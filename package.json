@@ -1,0 +1,22 @@
+{
+  "name": "ascii-lemmings",
+  "version": "1.0.0",
+  "description": "Experimental web assembly version of lemmings",
+  "main": "index.ts",
+  "repository": "git@github.com:Scutterman/ascii-lemmings-wasm.git",
+  "author": "tom <2962703+Scutterman@users.noreply.github.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@assemblyscript/loader": "^0.18.15"
+  },
+  "devDependencies": {
+    "assemblyscript": "^0.18.15"
+  },
+  "scripts": {
+    "asbuild:untouched": "asc assembly/index.ts --target debug",
+    "asbuild:optimized": "asc assembly/index.ts --target release",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+    "test": "node tests"
+  }
+}
