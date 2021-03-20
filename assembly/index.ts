@@ -1,19 +1,24 @@
 // The entry file of your WebAssembly module.
-const numberOfLemmings: i32 = 1
 
-const level: string[] = [
-  '____OO______________',
-  '|                EE|',
-  '|GGGGGGGGGGGGGGGGGG|',
-  '____________________'
-]
+import { Level } from "./level"
+import { eventLoop, loadLevel } from "./loop"
 
-declare function display(arr: string): void;
-declare function clear(): void;
+const level1 = new Level(
+  10,
+  1,
+  [
+    '________________________',
+    '|GGGGGGGGGGGGGGGGGGGGGG|',
+    '|   O             GG  G|',
+    '|                 GG  G|',
+    '|GGGGGGGGGGGGGGGGGGG  G|',
+    '|                  E  G|',
+    '|GGGGGGGGGGGGGGGGGGGGGG|',
+    '________________________'
+  ]
+)
 
 export function test(): void {
-  clear()
-  for (var i = 0; i < level.length; i++) {
-    display(level[i]);
-  }
+  loadLevel(level1)
+  eventLoop()
 }
