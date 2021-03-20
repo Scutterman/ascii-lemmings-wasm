@@ -1,12 +1,12 @@
 
-const baseMillisecondsPerGameLoop = 1000
-const fastForwardMultiplier = 2
+const baseMillisecondsPerGameLoop: u16 = 1000 as u16
+const fastForwardMultiplier: u8 = 2 as u8
 
 interface GameState {
   shouldRun: boolean
   lastGameLoopRunTime: i64
   fastForward: boolean // double the game speed
-  millisecondsPerGameLoop: u8
+  millisecondsPerGameLoop: u16
   releaseRate: u8
   minimumReleaseRate: u8
 }
@@ -24,7 +24,7 @@ export function endGame(): void {
   gameState.shouldRun = false
 }
 
-export function toggleFastForward() {
+export function toggleFastForward(): void {
   gameState.fastForward = !gameState.fastForward
   gameState.millisecondsPerGameLoop = baseMillisecondsPerGameLoop
   if (gameState.fastForward) {
