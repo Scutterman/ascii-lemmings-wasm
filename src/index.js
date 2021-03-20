@@ -2,11 +2,12 @@
 (async () => {
     const screen = document.querySelector('#screen')
     const importObject = {
-        index: {
+        loop: {
             display(msgPtr) {
                 screen.innerHTML += module.exports.__getString(msgPtr) + '<br>'
             },
             clear() {
+                console.log('clearing')
                 screen.innerHTML = ''
             }
         },
@@ -24,6 +25,10 @@
         importObject
     );
     
+    setTimeout(10000, () => {
+        console.log('ending the game')
+        module.instance.export.endGame()
+    })
     const test = module.instance.exports.test;
     test();
 })();
