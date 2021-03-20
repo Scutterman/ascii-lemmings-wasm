@@ -37,6 +37,11 @@ export function toggleFastForward(): void {
   }
 }
 
+export function loadLevel(level: Level): void {
+  gameState.currentLevel = level
+  gameState.levelState = LevelState.LevelRunning
+}
+
 export function eventLoop(): void {
   while (gameState.shouldRun) {
 
