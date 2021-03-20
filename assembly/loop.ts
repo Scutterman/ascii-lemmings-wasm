@@ -58,4 +58,20 @@ export function eventLoop(): void {
 
 function gameLoop(): void {
   // Loop through each lemming and progress their action
+  render()
+}
+
+declare function display(arr: string): void;
+declare function clear(): void;
+
+function render(): void {
+  clear()
+  // TODO:: render other elements
+  if (!gameState.currentLevel) { return }
+
+  const map = (gameState.currentLevel as Level).map
+  
+  for (var i = 0; i < map.length; i++) {
+    display(map[i]);
+  }
 }
