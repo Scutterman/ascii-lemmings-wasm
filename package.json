@@ -8,16 +8,17 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "@assemblyscript/loader": "^0.18.15",
-    "express": "^4.17.1"
+    "@assemblyscript/loader": "^0.18.15"
   },
   "devDependencies": {
-    "assemblyscript": "^0.18.15"
+    "assemblyscript": "^0.18.15",
+    "http-server": "^0.12.3"
   },
   "scripts": {
-    "asbuild:untouched": "asc assembly/index.ts --target debug",
-    "asbuild:optimized": "asc assembly/index.ts --target release",
-    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+    "asbuild:untouched": "asc assembly/index.ts --baseDir . --binaryFile src/build/untouched.wasm --target debug",
+    "asbuild:optimized": "asc assembly/index.ts --baseDir . --binaryFile src/build/optimized.wasm --target release",
+    "asbuild": "yarn asbuild:untouched && yarn run asbuild:optimized",
+    "serve": "yarn http-server src",
     "test": "node tests"
   }
 }
