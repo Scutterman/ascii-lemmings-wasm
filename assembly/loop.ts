@@ -1,14 +1,17 @@
+import { Level, LevelState } from "./level"
 
 const baseMillisecondsPerGameLoop: u16 = 1000 as u16
 const fastForwardMultiplier: u8 = 2 as u8
 
-interface GameState {
+class GameState {
   shouldRun: boolean
+  levelState: LevelState
   lastGameLoopRunTime: i64
   fastForward: boolean // double the game speed
   millisecondsPerGameLoop: u16
   releaseRate: u8
   minimumReleaseRate: u8
+  currentLevel: Level | null
 }
 
 const gameState: GameState = {
@@ -17,7 +20,9 @@ const gameState: GameState = {
   lastGameLoopRunTime: Date.now(),
   minimumReleaseRate: 50,
   releaseRate: 50,
-  shouldRun: true
+  shouldRun: true,
+  levelState: LevelState.TitleScreen,
+  currentLevel: null
 }
 
 export function endGame(): void {
