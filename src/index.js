@@ -24,12 +24,6 @@
         importObject
     );
     
-    console.log('setting asmodule');
-    console.log('exports', module, module.exports, module.instance.exports)
     const test = module.instance.exports.test;
     test();
-    const add = module.instance.exports.add
-    for (var i = 0; i <= 360; i+= 15) {
-        console.log('Doin\' a barrel roll! Angle is', add(0, i))
-    }
 })();
