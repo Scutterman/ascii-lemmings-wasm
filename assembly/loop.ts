@@ -44,12 +44,14 @@ export function loadLevel(level: Level): void {
 
 export function eventLoop(): void {
   while (gameState.shouldRun) {
-
     // Process inputs from browser
     // Send browser contextual clue updates
     // Check if frame loop should run
     const currentTime = Date.now()
-    if ((currentTime - gameState.lastGameLoopRunTime) >= gameState.millisecondsPerGameLoop) {
+    const levelRunning = gameState.levelState == LevelState.LevelRunning
+    const delta = currentTime - gameState.lastGameLoopRunTime
+    const gameLoopOverdue = delta > 65535 || delta as u16 >= gameState.millisecondsPerGameLoop
+    if (levelRunning && gameLoopOverdue) {
       gameState.lastGameLoopRunTime = currentTime
       gameLoop()
     }
