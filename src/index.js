@@ -7,7 +7,6 @@
         screen.innerHTML += module.exports.__getString(msgPtr) + '<br>'
       },
       clear() {
-        console.log('clearing')
         screen.innerHTML = ''
       }
     },
@@ -34,14 +33,12 @@
   }, 60000)
   const test = module.instance.exports.test;
 
-  console.log('EXPORTS', module.instance.exports);
-
   test();
 
   const loop = () => {
-    console.log('looping')
     module.instance.exports.eventLoop()
   }
-
+  
+  console.log('Starting the loop')
   loopIntervalHandle = setInterval(loop, 100)
 })();
