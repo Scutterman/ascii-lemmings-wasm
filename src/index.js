@@ -17,7 +17,7 @@
     }
   };
 
-  const response = await fetch("/build/optimized.wasm");
+  const response = await fetch("/build/untouched.wasm");
   const buffer = await response.arrayBuffer();
   const module = await loader.instantiate(
     buffer,
@@ -30,7 +30,7 @@
     console.log('ending the game')
     module.instance.exports.endGame()
     clearInterval(loopIntervalHandle)
-  }, 60000)
+  }, 312000)
   const test = module.instance.exports.test;
 
   test();
