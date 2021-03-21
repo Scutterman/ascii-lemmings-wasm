@@ -87,14 +87,12 @@ function render(level: Level): void {
   for (let i = 0; i < level.lemmings.length; i++) {
     const lemming = level.lemmings[i]
     if (lemming.removed) { continue }
-
-    const line = map[lemming.position.y - 1].split('')
-    line[lemming.position.x - 1] = lemmingActionToCharacter(lemming.action)
-    map[lemming.position.y - 1] = line.join('')
+    map[lemming.position.y][lemming.position.x] = lemmingActionToCharacter(lemming.action)
   }
   
   for (let i = 0; i < map.length; i++) {
-    display(map[i]);
+    display(map[i].join(''));
   }
+
   display('                    ' + level.timeLeft.toString())
 }

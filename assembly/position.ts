@@ -1,4 +1,4 @@
 export class Vec2 {
-  x: u8
-  y: u8
+  x: i16
+  y: i16
 }
