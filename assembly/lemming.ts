@@ -1,4 +1,4 @@
-import { SurroundingTiles, TILE_AIR } from "./map";
+import { SurroundingTiles, TILE_AIR, TILE_EXIT } from "./map";
 import { Vec2 } from "./position";
 
 export enum LemmingAction {
@@ -37,7 +37,13 @@ export class Lemming {
         }
         break
         case LemmingAction.Walk:
-          if ((this.movingLeft && surroundingTiles.left != TILE_AIR) || (this.movingRight && surroundingTiles.right != TILE_AIR)) {
+          if (surroundingTiles.bottomCentre == TILE_AIR) {
+            this.action = LemmingAction.Fall
+            this.position.y++
+          } else if ((this.movingLeft && surroundingTiles.left == TILE_EXIT) || (this.movingRight && surroundingTiles.right == TILE_EXIT)) {
+            this.action = LemmingAction.Exited
+            this.removed = true
+          } else if ((this.movingLeft && surroundingTiles.left != TILE_AIR) || (this.movingRight && surroundingTiles.right != TILE_AIR)) {
             this.movingLeft = !this.movingLeft
             this.movingRight = !this.movingRight
           } else {
