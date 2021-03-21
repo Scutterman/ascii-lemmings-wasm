@@ -1,3 +1,4 @@
+import { SurroundingTiles, TILE_AIR } from "./map";
 import { Vec2 } from "./position";
 
 export enum LemmingAction {
@@ -26,6 +27,25 @@ export class Lemming {
   action: LemmingAction = LemmingAction.Fall
   position: Vec2 = { x: 4, y: 3}
   
+  public update(surroundingTiles: SurroundingTiles): void {
+    switch (this.action) {
+      case LemmingAction.Fall:
+        if (surroundingTiles.bottomCentre != TILE_AIR) {
+          this.action = LemmingAction.Walk
+        } else {
+          this.position.y--
+        }
+        break
+        case LemmingAction.Walk:
+          if ((this.movingLeft && surroundingTiles.left != TILE_AIR) || (this.movingRight && surroundingTiles.right != TILE_AIR)) {
+            this.movingLeft = !this.movingLeft
+            this.movingRight = !this.movingRight
+          } else {
+            this.position.x += 1 * (this.movingLeft ? -1 : 1)
+          }
+          break
+    }
+  }
 }
 
 export function lemmingActionToCharacter(action: LemmingAction): string {

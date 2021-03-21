@@ -68,6 +68,10 @@ function gameLoop(): void {
 
   const level = (gameState.currentLevel as Level)
 
+  for (var i = 0; i < level.lemmings.length; i++) {
+    level.lemmings[i].update(getSurroundingTiles(level.map, level.lemmings[i].position))
+  }
+  
   if (level.lemmings.length < (level.numberOfLemmings as i32)) {
     level.lemmings.push(new Lemming())
   }
