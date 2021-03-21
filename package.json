@@ -15,8 +15,8 @@
     "http-server": "^0.12.3"
   },
   "scripts": {
-    "asbuild:untouched": "asc assembly/index.ts --baseDir . --binaryFile src/build/untouched.wasm --target debug",
-    "asbuild:optimized": "asc assembly/index.ts --baseDir . --binaryFile src/build/optimized.wasm --target release",
+    "asbuild:untouched": "asc assembly/index.ts --baseDir . --binaryFile src/build/untouched.wasm --textFile src/build/untouched.wat --target debug",
+    "asbuild:optimized": "asc assembly/index.ts --baseDir . --binaryFile src/build/optimized.wasm --textFile src/build/optimized.wat --target release",
     "asbuild": "yarn asbuild:untouched && yarn run asbuild:optimized",
     "serve": "yarn http-server src",
     "test": "node tests"
