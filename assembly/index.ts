@@ -14,7 +14,7 @@ const level1: Level = {
     '|GGGGGGGGGGGGGGGGGGGGGG|',
     '|   O             GG  G|',
     '|                 GG  G|',
-    '|GGGGGGGGGGGGGGGGGGG  G|',
+    '|G GGGGGGGGGGGGGGGGG  G|',
     '|                  E  G|',
     '|GGGGGGGGGGGGGGGGGGGGGG|',
     '________________________'
