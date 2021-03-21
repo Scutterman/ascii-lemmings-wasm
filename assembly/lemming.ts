@@ -33,7 +33,7 @@ export class Lemming {
         if (surroundingTiles.bottomCentre != TILE_AIR) {
           this.action = LemmingAction.Walk
         } else {
-          this.position.y--
+          this.position.y++
         }
         break
         case LemmingAction.Walk:
