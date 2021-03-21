@@ -1,5 +1,6 @@
-import { LemmingAction, lemmingActionToCharacter } from "./lemming"
+import { Lemming, lemmingActionToCharacter } from "./lemming"
 import { Level, LevelState } from "./level"
+import { getSurroundingTiles, LevelTiles } from "./map"
 
 const baseMillisecondsPerGameLoop: u16 = 1000 as u16
 const fastForwardMultiplier: u8 = 2 as u8
@@ -81,8 +82,15 @@ function render(level: Level): void {
   clear()
   // TODO:: render other elements
   
-  const map = level.map
   level.timeLeft--
+
+  const map: LevelTiles = []
+  for (let i = 0; i < level.map.length; i++) {
+    for (let j = 0; j < level.map[i].length; j++) {
+      if (j == 0) { map[i] = [] }
+      map[i].push(level.map[i][j])
+    }
+  }
 
   for (let i = 0; i < level.lemmings.length; i++) {
     const lemming = level.lemmings[i]
