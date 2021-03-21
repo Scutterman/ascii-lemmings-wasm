@@ -62,18 +62,33 @@ export function eventLoop(): void {
 
 function gameLoop(): void {
   // Loop through each lemming and progress their action
-  render()
+  if (!gameState.currentLevel) { return }
+
+  const level = (gameState.currentLevel as Level)
+
+  if (level.lemmings.length < (level.numberOfLemmings as i32)) {
+    level.lemmings.push({
+      action: LemmingAction.Fall,
+      actionTimeLeft: 0,
+      movingDown: true,
+      movingLeft: false,
+      movingRight: false,
+      movingUp: false,
+      removed: false,
+      position: { x: 5, y: 4}
+    })
+  }
+  
+  render(level)
 }
 
 declare function display(arr: string): void;
 declare function clear(): void;
 
-function render(): void {
+function render(level: Level): void {
   clear()
   // TODO:: render other elements
-  if (!gameState.currentLevel) { return }
-
-  const level = (gameState.currentLevel as Level)
+  
   const map = level.map
   level.timeLeft--
   
