@@ -30,16 +30,15 @@ export class Lemming {
   public update(surroundingTiles: SurroundingTiles): void {
     switch (this.action) {
       case LemmingAction.Fall:
-        if (surroundingTiles.bottomCentre != TILE_AIR) {
-          this.action = LemmingAction.Walk
+        if (this.isFalling(surroundingTiles)) {
+          this.handleFalling()
         } else {
-          this.position.y++
+          this.action = LemmingAction.Walk
         }
         break
         case LemmingAction.Walk:
-          if (surroundingTiles.bottomCentre == TILE_AIR) {
-            this.action = LemmingAction.Fall
-            this.position.y++
+          if (this.isFalling(surroundingTiles)) {
+            this.handleFalling()
           } else if ((this.movingLeft && surroundingTiles.left == TILE_EXIT) || (this.movingRight && surroundingTiles.right == TILE_EXIT)) {
             this.action = LemmingAction.Exited
             this.removed = true
@@ -51,6 +50,15 @@ export class Lemming {
           }
           break
     }
+  }
+
+  private isFalling(surroundingTiles: SurroundingTiles): boolean {
+    return surroundingTiles.bottomCentre == TILE_AIR
+  }
+
+  private handleFalling(): void {
+    this.action = LemmingAction.Fall
+    this.position.y++    
   }
 }
 

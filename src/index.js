@@ -30,7 +30,7 @@
     console.log('ending the game')
     module.instance.exports.endGame()
     clearInterval(loopIntervalHandle)
-  }, 312000)
+  }, 321000)
   const test = module.instance.exports.test;
 
   test();
