@@ -1,7 +1,9 @@
 // The entry file of your WebAssembly module.
 
 import { Level } from "./level"
-import { eventLoop, loadLevel } from "./loop"
+import { loadLevel } from "./loop"
+
+export { eventLoop, endGame } from './loop'
 
 const level1 = new Level(
   10,
@@ -20,5 +22,4 @@ const level1 = new Level(
 
 export function test(): void {
   loadLevel(level1)
-  eventLoop()
 }
