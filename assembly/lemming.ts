@@ -17,14 +17,15 @@ export enum LemmingAction {
 const LemmingActionMap: string[] = ['F','W','C','U','*','T','/','B','\\','D','X']
 
 export class Lemming {
-  movingUp: boolean
-  movingDown: boolean
-  movingLeft: boolean
-  movingRight: boolean
-  removed: boolean
-  actionTimeLeft: u16
-  action: LemmingAction
-  position: Vec2
+  movingUp: boolean = false
+  movingDown: boolean = true
+  movingLeft: boolean = false
+  movingRight: boolean = true
+  removed: boolean = false
+  actionTimeLeft: u16 = 0
+  action: LemmingAction = LemmingAction.Fall
+  position: Vec2 = { x: 4, y: 3}
+  
 }
 
 export function lemmingActionToCharacter(action: LemmingAction): string {

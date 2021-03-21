@@ -68,16 +68,7 @@ function gameLoop(): void {
   const level = (gameState.currentLevel as Level)
 
   if (level.lemmings.length < (level.numberOfLemmings as i32)) {
-    level.lemmings.push({
-      action: LemmingAction.Fall,
-      actionTimeLeft: 0,
-      movingDown: true,
-      movingLeft: false,
-      movingRight: false,
-      movingUp: false,
-      removed: false,
-      position: { x: 5, y: 4}
-    })
+    level.lemmings.push(new Lemming())
   }
   
   render(level)
