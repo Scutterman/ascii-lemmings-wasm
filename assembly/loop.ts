@@ -1,3 +1,4 @@
+import { LemmingAction, lemmingActionToCharacter } from "./lemming"
 import { Level, LevelState } from "./level"
 
 const baseMillisecondsPerGameLoop: u16 = 1000 as u16
@@ -91,8 +92,17 @@ function render(level: Level): void {
   
   const map = level.map
   level.timeLeft--
+
+  for (let i = 0; i < level.lemmings.length; i++) {
+    const lemming = level.lemmings[i]
+    if (lemming.removed) { continue }
+
+    const line = map[lemming.position.y - 1].split('')
+    line[lemming.position.x - 1] = lemmingActionToCharacter(lemming.action)
+    map[lemming.position.y - 1] = line.join('')
+  }
   
-  for (var i = 0; i < map.length; i++) {
+  for (let i = 0; i < map.length; i++) {
     display(map[i]);
   }
   display('                    ' + level.timeLeft.toString())
