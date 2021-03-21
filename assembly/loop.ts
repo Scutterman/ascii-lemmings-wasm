@@ -87,6 +87,11 @@ function render(level: Level): void {
   // TODO:: render other elements
   
   level.timeLeft--
+  
+  if (level.timeLeft == 0) {
+    gameState.shouldRun = false
+    // TODO:: End screen
+  }
 
   const map: LevelTiles = []
   for (let i = 0; i < level.map.length; i++) {
