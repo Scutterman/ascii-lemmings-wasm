@@ -46,7 +46,7 @@ export function eventLoop(): void {
   if (!gameState.shouldRun) {
     return
   }
-  
+
   // Process inputs from browser
   // Send browser contextual clue updates
   // Check if frame loop should run
@@ -73,9 +73,12 @@ function render(): void {
   // TODO:: render other elements
   if (!gameState.currentLevel) { return }
 
-  const map = (gameState.currentLevel as Level).map
+  const level = (gameState.currentLevel as Level)
+  const map = level.map
+  level.timeLeft--
   
   for (var i = 0; i < map.length; i++) {
     display(map[i]);
   }
+  display('                    ' + level.timeLeft.toString())
 }
