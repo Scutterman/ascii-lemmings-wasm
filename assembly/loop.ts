@@ -73,7 +73,24 @@ function insertText(map: LevelTiles, message: string, line: u8, start: u8 = 0): 
   return map
 }
 
+export function endLevel(level: Level): void {
   gameState.shouldRun = false
+  let endSlateToRender = cloneMap(endSlate)
+
+  const needed = level.numberOfLemmingsForSucces.toString()
+  const rescued = level.numberOfLemmingsSaved.toString()
+  endSlateToRender = insertText(endSlateToRender, needed, NEEDED_LINE, NEEDED_REPLACE_START)
+  endSlateToRender = insertText(endSlateToRender, rescued, RESCUED_LINE, RESCUED_REPLACE_START)
+
+  if (rescued > needed) {
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_1, MESSAGE_1_LINE, MESSAGE_SUCCESS_1_REPLACE_START)
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_2, MESSAGE_2_LINE, MESSAGE_SUCCESS_2_REPLACE_START)
+  } else {
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_1, MESSAGE_1_LINE, MESSAGE_FAIL_1_REPLACE_START)
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_2, MESSAGE_2_LINE, MESSAGE_FAIL_2_REPLACE_START)
+  }
+
+  render(endSlateToRender)
 }
 
 export function toggleFastForward(): void {
