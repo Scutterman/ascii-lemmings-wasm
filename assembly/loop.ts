@@ -97,26 +97,19 @@ function gameLoop(): void {
 declare function display(arr: string): void;
 declare function clear(): void;
 
-function render(level: Level): void {
-  clear()
-  // TODO:: render other elements
-  
-  level.timeLeft--
-  
-  if (level.timeLeft == 0) {
-    gameState.shouldRun = false
-    // TODO:: End screen
-  }
-
-  const map: LevelTiles = []
-  for (let i = 0; i < level.map.length; i++) {
-    for (let j = 0; j < level.map[i].length; j++) {
-      if (j == 0) { map[i] = [] }
-      map[i].push(level.map[i][j])
+function cloneMap(map: LevelTiles): LevelTiles {
+  const mapClone: LevelTiles = []
+  for (let i = 0; i < map.length; i++) {
+    for (let j = 0; j < map[i].length; j++) {
+      if (j == 0) { mapClone[i] = [] }
+      mapClone[i].push(map[i][j])
     }
   }
+  return mapClone
+}
 
 function renderLevel(level: Level): void {
+  const map = cloneMap(level.map)
   for (let i = 0; i < level.lemmings.length; i++) {
     const lemming = level.lemmings[i]
     if (lemming.removed) { continue }
