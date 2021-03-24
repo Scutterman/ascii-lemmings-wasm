@@ -25,12 +25,6 @@
   );
   
   let loopIntervalHandle
-
-  setTimeout(() => {
-    console.log('ending the game')
-    module.instance.exports.endGame()
-    clearInterval(loopIntervalHandle)
-  }, 321000)
   const test = module.instance.exports.test;
 
   test();
