@@ -205,8 +205,10 @@ function renderLevel(level: Level): void {
     map[lemming.position.y][lemming.position.x] = lemmingActionToCharacter(lemming.action)
   }
   
-  render(map)
-  display('                    ' + level.timeLeft.toString())
+  const rightmostColumn = render(map)
+  const timeLeft = level.timeLeft.toString()
+  const paddingRequired = rightmostColumn - timeLeft.length
+  display(' '.repeat(paddingRequired) + timeLeft)
 }
 
 function padRows(totalRows: i32, usedRows: i32): void {
@@ -215,13 +217,25 @@ function padRows(totalRows: i32, usedRows: i32): void {
   }
 }
 
-function render(map: LevelTiles): void {
+function padColumn(totalColumns: i32, text: string): string {
+  const charactersSpare = totalColumns - text.length
+  const charactersRequiredOnLeft = Math.floor(charactersSpare / 2) as i32
+  return ' '.repeat(charactersRequiredOnLeft) + text
+}
+
+function render(map: LevelTiles): i32 {
+  const totalColumns = gameState.screenWidth / gameState.characterWidth
   const totalRows = gameState.screenHeight / gameState.characterHeight
   const usedRows = map.length
   
   clear()
   padRows(totalRows, usedRows)
+  let rightmostColumn = 0
   for (let i = 0; i < map.length; i++) {
-    display(map[i].join(''));
+    const column = padColumn(totalColumns, map[i].join(''))
+    rightmostColumn = Math.max(rightmostColumn, column.length) as i32
+    display(column);
   }
+
+  return rightmostColumn
 }
