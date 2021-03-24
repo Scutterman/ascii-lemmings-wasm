@@ -26,9 +26,11 @@
   
   let loopIntervalHandle
   const start = module.instance.exports.start;
+  const setScreenDimensions = module.instance.exports.setScreenDimensions
   const setCharacterDimensions = module.instance.exports.setCharacterDimensions
   const dimensions = measureOneCharacter()
-  console.log(dimensions)
+  
+  setScreenDimensions(document.body.clientWidth, document.body.clientHeight)
   setCharacterDimensions(dimensions.width, dimensions.height)
   start()
 

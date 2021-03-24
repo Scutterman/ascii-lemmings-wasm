@@ -43,6 +43,8 @@ class GameState {
   releaseRate: u8
   minimumReleaseRate: u8
   currentLevel: Level | null
+  screenWidth: i32
+  screenHeight: i32
   characterWidth: i32
   characterHeight: i32
 }
@@ -56,8 +58,15 @@ const gameState: GameState = {
   shouldRun: true,
   levelState: LevelState.TitleScreen,
   currentLevel: null,
+  screenWidth: 0,
+  screenHeight: 0,
   characterWidth: 0,
   characterHeight: 0
+}
+
+export function setScreenDimensions(screenWidth: i32, screenHeight: i32): void {
+  gameState.screenWidth = screenWidth
+  gameState.screenHeight = screenHeight
 }
 
 export function setCharacterDimensions(characterWidth: i32, characterHeight: i32): void {
