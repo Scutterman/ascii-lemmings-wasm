@@ -4,7 +4,7 @@ import { Level } from "./level"
 import { loadLevel } from "./loop"
 import { mapToTiles } from './map'
 
-export { eventLoop } from './loop'
+export { eventLoop, setCharacterDimensions } from './loop'
 
 const level1 = new Level(10, 1, mapToTiles([
     '________________________',
@@ -17,6 +17,6 @@ const level1 = new Level(10, 1, mapToTiles([
     '________________________'
   ]))
 
-export function test(): void {
+export function start(): void {
   loadLevel(level1)
 }

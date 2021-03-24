@@ -43,6 +43,8 @@ class GameState {
   releaseRate: u8
   minimumReleaseRate: u8
   currentLevel: Level | null
+  characterWidth: i32
+  characterHeight: i32
 }
 
 const gameState: GameState = {
@@ -53,7 +55,14 @@ const gameState: GameState = {
   releaseRate: 50,
   shouldRun: true,
   levelState: LevelState.TitleScreen,
-  currentLevel: null
+  currentLevel: null,
+  characterWidth: 0,
+  characterHeight: 0
+}
+
+export function setCharacterDimensions(characterWidth: i32, characterHeight: i32): void {
+  gameState.characterWidth = characterWidth
+  gameState.characterHeight = characterHeight
 }
 
 function insertText(map: LevelTiles, message: string, line: u8, start: u8 = 0): LevelTiles {

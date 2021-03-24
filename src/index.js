@@ -25,9 +25,12 @@
   );
   
   let loopIntervalHandle
-  const test = module.instance.exports.test;
-
-  test();
+  const start = module.instance.exports.start;
+  const setCharacterDimensions = module.instance.exports.setCharacterDimensions
+  const dimensions = measureOneCharacter()
+  console.log(dimensions)
+  setCharacterDimensions(dimensions.width, dimensions.height)
+  start()
 
   const loop = () => {
     module.instance.exports.eventLoop()
@@ -36,3 +39,15 @@
   console.log('Starting the loop')
   loopIntervalHandle = setInterval(loop, 100)
 })();
+
+function measureOneCharacter() {
+  const screen = document.createElement('span')
+  screen.classList.add('screen')
+  screen.classList.add('measure-text')
+  screen.textContent = 'A'
+  document.body.appendChild(screen)
+  const width = screen.clientWidth
+  const height = screen.clientHeight
+  document.body.removeChild(screen)
+  return { width, height }
+}
