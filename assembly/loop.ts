@@ -21,7 +21,7 @@ const MESSAGE_SUCCESS_2_REPLACE_START: u8 = 6
 const MESSAGE_FAIL_1: string = 'You didn\'t save enough this time'
 const MESSAGE_FAIL_2: string = 'Would you like to try again?'
 const MESSAGE_FAIL_1_REPLACE_START: u8 = 1
-const MESSAGE_FAIL_2_REPLACE_START: u8 = 6
+const MESSAGE_FAIL_2_REPLACE_START: u8 = 3
 
 const endSlate = mapToTiles([
   '__________________________________',
@@ -73,7 +73,7 @@ function insertText(map: LevelTiles, message: string, line: u8, start: u8 = 0): 
   return map
 }
 
-export function endLevel(level: Level): void {
+function endLevel(level: Level): void {
   gameState.shouldRun = false
   let endSlateToRender = cloneMap(endSlate)
 
