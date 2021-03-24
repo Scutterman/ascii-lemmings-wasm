@@ -1,9 +1,38 @@
-import { Lemming, lemmingActionToCharacter } from "./lemming"
+import { Lemming, LemmingAction, lemmingActionToCharacter } from "./lemming"
 import { Level, LevelState } from "./level"
-import { getSurroundingTiles, LevelTiles } from "./map"
+import { getSurroundingTiles, LevelTiles, mapToTiles } from "./map"
 
 const baseMillisecondsPerGameLoop: u16 = 1000 as u16
 const fastForwardMultiplier: u8 = 2 as u8
+
+const NEEDED_LINE: u8 = 2
+const NEEDED_REPLACE_START: u8 = 21
+const RESCUED_LINE: u8 = 3
+const RESCUED_REPLACE_START: u8 = 21
+
+const MESSAGE_1_LINE: u8 = 5
+const MESSAGE_2_LINE: u8 = 6
+
+const MESSAGE_SUCCESS_1: string = 'You passed the level!'
+const MESSAGE_SUCCESS_2: string = 'Can you do it again...?'
+const MESSAGE_SUCCESS_1_REPLACE_START: u8 = 7
+const MESSAGE_SUCCESS_2_REPLACE_START: u8 = 6
+
+const MESSAGE_FAIL_1: string = 'You didn\'t save enough this time'
+const MESSAGE_FAIL_2: string = 'Would you like to try again?'
+const MESSAGE_FAIL_1_REPLACE_START: u8 = 1
+const MESSAGE_FAIL_2_REPLACE_START: u8 = 6
+
+const endSlate = mapToTiles([
+  '__________________________________',
+  '|   All lemmings accounted for   |',
+  '|        You needed              |',
+  '|        You rescued             |',
+  '|                                |',
+  '|                                |',
+  '|                                |',
+  '__________________________________'
+])
 
 class GameState {
   shouldRun: boolean
