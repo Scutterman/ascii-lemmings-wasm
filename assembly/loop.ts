@@ -79,6 +79,15 @@ function gameLoop(): void {
       level.numberOfLemmingsRemoved++
     }
   }
+    
+  level.timeLeft--
+  const lemmingsLeftToSpawn = level.lemmings.length < (level.numberOfLemmings as i32)
+  const allLemmingsRemoved = !lemmingsLeftToSpawn && level.numberOfLemmingsRemoved == level.numberOfLemmings
+
+  if (allLemmingsRemoved || level.timeLeft == 0) {
+    endLevel(level)
+    return
+  } else if (lemmingsLeftToSpawn) {
     level.lemmings.push(new Lemming())
   }
   
