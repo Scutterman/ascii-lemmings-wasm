@@ -90,8 +90,8 @@ function gameLoop(): void {
   } else if (lemmingsLeftToSpawn) {
     level.lemmings.push(new Lemming())
   }
-  
-  render(level)
+
+  renderLevel(level)
 }
 
 declare function display(arr: string): void;
@@ -116,6 +116,7 @@ function render(level: Level): void {
     }
   }
 
+function renderLevel(level: Level): void {
   for (let i = 0; i < level.lemmings.length; i++) {
     const lemming = level.lemmings[i]
     if (lemming.removed) { continue }
