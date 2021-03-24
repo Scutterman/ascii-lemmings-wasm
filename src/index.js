@@ -32,7 +32,10 @@
   
   setScreenDimensions(document.body.clientWidth, document.body.clientHeight)
   setCharacterDimensions(dimensions.width, dimensions.height)
-  start()
+  
+  if (!start()) {
+    return
+  }
 
   const loop = () => {
     module.instance.exports.eventLoop()

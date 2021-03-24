@@ -74,6 +74,15 @@ export function setCharacterDimensions(characterWidth: i32, characterHeight: i32
   gameState.characterHeight = characterHeight
 }
 
+export function canStart(): boolean {
+  return (
+    gameState.screenWidth > 0 &&
+    gameState.screenHeight > 0 &&
+    gameState.characterWidth > 0 &&
+    gameState.characterHeight > 0
+  )
+}
+
 function insertText(map: LevelTiles, message: string, line: u8, start: u8 = 0): LevelTiles {
   if ((line as i32) >= map.length) {
     throw new Error('insertText: line argument out of map bounds')
