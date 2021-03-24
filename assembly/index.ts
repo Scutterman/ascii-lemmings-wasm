@@ -6,10 +6,7 @@ import { mapToTiles } from './map'
 
 export { eventLoop, endGame } from './loop'
 
-const level1: Level = {
-  numberOfLemmings: 10,
-  numberOfLemmingsForSucces: 1,
-  map: mapToTiles([
+const level1 = new Level(10, 1, mapToTiles([
     '________________________',
     '|GGGGGGGGGGGGGGGGGGGGGG|',
     '|   O             GG  G|',
@@ -18,10 +15,7 @@ const level1: Level = {
     '|                  E  G|',
     '|GGGGGGGGGGGGGGGGGGGGGG|',
     '________________________'
-  ]),
-  timeLeft: 300,
-  lemmings: []
-}
+  ]))
 
 export function test(): void {
   loadLevel(level1)
