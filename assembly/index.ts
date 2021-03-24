@@ -4,7 +4,7 @@ import { Level } from "./level"
 import { loadLevel } from "./loop"
 import { mapToTiles } from './map'
 
-export { eventLoop, endGame } from './loop'
+export { eventLoop, endLevel } from './loop'
 
 const level1 = new Level(10, 1, mapToTiles([
     '________________________',
