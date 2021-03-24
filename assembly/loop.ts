@@ -209,18 +209,18 @@ function renderLevel(level: Level): void {
   display('                    ' + level.timeLeft.toString())
 }
 
-function padRows(totalLines: i32, usedLines: i32): void {
-  for (var i = totalLines; i > usedLines; i -= 2) {
+function padRows(totalRows: i32, usedRows: i32): void {
+  for (var i = totalRows; i > usedRows; i -= 2) {
     display('')
   }
 }
 
 function render(map: LevelTiles): void {
-  const totalLines = gameState.screenHeight / gameState.characterHeight
-  const usedLines = map.length
+  const totalRows = gameState.screenHeight / gameState.characterHeight
+  const usedRows = map.length
   
   clear()
-  padRows(totalLines, usedLines)
+  padRows(totalRows, usedRows)
   for (let i = 0; i < map.length; i++) {
     display(map[i].join(''));
   }
