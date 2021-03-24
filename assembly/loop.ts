@@ -116,9 +116,13 @@ function renderLevel(level: Level): void {
     map[lemming.position.y][lemming.position.x] = lemmingActionToCharacter(lemming.action)
   }
   
+  render(map)
+  display('                    ' + level.timeLeft.toString())
+}
+
+function render(map: LevelTiles): void {
+  clear()
   for (let i = 0; i < map.length; i++) {
     display(map[i].join(''));
   }
-
-  display('                    ' + level.timeLeft.toString())
 }
