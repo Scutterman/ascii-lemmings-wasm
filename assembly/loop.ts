@@ -68,7 +68,8 @@ function gameLoop(): void {
 
   const level = (gameState.currentLevel as Level)
 
-  for (var i = 0; i < level.lemmings.length; i++) {
+  for (let i = 0; i < level.lemmings.length; i++) {
+    if (level.lemmings[i].removed) { continue }
     level.lemmings[i].update(getSurroundingTiles(level.map, level.lemmings[i].position))
   }
   
