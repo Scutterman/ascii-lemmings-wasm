@@ -27,7 +27,23 @@ const gameState: GameState = {
   currentLevel: null
 }
 
-export function endGame(): void {
+function insertText(map: LevelTiles, message: string, line: u8, start: u8 = 0): LevelTiles {
+  if ((line as i32) >= map.length) {
+    throw new Error('insertText: line argument out of map bounds')
+  }
+  
+  if ((start + message.length) >= map[line].length) {
+    throw new Error('insertText: text out of map bounds')
+  }
+  
+  const messageArray = message.split('')
+  for (var i = 0; i < messageArray.length; i++) {
+    map[line][start + i] = messageArray[i]
+  }
+
+  return map
+}
+
   gameState.shouldRun = false
 }
 
