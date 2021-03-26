@@ -101,6 +101,11 @@ function endLevel(level: Level): void {
     endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_2, new Vec2(-1, 6))
   }
 
+  // TODO:: This renders buttons
+  // but doesn't allow them to be clicked
+  // because processInputs() still uses
+  // gameState.currentLevel.uiControls
+  // when it's checking for button collision
   render(endSlateToRender, [
     new UIControl(new Vec2(6, 4), "Restart", () => {
       (gameState.currentLevel as Level).reset()
