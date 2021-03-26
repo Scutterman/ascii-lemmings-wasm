@@ -116,7 +116,33 @@ export function loadLevel(level: Level): void {
   gameState.levelState = LevelState.LevelRunning
 }
 
+function processInputs(): void {
+  const level = gameState.currentLevel
+  if (level == null) {
+    return
+  }
+
+  if (gameState.mouseClicked) {
+    gameState.mouseClicked = false
+
+    const normalizedMouseX = i32(Math.floor(gameState.mouseX / gameState.characterWidth)) + 1
+    const normalizedMouseY = i32(Math.floor(gameState.mouseY / gameState.characterHeight))
+    const mouseTileX: i32 = normalizedMouseX - gameState.lastColumnPadding
+    const mouseTileY: i32 = normalizedMouseY - gameState.lastRowPadding
+    
+    if (mouseTileX > 0 && mouseTileY > 0 && mouseTileX < level.map[0].length && mouseTileY < level.map.length) {  
+      for (let i = 0; i < level.uiControls.length; i++) {
+        if (level.uiControls[i].isInBounds(mouseTileX, mouseTileY)) {
+          level.uiControls[i].clicked()
+        }
+      }
+    }
+  }
+}
+
 export function eventLoop(): void {
+  processInputs()
+
   if (!gameState.shouldRun) {
     return
   }
