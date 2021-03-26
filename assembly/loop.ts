@@ -37,6 +37,11 @@ class GameState {
   screenHeight: i32
   characterWidth: i32
   characterHeight: i32
+  mouseX: i32
+  mouseY: i32
+  mouseClicked: boolean
+  lastRowPadding: i32
+  lastColumnPadding: i32
 }
 
 const gameState: GameState = {
@@ -51,7 +56,12 @@ const gameState: GameState = {
   screenWidth: 0,
   screenHeight: 0,
   characterWidth: 0,
-  characterHeight: 0
+  characterHeight: 0,
+  mouseX: 0,
+  mouseY: 0,
+  mouseClicked: false,
+  lastRowPadding: 0,
+  lastColumnPadding: 0
 }
 
 export function setScreenDimensions(screenWidth: i32, screenHeight: i32): void {
@@ -185,7 +195,9 @@ function renderLevel(level: Level): void {
 }
 
 function padRows(totalRows: i32, usedRows: i32): void {
+  gameState.lastRowPadding = 0
   for (var i = totalRows; i > usedRows; i -= 2) {
+    gameState.lastRowPadding++
     display('')
   }
 }
@@ -193,6 +205,7 @@ function padRows(totalRows: i32, usedRows: i32): void {
 function padColumn(totalColumns: i32, text: string): string {
   const charactersSpare = totalColumns - text.length
   const charactersRequiredOnLeft = Math.floor(charactersSpare / 2) as i32
+  gameState.lastColumnPadding = charactersRequiredOnLeft
   return ' '.repeat(charactersRequiredOnLeft) + text
 }
 
@@ -211,4 +224,13 @@ function render(map: LevelTiles): i32 {
   }
 
   return rightmostColumn
+}
+
+export function updateMouseCoordinates(x: i32, y: i32): void {
+  gameState.mouseX = x
+  gameState.mouseY = y
+}
+
+export function registerMouseClick(): void {
+  gameState.mouseClicked = true
 }
