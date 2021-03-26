@@ -6,7 +6,7 @@ import { mapToTiles } from './map'
 import { Vec2 } from "./position"
 import { UIControl } from "./UIControl"
 
-export { eventLoop, setCharacterDimensions, setScreenDimensions } from './loop'
+export { eventLoop, setCharacterDimensions, setScreenDimensions, updateMouseCoordinates, registerMouseClick } from './loop'
 
 const level1 = new Level(10, 1, mapToTiles([
     '________________________',

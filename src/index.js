@@ -2,6 +2,11 @@
 (async () => {
   const screen = document.querySelector('#screen')
   const importObject = {
+    index: {
+      log(msgPtr) {
+        console.log(module.exports.__getString(msgPtr))
+      }
+    },
     loop: {
       display(msgPtr) {
         screen.innerHTML += module.exports.__getString(msgPtr) + '<br>'
@@ -32,6 +37,14 @@
   
   setScreenDimensions(document.body.clientWidth, document.body.clientHeight)
   setCharacterDimensions(dimensions.width, dimensions.height)
+
+  window.addEventListener('mousemove', function(event) {
+    module.instance.exports.updateMouseCoordinates(event.clientX, event.clientY)
+  })
+
+  window.addEventListener('click', function(event) {
+    module.instance.exports.registerMouseClick()
+  })
   
   if (!start()) {
     return
