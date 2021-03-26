@@ -3,6 +3,8 @@
 import { Level } from "./level"
 import { canStart, loadLevel } from "./loop"
 import { mapToTiles } from './map'
+import { Vec2 } from "./position"
+import { UIControl } from "./UIControl"
 
 export { eventLoop, setCharacterDimensions, setScreenDimensions } from './loop'
 
@@ -14,8 +16,13 @@ const level1 = new Level(10, 1, mapToTiles([
     '|G GGGGGGGGGGGGGGGGG  G|',
     '|                  E  G|',
     '|GGGGGGGGGGGGGGGGGGGGGG|',
+    '|                      |',
     '________________________'
   ]))
+
+level1.uiControls.push(new UIControl(new Vec2(-1, 7), "Display", () => {
+  log("Hello World!")
+}))
 
 export function start(): boolean {
   if (!canStart()) {
@@ -25,3 +32,5 @@ export function start(): boolean {
   loadLevel(level1)
   return true
 }
+
+declare function log(text: string): void;
