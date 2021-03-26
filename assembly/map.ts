@@ -32,15 +32,15 @@ export function mapToTiles(map: LevelMap): LevelTiles {
 
 export function getSurroundingTiles(map: LevelTiles, position: Vec2): SurroundingTiles {
   const surrounding: SurroundingTiles = {
-    topLeft: getSurroundingTile(map, { x: position.x - 1, y: position.y - 1 }),
-    topCentre: getSurroundingTile(map, { x: position.x, y: position.y - 1 }),
-    topRight: getSurroundingTile(map, { x: position.x + 1, y: position.y - 1 }),
-    left: getSurroundingTile(map, { x: position.x - 1, y: position.y }),
-    centre: getSurroundingTile(map, { x: position.x, y: position.y }),
-    right: getSurroundingTile(map, { x: position.x + 1, y: position.y }),
-    bottomLeft: getSurroundingTile(map, { x: position.x - 1, y: position.y + 1 }),
-    bottomCentre: getSurroundingTile(map, { x: position.x, y: position.y + 1 }),
-    bottomRight: getSurroundingTile(map, { x: position.x + 1, y: position.y + 1 })
+    topLeft: getSurroundingTile(map, new Vec2(position.x - 1, position.y - 1)),
+    topCentre: getSurroundingTile(map, new Vec2(position.x, position.y - 1)),
+    topRight: getSurroundingTile(map, new Vec2(position.x + 1, position.y - 1)),
+    left: getSurroundingTile(map, new Vec2(position.x - 1, position.y)),
+    centre: getSurroundingTile(map, new Vec2(position.x, position.y)),
+    right: getSurroundingTile(map, new Vec2(position.x + 1, position.y)),
+    bottomLeft: getSurroundingTile(map, new Vec2(position.x - 1, position.y + 1)),
+    bottomCentre: getSurroundingTile(map, new Vec2(position.x, position.y + 1) ),
+    bottomRight: getSurroundingTile(map, new Vec2(position.x + 1, position.y + 1))
   }
   return surrounding
 }

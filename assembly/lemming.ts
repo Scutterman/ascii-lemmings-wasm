@@ -25,7 +25,7 @@ export class Lemming {
   removed: boolean = false
   actionTimeLeft: u16 = 0
   action: LemmingAction = LemmingAction.Fall
-  position: Vec2 = { x: 4, y: 3}
+  position: Vec2 = new Vec2(4, 3)
   
   public update(surroundingTiles: SurroundingTiles): void {
     switch (this.action) {
