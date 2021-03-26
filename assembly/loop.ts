@@ -3,8 +3,9 @@ import { Lemming, LemmingAction, lemmingActionToCharacter } from "./lemming"
 import { Level, LevelState } from "./level"
 import { getSurroundingTiles, LevelTiles, mapToTiles } from "./map"
 import { Vec2 } from "./position"
+import { UIControl } from "./UIControl"
 
-const baseMillisecondsPerGameLoop: u16 = 100 as u16
+const baseMillisecondsPerGameLoop: u16 = 1000 as u16
 const fastForwardMultiplier: u8 = 2 as u8
 
 const MESSAGE_SUCCESS_1: string = 'You passed the level!'
@@ -100,7 +101,7 @@ function endLevel(level: Level): void {
     endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_2, new Vec2(-1, 6))
   }
 
-  render(endSlateToRender)
+  render(endSlateToRender, [])
 }
 
 export function toggleFastForward(): void {
@@ -214,7 +215,7 @@ function renderLevel(level: Level): void {
     map[lemming.position.y][lemming.position.x] = lemmingActionToCharacter(lemming.action)
   }
   
-  const rightmostColumn = render(map)
+  const rightmostColumn = render(map, level.uiControls)
   const timeLeft = level.timeLeft.toString()
   const paddingRequired = rightmostColumn - timeLeft.length
   display(' '.repeat(paddingRequired) + timeLeft)
@@ -235,14 +236,18 @@ function padColumn(totalColumns: i32, text: string): string {
   return ' '.repeat(charactersRequiredOnLeft) + text
 }
 
-function render(map: LevelTiles): i32 {
+function render(map: LevelTiles, controls: UIControl[]): i32 {
   const totalColumns = gameState.screenWidth / gameState.characterWidth
   const totalRows = gameState.screenHeight / gameState.characterHeight
   const usedRows = map.length
+
+  for (let i = 0; i < controls.length; i++) {
+    insertText(map, controls[i].getText(), controls[i].getPosition())
+  }
   
   clear()
   padRows(totalRows, usedRows)
-  let rightmostColumn = 0
+  let rightmostColumn: i32 = 0
   for (let i = 0; i < map.length; i++) {
     const column = padColumn(totalColumns, map[i].join(''))
     rightmostColumn = Math.max(rightmostColumn, column.length) as i32
