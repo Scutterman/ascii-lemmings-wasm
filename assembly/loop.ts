@@ -1,27 +1,16 @@
+import { insertText } from "./text"
 import { Lemming, LemmingAction, lemmingActionToCharacter } from "./lemming"
 import { Level, LevelState } from "./level"
 import { getSurroundingTiles, LevelTiles, mapToTiles } from "./map"
 
-const baseMillisecondsPerGameLoop: u16 = 1000 as u16
+const baseMillisecondsPerGameLoop: u16 = 333 as u16
 const fastForwardMultiplier: u8 = 2 as u8
-
-const NEEDED_LINE: u8 = 2
-const NEEDED_REPLACE_START: u8 = 21
-const RESCUED_LINE: u8 = 3
-const RESCUED_REPLACE_START: u8 = 21
-
-const MESSAGE_1_LINE: u8 = 5
-const MESSAGE_2_LINE: u8 = 6
 
 const MESSAGE_SUCCESS_1: string = 'You passed the level!'
 const MESSAGE_SUCCESS_2: string = 'Can you do it again...?'
-const MESSAGE_SUCCESS_1_REPLACE_START: u8 = 7
-const MESSAGE_SUCCESS_2_REPLACE_START: u8 = 6
 
 const MESSAGE_FAIL_1: string = 'You didn\'t save enough this time'
 const MESSAGE_FAIL_2: string = 'Would you like to try again?'
-const MESSAGE_FAIL_1_REPLACE_START: u8 = 1
-const MESSAGE_FAIL_2_REPLACE_START: u8 = 3
 
 const endSlate = mapToTiles([
   '__________________________________',
@@ -83,38 +72,21 @@ export function canStart(): boolean {
   )
 }
 
-function insertText(map: LevelTiles, message: string, line: u8, start: u8 = 0): LevelTiles {
-  if ((line as i32) >= map.length) {
-    throw new Error('insertText: line argument out of map bounds')
-  }
-  
-  if ((start + message.length) >= map[line].length) {
-    throw new Error('insertText: text out of map bounds')
-  }
-  
-  const messageArray = message.split('')
-  for (var i = 0; i < messageArray.length; i++) {
-    map[line][start + i] = messageArray[i]
-  }
-
-  return map
-}
-
 function endLevel(level: Level): void {
   gameState.shouldRun = false
   let endSlateToRender = cloneMap(endSlate)
 
   const needed = level.numberOfLemmingsForSucces.toString()
   const rescued = level.numberOfLemmingsSaved.toString()
-  endSlateToRender = insertText(endSlateToRender, needed, NEEDED_LINE, NEEDED_REPLACE_START)
-  endSlateToRender = insertText(endSlateToRender, rescued, RESCUED_LINE, RESCUED_REPLACE_START)
+  endSlateToRender = insertText(endSlateToRender, needed, 2)
+  endSlateToRender = insertText(endSlateToRender, rescued, 3)
 
   if (rescued > needed) {
-    endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_1, MESSAGE_1_LINE, MESSAGE_SUCCESS_1_REPLACE_START)
-    endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_2, MESSAGE_2_LINE, MESSAGE_SUCCESS_2_REPLACE_START)
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_1, 5)
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_2, 6)
   } else {
-    endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_1, MESSAGE_1_LINE, MESSAGE_FAIL_1_REPLACE_START)
-    endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_2, MESSAGE_2_LINE, MESSAGE_FAIL_2_REPLACE_START)
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_1, 5)
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_2, 6)
   }
 
   render(endSlateToRender)
