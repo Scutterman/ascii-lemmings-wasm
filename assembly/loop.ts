@@ -2,8 +2,9 @@ import { insertText } from "./text"
 import { Lemming, LemmingAction, lemmingActionToCharacter } from "./lemming"
 import { Level, LevelState } from "./level"
 import { getSurroundingTiles, LevelTiles, mapToTiles } from "./map"
+import { Vec2 } from "./position"
 
-const baseMillisecondsPerGameLoop: u16 = 333 as u16
+const baseMillisecondsPerGameLoop: u16 = 100 as u16
 const fastForwardMultiplier: u8 = 2 as u8
 
 const MESSAGE_SUCCESS_1: string = 'You passed the level!'
@@ -78,15 +79,15 @@ function endLevel(level: Level): void {
 
   const needed = level.numberOfLemmingsForSucces.toString()
   const rescued = level.numberOfLemmingsSaved.toString()
-  endSlateToRender = insertText(endSlateToRender, needed, 2)
-  endSlateToRender = insertText(endSlateToRender, rescued, 3)
+  endSlateToRender = insertText(endSlateToRender, needed, new Vec2(21, 2))
+  endSlateToRender = insertText(endSlateToRender, rescued, new Vec2(21, 3))
 
   if (rescued > needed) {
-    endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_1, 5)
-    endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_2, 6)
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_1, new Vec2(-1, 5))
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_2, new Vec2(-1, 6))
   } else {
-    endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_1, 5)
-    endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_2, 6)
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_1, new Vec2(-1, 5))
+    endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_2, new Vec2(-1, 6))
   }
 
   render(endSlateToRender)
