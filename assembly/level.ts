@@ -17,6 +17,13 @@ export class Level {
     this.numberOfLemmingsForSucces = numberOfLemmingsForSucces
     this.map = map
   }
+
+  public reset(): void {
+    this.timeLeft = 300
+    this.lemmings = []
+    this.numberOfLemmings = 0
+    this.numberOfLemmingsRemoved = 0
+  }
 }
 
 export enum LevelState {

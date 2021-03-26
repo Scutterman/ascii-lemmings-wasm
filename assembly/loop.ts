@@ -5,7 +5,7 @@ import { getSurroundingTiles, LevelTiles, mapToTiles } from "./map"
 import { Vec2 } from "./position"
 import { UIControl } from "./UIControl"
 
-const baseMillisecondsPerGameLoop: u16 = 1000 as u16
+const baseMillisecondsPerGameLoop: u16 = 100 as u16
 const fastForwardMultiplier: u8 = 2 as u8
 
 const MESSAGE_SUCCESS_1: string = 'You passed the level!'
@@ -101,7 +101,13 @@ function endLevel(level: Level): void {
     endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_2, new Vec2(-1, 6))
   }
 
-  render(endSlateToRender, [])
+  render(endSlateToRender, [
+    new UIControl(new Vec2(6, 4), "Restart", () => {
+      (gameState.currentLevel as Level).reset()
+      gameState.shouldRun = true
+    }),
+    new UIControl(new Vec2(17, 4), "Continue", () => {})
+  ])
 }
 
 export function toggleFastForward(): void {
