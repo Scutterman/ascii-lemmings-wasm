@@ -51,7 +51,7 @@
   }
 
   const loop = () => {
-    module.instance.exports.eventLoop()
+    module.instance.exports.triggerEventLoop()
   }
   
   console.log('Starting the loop')
