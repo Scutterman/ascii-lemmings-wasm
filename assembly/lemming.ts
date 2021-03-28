@@ -4,9 +4,6 @@ import { SurroundingTiles } from "./map";
 import { Vec2 } from "./position";
 
 export class Lemming {
-  movingUp: boolean = false
-  movingDown: boolean = true
-  movingLeft: boolean = false
   movingRight: boolean = true
   removed: boolean = false
   exited: boolean = false
@@ -14,7 +11,7 @@ export class Lemming {
   action: LemmingAction = new Fall()
   position: Vec2 = new Vec2(4, 3)
   hasUmbrella: boolean = false
-  isClimber: boolean = true
+  isClimber: boolean = false
 
   public update(surroundingTiles: SurroundingTiles): void {
     this.action.update(this, surroundingTiles)

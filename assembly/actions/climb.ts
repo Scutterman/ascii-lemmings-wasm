@@ -24,7 +24,6 @@ export class Climb extends LemmingAction {
     if (this.hasReachedOpening(surroundingTiles, lemming.movingRight)) {
       lemming.action = new Walk()
     } else if (this.hasHitCeiling(surroundingTiles)) {
-      lemming.movingLeft = !lemming.movingLeft
       lemming.movingRight = !lemming.movingRight
       this.handleFalling(lemming)
     } else {
