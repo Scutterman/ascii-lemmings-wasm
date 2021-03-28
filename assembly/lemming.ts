@@ -11,11 +11,10 @@ export enum LemmingAction {
   Build = 6,
   Bash = 7,
   Mine = 8,
-  Dig = 9,
-  Exited = 10
+  Dig = 9
 }
 
-const LemmingActionMap: string[] = ['F','W','C','U','*','T','/','B','\\','D','X']
+const LemmingActionMap: string[] = ['F','W','C','U','*','T','/','B','\\','D']
 
 export class Lemming {
   movingUp: boolean = false
@@ -23,6 +22,7 @@ export class Lemming {
   movingLeft: boolean = false
   movingRight: boolean = true
   removed: boolean = false
+  exited: boolean = false
   actionTimeLeft: u16 = 0
   action: LemmingAction = LemmingAction.Fall
   position: Vec2 = new Vec2(4, 3)
@@ -40,7 +40,7 @@ export class Lemming {
           if (this.isFalling(surroundingTiles)) {
             this.handleFalling()
           } else if ((this.movingLeft && surroundingTiles.left == TILE_EXIT) || (this.movingRight && surroundingTiles.right == TILE_EXIT)) {
-            this.action = LemmingAction.Exited
+            this.exited = true
             this.removed = true
           } else if ((this.movingLeft && surroundingTiles.left != TILE_AIR) || (this.movingRight && surroundingTiles.right != TILE_AIR)) {
             this.movingLeft = !this.movingLeft
