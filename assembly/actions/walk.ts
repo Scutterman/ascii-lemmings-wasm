@@ -3,11 +3,9 @@ import { Lemming } from "../lemming";
 import { SurroundingTiles, TILE_AIR, TILE_EXIT } from "../map";
 import { LemmingAction } from "./lemmingAction"
 
-const walkAnimation = new Animation([[['k'], ['l']]])
-
 export class Walk extends LemmingAction {
   constructor() {
-    super(walkAnimation)
+    super(new Animation([[['k']], [['l']]]))
   }
   
   public update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {

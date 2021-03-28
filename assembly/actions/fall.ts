@@ -4,11 +4,9 @@ import { SurroundingTiles } from "../map";
 import { LemmingAction } from "./lemmingAction"
 import { Walk } from "./walk";
 
-const fallAnimation = new Animation([[['Y'], ['T']]])
-
 export class Fall extends LemmingAction {
   constructor() {
-    super(fallAnimation)
+    super(new Animation([[['Y']], [['T']]]))
   }
   
   public update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
