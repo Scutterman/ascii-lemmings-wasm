@@ -13,7 +13,8 @@ export class Lemming {
   actionTimeLeft: u16 = 0
   action: LemmingAction = new Fall()
   position: Vec2 = new Vec2(4, 3)
-  hasUmbrella: boolean = true
+  hasUmbrella: boolean = false
+  isClimber: boolean = true
 
   public update(surroundingTiles: SurroundingTiles): void {
     this.action.update(this, surroundingTiles)
