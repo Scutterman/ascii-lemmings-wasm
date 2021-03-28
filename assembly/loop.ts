@@ -1,5 +1,5 @@
 import { insertText } from "./text"
-import { Lemming, LemmingAction } from "./lemming"
+import { Lemming } from "./lemming"
 import { LevelState } from "./levels/level"
 import { getSurroundingTiles, LevelTiles } from "./map"
 import { UIControl } from "./UIControl"
