@@ -71,7 +71,12 @@ function gameLoop(): void {
     gameState.endLevel()
     return
   } else if (lemmingsLeftToSpawn) {
-    level.lemmings.push(new Lemming())
+    if (gameState.framesSinceLastLemming >= gameState.framesBetweenLemmingSpawns) {
+      level.lemmings.push(new Lemming())
+      gameState.framesSinceLastLemming = 0
+    } else {
+      gameState.framesSinceLastLemming++
+    }
   }
 
   level.renderLevel()

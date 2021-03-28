@@ -2,7 +2,7 @@ import { EndSlate } from "./levels/endSlate"
 import { Level, LevelState } from "./levels/level"
 import { render } from './loop'
 
-export const baseMillisecondsPerGameLoop: u16 = 100 as u16
+export const baseMillisecondsPerGameLoop: u16 = 1000 as u16
 export const fastForwardMultiplier: u8 = 2 as u8
 
 const defaultLevel = new Level(0, 0, [])
@@ -26,6 +26,8 @@ export class GameState {
   public lastRowPadding: i32 = 0
   public lastColumnPadding: i32 = 0
   public lastLevel: Level = defaultLevel
+  public framesSinceLastLemming: u16 = u16.MAX_VALUE
+  public framesBetweenLemmingSpawns: u16 = 4
 
   constructor () { }
 
