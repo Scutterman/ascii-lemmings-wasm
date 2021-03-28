@@ -2,6 +2,7 @@ import { Vec2 } from "./position"
 
 export type LevelTiles = string[][]
 export type LevelMap = string[]
+type Tile = string
 
 export const TILE_BOUNDARY  = '_'
 export const TILE_SIDE      = '|'
@@ -45,10 +46,27 @@ export function getSurroundingTiles(map: LevelTiles, position: Vec2): Surroundin
   return surrounding
 }
 
+function isOutOfMapBounds(map: LevelTiles, location: Vec2): boolean {
+  return location.x < 0 || location.y < 0 || location.y > map.length || location.x > map[location.y].length
+}
+
 function getSurroundingTile(map: LevelTiles, position: Vec2): string {
-  if (position.x < 0 || position.y < 0 || position.y > map.length || position.x > map[position.y].length) {
+  if (isOutOfMapBounds(map, position)) {
     return '_'
   }
 
   return map[position.y][position.x]
+}
+
+function terrainIndestructible(tile: Tile): boolean {
+  return tile == TILE_AIR || tile == TILE_ENTRANCE || tile == TILE_EXIT || tile == TILE_BOUNDARY || tile == TILE_SIDE
+}
+
+export function removeTerrain(map: LevelTiles, location: Vec2): boolean {
+  if (isOutOfMapBounds(map, location) || terrainIndestructible(map[location.y][location.x])) {
+    return false
+  } else {
+    map[location.y][location.x] = TILE_AIR
+    return true
+  }
 }
