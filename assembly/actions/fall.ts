@@ -11,7 +11,7 @@ export class Fall extends LemmingAction {
   
   public update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
     if (this.isFalling(surroundingTiles)) {
-      this.handleFalling(lemming)
+      this.handleFalling(lemming, false)
     } else {
       lemming.action = new Walk()
     }

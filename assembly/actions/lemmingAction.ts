@@ -16,8 +16,10 @@ export abstract class LemmingAction {
     return surroundingTiles.bottomCentre == TILE_AIR
   }
   
-  protected handleFalling(lemming: Lemming): void {
-    lemming.action = new Fall()
+  protected handleFalling(lemming: Lemming, changeAction: boolean = true): void {
+    if (changeAction) {
+      lemming.action = new Fall()
+    }
     lemming.position.y++
   }
 
