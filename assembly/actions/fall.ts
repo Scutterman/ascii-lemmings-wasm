@@ -22,8 +22,11 @@ export class Fall extends LemmingAction {
         this.blocksFallen++
       }
     } else {
-      // TODO:: if a lemming falls too many blocks then it splats
-      lemming.action = new Walk()
+      if (this.blocksFallen >= 16) {
+        lemming.removed = true
+      } else {
+        lemming.action = new Walk()
+      }
     }
   }
 }
