@@ -37,7 +37,7 @@ export class Level {
     for (let i = 0; i < this.lemmings.length; i++) {
       const lemming = this.lemmings[i]
       if (lemming.removed) { continue }
-      map[lemming.position.y][lemming.position.x] = lemming.action.getNextAnimationFrame()
+      map[lemming.position.y][lemming.position.x] = lemming.renderFrame()
     }
     
     const rightmostColumn = render(map, this.uiControls)
