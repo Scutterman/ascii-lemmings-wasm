@@ -1,7 +1,8 @@
 import { gameState } from "../index"
-import { LevelTiles, mapToTiles } from "../map"
+import { mapToTiles } from "../map"
 import { Vec2 } from "../position"
 import { insertText } from "../text"
+import { LevelTiles } from "../types"
 import { UIControl } from "../UIControl"
 import { Level } from "./level"
 
@@ -30,7 +31,7 @@ export class EndSlate extends Level {
     this.uiControls.push(new UIControl(new Vec2(17, 4), "Continue", () => {}))
   }
 
-  public getEndScreen(needed: string, rescued: string): LevelTiles {
+  public renderEndScreen(needed: string, rescued: string): void {
     let endSlateToRender = this.cloneMap()
     endSlateToRender = insertText(endSlateToRender, needed, new Vec2(21, 2))
     endSlateToRender = insertText(endSlateToRender, rescued, new Vec2(21, 3))
@@ -43,7 +44,7 @@ export class EndSlate extends Level {
       endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_2, new Vec2(-1, 6))
     }
 
-    return endSlateToRender
+    this.render(endSlateToRender)
   }
 }
 

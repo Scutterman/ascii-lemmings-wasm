@@ -1,12 +1,11 @@
-import { LemmingAction } from "./actions/lemmingAction"
+// import { Climb } from "./actions/climb"
+// import { LemmingAction } from "./actions/lemmingAction"
+import { BaseLevel } from "./levels/baseLevel"
 import { EndSlate } from "./levels/endSlate"
-import { Level } from './levels/level'
-import { render } from './loop'
+import { LemmingGift, LevelState } from "./types"
 
 export const baseMillisecondsPerGameLoop: u16 = 300 as u16
 export const fastForwardMultiplier: u8 = 2 as u8
-
-const defaultLevel = new Level(0, 0, [])
 
 export class GameState {
   public shouldRun: boolean = false
@@ -16,7 +15,7 @@ export class GameState {
   public millisecondsPerGameLoop: u16 = baseMillisecondsPerGameLoop
   public releaseRate: u8 = 50
   public minimumReleaseRate: u8 = 50
-  public currentLevel: Level = defaultLevel
+  public currentLevel: BaseLevel
   public screenWidth: i32 = 0
   public screenHeight: i32 = 0
   public characterWidth: i32 = 0
@@ -26,11 +25,16 @@ export class GameState {
   public mouseClicked: boolean = false
   public lastRowPadding: i32 = 0
   public lastColumnPadding: i32 = 0
-  public lastLevel: Level = defaultLevel
+  public lastLevel: BaseLevel
   public framesSinceLastLemming: u16 = u16.MAX_VALUE
   public framesBetweenLemmingSpawns: u16 = 4
+  //public selectedAction: LemmingAction | null = null
+  public selectedGift: LemmingGift = LemmingGift.None
 
-  constructor () { }
+  constructor (level: BaseLevel) { 
+    this.currentLevel = level
+    this.lastLevel = level
+  }
 
   public canStart(): boolean {
     return (
@@ -39,6 +43,13 @@ export class GameState {
       this.characterWidth > 0 &&
       this.characterHeight > 0
     )
+  }
+
+  // public setClimbAction = (): void => {
+  //   this.selectedAction = new Climb()
+  // }
+  public setUmbrellaGift(): void {
+    this.selectedGift = LemmingGift.Umbrella
   }
 
   public restartLastLevel(): void {
@@ -54,7 +65,7 @@ export class GameState {
     }
   }
   
-  public loadLevel(newLevel: Level): void {
+  public loadLevel(newLevel: BaseLevel): void {
     if (!this.currentLevel.isMetaScreen) {
       this.lastLevel = this.currentLevel.clone()
     }
@@ -72,8 +83,6 @@ export class GameState {
     
     const endSlate = new EndSlate()
     this.loadLevel(endSlate)
-    const endSlateToRender = endSlate.getEndScreen(needed, rescued)
-  
-    render(endSlateToRender, endSlate.uiControls)
+    endSlate.renderEndScreen(needed, rescued)
   }
 }

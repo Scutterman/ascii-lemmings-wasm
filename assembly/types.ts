@@ -1,5 +1,5 @@
 
-export enum LemmingGift { ClimbingBoots = 0, Umbrella = 1, Bomb = 2 }
+export enum LemmingGift { None = 0, ClimbingBoots = 1, Umbrella = 2, Bomb = 3 }
 
 export enum LevelState {
   TitleScreen,

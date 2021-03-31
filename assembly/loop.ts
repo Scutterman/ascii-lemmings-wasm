@@ -1,7 +1,5 @@
 import { insertText } from "./text"
-import { Lemming } from "./lemming"
 import { LevelState, LevelTiles } from "./types"
-import { getSurroundingTiles } from "./map"
 import { UIControl } from "./UIControl"
 
 import { gameState } from './index'
@@ -43,88 +41,25 @@ function eventLoop(): void {
   const gameLoopOverdue = delta > 65535 || delta as u16 >= gameState.millisecondsPerGameLoop
   if (!gameState.currentLevel.isMetaScreen && levelRunning && gameLoopOverdue) {
     gameState.lastGameLoopRunTime = currentTime
-    gameLoop()
+    gameState.currentLevel.gameLoop()
   }
-}
-
-function gameLoop(): void {
-  // Loop through each lemming and progress their action
-  const level = gameState.currentLevel
-
-  for (let i = 0; i < level.lemmings.length; i++) {
-    if (level.lemmings[i].removed) { continue }
-    level.lemmings[i].update(getSurroundingTiles(level.map, level.lemmings[i].position))
-    if (level.lemmings[i].exited) {
-      level.numberOfLemmingsSaved++
-    }
-
-    if (level.lemmings[i].removed) {
-      level.numberOfLemmingsRemoved++
-    }
-  }
-
-  level.timeLeft--
-  const lemmingsLeftToSpawn = level.lemmings.length < (level.numberOfLemmings as i32)
-  const allLemmingsRemoved = !lemmingsLeftToSpawn && level.numberOfLemmingsRemoved == level.numberOfLemmings
-
-  if (allLemmingsRemoved || level.timeLeft == 0) {
-    gameState.endLevel()
-    return
-  } else if (lemmingsLeftToSpawn) {
-    if (gameState.framesSinceLastLemming >= gameState.framesBetweenLemmingSpawns) {
-      level.lemmings.push(new Lemming())
-      gameState.framesSinceLastLemming = 0
-    } else {
-      gameState.framesSinceLastLemming++
-    }
-  }
-
-  level.renderLevel()
 }
 
 declare function display(arr: string): void;
 declare function clear(): void;
 
-function padRows(totalRows: i32, usedRows: i32): void {
-  gameState.lastRowPadding = 0
-  for (var i = totalRows; i > usedRows; i -= 2) {
-    gameState.lastRowPadding++
-    display('')
-  }
-}
-
-function padColumn(totalColumns: i32, text: string): string {
-  const charactersSpare = totalColumns - text.length
-  const charactersRequiredOnLeft = Math.floor(charactersSpare / 2) as i32
-  gameState.lastColumnPadding = charactersRequiredOnLeft
-  return ' '.repeat(charactersRequiredOnLeft) + text
-}
-
-export function render(map: LevelTiles, controls: UIControl[]): i32 {
-  const totalColumns = gameState.screenWidth / gameState.characterWidth
-  const totalRows = gameState.screenHeight / gameState.characterHeight
-  const usedRows = map.length
-
-  for (let i = 0; i < controls.length; i++) {
-    insertText(map, controls[i].getText(), controls[i].getPosition())
-  }
-  
-  clear()
-  padRows(totalRows, usedRows)
-  let rightmostColumn: i32 = 0
-  for (let i = 0; i < map.length; i++) {
-    const column = padColumn(totalColumns, map[i].join(''))
-    rightmostColumn = Math.max(rightmostColumn, column.length) as i32
-    display(column);
-  }
-
-  return rightmostColumn
-}
-
 export function renderTimer(rightmostColumn: i32, time: u16): void {
   const timeLeft = time.toString()
   const paddingRequired = rightmostColumn - timeLeft.length
   display(' '.repeat(paddingRequired) + timeLeft)
+}
+
+export function renderToScreen(text: string): void {
+  display(text)
+}
+
+export function clearScreen(): void {
+  clear()
 }
 
 /** EXPORTED TO JS */

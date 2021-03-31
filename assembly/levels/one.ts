@@ -17,6 +17,7 @@ export class Level1 extends Level {
       '|                  G  G|',
       '|                  E  G|',
       '|GGGGGGGGGGGGGGGGGGGGGG|',
+      '________________________',
       '|                      |',
       '________________________'
     ]))
