@@ -1,8 +1,5 @@
 import { Vec2 } from "./position"
-
-export type LevelTiles = string[][]
-export type LevelMap = string[]
-type Tile = string
+import { LevelMap, LevelTiles, Tile } from "./types"
 
 export const TILE_BOUNDARY  = '_'
 export const TILE_SIDE      = '|'

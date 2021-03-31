@@ -1,4 +1,4 @@
-import { LevelTiles } from "./map";
+import { LevelTiles } from "./types";
 import { Vec2 } from "./position";
 
 export function insertText(map: LevelTiles, message: string, position: Vec2): LevelTiles {

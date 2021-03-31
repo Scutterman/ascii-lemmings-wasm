@@ -1,7 +1,7 @@
 import { insertText } from "./text"
 import { Lemming } from "./lemming"
-import { LevelState } from "./levels/level"
-import { getSurroundingTiles, LevelTiles } from "./map"
+import { LevelState, LevelTiles } from "./types"
+import { getSurroundingTiles } from "./map"
 import { UIControl } from "./UIControl"
 
 import { gameState } from './index'

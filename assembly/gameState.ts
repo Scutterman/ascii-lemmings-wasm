@@ -1,5 +1,6 @@
+import { LemmingAction } from "./actions/lemmingAction"
 import { EndSlate } from "./levels/endSlate"
-import { Level, LevelState } from "./levels/level"
+import { Level } from './levels/level'
 import { render } from './loop'
 
 export const baseMillisecondsPerGameLoop: u16 = 300 as u16

@@ -1,10 +1,11 @@
 import { Vec2 } from "./position";
+import { UIAction } from "./types";
 
 export class UIControl {
   constructor(
     private positionOnScreen: Vec2,
     private text: string,
-    private action: ()=> void
+    private action: UIAction
   ) { }
 
   public getPosition(): Vec2 { return this.positionOnScreen }
