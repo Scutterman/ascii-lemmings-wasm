@@ -1,7 +1,7 @@
 import { EndSlate } from "./levels/endSlate"
 import { Level } from "./levels/level"
 import { render } from './loop'
-import { LevelState } from './types'
+import { LemmingGift, LevelState } from './types'
 
 export const baseMillisecondsPerGameLoop: u16 = 300 as u16
 export const fastForwardMultiplier: u8 = 2 as u8
@@ -29,8 +29,7 @@ export class GameState {
   public lastLevel: Level = defaultLevel
   public framesSinceLastLemming: u16 = u16.MAX_VALUE
   public framesBetweenLemmingSpawns: u16 = 4
-
-  constructor () { }
+  public selectedGift: LemmingGift = LemmingGift.None
 
   public canStart(): boolean {
     return (

@@ -1,4 +1,8 @@
+import { gameState } from ".."
 import { mapToTiles } from "../map"
+import { Vec2 } from "../position"
+import { LemmingGift } from "../types"
+import { UIControl } from "../UIControl"
 import { Level } from "./level"
 
 export class Level1 extends Level {
@@ -20,5 +24,8 @@ export class Level1 extends Level {
       '|                      |',
       '________________________'
     ]))
+    this.uiControls.push(new UIControl(new Vec2(0, 0), 'A', () => {
+      gameState.selectedGift = LemmingGift.None
+    }))
   }
 }
