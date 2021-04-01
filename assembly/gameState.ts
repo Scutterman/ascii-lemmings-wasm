@@ -43,11 +43,20 @@ export class GameState {
     )
   }
 
-  // public setClimbAction = (): void => {
-  //   this.selectedAction = new Climb()
-  // }
+  public setNoGift (): void {
+    this.selectedGift = LemmingGift.None
+  }
+
+  public setClimbingBootsGift (): void {
+    this.selectedGift = LemmingGift.ClimbingBoots
+  }
+
   public setUmbrellaGift(): void {
     this.selectedGift = LemmingGift.Umbrella
+  }
+
+  public setBombGift (): void {
+    this.selectedGift = LemmingGift.Bomb
   }
 
   public restartLastLevel(): void {

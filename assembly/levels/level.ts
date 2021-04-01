@@ -1,7 +1,7 @@
 import { gameState } from ".."
 import { Lemming } from "../lemming"
 import { clearScreen, renderTimer, renderToScreen } from "../loop"
-import { LevelTiles } from "../types"
+import { LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { getSurroundingTiles } from "../map"
 import { insertText } from "../text"
@@ -28,19 +28,21 @@ export class Level extends BaseLevel {
   public lemmings: Lemming[] = []
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
     super(lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
-    this.uiControls.push(new UIControl(new Vec2(1, 14), "Restart", () => {
-      gameState.restartLastLevel()
-    }))
-    // if (!this.isMetaScreen) {
-      // this.makeButton(1, 14, 'C', () => setClimbingBootsGift())
-      //this.makeButton(4, 14, 'U', () => gameState.setUmbrellaGift())
-      // this.makeButton(7, 14, '*', () => setBombGift())
+
+    if (!this.isMetaScreen) {
+      this.makeButton(1, 14, 'C', () => { gameState.setClimbingBootsGift() })
+      this.makeButton(4, 14, 'U', () => { gameState.setUmbrellaGift() })
+      this.makeButton(7, 14, '*', () => { gameState.setBombGift() })
       // this.makeButton(10, 14, 'T', () => setClimbAction())
       // this.makeButton(13, 14, '/', () => setClimbAction())
       // this.makeButton(16, 14, 'B', () => setClimbAction())
       // this.makeButton(19, 14, '\\', () => setClimbAction())
       // this.makeButton(22, 14, 'D', () => setClimbAction())
-      // }
+    }
+  }
+
+  public makeButton(x: i16, y:i16, text: string, action: UIAction): void {
+    this.uiControls.push(new UIControl(new Vec2(x, y), text, action))
   }
 
   public gameLoop(): void {
