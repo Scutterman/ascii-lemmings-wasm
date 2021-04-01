@@ -1,6 +1,4 @@
-import { insertText } from "./text"
-import { LevelState, LevelTiles } from "./types"
-import { UIControl } from "./UIControl"
+import { LevelState } from "./types"
 
 import { gameState } from './index'
 

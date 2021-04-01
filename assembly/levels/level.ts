@@ -8,22 +8,6 @@ import { insertText } from "../text"
 import { UIControl } from "../UIControl"
 import { Vec2 } from "../position"
 
-// const setNoGift = (): void => {
-//   gameState.selectedGift = LemmingGift.None
-// }
-
-// const setClimbingBootsGift = (): void => {
-//   gameState.selectedGift = LemmingGift.ClimbingBoots
-// }
-
-// const setUmbrellaGift = (): void => {
-//   gameState.selectedGift = LemmingGift.Umbrella
-// }
-
-// const setBombGift = (): void => {
-//   gameState.selectedGift = LemmingGift.Bomb
-// }
-
 export class Level extends BaseLevel {
   public lemmings: Lemming[] = []
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
@@ -62,6 +46,7 @@ export class Level extends BaseLevel {
       }
     }
   
+    this.updateLemmings()
     this.renderLevel()
   }
 
