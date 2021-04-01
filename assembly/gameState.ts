@@ -1,11 +1,9 @@
-// import { Climb } from "./actions/climb"
-// import { LemmingAction } from "./actions/lemmingAction"
 import { BaseLevel } from "./levels/baseLevel"
 import { DefaultLevel } from "./levels/defaultLevel"
 import { EndSlate } from "./levels/endSlate"
 import { LemmingGift, LevelState } from "./types"
 
-export const baseMillisecondsPerGameLoop: u16 = 300 as u16
+export const baseMillisecondsPerGameLoop: u16 = 1000 as u16
 export const fastForwardMultiplier: u8 = 2 as u8
 
 const defaultLevel: DefaultLevel = new DefaultLevel()

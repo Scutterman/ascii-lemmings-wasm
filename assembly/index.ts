@@ -18,3 +18,5 @@ export function start(): boolean {
   titleScreen.renderLevel()
   return true
 }
+
+export declare function log(text: string): void
