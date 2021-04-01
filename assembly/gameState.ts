@@ -1,11 +1,14 @@
 // import { Climb } from "./actions/climb"
 // import { LemmingAction } from "./actions/lemmingAction"
 import { BaseLevel } from "./levels/baseLevel"
+import { DefaultLevel } from "./levels/defaultLevel"
 import { EndSlate } from "./levels/endSlate"
 import { LemmingGift, LevelState } from "./types"
 
 export const baseMillisecondsPerGameLoop: u16 = 300 as u16
 export const fastForwardMultiplier: u8 = 2 as u8
+
+const defaultLevel: DefaultLevel = new DefaultLevel()
 
 export class GameState {
   public shouldRun: boolean = false
@@ -15,7 +18,7 @@ export class GameState {
   public millisecondsPerGameLoop: u16 = baseMillisecondsPerGameLoop
   public releaseRate: u8 = 50
   public minimumReleaseRate: u8 = 50
-  public currentLevel: BaseLevel
+  public currentLevel: BaseLevel = defaultLevel
   public screenWidth: i32 = 0
   public screenHeight: i32 = 0
   public characterWidth: i32 = 0
@@ -25,16 +28,11 @@ export class GameState {
   public mouseClicked: boolean = false
   public lastRowPadding: i32 = 0
   public lastColumnPadding: i32 = 0
-  public lastLevel: BaseLevel
+  public lastLevel: BaseLevel = defaultLevel
   public framesSinceLastLemming: u16 = u16.MAX_VALUE
   public framesBetweenLemmingSpawns: u16 = 4
   //public selectedAction: LemmingAction | null = null
   public selectedGift: LemmingGift = LemmingGift.None
-
-  constructor (level: BaseLevel) { 
-    this.currentLevel = level
-    this.lastLevel = level
-  }
 
   public canStart(): boolean {
     return (

@@ -2,11 +2,11 @@ import { gameState } from ".."
 import { Lemming } from "../lemming"
 import { clearScreen, renderTimer, renderToScreen } from "../loop"
 import { LevelTiles } from "../types"
-import { Vec2 } from "../position"
-import { UIControl } from "../UIControl"
 import { BaseLevel } from "./baseLevel"
 import { getSurroundingTiles } from "../map"
 import { insertText } from "../text"
+import { UIControl } from "../UIControl"
+import { Vec2 } from "../position"
 
 // const setNoGift = (): void => {
 //   gameState.selectedGift = LemmingGift.None
@@ -28,10 +28,9 @@ export class Level extends BaseLevel {
   public lemmings: Lemming[] = []
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
     super(lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
-    this.uiControls.push(new UIControl(new Vec2(6, 4), "Restart", () => {
-      //gameState.restartLastLevel()
+    this.uiControls.push(new UIControl(new Vec2(1, 14), "Restart", () => {
+      gameState.restartLastLevel()
     }))
-    
     // if (!this.isMetaScreen) {
       // this.makeButton(1, 14, 'C', () => setClimbingBootsGift())
       //this.makeButton(4, 14, 'U', () => gameState.setUmbrellaGift())
