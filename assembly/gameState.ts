@@ -1,6 +1,7 @@
 import { EndSlate } from "./levels/endSlate"
-import { Level, LevelState } from "./levels/level"
+import { Level } from "./levels/level"
 import { render } from './loop'
+import { LevelState } from './types'
 
 export const baseMillisecondsPerGameLoop: u16 = 300 as u16
 export const fastForwardMultiplier: u8 = 2 as u8

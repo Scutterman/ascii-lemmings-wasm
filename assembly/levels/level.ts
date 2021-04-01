@@ -1,6 +1,6 @@
 import { Lemming } from "../lemming"
 import { render, renderTimer } from "../loop"
-import { LevelTiles } from "../map"
+import { LevelTiles } from "../types"
 import { UIControl } from "../UIControl"
 
 export class Level {
@@ -47,11 +47,4 @@ export class Level {
   public clone(): Level {
     return new Level(this.numberOfLemmings, this.numberOfLemmingsForSucces, this.map, this.isMetaScreen)
   }
-}
-
-export enum LevelState {
-  TitleScreen,
-  LevelSelect,
-  LevelRunning,
-  EndSlate
 }

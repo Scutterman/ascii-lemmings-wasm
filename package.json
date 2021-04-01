@@ -8,11 +8,13 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "@assemblyscript/loader": "^0.18.15"
+    "@assemblyscript/loader": "^0.18.15",
+    "source-map-support": "^0.5.19"
   },
   "devDependencies": {
     "assemblyscript": "^0.18.15",
-    "http-server": "^0.12.3"
+    "http-server": "^0.12.3",
+    "typescript": "^4.2.3"
   },
   "scripts": {
     "asbuild:untouched": "asc assembly/index.ts --baseDir . --binaryFile src/build/untouched.wasm --textFile src/build/untouched.wat --target debug",

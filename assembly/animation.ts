@@ -1,4 +1,4 @@
-export type AnimationFrame = string[][]
+import { AnimationFrame } from './types'
 
 export class Animation {
   private currentFrameIndex: u8 = 0
