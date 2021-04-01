@@ -4,6 +4,7 @@ import { LemmingAction } from "./actions/lemmingAction";
 import { Animation } from "./animation";
 import { removeTerrain, SurroundingTiles } from "./map";
 import { Vec2 } from "./position";
+import { LemmingGift } from "./types";
 
 export class Lemming {
   movingRight: boolean = true
@@ -54,5 +55,29 @@ export class Lemming {
     } else {
       return this.action.getNextAnimationFrame()
     }
+  }
+
+  public setGift(gift: LemmingGift): boolean {
+    switch (gift) {
+      case LemmingGift.ClimbingBoots: 
+        if (this.isClimber != true) {
+          this.isClimber = true
+          return true
+        }
+      break
+      case LemmingGift.Umbrella:
+        if (this.hasUmbrella != true) {
+          this.hasUmbrella = true
+          return true
+        }
+      break
+      case LemmingGift.Bomb:
+        if (this.isExploding != true) {
+          this.isExploding = true
+          return true
+        }
+      break
+    }
+    return false
   }
 }

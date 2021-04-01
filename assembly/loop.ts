@@ -17,8 +17,11 @@ function processInputs(): void {
       for (let i = 0; i < level.uiControls.length; i++) {
         if (level.uiControls[i].isInBounds(mouseTileX, mouseTileY)) {
           level.uiControls[i].clicked()
+          return
         }
       }
+
+      level.processLemmingSelect(mouseTileX, mouseTileY)
     }
   }
 }

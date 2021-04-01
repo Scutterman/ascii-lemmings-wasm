@@ -1,7 +1,7 @@
 import { gameState } from ".."
 import { Lemming } from "../lemming"
 import { clearScreen, renderTimer, renderToScreen } from "../loop"
-import { LevelTiles, UIAction } from "../types"
+import { LemmingGift, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { getSurroundingTiles } from "../map"
 import { insertText } from "../text"
@@ -14,6 +14,7 @@ export class Level extends BaseLevel {
     super(lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
     if (!this.isMetaScreen) {
+      // TODO:: limit the quantities
       this.makeButton(1, 14, 'C', () => { gameState.setClimbingBootsGift() })
       this.makeButton(4, 14, 'U', () => { gameState.setUmbrellaGift() })
       this.makeButton(7, 14, '*', () => { gameState.setBombGift() })
@@ -29,6 +30,22 @@ export class Level extends BaseLevel {
     this.uiControls.push(new UIControl(new Vec2(x, y), text, action))
   }
 
+  public processLemmingSelect(mouseTileX: i32, mouseTileY: i32): boolean {
+    for (let i = 0; i < this.lemmings.length; i++) {
+      if (mouseTileX == this.lemmings[i].position.x && mouseTileY == this.lemmings[i].position.y) {
+        if (gameState.selectedGift !== LemmingGift.None) {
+          const giftApplied = this.lemmings[i].setGift(gameState.selectedGift)
+          if (giftApplied) {
+            gameState.setNoGift()
+            return true
+          }
+        }
+      }
+    }
+
+    return false
+  }
+  
   public gameLoop(): void {
     this.timeLeft--
     const lemmingsLeftToSpawn = this.lemmings.length < (this.numberOfLemmings as i32)

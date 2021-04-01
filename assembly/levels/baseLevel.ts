@@ -11,6 +11,7 @@ export abstract class BaseLevel {
   public uiControls: UIControl[] = []
   public isMetaScreen: boolean
 
+  public abstract processLemmingSelect(mouseTileX: i32, mouseTileY: i32): boolean
   public abstract updateLemmings(): void
   public abstract gameLoop(): void
   public abstract clone(): BaseLevel
