@@ -1,3 +1,4 @@
+import { gameState } from "."
 import { Vec2 } from "./position"
 import { LevelMap, LevelTiles, Tile } from "./types"
 
@@ -52,7 +53,11 @@ function getSurroundingTile(map: LevelTiles, position: Vec2): string {
     return '_'
   }
 
-  return map[position.y][position.x]
+  if (gameState.currentLevel.isBlockerInLocation(position)) {
+    return 'T'
+  } else {
+    return map[position.y][position.x]
+  }
 }
 
 function terrainIndestructible(tile: Tile): boolean {

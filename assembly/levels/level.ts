@@ -7,6 +7,7 @@ import { getSurroundingTiles } from "../map"
 import { insertText } from "../text"
 import { UIControl } from "../UIControl"
 import { Vec2 } from "../position"
+import { Block } from "../actions/block"
 
 export class Level extends BaseLevel {
   public lemmings: Lemming[] = []
@@ -89,6 +90,16 @@ export class Level extends BaseLevel {
         this.numberOfLemmingsRemoved++
       }
     }
+  }
+
+  public isBlockerInLocation(location: Vec2): boolean {
+    for (let i = 0; i < this.lemmings.length; i++) {
+      if (this.lemmings[i].position.equals(location) && this.lemmings[i].action instanceof Block) {
+        return true
+      }
+    }
+
+    return false
   }
   
   public renderLevel(): void {

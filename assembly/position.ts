@@ -6,4 +6,8 @@ export class Vec2 {
     this.x = x
     this.y = y
   }
+
+  public equals(vec2: Vec2): boolean {
+    return this.x == vec2.x && this.y == vec2.y
+  }
 }
