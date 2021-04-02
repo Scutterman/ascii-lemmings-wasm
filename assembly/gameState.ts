@@ -29,7 +29,6 @@ export class GameState {
   public lastLevel: BaseLevel = defaultLevel
   public framesSinceLastLemming: u16 = u16.MAX_VALUE
   public framesBetweenLemmingSpawns: u16 = 4
-  //public selectedAction: LemmingAction | null = null
   public selectedGift: LemmingGift = LemmingGift.None
 
   public canStart(): boolean {
@@ -57,6 +56,13 @@ export class GameState {
     this.selectedGift = LemmingGift.Bomb
   }
 
+  public setNukeGift (): void {
+    if (this.selectedGift == LemmingGift.Nuke) {
+      this.currentLevel.nuke()
+    } else {
+      this.selectedGift = LemmingGift.Nuke
+    }
+  }
 
   private reset (): void {
     this.shouldRun = true
