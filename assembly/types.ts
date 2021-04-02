@@ -1,5 +1,16 @@
 
-export enum LemmingGift { None = 0, ClimbingBoots = 1, Umbrella = 2, Bomb = 3 }
+export enum LemmingGift {
+  None = 0,
+  ClimbingBoots = 1,
+  Umbrella = 2,
+  Bomb = 3,
+  Block = 4,
+  BrickSack = 5,
+  Hammer = 6,
+  Pickaxe = 7,
+  Shovel = 8,
+  Nuke = 9
+}
 
 export enum LevelState {
   TitleScreen,
