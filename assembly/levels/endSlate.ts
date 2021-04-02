@@ -36,7 +36,7 @@ export class EndSlate extends Level {
     endSlateToRender = insertText(endSlateToRender, needed, new Vec2(21, 2))
     endSlateToRender = insertText(endSlateToRender, rescued, new Vec2(21, 3))
 
-    if (rescued > needed) {
+    if (rescued >= needed) {
       endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_1, new Vec2(-1, 5))
       endSlateToRender = insertText(endSlateToRender, MESSAGE_SUCCESS_2, new Vec2(-1, 6))
     } else {
