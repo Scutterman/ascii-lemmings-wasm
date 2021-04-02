@@ -94,7 +94,8 @@ export class Level extends BaseLevel {
   }
 
   public clone(): Level {
-    return new Level(this.numberOfLemmings, this.numberOfLemmingsForSucces, this.map, this.isMetaScreen)
+    const newMap = this.cloneMap()
+    return new Level(this.numberOfLemmings, this.numberOfLemmingsForSucces, newMap, this.isMetaScreen)
   }
   
   private padRows(totalRows: i32, usedRows: i32): void {
