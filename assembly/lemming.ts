@@ -1,7 +1,11 @@
 import { gameState } from ".";
+import { Basher } from "./actions/basher";
 import { Block } from "./actions/block";
+import { Builder } from "./actions/builder";
+import { Digger } from "./actions/digger";
 import { Fall } from "./actions/fall";
 import { LemmingAction } from "./actions/lemmingAction";
+import { Miner } from "./actions/miner";
 import { Animation } from "./animation";
 import { removeTerrain, SurroundingTiles } from "./map";
 import { Vec2 } from "./position";
@@ -78,8 +82,20 @@ export class Lemming {
           return true
         }
       break
-        case LemmingGift.Block:
+      case LemmingGift.Block:
           this.action = new Block()
+      break
+      case LemmingGift.BrickSack:
+          this.action = new Builder()
+      break
+      case LemmingGift.Hammer:
+          this.action = new Basher()
+      break
+      case LemmingGift.Pickaxe:
+          this.action = new Miner()
+      break
+      case LemmingGift.Shovel:
+          this.action = new Digger()
       break
     }
     return false

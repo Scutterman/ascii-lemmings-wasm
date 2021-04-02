@@ -60,6 +60,22 @@ export class GameState {
     this.selectedGift = LemmingGift.Block
   }
 
+  public setBrickSackGift (): void {
+    this.selectedGift = LemmingGift.BrickSack
+  }
+
+  public setHammerGift (): void {
+    this.selectedGift = LemmingGift.Hammer
+  }
+
+  public setPickaxeGift (): void {
+    this.selectedGift = LemmingGift.Pickaxe
+  }
+
+  public setShovelGift (): void {
+    this.selectedGift = LemmingGift.Shovel
+  }
+
   public setNukeGift (): void {
     if (this.selectedGift == LemmingGift.Nuke) {
       this.currentLevel.nuke()
