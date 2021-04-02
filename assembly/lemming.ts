@@ -1,4 +1,5 @@
 import { gameState } from ".";
+import { Block } from "./actions/block";
 import { Fall } from "./actions/fall";
 import { LemmingAction } from "./actions/lemmingAction";
 import { Animation } from "./animation";
@@ -76,6 +77,9 @@ export class Lemming {
           this.isExploding = true
           return true
         }
+      break
+        case LemmingGift.Block:
+          this.action = new Block()
       break
     }
     return false
