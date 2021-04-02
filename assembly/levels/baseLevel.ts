@@ -14,6 +14,7 @@ export abstract class BaseLevel {
   public abstract processLemmingSelect(mouseTileX: i32, mouseTileY: i32): boolean
   public abstract updateLemmings(): void
   public abstract gameLoop(): void
+  public abstract nuke(): void
   public abstract clone(): BaseLevel
   
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {

@@ -6,6 +6,7 @@ export class DefaultLevel extends BaseLevel {
   }
   public updateLemmings(): void {}
   public gameLoop(): void {}
+  public nuke(): void {}
   public processLemmingSelect(mouseTileX: i32, mouseTileY: i32): boolean {
     return true
   }

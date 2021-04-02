@@ -10,6 +10,7 @@ import { Vec2 } from "../position"
 
 export class Level extends BaseLevel {
   public lemmings: Lemming[] = []
+  private canSpawnMore: boolean = true
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
     super(lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
@@ -18,6 +19,7 @@ export class Level extends BaseLevel {
       this.makeButton(1, 14, 'C', () => { gameState.setClimbingBootsGift() })
       this.makeButton(4, 14, 'U', () => { gameState.setUmbrellaGift() })
       this.makeButton(7, 14, '*', () => { gameState.setBombGift() })
+      this.makeButton(10, 14, 'm', () => { gameState.currentLevel.nuke() })
       // this.makeButton(10, 14, 'T', () => setClimbAction())
       // this.makeButton(13, 14, '/', () => setClimbAction())
       // this.makeButton(16, 14, 'B', () => setClimbAction())
@@ -28,6 +30,13 @@ export class Level extends BaseLevel {
 
   public makeButton(x: i16, y:i16, text: string, action: UIAction): void {
     this.uiControls.push(new UIControl(new Vec2(x, y), text, action))
+  }
+
+  public nuke(): void {
+    this.canSpawnMore = false
+    for (let i = 0; i < this.lemmings.length; i++) {
+      this.lemmings[i].triggerExplosion()
+    }
   }
 
   public processLemmingSelect(mouseTileX: i32, mouseTileY: i32): boolean {
@@ -48,13 +57,13 @@ export class Level extends BaseLevel {
   
   public gameLoop(): void {
     this.timeLeft--
-    const lemmingsLeftToSpawn = this.lemmings.length < (this.numberOfLemmings as i32)
-    const allLemmingsRemoved = !lemmingsLeftToSpawn && this.numberOfLemmingsRemoved == this.numberOfLemmings
+    this.canSpawnMore = this.canSpawnMore && this.lemmings.length < (this.numberOfLemmings as i32)
+    const allLemmingsRemoved = !this.canSpawnMore && this.numberOfLemmingsRemoved == this.numberOfLemmings
   
     if (allLemmingsRemoved || this.timeLeft == 0) {
       gameState.endLevel()
       return
-    } else if (lemmingsLeftToSpawn) {
+    } else if (this.canSpawnMore) {
       if (gameState.framesSinceLastLemming >= gameState.framesBetweenLemmingSpawns) {
         this.lemmings.push(new Lemming())
         gameState.framesSinceLastLemming = 0
