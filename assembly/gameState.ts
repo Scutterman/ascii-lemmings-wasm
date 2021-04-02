@@ -71,8 +71,8 @@ export class GameState {
   }
   
   public loadLevel(newLevel: BaseLevel): void {
-    if (!this.currentLevel.isMetaScreen) {
-      this.lastLevel = this.currentLevel.clone()
+    if (!newLevel.isMetaScreen) {
+      this.lastLevel = newLevel.clone()
     }
     
     this.currentLevel = newLevel
