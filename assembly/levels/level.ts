@@ -58,7 +58,7 @@ export class Level extends BaseLevel {
   public gameLoop(): void {
     this.timeLeft--
     this.canSpawnMore = this.canSpawnMore && this.lemmings.length < (this.numberOfLemmings as i32)
-    const allLemmingsRemoved = !this.canSpawnMore && this.numberOfLemmingsRemoved == this.numberOfLemmings
+    const allLemmingsRemoved = !this.canSpawnMore && this.numberOfLemmingsRemoved == this.lemmings.length
   
     if (allLemmingsRemoved || this.timeLeft == 0) {
       gameState.endLevel()
