@@ -5,7 +5,7 @@ import { LemmingAction } from "./lemmingAction";
 
 export class Builder extends LemmingAction {
   constructor() {
-    super(new Animation([]))
+    super(new Animation([[['/']]]))
   }
   
   update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {}
