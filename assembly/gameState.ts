@@ -57,9 +57,19 @@ export class GameState {
     this.selectedGift = LemmingGift.Bomb
   }
 
+
+  private reset (): void {
+    this.shouldRun = true
+    this.lastGameLoopRunTime = Date.now()
+    this.fastForward = false
+    this.millisecondsPerGameLoop = baseMillisecondsPerGameLoop
+    this.framesSinceLastLemming = u16.MAX_VALUE
+    this.selectedGift = LemmingGift.None
+  }
+
   public restartLastLevel(): void {
     this.currentLevel = this.lastLevel.clone()
-    this.shouldRun = true
+    this.reset()
   }
   
   public toggleFastForward(): void {
