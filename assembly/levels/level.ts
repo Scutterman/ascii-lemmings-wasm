@@ -16,7 +16,6 @@ export class Level extends BaseLevel {
     super(lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
     if (!this.isMetaScreen) {
-      // TODO:: limit the quantities
       this.makeButton(1, 14, 'C', () => { gameState.setClimbingBootsGift() })
       this.makeButton(4, 14, 'U', () => { gameState.setUmbrellaGift() })
       this.makeButton(7, 14, '*', () => { gameState.setBombGift() })

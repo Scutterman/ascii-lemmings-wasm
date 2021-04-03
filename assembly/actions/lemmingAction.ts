@@ -13,7 +13,6 @@ export abstract class LemmingAction {
   abstract update(lemming: Lemming, surroundingTiles: SurroundingTiles): void
   
   protected isFalling(surroundingTiles: SurroundingTiles): boolean {
-    // TODO:: If it's a brick then this is fine, move it down naturally
     return surroundingTiles.bottomCentre == TILE_AIR
   }
   

@@ -33,8 +33,6 @@ export class Walk extends LemmingAction {
     }
   }
 
-  // TODO:: lemmings can walk through brick tiles if they're walking opposite to the brick direction
-  // Maybe use / for BRICK_RIGHT and \ for BRICK_LEFT?
   private canWalkOnNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
     const tile: string = lemming.movingRight ? surroundingTiles.right : surroundingTiles.left
     return tile == TILE_BRICK ? this.canWalkOnBrickTile(lemming, surroundingTiles) : tile == TILE_AIR
