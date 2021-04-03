@@ -1,6 +1,6 @@
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
-import { SurroundingTiles, TILE_AIR, TILE_BRICK, TILE_EXIT } from "../map";
+import { isWalkingDownStairs, SurroundingTiles, TILE_AIR, TILE_BRICK, TILE_EXIT } from "../map";
 import { Climb } from "./climb";
 import { LemmingAction } from "./lemmingAction"
 
@@ -23,9 +23,12 @@ export class Walk extends LemmingAction {
       }
     } else {
       const tile: string = lemming.movingRight ? surroundingTiles.right : surroundingTiles.left
+      const isStairs = isWalkingDownStairs(lemming)
       lemming.position.x += lemming.movingRight ? 1 : -1
       if (tile == TILE_BRICK) {
-        lemming.position.y -= 1
+        lemming.position.y--
+      } else if (isStairs) {
+        lemming.position.y++
       }
     }
   }
