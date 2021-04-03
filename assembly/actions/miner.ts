@@ -25,7 +25,7 @@ export class Miner extends LemmingAction {
     }
   }
 
-  private canMineNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): bool {
+  private canMineNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
     const tile: string = lemming.movingRight ? surroundingTiles.bottomRight : surroundingTiles.bottomLeft
     return (
       tile != TILE_BOUNDARY &&

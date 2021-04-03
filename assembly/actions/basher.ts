@@ -23,7 +23,7 @@ export class Basher extends LemmingAction {
     }
   }
 
-  private canMineNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): bool {
+  private canMineNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
     const tile: string = lemming.movingRight ? surroundingTiles.right : surroundingTiles.left
     return (
       tile != TILE_BOUNDARY &&
