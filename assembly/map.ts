@@ -8,6 +8,7 @@ export const TILE_ENTRANCE  = 'O'
 export const TILE_EXIT      = 'E'
 export const TILE_AIR       = ' '
 export const TILE_GROUND    = 'G'
+export const TILE_BRICK     = '-'
 
 export class SurroundingTiles {
   topLeft: string
@@ -69,6 +70,15 @@ export function removeTerrain(map: LevelTiles, location: Vec2): boolean {
     return false
   } else {
     map[location.y][location.x] = TILE_AIR
+    return true
+  }
+}
+
+export function addBrick(map: LevelTiles, location: Vec2): boolean {
+  if (isOutOfMapBounds(map, location) || map[location.y][location.x] != TILE_AIR) {
+    return false
+  } else {
+    map[location.y][location.x] = TILE_BRICK
     return true
   }
 }
