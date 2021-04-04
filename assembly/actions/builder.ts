@@ -54,17 +54,17 @@ export class Builder extends LemmingAction {
   }
 
   private canBuildNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
-    const tile: string = lemming.movingRight ? surroundingTiles.left : surroundingTiles.right
-    return tile == TILE_AIR
-  }
-
-  private canBuildTileInOtherDirection(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
     const tile: string = lemming.movingRight ? surroundingTiles.right : surroundingTiles.left
     return tile == TILE_AIR
   }
 
+  private canBuildTileInOtherDirection(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
+    const tile: string = lemming.movingRight ? surroundingTiles.left : surroundingTiles.right
+    return tile == TILE_AIR
+  }
+
   private canMoveOntoBrickTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
-    const tile: string = lemming.movingRight ? surroundingTiles.topLeft : surroundingTiles.topRight
+    const tile: string = lemming.movingRight ? surroundingTiles.topRight : surroundingTiles.topLeft
     return tile == TILE_AIR
   }
 }
