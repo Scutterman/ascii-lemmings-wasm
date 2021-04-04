@@ -1,7 +1,7 @@
 import { gameState } from "..";
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
-import { addBrick, SurroundingTiles, TILE_AIR } from "../map";
+import { addBrick, getSurroundingTiles, SurroundingTiles, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
@@ -34,6 +34,7 @@ export class Builder extends LemmingAction {
     } else if (this.canMoveOntoBrickTile(lemming, surroundingTiles)) {
       lemming.position.x += xDelta
       lemming.position.y--
+      surroundingTiles = getSurroundingTiles(gameState.currentLevel.map, lemming.position)
     } else if (this.canBuildTileInOtherDirection(lemming, surroundingTiles)) {
       lemming.movingRight = !lemming.movingRight
       return
