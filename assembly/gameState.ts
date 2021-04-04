@@ -1,3 +1,4 @@
+import { AutoPlayer } from "./autoplayer"
 import { BaseLevel } from "./levels/baseLevel"
 import { DefaultLevel } from "./levels/defaultLevel"
 import { EndSlate } from "./levels/endSlate"
@@ -9,6 +10,8 @@ export const fastForwardMultiplier: u8 = 2 as u8
 const defaultLevel: DefaultLevel = new DefaultLevel()
 
 export class GameState {
+  public autoplayer: AutoPlayer | null = null
+
   public shouldRun: boolean = false
   public levelState: LevelState = LevelState.TitleScreen
   public lastGameLoopRunTime: i64 = Date.now()

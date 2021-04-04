@@ -42,6 +42,9 @@ function eventLoop(): void {
   const gameLoopOverdue = delta > 65535 || delta as u16 >= gameState.millisecondsPerGameLoop
   if (!gameState.currentLevel.isMetaScreen && levelRunning && gameLoopOverdue) {
     gameState.lastGameLoopRunTime = currentTime
+
+    const player = gameState.autoplayer
+    if (player != null) { player.update() }
     gameState.currentLevel.gameLoop()
   }
 }
