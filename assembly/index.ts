@@ -14,11 +14,10 @@ export function start(): boolean {
     return false
   }
 
-  
   if (useAutoPlayer) {
     const level = new StreamStartingLevel()
-    gameState.loadLevel(level)
     const player = new StreamStarting()
+    player.init(level)
     gameState.autoplayer = player
   } else {
     const titleScreen = new TitleScreen()
