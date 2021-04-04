@@ -47,7 +47,7 @@ export function getSurroundingTiles(map: LevelTiles, position: Vec2): Surroundin
 }
 
 function isOutOfMapBounds(map: LevelTiles, location: Vec2): boolean {
-  return location.x < 0 || location.y < 0 || location.y > map.length || location.x > map[location.y].length
+  return location.x < 0 || location.y < 0 || location.y >= map.length || location.x >= map[location.y].length
 }
 
 function getSurroundingTile(map: LevelTiles, position: Vec2): string {
