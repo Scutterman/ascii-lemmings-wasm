@@ -94,7 +94,13 @@ export class Level extends BaseLevel {
       }
     }
   }
-
+  
+  public giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void {
+    if (u8(this.lemmings.length) >= lemmingNumber) {
+      this.lemmings[lemmingNumber].setGift(gift)
+    }
+  }
+  
   public isBlockerInLocation(location: Vec2): boolean {
     for (let i = 0; i < this.lemmings.length; i++) {
       if (this.lemmings[i].position.equals(location) && this.lemmings[i].action instanceof Block) {

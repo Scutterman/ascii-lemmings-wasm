@@ -1,5 +1,5 @@
 import { Vec2 } from "../position"
-import { LevelTiles } from "../types"
+import { LemmingGift, LevelTiles } from "../types"
 import { UIControl } from "../UIControl"
 
 export abstract class BaseLevel {
@@ -17,6 +17,7 @@ export abstract class BaseLevel {
   public abstract gameLoop(): void
   public abstract nuke(): void
   public abstract isBlockerInLocation(location: Vec2): boolean
+  public abstract giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void
   public abstract clone(): BaseLevel
   
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
