@@ -115,6 +115,7 @@ export class GameState {
     }
     
     this.currentLevel = newLevel
+    // TODO:: We should set this to EndSlate or other values when necessary, or get rid of this entirely
     this.levelState = LevelState.LevelRunning
     this.shouldRun = true
   }
