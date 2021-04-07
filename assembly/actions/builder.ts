@@ -37,6 +37,7 @@ export class Builder extends LemmingAction {
       surroundingTiles = getSurroundingTiles(gameState.currentLevel.map, lemming.position)
     } else if (this.canBuildTileInOtherDirection(lemming, surroundingTiles)) {
       lemming.movingRight = !lemming.movingRight
+      this.moveOntoBrick = false
       return
     } else {
       lemming.action = new Walk()
