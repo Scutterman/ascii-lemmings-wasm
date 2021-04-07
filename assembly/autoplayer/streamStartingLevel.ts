@@ -4,7 +4,7 @@ import { mapToTiles } from "../map";
 export class StreamStartingLevel extends Level {
   protected buttonYCoordinate(): u8 { return 20 }
   constructor() {
-    super(1, 0, mapToTiles([
+    super(41, 35, mapToTiles([
       '__________________________________________',
       '|                                        |',
       '|   O                                    |',
