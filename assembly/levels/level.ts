@@ -67,8 +67,14 @@ export class Level extends BaseLevel {
       return
     } else if (this.canSpawnMore) {
       if (gameState.framesSinceLastLemming >= gameState.framesBetweenLemmingSpawns) {
-        this.lemmings.push(new Lemming())
+        const lemming = new Lemming()
+        this.lemmings.push(lemming)
         gameState.framesSinceLastLemming = 0
+        
+        const player = gameState.autoplayer
+        if (player != null) {
+          player.onLemmingSpawn(lemming)
+        }
       } else {
         gameState.framesSinceLastLemming++
       }
@@ -93,7 +99,7 @@ export class Level extends BaseLevel {
   }
   
   public giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void {
-    if (u8(this.lemmings.length) >= lemmingNumber) {
+    if (lemmingNumber >= 0 && u8(this.lemmings.length) >= lemmingNumber) {
       this.lemmings[lemmingNumber].setGift(gift)
     }
   }

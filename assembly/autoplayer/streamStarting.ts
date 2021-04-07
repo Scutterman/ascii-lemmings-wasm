@@ -1,4 +1,5 @@
 import { AutoAction, AutoPlayer } from ".";
+import { Lemming } from "../lemming";
 import { BaseLevel } from "../levels/baseLevel";
 import { LemmingGift } from "../types";
 
