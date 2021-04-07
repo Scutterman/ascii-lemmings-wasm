@@ -16,6 +16,7 @@ actions.set(89, [new AutoAction(0, LemmingGift.BrickSack)])
 actions.set(92, [new AutoAction(0, LemmingGift.Hammer)])
 actions.set(125, [new AutoAction(0, LemmingGift.BrickSack)])
 actions.set(158, [new AutoAction(0, LemmingGift.Hammer)])
+actions.set(285, [new AutoAction(0, LemmingGift.Nuke)])
 
 export class StreamStarting extends AutoPlayer {
   constructor(level: BaseLevel) {

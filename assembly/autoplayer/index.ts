@@ -22,7 +22,12 @@ export abstract class AutoPlayer {
       const level = gameState.currentLevel
       const actions = this.actions.get(this.frameNumber)
       for (let i = 0; i < actions.length; i++) {
-        level.giveGiftToLemming(actions[i].lemmingNumber, actions[i].action)
+        if (actions[i].action == LemmingGift.Nuke) {
+          gameState.setNukeGift()
+          gameState.setNukeGift()
+        } else {
+          level.giveGiftToLemming(actions[i].lemmingNumber, actions[i].action)
+        }
       }
     }
   }
