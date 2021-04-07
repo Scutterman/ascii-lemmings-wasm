@@ -48,6 +48,7 @@ export class Builder extends LemmingAction {
       this.bricksRemaining--
     } else if (this.canBuildTileInOtherDirection(lemming, surroundingTiles)) {
       lemming.movingRight = !lemming.movingRight
+      this.moveOntoBrick = false
       return
     } else {
       lemming.action = new Walk()
