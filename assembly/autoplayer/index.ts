@@ -1,4 +1,5 @@
 import { gameState } from ".."
+import { Lemming } from "../lemming"
 import { BaseLevel } from "../levels/baseLevel"
 import { LemmingGift } from "../types"
 
@@ -25,4 +26,6 @@ export abstract class AutoPlayer {
       }
     }
   }
+
+  public abstract onLemmingSpawn(lemming: Lemming): void
 }

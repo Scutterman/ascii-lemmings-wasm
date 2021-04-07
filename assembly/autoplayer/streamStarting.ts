@@ -17,4 +17,9 @@ export class StreamStarting extends AutoPlayer {
   constructor(level: BaseLevel) {
     super(level, actions)
   }
+
+  public onLemmingSpawn(lemming: Lemming): void {
+    lemming.setGift(LemmingGift.ClimbingBoots)
+    lemming.setGift(LemmingGift.Umbrella)
+  }
 }
