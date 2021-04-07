@@ -6,6 +6,7 @@ import { Digger } from "./actions/digger";
 import { Fall } from "./actions/fall";
 import { LemmingAction } from "./actions/lemmingAction";
 import { Miner } from "./actions/miner";
+import { Walk } from "./actions/walk";
 import { Animation } from "./animation";
 import { removeTerrain, SurroundingTiles } from "./map";
 import { Vec2 } from "./position";
@@ -96,6 +97,9 @@ export class Lemming {
       break
       case LemmingGift.Shovel:
           this.action = new Digger()
+      break
+      case LemmingGift.Walk:
+          this.action = new Walk()
       break
     }
     return false

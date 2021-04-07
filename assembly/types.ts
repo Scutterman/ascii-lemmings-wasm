@@ -9,7 +9,8 @@ export enum LemmingGift {
   Hammer = 6,
   Pickaxe = 7,
   Shovel = 8,
-  Nuke = 9
+  Nuke = 9,
+  Walk = 10
 }
 
 export enum LevelState {
