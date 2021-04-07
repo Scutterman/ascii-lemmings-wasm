@@ -1,9 +1,11 @@
 import { LevelTiles } from "./types";
 import { Vec2 } from "./position";
+import { log } from ".";
 
 export function insertText(map: LevelTiles, message: string, position: Vec2): LevelTiles {
   if ((position.y as i32) >= map.length) {
-    throw new Error('insertText: line argument out of map bounds');
+    log('insertText: line argument out of map bounds');
+    return map
   }
 
   if (position.y == -1) {
@@ -11,7 +13,8 @@ export function insertText(map: LevelTiles, message: string, position: Vec2): Le
   }
 
   if (message.length > (map[position.y].length - 2)) {
-    throw new Error('insertText: text out of map bounds');
+    log('insertText: text out of map bounds');
+    return map
   }
 
   if (position.x == -1) {
