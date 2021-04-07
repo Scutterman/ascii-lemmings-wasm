@@ -2,26 +2,30 @@ import { Level } from "../levels/level";
 import { mapToTiles } from "../map";
 
 export class StreamStartingLevel extends Level {
+  protected buttonYCoordinate(): u8 { return 19 }
   constructor() {
     super(1, 0, mapToTiles([
-      '____________________________',
-      '|                          |',
-      '|   O                      |',
-      '|                          |',
-      '|GGGGGGGGGGGGGGGGGGGGGGGGGG|',
-      '|                          |',
-      '|   _ ___ _   _ ___  _     |',
-      '|  |_  | |_| |   |  |_     |',
-      '|   _| | | | |   |   _|    |',
-      '|                          |',
-      '|   _                      |',
-      '|  |_    ___   ___   ___   |',
-      '|   _|   |_|   |_|   | |   |',
-      '|GGGGGGGGGGGGGGGGGGGGGGGGGG|',
-      '|                        E |',
-      '____________________________',
-      '|                          |',
-      '____________________________'
+      '__________________________________________',
+      '|                                        |',
+      '|   O                                    |',
+      '|                                        |',
+      '|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|',
+      '|                                        |',
+      '|                                        |',
+      '|     GG   GGG    G    GGG   GGG     GG  |',
+      '|    G      G    G G   G G    G     G    |',
+      '|     G     G    GGG   GG     G      G   |',
+      '|   GG      G    G G   G G    G    GG    |',
+      '|                                        |',
+      '|                                        |',
+      '|             GG                         |',
+      '|            G      GG     GG     GGG    |',
+      '|             G    G  G   G  G   G   G   |',
+      '|           GG      GG     GG    G   G   |',
+      '|                                      E |',
+      '__________________________________________',
+      '|                                        |',
+      '__________________________________________'
     ]), false)
   }
 }

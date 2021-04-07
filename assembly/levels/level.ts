@@ -12,24 +12,21 @@ import { Block } from "../actions/block"
 export class Level extends BaseLevel {
   public lemmings: Lemming[] = []
   private canSpawnMore: boolean = true
+  protected buttonYCoordinate(): u8 { return 14 }
+
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
     super(lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
     if (!this.isMetaScreen) {
-      this.makeButton(1, 14, 'C', () => { gameState.setClimbingBootsGift() })
-      this.makeButton(4, 14, 'U', () => { gameState.setUmbrellaGift() })
-      this.makeButton(7, 14, '*', () => { gameState.setBombGift() })
-      this.makeButton(10, 14, 'T', () => { gameState.setBlockGift() })
-      this.makeButton(13, 14, '/', () => { gameState.setBrickSackGift() })
-      this.makeButton(16, 14, 'B', () => { gameState.setHammerGift() })
-      this.makeButton(19, 14, '\\', () => { gameState.setPickaxeGift() })
-      this.makeButton(22, 14, 'D', () => { gameState.setShovelGift() })
-      this.makeButton(25, 14, 'm', () => { gameState.setNukeGift() })
-      // this.makeButton(10, 14, 'T', () => setClimbAction())
-      // this.makeButton(13, 14, '/', () => setClimbAction())
-      // this.makeButton(16, 14, 'B', () => setClimbAction())
-      // this.makeButton(19, 14, '\\', () => setClimbAction())
-      // this.makeButton(22, 14, 'D', () => setClimbAction())
+      this.makeButton(1, this.buttonYCoordinate(), 'C', () => { gameState.setClimbingBootsGift() })
+      this.makeButton(4, this.buttonYCoordinate(), 'U', () => { gameState.setUmbrellaGift() })
+      this.makeButton(7, this.buttonYCoordinate(), '*', () => { gameState.setBombGift() })
+      this.makeButton(10, this.buttonYCoordinate(), 'T', () => { gameState.setBlockGift() })
+      this.makeButton(13, this.buttonYCoordinate(), '/', () => { gameState.setBrickSackGift() })
+      this.makeButton(16, this.buttonYCoordinate(), 'B', () => { gameState.setHammerGift() })
+      this.makeButton(19, this.buttonYCoordinate(), '\\', () => { gameState.setPickaxeGift() })
+      this.makeButton(22, this.buttonYCoordinate(), 'D', () => { gameState.setShovelGift() })
+      this.makeButton(25, this.buttonYCoordinate(), 'm', () => { gameState.setNukeGift() })
     }
   }
 
