@@ -1,7 +1,7 @@
 import { gameState } from "..";
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
-import { removeTerrain, SurroundingTiles, TILE_AIR, TILE_BOUNDARY, TILE_SIDE } from "../map";
+import { removeTerrain, SurroundingTiles, terrainIndestructible, TILE_AIR, TILE_BOUNDARY, TILE_SIDE } from "../map";
 import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
@@ -27,10 +27,6 @@ export class Miner extends LemmingAction {
 
   private canMineNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
     const tile: string = lemming.movingRight ? surroundingTiles.bottomRight : surroundingTiles.bottomLeft
-    return (
-      tile != TILE_BOUNDARY &&
-      tile != TILE_SIDE &&
-      tile != TILE_AIR
-    )
+    return terrainIndestructible(tile) == false
   }
 }

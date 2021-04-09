@@ -1,5 +1,5 @@
-import { StreamStarting } from './autoplayer/StreamStarting'
-import { StreamStartingLevel } from './autoplayer/streamStartingLevel'
+import { Test } from './autoplayer/test'
+import { TestLevel } from './autoplayer/testLevel'
 import { GameState } from './gameState'
 import { TitleScreen } from './levels/titleScreen'
 
@@ -15,8 +15,8 @@ export function start(): boolean {
   }
 
   if (useAutoPlayer) {
-    const level = new StreamStartingLevel()
-    const player = new StreamStarting(level)
+    const level = new TestLevel()
+    const player = new Test(level)
     gameState.autoplayer = player
   } else {
     const titleScreen = new TitleScreen()

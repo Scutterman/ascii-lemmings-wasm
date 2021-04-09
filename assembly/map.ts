@@ -10,6 +10,7 @@ export const TILE_EXIT      = 'E'
 export const TILE_AIR       = ' '
 export const TILE_GROUND    = 'G'
 export const TILE_BRICK     = '-'
+export const TILE_BLOCKER   = 'T'
 
 export class SurroundingTiles {
   topLeft: string
@@ -71,8 +72,8 @@ export function isWalkingDownStairs(lemming: Lemming): boolean {
   return tileBelow == TILE_AIR && (tileTwoBelow == TILE_BRICK || tileTwoBelow == TILE_GROUND)
 }
 
-function terrainIndestructible(tile: Tile): boolean {
-  return tile == TILE_AIR || tile == TILE_ENTRANCE || tile == TILE_EXIT || tile == TILE_BOUNDARY || tile == TILE_SIDE
+export function terrainIndestructible(tile: Tile): boolean {
+  return tile == TILE_AIR || tile == TILE_ENTRANCE || tile == TILE_EXIT || tile == TILE_BOUNDARY || tile == TILE_SIDE || tile == TILE_BLOCKER
 }
 
 export function removeTerrain(map: LevelTiles, location: Vec2): boolean {
