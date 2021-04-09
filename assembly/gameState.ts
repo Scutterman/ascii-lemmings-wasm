@@ -94,6 +94,11 @@ export class GameState {
     this.millisecondsPerGameLoop = baseMillisecondsPerGameLoop
     this.framesSinceLastLemming = u16.MAX_VALUE
     this.selectedGift = LemmingGift.None
+
+    const player = this.autoplayer
+    if (player != null) {
+      player.reset()
+    }
   }
 
   public restartLastLevel(): void {

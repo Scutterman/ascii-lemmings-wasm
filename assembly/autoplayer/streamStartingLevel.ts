@@ -2,7 +2,6 @@ import { Level } from "../levels/level";
 import { mapToTiles } from "../map";
 
 export class StreamStartingLevel extends Level {
-  protected buttonYCoordinate(): u8 { return 20 }
   constructor() {
     super(41, 35, mapToTiles([
       '__________________________________________',
@@ -27,6 +26,6 @@ export class StreamStartingLevel extends Level {
       '__________________________________________',
       '|                                        |',
       '__________________________________________'
-    ]), false)
+    ]), false, 20)
   }
 }

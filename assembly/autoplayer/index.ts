@@ -32,5 +32,9 @@ export abstract class AutoPlayer {
     }
   }
 
+  public reset(): void {
+    this.frameNumber = 0
+  }
+
   public abstract onLemmingSpawn(lemming: Lemming): void
 }

@@ -12,21 +12,20 @@ import { Block } from "../actions/block"
 export class Level extends BaseLevel {
   public lemmings: Lemming[] = []
   private canSpawnMore: boolean = true
-  protected buttonYCoordinate(): u8 { return 14 }
 
-  constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
+  constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 14) {
     super(lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
     if (!this.isMetaScreen) {
-      this.makeButton(1, this.buttonYCoordinate(), 'C', () => { gameState.setClimbingBootsGift() })
-      this.makeButton(4, this.buttonYCoordinate(), 'U', () => { gameState.setUmbrellaGift() })
-      this.makeButton(7, this.buttonYCoordinate(), '*', () => { gameState.setBombGift() })
-      this.makeButton(10, this.buttonYCoordinate(), 'T', () => { gameState.setBlockGift() })
-      this.makeButton(13, this.buttonYCoordinate(), '/', () => { gameState.setBrickSackGift() })
-      this.makeButton(16, this.buttonYCoordinate(), 'B', () => { gameState.setHammerGift() })
-      this.makeButton(19, this.buttonYCoordinate(), '\\', () => { gameState.setPickaxeGift() })
-      this.makeButton(22, this.buttonYCoordinate(), 'D', () => { gameState.setShovelGift() })
-      this.makeButton(25, this.buttonYCoordinate(), 'm', () => { gameState.setNukeGift() })
+      this.makeButton(1, this.buttonYCoordinate, 'C', () => { gameState.setClimbingBootsGift() })
+      this.makeButton(4, this.buttonYCoordinate, 'U', () => { gameState.setUmbrellaGift() })
+      this.makeButton(7, this.buttonYCoordinate, '*', () => { gameState.setBombGift() })
+      this.makeButton(10, this.buttonYCoordinate, 'T', () => { gameState.setBlockGift() })
+      this.makeButton(13, this.buttonYCoordinate, '/', () => { gameState.setBrickSackGift() })
+      this.makeButton(16, this.buttonYCoordinate, 'B', () => { gameState.setHammerGift() })
+      this.makeButton(19, this.buttonYCoordinate, '\\', () => { gameState.setPickaxeGift() })
+      this.makeButton(22, this.buttonYCoordinate, 'D', () => { gameState.setShovelGift() })
+      this.makeButton(25, this.buttonYCoordinate, 'm', () => { gameState.setNukeGift() })
     }
   }
 
@@ -128,7 +127,7 @@ export class Level extends BaseLevel {
 
   public clone(): Level {
     const newMap = this.cloneMap()
-    return new Level(this.numberOfLemmings, this.numberOfLemmingsForSucces, newMap, this.isMetaScreen)
+    return new Level(this.numberOfLemmings, this.numberOfLemmingsForSucces, newMap, this.isMetaScreen, this.buttonYCoordinate)
   }
   
   private padRows(totalRows: i32, usedRows: i32): void {
