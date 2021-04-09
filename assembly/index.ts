@@ -7,7 +7,7 @@ export const gameState = new GameState()
 
 export { triggerEventLoop, setCharacterDimensions, setScreenDimensions, updateMouseCoordinates, registerMouseClick } from './loop'
 
-const useAutoPlayer: boolean = true
+const useAutoPlayer: boolean = false
 
 export function start(): boolean {
   if (!gameState.canStart()) {

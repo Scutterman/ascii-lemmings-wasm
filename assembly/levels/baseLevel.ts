@@ -1,6 +1,6 @@
 import { Vec2 } from "../position"
 import { LemmingGift, LevelTiles } from "../types"
-import { UIControl } from "../UIControl"
+import { UIControl } from "../ui/uiControl"
 
 export abstract class BaseLevel {
   public numberOfLemmings: u8

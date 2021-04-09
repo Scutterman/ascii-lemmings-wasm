@@ -2,8 +2,7 @@ import { gameState } from "../index"
 import { mapToTiles } from "../map"
 import { Vec2 } from "../position"
 import { insertText } from "../text"
-import { LevelTiles } from "../types"
-import { UIControl } from "../UIControl"
+import { UIControl } from "../ui/uiControl"
 import { Level } from "./level"
 
 const MESSAGE_SUCCESS_1: string = 'You passed the level!'

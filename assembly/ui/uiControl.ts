@@ -1,15 +1,14 @@
-import { Vec2 } from "./position";
-import { UIAction } from "./types";
+import { Vec2 } from "../position";
+import { UIAction } from "../types";
+import { UILabel } from "./uiLabel";
 
-export class UIControl {
+export class UIControl extends UILabel {
   constructor(
-    private positionOnScreen: Vec2,
-    private text: string,
+    positionOnScreen: Vec2,
+    text: string,
     private action: UIAction
-  ) { }
+  ) { super(positionOnScreen, text) }
 
-  public getPosition(): Vec2 { return this.positionOnScreen }
-  public getText(): string { return '|' + this.text  + '|' }
   public clicked(): void { this.action() }
   
   public isInBounds(x: i32, y: i32): boolean {

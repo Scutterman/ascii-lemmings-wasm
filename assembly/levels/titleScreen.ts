@@ -1,7 +1,7 @@
 import { gameState } from "../index"
 import { mapToTiles } from "../map"
 import { Vec2 } from "../position"
-import { UIControl } from "../UIControl"
+import { UIControl } from "../ui/uiControl"
 import { Level } from "./level"
 import { Level1 } from "./one"
 

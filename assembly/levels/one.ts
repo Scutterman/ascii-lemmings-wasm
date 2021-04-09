@@ -1,4 +1,5 @@
 import { mapToTiles } from "../map"
+import { LemmingGift } from "../types"
 import { Level } from "./level"
 
 export class Level1 extends Level {
@@ -11,7 +12,7 @@ export class Level1 extends Level {
       '|                     GG  G|',
       '|                     GG  G|',
       '|                     GG  G|',
-      '|G GGGGGGGGGGGGGGGGGGGGG  G|',
+      '|GGGGGGGGGGGGGGGGGGGGGGG  G|',
       '|                      G  G|',
       '|                      G  G|',
       '|                      G  G|',
@@ -21,5 +22,7 @@ export class Level1 extends Level {
       '|                          |',
       '____________________________'
     ]))
+
+    this.setSkillQuantity(LemmingGift.Shovel, 1)
   }
 }

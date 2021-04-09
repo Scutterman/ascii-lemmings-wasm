@@ -5,7 +5,7 @@ import { LemmingGift, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { getSurroundingTiles } from "../map"
 import { insertText } from "../text"
-import { UIControl } from "../UIControl"
+import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { Block } from "../actions/block"
 
