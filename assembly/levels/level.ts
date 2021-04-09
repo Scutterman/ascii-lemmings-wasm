@@ -12,20 +12,47 @@ import { Block } from "../actions/block"
 export class Level extends BaseLevel {
   public lemmings: Lemming[] = []
   private canSpawnMore: boolean = true
+  private skills: Map<LemmingGift, u8> = new Map()
 
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 14) {
     super(lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
     if (!this.isMetaScreen) {
-      this.makeButton(1, this.buttonYCoordinate, 'C', () => { gameState.setClimbingBootsGift() })
-      this.makeButton(4, this.buttonYCoordinate, 'U', () => { gameState.setUmbrellaGift() })
-      this.makeButton(7, this.buttonYCoordinate, '*', () => { gameState.setBombGift() })
-      this.makeButton(10, this.buttonYCoordinate, 'T', () => { gameState.setBlockGift() })
-      this.makeButton(13, this.buttonYCoordinate, '/', () => { gameState.setBrickSackGift() })
-      this.makeButton(16, this.buttonYCoordinate, 'B', () => { gameState.setHammerGift() })
-      this.makeButton(19, this.buttonYCoordinate, '\\', () => { gameState.setPickaxeGift() })
-      this.makeButton(22, this.buttonYCoordinate, 'D', () => { gameState.setShovelGift() })
+      this.makeButton(1, this.buttonYCoordinate, 'C', () => { gameState.setSelectedGift(LemmingGift.ClimbingBoots) })
+      this.makeButton(4, this.buttonYCoordinate, 'U', () => { gameState.setSelectedGift(LemmingGift.Umbrella) })
+      this.makeButton(7, this.buttonYCoordinate, '*', () => { gameState.setSelectedGift(LemmingGift.Bomb) })
+      this.makeButton(10, this.buttonYCoordinate, 'T', () => { gameState.setSelectedGift(LemmingGift.Block) })
+      this.makeButton(13, this.buttonYCoordinate, '/', () => { gameState.setSelectedGift(LemmingGift.BrickSack) })
+      this.makeButton(16, this.buttonYCoordinate, 'B', () => { gameState.setSelectedGift(LemmingGift.Hammer) })
+      this.makeButton(19, this.buttonYCoordinate, '\\', () => { gameState.setSelectedGift(LemmingGift.Pickaxe) })
+      this.makeButton(22, this.buttonYCoordinate, 'D', () => { gameState.setSelectedGift(LemmingGift.Shovel) })
       this.makeButton(25, this.buttonYCoordinate, 'm', () => { gameState.setNukeGift() })
+    }
+  }
+
+  protected setSkillQuantity(skill: LemmingGift, quantity: u8): void {
+    if (quantity < 1) {
+      return
+    }
+    this.skills.set(skill, quantity)
+  }
+
+  public canUseSkill(skill: LemmingGift): boolean {
+    if (this.skills.has(skill)) {
+      return this.skills.get(skill) > 0
+    } else {
+      return false
+    }
+  }
+
+  public skillUsed(skill: LemmingGift): void {
+    if (this.skills.has(skill)) {
+      const quantity: u8 = this.skills.get(skill) - 1
+      if (quantity <= 0) {
+        this.skills.delete(skill)
+      } else {
+        this.skills.set(skill, quantity)
+      }
     }
   }
 
@@ -46,7 +73,7 @@ export class Level extends BaseLevel {
         if (gameState.selectedGift !== LemmingGift.None) {
           const giftApplied = this.lemmings[i].setGift(gameState.selectedGift)
           if (giftApplied) {
-            gameState.setNoGift()
+            gameState.setSelectedGift(LemmingGift.None)
             return true
           }
         }

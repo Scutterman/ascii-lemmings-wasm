@@ -43,40 +43,10 @@ export class GameState {
     )
   }
 
-  public setNoGift (): void {
-    this.selectedGift = LemmingGift.None
-  }
-
-  public setClimbingBootsGift (): void {
-    this.selectedGift = LemmingGift.ClimbingBoots
-  }
-
-  public setUmbrellaGift(): void {
-    this.selectedGift = LemmingGift.Umbrella
-  }
-
-  public setBombGift (): void {
-    this.selectedGift = LemmingGift.Bomb
-  }
-
-  public setBlockGift (): void {
-    this.selectedGift = LemmingGift.Block
-  }
-
-  public setBrickSackGift (): void {
-    this.selectedGift = LemmingGift.BrickSack
-  }
-
-  public setHammerGift (): void {
-    this.selectedGift = LemmingGift.Hammer
-  }
-
-  public setPickaxeGift (): void {
-    this.selectedGift = LemmingGift.Pickaxe
-  }
-
-  public setShovelGift (): void {
-    this.selectedGift = LemmingGift.Shovel
+  public setSelectedGift(gift: LemmingGift): void {
+    if (this.currentLevel.canUseSkill(gift)) {
+      this.selectedGift = gift
+    }
   }
 
   public setNukeGift (): void {

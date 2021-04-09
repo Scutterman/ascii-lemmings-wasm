@@ -19,6 +19,9 @@ export abstract class BaseLevel {
   public abstract isBlockerInLocation(location: Vec2): boolean
   public abstract giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void
   public abstract clone(): BaseLevel
+
+  public abstract canUseSkill(skill: LemmingGift): boolean
+  public abstract skillUsed(skill: LemmingGift): void
   
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
     this.numberOfLemmings = lemmingsToSpawn

@@ -64,6 +64,13 @@ export class Lemming {
   }
 
   public setGift(gift: LemmingGift): boolean {
+    const level = gameState.currentLevel
+    if (gift != LemmingGift.Walk && level.canUseSkill(gift) == false) {
+      return false
+    } else {
+      level.skillUsed(gift)
+    }
+    
     switch (gift) {
       case LemmingGift.ClimbingBoots: 
         if (this.isClimber != true) {
