@@ -4,7 +4,7 @@ import { SurroundingTiles } from "../map";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
-export const BLOCKS_FALLEN_BEFORE_UMBRELLA: u8 = 2
+export const BLOCKS_FALLEN_BEFORE_UMBRELLA: u8 = 4
 export const FRAMES_BETWEEN_FALLING: u16 = 2
 
 export class Umbrella extends LemmingAction {
