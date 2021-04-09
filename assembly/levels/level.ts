@@ -8,6 +8,7 @@ import { insertText } from "../text"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { Block } from "../actions/block"
+import { UILabel } from "../ui/uiLabel"
 
 export class Level extends BaseLevel {
   public lemmings: Lemming[] = []
@@ -19,22 +20,41 @@ export class Level extends BaseLevel {
 
     if (!this.isMetaScreen) {
       this.makeButton(1, this.buttonYCoordinate, 'C', () => { gameState.setSelectedGift(LemmingGift.ClimbingBoots) })
+      this.addLabel(LemmingGift.ClimbingBoots, 1, this.buttonYCoordinate + 1)
+      
       this.makeButton(4, this.buttonYCoordinate, 'U', () => { gameState.setSelectedGift(LemmingGift.Umbrella) })
+      this.addLabel(LemmingGift.Umbrella, 4, this.buttonYCoordinate + 1)
+      
       this.makeButton(7, this.buttonYCoordinate, '*', () => { gameState.setSelectedGift(LemmingGift.Bomb) })
+      this.addLabel(LemmingGift.Bomb, 7, this.buttonYCoordinate + 1)
+      
       this.makeButton(10, this.buttonYCoordinate, 'T', () => { gameState.setSelectedGift(LemmingGift.Block) })
+      this.addLabel(LemmingGift.Block, 10, this.buttonYCoordinate + 1)
+      
       this.makeButton(13, this.buttonYCoordinate, '/', () => { gameState.setSelectedGift(LemmingGift.BrickSack) })
+      this.addLabel(LemmingGift.BrickSack, 13, this.buttonYCoordinate + 1)
+      
       this.makeButton(16, this.buttonYCoordinate, 'B', () => { gameState.setSelectedGift(LemmingGift.Hammer) })
+      this.addLabel(LemmingGift.Hammer, 16, this.buttonYCoordinate + 1)
+      
       this.makeButton(19, this.buttonYCoordinate, '\\', () => { gameState.setSelectedGift(LemmingGift.Pickaxe) })
+      this.addLabel(LemmingGift.Pickaxe, 19, this.buttonYCoordinate + 1)
+      
       this.makeButton(22, this.buttonYCoordinate, 'D', () => { gameState.setSelectedGift(LemmingGift.Shovel) })
-      this.makeButton(25, this.buttonYCoordinate, 'm', () => { gameState.setNukeGift() })
+      this.addLabel(LemmingGift.Shovel, 22, this.buttonYCoordinate + 1)
+
+      this.uiControls.push(new UIControl(new Vec2(25, this.buttonYCoordinate), 'm', () => { gameState.setNukeGift() }))
     }
   }
 
   protected setSkillQuantity(skill: LemmingGift, quantity: u8): void {
     if (quantity < 1) {
+      this.updateLabel(skill, '0')
       return
     }
+
     this.skills.set(skill, quantity)
+    this.updateLabel(skill, quantity.toString())
   }
 
   public canUseSkill(skill: LemmingGift): boolean {
@@ -49,8 +69,10 @@ export class Level extends BaseLevel {
     if (this.skills.has(skill)) {
       const quantity: u8 = this.skills.get(skill) - 1
       if (quantity <= 0) {
+        this.updateLabel(skill, '0')
         this.skills.delete(skill)
       } else {
+        this.updateLabel(skill, quantity.toString())
         this.skills.set(skill, quantity)
       }
     }
@@ -58,6 +80,17 @@ export class Level extends BaseLevel {
 
   public makeButton(x: i16, y:i16, text: string, action: UIAction): void {
     this.uiControls.push(new UIControl(new Vec2(x, y), text, action))
+  }
+
+  public addLabel(gift: LemmingGift, x: i16, y: i16): void {
+    this.uiLabels.push(new UILabel(new Vec2(x, y), '0', 'GIFT_COUNTER_' + gift.toString()))
+  }
+
+  public updateLabel(gift: LemmingGift, newText: string): void {
+    const label = this.getUIByTag('GIFT_COUNTER_' + gift.toString())
+    if (label != null) {
+      label.updateText(newText)
+    }
   }
 
   public nuke(): void {
@@ -179,6 +212,10 @@ export class Level extends BaseLevel {
 
     for (let i = 0; i < this.uiControls.length; i++) {
       insertText(map, this.uiControls[i].getText(), this.uiControls[i].getPosition())
+    }
+
+    for (let i = 0; i < this.uiLabels.length; i++) {
+      insertText(map, this.uiLabels[i].getText(), this.uiLabels[i].getPosition())
     }
     
     clearScreen()

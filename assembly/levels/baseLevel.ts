@@ -1,6 +1,7 @@
 import { Vec2 } from "../position"
 import { LemmingGift, LevelTiles } from "../types"
 import { UIControl } from "../ui/uiControl"
+import { UILabel } from "../ui/uiLabel"
 
 export abstract class BaseLevel {
   public numberOfLemmings: u8
@@ -10,6 +11,7 @@ export abstract class BaseLevel {
   public numberOfLemmingsSaved: u8 = 0
   public numberOfLemmingsRemoved: u8 = 0
   public uiControls: UIControl[] = []
+  public uiLabels: UILabel[] = []
   public isMetaScreen: boolean
 
   public abstract processLemmingSelect(mouseTileX: i32, mouseTileY: i32): boolean
@@ -39,5 +41,19 @@ export abstract class BaseLevel {
       }
     }
     return mapClone
+  }
+
+  protected getUIByTag(tag: string): UILabel | null {
+    if (tag == '') {
+      return null
+    }
+    
+    for (let i = 0; i < this.uiLabels.length; i++) {
+      if (this.uiLabels[i].getTag() == tag) {
+        return this.uiLabels[i]
+      }
+    }
+    
+    return null
   }
 }

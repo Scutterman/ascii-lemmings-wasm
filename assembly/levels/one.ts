@@ -20,9 +20,10 @@ export class Level1 extends Level {
       '|GGGGGGGGGGGGGGGGGGGGGGGGGG|',
       '____________________________',
       '|                          |',
+      '|                          |',
       '____________________________'
     ]))
 
-    this.setSkillQuantity(LemmingGift.Shovel, 1)
+    this.setSkillQuantity(LemmingGift.Shovel, 3)
   }
 }
