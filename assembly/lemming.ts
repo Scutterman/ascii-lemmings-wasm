@@ -72,6 +72,8 @@ export class Lemming {
     }
     
     switch (gift) {
+      case LemmingGift.None:
+        return true
       case LemmingGift.ClimbingBoots: 
         if (this.isClimber != true) {
           this.isClimber = true

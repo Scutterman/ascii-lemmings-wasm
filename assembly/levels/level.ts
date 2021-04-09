@@ -58,7 +58,9 @@ export class Level extends BaseLevel {
   }
 
   public canUseSkill(skill: LemmingGift): boolean {
-    if (this.skills.has(skill)) {
+    if (skill == LemmingGift.None) {
+      return true
+    } else if (this.skills.has(skill)) {
       return this.skills.get(skill) > 0
     } else {
       return false
