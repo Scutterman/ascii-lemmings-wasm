@@ -17,7 +17,7 @@
         screen.lastChild.innerHTML += module.exports.__getString(msgPtr) + '<br>'
       },
       clear() {
-        screen.childNodes.forEach(n => screen.removeChild(n))
+        screen.innerHTML = ''
       },
       addLayer() {
         const newLayer = document.createElement('div')
