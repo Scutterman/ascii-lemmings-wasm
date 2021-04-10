@@ -1,6 +1,6 @@
 import { gameState } from ".."
 import { Lemming } from "../lemming"
-import { clearScreen, renderTimer, renderToScreen } from "../loop"
+import { addLayerToScreen, clearScreen, renderTimer, renderToScreen } from "../loop"
 import { LemmingGift, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { getSurroundingTiles } from "../map"
@@ -179,15 +179,23 @@ export class Level extends BaseLevel {
   }
   
   public renderLevel(): void {
+    
     const map = this.cloneMap()
+    const rightmostColumn = this.render(map)
+    renderTimer(rightmostColumn, this.timeLeft)
+
     for (let i = 0; i < this.lemmings.length; i++) {
       const lemming = this.lemmings[i]
       if (lemming.removed) { continue }
-      map[lemming.position.y][lemming.position.x] = lemming.renderFrame()
+      
+      addLayerToScreen()
+      this.padRows(map.length)
+      this.setYPosition(lemming.position.y)
+      const xPadding = this.getXPadding(lemming.position.x)
+      const screenPadding: i32 = Math.floor(map[0].length / 2) as i32
+
+      renderToScreen(' '.repeat(screenPadding) + xPadding + lemming.renderFrame())
     }
-    
-    const rightmostColumn = this.render(map)
-    renderTimer(rightmostColumn, this.timeLeft)
   }
 
   public clone(): Level {
@@ -195,15 +203,27 @@ export class Level extends BaseLevel {
     return new Level(this.numberOfLemmings, this.numberOfLemmingsForSucces, newMap, this.isMetaScreen, this.buttonYCoordinate)
   }
   
-  private padRows(totalRows: i32, usedRows: i32): void {
+  private padRows(rowsWithContent: i32): void {
+    const totalRows: i32 = gameState.screenHeight / gameState.characterHeight
     gameState.lastRowPadding = 0
-    for (var i = totalRows; i > usedRows; i -= 2) {
+    for (let i = totalRows; i > rowsWithContent; i -= 2) {
       gameState.lastRowPadding++
       renderToScreen('')
     }
   }
 
-  private padColumn(totalColumns: i32, text: string): string {
+  private setYPosition(yPosition: i16): void {
+    for (let i = 0; i < yPosition; i++) {
+      renderToScreen('')
+    }
+  }
+
+  private getXPadding(xPosition: i16): string {
+    return ' '.repeat(xPosition - 1)
+  }
+  
+  private padColumn(text: string): string {
+    const totalColumns = gameState.screenWidth / gameState.characterWidth
     const charactersSpare = totalColumns - text.length
     const charactersRequiredOnLeft = Math.floor(charactersSpare / 2) as i32
     gameState.lastColumnPadding = charactersRequiredOnLeft
@@ -211,10 +231,6 @@ export class Level extends BaseLevel {
   }
 
   protected render(map: LevelTiles): i32 {
-    const totalColumns = gameState.screenWidth / gameState.characterWidth
-    const totalRows = gameState.screenHeight / gameState.characterHeight
-    const usedRows = map.length
-
     for (let i = 0; i < this.uiControls.length; i++) {
       insertText(map, this.uiControls[i].getText(), this.uiControls[i].getPosition())
     }
@@ -225,9 +241,10 @@ export class Level extends BaseLevel {
     
     clearScreen()
     addLayerToScreen()
+    this.padRows(map.length)
     let rightmostColumn: i32 = 0
     for (let i = 0; i < map.length; i++) {
-      const column = this.padColumn(totalColumns, map[i].join(''))
+      const column = this.padColumn(map[i].join(''))
       rightmostColumn = Math.max(rightmostColumn, column.length) as i32
       renderToScreen(column);
     }
