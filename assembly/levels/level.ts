@@ -224,7 +224,7 @@ export class Level extends BaseLevel {
     }
     
     clearScreen()
-    this.padRows(totalRows, usedRows)
+    addLayerToScreen()
     let rightmostColumn: i32 = 0
     for (let i = 0; i < map.length; i++) {
       const column = this.padColumn(totalColumns, map[i].join(''))

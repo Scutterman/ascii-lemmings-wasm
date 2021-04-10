@@ -9,10 +9,20 @@
     },
     loop: {
       display(msgPtr) {
-        screen.innerHTML += module.exports.__getString(msgPtr) + '<br>'
+        if (screen.childNodes.length === 0) {
+          console.log('No screen layers')
+          return
+        }
+        
+        screen.lastChild.innerHTML += module.exports.__getString(msgPtr) + '<br>'
       },
       clear() {
-        screen.innerHTML = ''
+        screen.childNodes.forEach(n => screen.removeChild(n))
+      },
+      addLayer() {
+        const newLayer = document.createElement('div')
+        newLayer.classList.add('screen')
+        screen.appendChild(newLayer)
       }
     },
     env: {

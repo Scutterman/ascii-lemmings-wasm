@@ -53,6 +53,7 @@ function eventLoop(): void {
 
 declare function display(arr: string): void;
 declare function clear(): void;
+declare function addLayer(): void;
 
 export function renderTimer(rightmostColumn: i32, time: u16): void {
   const timeLeft = time.toString()
@@ -66,6 +67,10 @@ export function renderToScreen(text: string): void {
 
 export function clearScreen(): void {
   clear()
+}
+
+export function addLayerToScreen(): void {
+  addLayer()
 }
 
 /** EXPORTED TO JS */
