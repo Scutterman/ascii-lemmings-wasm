@@ -75,22 +75,23 @@ export class Lemming {
       case LemmingGift.None:
         return true
       case LemmingGift.ClimbingBoots: 
-        if (this.isClimber != true) {
-          this.isClimber = true
-          return true
+        if (this.isClimber == true) {
+          return false
         }
+
+        this.isClimber = true
       break
       case LemmingGift.Umbrella:
-        if (this.hasUmbrella != true) {
-          this.hasUmbrella = true
-          return true
+        if (this.hasUmbrella == true) {
+          return false
         }
+        this.hasUmbrella = true
       break
       case LemmingGift.Bomb:
-        if (this.isExploding != true) {
-          this.isExploding = true
-          return true
+        if (this.isExploding == true) {
+          return false
         }
+        this.isExploding = true
       break
       case LemmingGift.Block:
           this.action = new Block()
@@ -110,7 +111,9 @@ export class Lemming {
       case LemmingGift.Walk:
           this.action = new Walk()
       break
+      default:
+        return false
     }
-    return false
+    return true
   }
 }

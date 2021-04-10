@@ -105,12 +105,10 @@ export class Level extends BaseLevel {
   public processLemmingSelect(mouseTileX: i32, mouseTileY: i32): boolean {
     for (let i = 0; i < this.lemmings.length; i++) {
       if (mouseTileX == this.lemmings[i].position.x && mouseTileY == this.lemmings[i].position.y) {
-        if (gameState.selectedGift !== LemmingGift.None) {
-          const giftApplied = this.lemmings[i].setGift(gameState.selectedGift)
-          if (giftApplied) {
-            gameState.setSelectedGift(LemmingGift.None)
-            return true
-          }
+        const giftApplied = this.lemmings[i].setGift(gameState.selectedGift)
+        if (giftApplied) {
+          gameState.setSelectedGift(LemmingGift.None)
+          return true
         }
       }
     }

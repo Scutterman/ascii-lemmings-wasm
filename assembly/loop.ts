@@ -1,4 +1,4 @@
-import { LevelState } from "./types"
+import { LemmingGift, LevelState } from "./types"
 
 import { gameState } from './index'
 
@@ -21,7 +21,9 @@ function processInputs(): void {
         }
       }
 
-      level.processLemmingSelect(mouseTileX, mouseTileY)
+      if (gameState.selectedGift != LemmingGift.None) {
+        level.processLemmingSelect(mouseTileX, mouseTileY)
+      }
     }
   }
 }
