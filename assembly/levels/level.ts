@@ -179,7 +179,6 @@ export class Level extends BaseLevel {
   }
   
   public renderLevel(): void {
-    
     const map = this.cloneMap()
     const rightmostColumn = this.render(map)
     renderTimer(rightmostColumn, this.timeLeft)
@@ -191,10 +190,14 @@ export class Level extends BaseLevel {
       addLayerToScreen()
       this.padRows(map.length)
       this.setYPosition(lemming.position.y)
-      const xPadding = this.getXPadding(lemming.position.x)
-      const screenPadding: i32 = Math.floor(map[0].length / 2) as i32
 
-      renderToScreen(' '.repeat(screenPadding) + xPadding + lemming.renderFrame())
+      // Pad from the beginning of the screen to the character before the lemming so the lemming is in the correct position
+      const xPaddingLeft = lemming.position.x
+      
+      // Pad between the end lemming character to the edge of the screen
+      const xPaddingRight = map[0].length - lemming.position.x - 1
+      const row = ' '.repeat(xPaddingLeft) + lemming.renderFrame() + ' '.repeat(xPaddingRight)
+      renderToScreen(this.padColumn(row))
     }
   }
 
@@ -218,10 +221,6 @@ export class Level extends BaseLevel {
     }
   }
 
-  private getXPadding(xPosition: i16): string {
-    return ' '.repeat(xPosition - 1)
-  }
-  
   private padColumn(text: string): string {
     const totalColumns = gameState.screenWidth / gameState.characterWidth
     const charactersSpare = totalColumns - text.length
