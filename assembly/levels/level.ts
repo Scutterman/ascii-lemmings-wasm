@@ -54,7 +54,11 @@ export class Level extends BaseLevel {
     }
 
     this.skills.set(skill, quantity)
-    this.updateLabel(skill, quantity.toString())
+    if (quantity == u8.MAX_VALUE) {
+      this.updateLabel(skill, '∞')
+    } else {
+      this.updateLabel(skill, quantity.toString())
+    }
   }
 
   public canUseSkill(skill: LemmingGift): boolean {
@@ -69,13 +73,14 @@ export class Level extends BaseLevel {
 
   public skillUsed(skill: LemmingGift): void {
     if (this.skills.has(skill)) {
-      const quantity: u8 = this.skills.get(skill) - 1
-      if (quantity <= 0) {
-        this.updateLabel(skill, '0')
+      const currentQuantity: u8 = this.skills.get(skill)
+      if (currentQuantity <= 1) {
         this.skills.delete(skill)
-      } else {
-        this.updateLabel(skill, quantity.toString())
+        this.updateLabel(skill, '0')
+      } else if (currentQuantity != u8.MAX_VALUE) {
+        const quantity = currentQuantity - 1
         this.skills.set(skill, quantity)
+        this.updateLabel(skill, quantity.toString())
       }
     }
   }

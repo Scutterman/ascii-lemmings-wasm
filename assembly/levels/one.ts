@@ -24,6 +24,6 @@ export class Level1 extends Level {
       '____________________________'
     ]))
 
-    this.setSkillQuantity(LemmingGift.Shovel, 3)
+    this.setSkillQuantity(LemmingGift.Shovel, u8.MAX_VALUE)
   }
 }
