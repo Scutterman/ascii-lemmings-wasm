@@ -32,14 +32,13 @@
     }
   };
 
-  const response = await fetch("/build/untouched.wasm");
+  const response = await fetch("/build/optimized.wasm");
   const buffer = await response.arrayBuffer();
   const module = await loader.instantiate(
     buffer,
     importObject
   );
   
-  let loopIntervalHandle
   const start = module.instance.exports.start;
   const setScreenDimensions = module.instance.exports.setScreenDimensions
   const setCharacterDimensions = module.instance.exports.setCharacterDimensions
@@ -64,8 +63,7 @@
     module.instance.exports.triggerEventLoop()
   }
   
-  console.log('Starting the loop')
-  loopIntervalHandle = setInterval(loop, 100)
+  setInterval(loop, 100)
 })();
 
 function measureOneCharacter() {
