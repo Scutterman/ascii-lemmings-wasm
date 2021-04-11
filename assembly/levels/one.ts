@@ -25,5 +25,12 @@ export class Level1 extends Level {
     ]))
 
     this.setSkillQuantity(LemmingGift.Shovel, u8.MAX_VALUE)
+    this.setSkillQuantity(LemmingGift.Block, 10)
+    this.setSkillQuantity(LemmingGift.Bomb, 10)
+    this.setSkillQuantity(LemmingGift.BrickSack, u8.MAX_VALUE)
+    this.setSkillQuantity(LemmingGift.ClimbingBoots, 10)
+    this.setSkillQuantity(LemmingGift.Hammer, 10)
+    this.setSkillQuantity(LemmingGift.Pickaxe, 10)
+    this.setSkillQuantity(LemmingGift.Umbrella, 10)
   }
 }
