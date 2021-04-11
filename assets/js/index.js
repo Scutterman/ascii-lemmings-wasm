@@ -43,11 +43,12 @@ async function startGame (file) {
   const setScreenDimensions = module.instance.exports.setScreenDimensions
   const setCharacterDimensions = module.instance.exports.setCharacterDimensions
   const dimensions = measureOneCharacter()
+  const screenPaddingTop = screen.getBoundingClientRect().top
   setScreenDimensions(screen.clientWidth, screen.clientHeight)
   setCharacterDimensions(dimensions.width, dimensions.height)
 
   window.addEventListener('mousemove', function(event) {
-    module.instance.exports.updateMouseCoordinates(event.clientX, event.clientY - screen.clientTop)
+    module.instance.exports.updateMouseCoordinates(event.clientX, event.clientY - screenPaddingTop)
   })
 
   window.addEventListener('click', function(_event) {
