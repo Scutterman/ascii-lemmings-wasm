@@ -1,7 +1,7 @@
-import { gameState } from ".."
+import { gameState, log } from ".."
 import { Lemming } from "../lemming"
 import { addLayerToScreen, clearScreen, renderTimer, renderToScreen } from "../loop"
-import { LemmingGift, LevelTiles, UIAction } from "../types"
+import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { getSurroundingTiles } from "../map"
 import { insertText } from "../text"
@@ -44,6 +44,8 @@ export class Level extends BaseLevel {
       this.addLabel(LemmingGift.Shovel, 22, this.buttonYCoordinate + 1)
 
       this.uiControls.push(new UIControl(new Vec2(25, this.buttonYCoordinate), 'm', () => { gameState.setNukeGift() }))
+
+      this.uiLabels.push(new UILabel(new Vec2(1, this.buttonYCoordinate + 2), '', 'SELECTED_GIFT'))
     }
   }
 
@@ -68,6 +70,18 @@ export class Level extends BaseLevel {
       return this.skills.get(skill) > 0
     } else {
       return false
+    }
+  }
+
+  public skillSelected(skill: LemmingGift): void {
+    if (!lemmingGiftLabel.has(skill)) {
+      log('no label for gift ' + skill.toString())
+      return
+    }
+    
+    const tag = this.getUIByTag('SELECTED_GIFT')
+    if (tag != null) {
+      tag.updateText(lemmingGiftLabel.get(skill))
     }
   }
 

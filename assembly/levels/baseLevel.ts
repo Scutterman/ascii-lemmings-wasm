@@ -24,6 +24,7 @@ export abstract class BaseLevel {
 
   public abstract canUseSkill(skill: LemmingGift): boolean
   public abstract skillUsed(skill: LemmingGift): void
+  public abstract skillSelected(skill: LemmingGift): void
   
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
     this.numberOfLemmings = lemmingsToSpawn

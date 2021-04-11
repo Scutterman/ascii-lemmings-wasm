@@ -46,6 +46,7 @@ export class GameState {
   public setSelectedGift(gift: LemmingGift): void {
     if (this.currentLevel.canUseSkill(gift)) {
       this.selectedGift = gift
+      this.currentLevel.skillSelected(gift)
     }
   }
 
@@ -54,6 +55,7 @@ export class GameState {
       this.currentLevel.nuke()
     } else {
       this.selectedGift = LemmingGift.Nuke
+      this.currentLevel.skillSelected(LemmingGift.Nuke)
     }
   }
 
@@ -64,6 +66,7 @@ export class GameState {
     this.millisecondsPerGameLoop = baseMillisecondsPerGameLoop
     this.framesSinceLastLemming = u16.MAX_VALUE
     this.selectedGift = LemmingGift.None
+    this.currentLevel.skillSelected(LemmingGift.None)
 
     const player = this.autoplayer
     if (player != null) {
