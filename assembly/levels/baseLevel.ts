@@ -14,7 +14,7 @@ export abstract class BaseLevel {
   public uiLabels: UILabel[] = []
   public isMetaScreen: boolean
 
-  public abstract processLemmingSelect(mouseTileX: i32, mouseTileY: i32): boolean
+  public abstract processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean
   public abstract updateLemmings(): void
   public abstract gameLoop(): void
   public abstract nuke(): void

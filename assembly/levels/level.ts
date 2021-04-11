@@ -46,6 +46,7 @@ export class Level extends BaseLevel {
       this.uiControls.push(new UIControl(new Vec2(25, this.buttonYCoordinate), 'm', () => { gameState.setNukeGift() }))
 
       this.uiLabels.push(new UILabel(new Vec2(1, this.buttonYCoordinate + 2), '', 'SELECTED_GIFT'))
+      this.uiLabels.push(new UILabel(new Vec2(15, this.buttonYCoordinate + 2), '', 'LEMMING_INFO'))
     }
   }
 
@@ -121,13 +122,22 @@ export class Level extends BaseLevel {
     }
   }
 
-  public processLemmingSelect(mouseTileX: i32, mouseTileY: i32): boolean {
+  public processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean {
+    const tag = this.getUIByTag('LEMMING_INFO')
+    if (tag != null) { tag.updateText('') }
+    
     for (let i = 0; i < this.lemmings.length; i++) {
       if (mouseTileX == this.lemmings[i].position.x && mouseTileY == this.lemmings[i].position.y) {
-        const giftApplied = this.lemmings[i].setGift(gameState.selectedGift)
-        if (giftApplied) {
-          gameState.setSelectedGift(LemmingGift.None)
-          return true
+        if (tag != null) {
+          tag.updateText((i + 1).toString() + ': ' + this.lemmings[i].action.label())
+        }
+        
+        if (processLemmingClick) {
+          const giftApplied = this.lemmings[i].setGift(gameState.selectedGift)
+          if (giftApplied) {
+            gameState.setSelectedGift(LemmingGift.None)
+            return true
+          }
         }
       }
     }
