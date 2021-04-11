@@ -33,4 +33,8 @@ export class Level1 extends Level {
     this.setSkillQuantity(LemmingGift.Pickaxe, 10)
     this.setSkillQuantity(LemmingGift.Umbrella, 10)
   }
+
+  public clone(): Level1 {
+    return new Level1()
+  }
 }

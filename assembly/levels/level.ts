@@ -201,7 +201,7 @@ export class Level extends BaseLevel {
     }
   }
 
-  public clone(): Level {
+  public clone(): BaseLevel {
     const newMap = this.cloneMap()
     return new Level(this.numberOfLemmings, this.numberOfLemmingsForSucces, newMap, this.isMetaScreen, this.buttonYCoordinate)
   }

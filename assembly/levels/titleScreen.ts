@@ -22,4 +22,8 @@ export class TitleScreen extends Level {
       gameState.loadLevel(new Level1())
     }))
   }
+
+  public clone(): TitleScreen {
+    return new TitleScreen()
+  }
 }

@@ -45,6 +45,8 @@ export class EndSlate extends Level {
 
     this.render(endSlateToRender)
   }
+
+  public clone(): EndSlate {
+    return new EndSlate()
+  }
 }
-
-
