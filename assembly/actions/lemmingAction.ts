@@ -24,8 +24,8 @@ export abstract class LemmingAction {
     lemming.position.y++
   }
 
-  public getNextAnimationFrame(): string {
-    const frame = this.animation.getNextFrame()
+  public getNextAnimationFrame(progressFrame: boolean): string {
+    const frame = this.animation.getNextFrame(progressFrame)
     return frame[0][0]
   }
 }

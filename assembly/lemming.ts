@@ -59,11 +59,11 @@ export class Lemming {
     }
   }
 
-  public renderFrame(): string {
+  public renderFrame(isDirty: boolean): string {
     if (this.isExploding) {
-      return this.explosionAnimation.getNextFrame()[0][0]
+      return this.explosionAnimation.getNextFrame(isDirty)[0][0]
     } else {
-      return this.action.getNextAnimationFrame()
+      return this.action.getNextAnimationFrame(isDirty)
     }
   }
 

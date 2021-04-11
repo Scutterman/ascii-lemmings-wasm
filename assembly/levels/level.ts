@@ -14,6 +14,7 @@ export class Level extends BaseLevel {
   public lemmings: Lemming[] = []
   private canSpawnMore: boolean = true
   private skills: Map<LemmingGift, u8> = new Map()
+  private isDirty: boolean = false
 
   constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 14) {
     super(lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
@@ -169,7 +170,7 @@ export class Level extends BaseLevel {
     }
   
     this.updateLemmings()
-    this.renderLevel()
+    this.isDirty = true
   }
 
   public updateLemmings(): void {
@@ -205,6 +206,7 @@ export class Level extends BaseLevel {
   public renderLevel(): void {
     const map = this.cloneMap()
     const rightmostColumn = this.render(map)
+
     renderTimer(rightmostColumn, this.timeLeft)
 
     for (let i = 0; i < this.lemmings.length; i++) {
@@ -222,9 +224,11 @@ export class Level extends BaseLevel {
       
       // Pad between the end lemming character to the edge of the screen
       const xPaddingRight = map[0].length - lemming.position.x - 1
-      const row = ' '.repeat(xPaddingLeft) + lemming.renderFrame() + ' '.repeat(xPaddingRight)
+      const row = ' '.repeat(xPaddingLeft) + lemming.renderFrame(this.isDirty) + ' '.repeat(xPaddingRight)
       renderToScreen(this.padColumn(row), colour)
     }
+
+    this.isDirty = false
   }
 
   public clone(): BaseLevel {

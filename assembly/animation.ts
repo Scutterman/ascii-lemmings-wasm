@@ -7,12 +7,15 @@ export class Animation {
     this.frames = frames
   }
 
-  public getNextFrame(): AnimationFrame {
+  public getNextFrame(progressFrame: boolean): AnimationFrame {
     const frame = this.frames[this.currentFrameIndex]
-    this.currentFrameIndex++
 
-    if (this.currentFrameIndex == this.frames.length) {
-      this.currentFrameIndex = 0
+    if (progressFrame) {
+      this.currentFrameIndex++
+  
+      if (this.currentFrameIndex == this.frames.length) {
+        this.currentFrameIndex = 0
+      }
     }
 
     return frame

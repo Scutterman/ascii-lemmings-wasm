@@ -21,6 +21,7 @@ export abstract class BaseLevel {
   public abstract isBlockerInLocation(location: Vec2): boolean
   public abstract giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void
   public abstract clone(): BaseLevel
+  public abstract renderLevel(): void
 
   public abstract canUseSkill(skill: LemmingGift): boolean
   public abstract skillUsed(skill: LemmingGift): void

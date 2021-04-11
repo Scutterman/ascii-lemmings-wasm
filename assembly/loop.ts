@@ -2,6 +2,8 @@ import { LemmingGift, LevelState } from "./types"
 
 import { gameState } from './index'
 
+const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
+
 function processInputs(): void {
   const level = gameState.currentLevel
   let processLemmingClick = gameState.mouseClicked && gameState.selectedGift != LemmingGift.None && gameState.selectedGift != LemmingGift.Nuke
@@ -37,12 +39,20 @@ function eventLoop(): void {
   const levelRunning = gameState.levelState == LevelState.LevelRunning
   const delta = currentTime - gameState.lastGameLoopRunTime
   const gameLoopOverdue = delta > 65535 || delta as u16 >= gameState.millisecondsPerGameLoop
+  
   if (!gameState.currentLevel.isMetaScreen && levelRunning && gameLoopOverdue) {
     gameState.lastGameLoopRunTime = currentTime
 
     const player = gameState.autoplayer
     if (player != null) { player.update() }
     gameState.currentLevel.gameLoop()
+  }
+
+  const renderDelta = currentTime - gameState.lastRenderTime
+  const renderOverdue = renderDelta >= millisecondsPerFrameRender
+  
+  if (renderOverdue) {
+    gameState.currentLevel.renderLevel()
   }
 }
 

@@ -4,7 +4,7 @@ import { DefaultLevel } from "./levels/defaultLevel"
 import { EndSlate } from "./levels/endSlate"
 import { LemmingGift, LevelState } from "./types"
 
-export const baseMillisecondsPerGameLoop: u16 = 1000 as u16
+export const baseMillisecondsPerGameLoop: u16 = 5000 as u16
 export const fastForwardMultiplier: u8 = 2 as u8
 
 const defaultLevel: DefaultLevel = new DefaultLevel()
@@ -15,6 +15,7 @@ export class GameState {
   public shouldRun: boolean = false
   public levelState: LevelState = LevelState.TitleScreen
   public lastGameLoopRunTime: i64 = Date.now()
+  public lastRenderTime: i64 = Date.now()
   public fastForward: boolean = false
   public millisecondsPerGameLoop: u16 = baseMillisecondsPerGameLoop
   public releaseRate: u8 = 50
@@ -66,6 +67,7 @@ export class GameState {
   private reset (): void {
     this.shouldRun = true
     this.lastGameLoopRunTime = Date.now()
+    this.lastRenderTime = Date.now()
     this.fastForward = false
     this.millisecondsPerGameLoop = baseMillisecondsPerGameLoop
     this.framesSinceLastLemming = u16.MAX_VALUE
