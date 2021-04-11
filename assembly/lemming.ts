@@ -36,6 +36,10 @@ export class Lemming {
     this.isExploding = true
   }
 
+  public areYouExploding(): boolean {
+    return this.isExploding
+  }
+
   // returns whether the lemming is still alive (for now)
   private updateExplosion(): boolean {
     if (this.framesUntilExplosion > 0) {

@@ -186,6 +186,8 @@ export class Level extends BaseLevel {
     for (let i = 0; i < this.lemmings.length; i++) {
       const lemming = this.lemmings[i]
       if (lemming.removed) { continue }
+
+      const colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
       
       addLayerToScreen()
       this.padRows(map.length)
@@ -197,7 +199,7 @@ export class Level extends BaseLevel {
       // Pad between the end lemming character to the edge of the screen
       const xPaddingRight = map[0].length - lemming.position.x - 1
       const row = ' '.repeat(xPaddingLeft) + lemming.renderFrame() + ' '.repeat(xPaddingRight)
-      renderToScreen(this.padColumn(row))
+      renderToScreen(this.padColumn(row), colour)
     }
   }
 

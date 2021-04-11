@@ -19,7 +19,7 @@
 
         let output = message
         if (colour !== '') {
-          output = `<span style="color: ${ color }">${ output }</span>`
+          output = `<span style="color: ${ colour };">${ output }</span>`
         }
 
         screen.lastChild.innerHTML += output + '<br>'
