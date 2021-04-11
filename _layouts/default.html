@@ -39,7 +39,7 @@
       <script src="{{ '/assets/js/index.js?v=' | append: site.github.build_revision | relative_url }}"></script>
       <script>
         window.addEventListener('load', function() {
-          startGame("{{ /assets/wasm/optimized.wasm?v=' | append: site.github.build_revision | relative_url }}")
+          startGame("{{ '/assets/wasm/optimized.wasm?v=' | append: site.github.build_revision | relative_url }}")
         })
       </script>
     </div>
