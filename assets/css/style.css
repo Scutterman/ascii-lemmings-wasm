@@ -40,6 +40,10 @@ html, body {
   user-select: none;
 }
 
+#screen {
+  position: relative;
+}
+
 .screen {
   font-family: 'Courier New', Courier, monospace;
 }
