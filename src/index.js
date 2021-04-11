@@ -8,13 +8,21 @@
       }
     },
     loop: {
-      display(msgPtr) {
+      display(msgPtr, colourPtr) {
         if (screen.childNodes.length === 0) {
           console.log('No screen layers')
           return
         }
         
-        screen.lastChild.innerHTML += module.exports.__getString(msgPtr) + '<br>'
+        const colour = module.exports.__getString(colourPtr)
+        const message = module.exports.__getString(msgPtr)
+
+        let output = message
+        if (colour !== '') {
+          output = `<span style="color: ${ color }">${ output }</span>`
+        }
+
+        screen.lastChild.innerHTML += output + '<br>'
       },
       clear() {
         screen.innerHTML = ''

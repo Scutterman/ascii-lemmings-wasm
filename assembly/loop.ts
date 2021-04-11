@@ -51,18 +51,18 @@ function eventLoop(): void {
   }
 }
 
-declare function display(arr: string): void;
+declare function display(arr: string, colour: string): void;
 declare function clear(): void;
 declare function addLayer(): void;
 
 export function renderTimer(rightmostColumn: i32, time: u16): void {
   const timeLeft = time.toString()
   const paddingRequired = rightmostColumn - timeLeft.length
-  display(' '.repeat(paddingRequired) + timeLeft)
+  display(' '.repeat(paddingRequired) + timeLeft, '')
 }
 
-export function renderToScreen(text: string): void {
-  display(text)
+export function renderToScreen(text: string, colour: string = ''): void {
+  display(text, colour)
 }
 
 export function clearScreen(): void {
