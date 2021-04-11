@@ -43,8 +43,7 @@ async function startGame (file) {
   const setScreenDimensions = module.instance.exports.setScreenDimensions
   const setCharacterDimensions = module.instance.exports.setCharacterDimensions
   const dimensions = measureOneCharacter()
-  
-  setScreenDimensions(document.body.clientWidth, document.body.clientHeight)
+  setScreenDimensions(screen.clientWidth, screen.clientHeight)
   setCharacterDimensions(dimensions.width, dimensions.height)
 
   window.addEventListener('mousemove', function(event) {
