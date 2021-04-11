@@ -14,4 +14,8 @@ export class Block extends LemmingAction {
       lemming.action = new Walk()
     }
   }
+
+  public label(): string {
+    return 'Blocker'
+  }
 }

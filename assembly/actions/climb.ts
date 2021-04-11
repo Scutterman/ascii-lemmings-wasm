@@ -33,4 +33,8 @@ export class Climb extends LemmingAction {
       lemming.position.y--
     }
   }
+  
+  public label(): string {
+    return 'Climber'
+  }
 }

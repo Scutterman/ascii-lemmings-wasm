@@ -24,6 +24,10 @@ export class Miner extends LemmingAction {
       lemming.action = new Walk()
     }
   }
+  
+  public label(): string {
+    return 'Miner'
+  }
 
   private canMineNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
     const tile: string = lemming.movingRight ? surroundingTiles.bottomRight : surroundingTiles.bottomLeft

@@ -23,4 +23,8 @@ export class Umbrella extends LemmingAction {
       this.framesSinceFall++
     }
   }
+  
+  public label(): string {
+    return 'Floater'
+  }
 }

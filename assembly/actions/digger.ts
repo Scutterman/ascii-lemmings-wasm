@@ -21,4 +21,8 @@ export class Digger extends LemmingAction {
       lemming.position.y++
     }
   }
+  
+  public label(): string {
+    return 'Digger'
+  }
 }

@@ -23,6 +23,10 @@ export class Basher extends LemmingAction {
     }
   }
 
+  public label(): string {
+    return 'Basher'
+  }
+
   private canMineNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
     const tile: string = lemming.movingRight ? surroundingTiles.right : surroundingTiles.left
     return terrainIndestructible(tile) == false

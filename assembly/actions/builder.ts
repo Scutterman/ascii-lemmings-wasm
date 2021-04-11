@@ -18,6 +18,10 @@ export class Builder extends LemmingAction {
     this.updateBuilder(lemming, surroundingTiles)
   }
   
+  public label(): string {
+    return 'Builder'
+  }
+  
   private updateBuilder(lemming: Lemming, surroundingTiles: SurroundingTiles, hasTurnedAround: boolean = false): void {
     if (this.isFalling(surroundingTiles)) {
       this.handleFalling(lemming)

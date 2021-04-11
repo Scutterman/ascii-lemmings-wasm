@@ -8,6 +8,8 @@ export class NoopAction extends LemmingAction {
 
   update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {}
 
+  public label(): string { return '' }
+  
   constructor() {
     super(new Animation([]))
   }

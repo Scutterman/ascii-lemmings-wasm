@@ -32,6 +32,10 @@ export class Walk extends LemmingAction {
       }
     }
   }
+  
+  public label(): string {
+    return 'Walker'
+  }
 
   private canWalkOnNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
     const tile: string = lemming.movingRight ? surroundingTiles.right : surroundingTiles.left

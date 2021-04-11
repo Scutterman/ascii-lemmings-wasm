@@ -29,4 +29,8 @@ export class Fall extends LemmingAction {
       }
     }
   }
+  
+  public label(): string {
+    return 'Falling'
+  }
 }
