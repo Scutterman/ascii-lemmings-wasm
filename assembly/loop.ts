@@ -4,28 +4,23 @@ import { gameState } from './index'
 
 function processInputs(): void {
   const level = gameState.currentLevel
+  let processLemmingClick = gameState.mouseClicked && gameState.selectedGift != LemmingGift.None && gameState.selectedGift != LemmingGift.Nuke
   
   if (gameState.mouseClicked) {
     gameState.mouseClicked = false
-
-    const normalizedMouseX = i32(Math.floor(gameState.mouseX / gameState.characterWidth)) + 1
-    const normalizedMouseY = i32(Math.floor(gameState.mouseY / gameState.characterHeight))
-    const mouseTileX: i32 = normalizedMouseX - gameState.lastColumnPadding
-    const mouseTileY: i32 = normalizedMouseY - gameState.lastRowPadding
     
-    if (mouseTileX > 0 && mouseTileY > 0 && mouseTileX < level.map[0].length && mouseTileY < level.map.length) {  
+    if (gameState.mouseTileX > 0 && gameState.mouseTileY > 0 && gameState.mouseTileX < level.map[0].length && gameState.mouseTileY < level.map.length) {  
       for (let i = 0; i < level.uiControls.length; i++) {
-        if (level.uiControls[i].isInBounds(mouseTileX, mouseTileY)) {
+        if (level.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
           level.uiControls[i].clicked()
-          return
+          processLemmingClick = false
+          break
         }
-      }
-
-      if (gameState.selectedGift != LemmingGift.None) {
-        level.processLemmingSelect(mouseTileX, mouseTileY)
       }
     }
   }
+  
+  level.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
 }
 
 function eventLoop(): void {
@@ -78,6 +73,10 @@ export function addLayerToScreen(): void {
 export function updateMouseCoordinates(x: i32, y: i32): void {
   gameState.mouseX = x
   gameState.mouseY = y
+  gameState.normalizedMouseX = i32(Math.floor(gameState.mouseX / gameState.characterWidth)) + 1
+  gameState.normalizedMouseY = i32(Math.floor(gameState.mouseY / gameState.characterHeight))
+  gameState.mouseTileX = gameState.normalizedMouseX - gameState.lastColumnPadding
+  gameState.mouseTileY = gameState.normalizedMouseY - gameState.lastRowPadding
 }
 
 export function registerMouseClick(): void {

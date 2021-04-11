@@ -26,6 +26,10 @@ export class GameState {
   public characterHeight: i32 = 0
   public mouseX: i32 = 0
   public mouseY: i32 = 0
+  public normalizedMouseX: i32 = 0
+  public normalizedMouseY: i32 = 0
+  public mouseTileX: i32 = 0
+  public mouseTileY: i32 = 0
   public mouseClicked: boolean = false
   public lastRowPadding: i32 = 0
   public lastColumnPadding: i32 = 0
