@@ -47,7 +47,7 @@ async function startGame (file) {
   setCharacterDimensions(dimensions.width, dimensions.height)
 
   window.addEventListener('mousemove', function(event) {
-    module.instance.exports.updateMouseCoordinates(event.clientX, event.clientY)
+    module.instance.exports.updateMouseCoordinates(event.clientX, event.clientY - screen.clientTop)
   })
 
   window.addEventListener('click', function(_event) {
