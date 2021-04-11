@@ -32,7 +32,7 @@
     }
   };
 
-  const response = await fetch("/build/optimized.wasm");
+  const response = await fetch("/build/untouched.wasm");
   const buffer = await response.arrayBuffer();
   const module = await loader.instantiate(
     buffer,
