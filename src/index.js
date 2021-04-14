@@ -22,10 +22,11 @@ wasmRunner.onmessage = (e) => {
     case 'display':
       display(e.data.output)
     break
-    case 'clear':
-      screen.innerHTML = ''
-    break
     case 'addLayer':
+      console.log('Adding layer at time ' + new Date().toISOString())
+      if (e.data.clearBeforeAdd) {
+        screen.innerHTML = ''
+      }
       const newLayer = document.createElement('div')
       newLayer.classList.add('screen')
       screen.appendChild(newLayer)

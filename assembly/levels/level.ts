@@ -1,6 +1,6 @@
 import { gameState, loadEndSlate } from ".."
 import { Lemming } from "../lemming"
-import { addLayerToScreen, clearScreen, renderTimer, renderToScreen } from "../loop"
+import { addLayerToScreen, renderTimer, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { getSurroundingTiles } from "../map"
@@ -272,8 +272,7 @@ export class Level extends BaseLevel {
       insertText(map, this.uiLabels[i].getText(), this.uiLabels[i].getPosition())
     }
     
-    clearScreen()
-    addLayerToScreen()
+    addLayerToScreen(true)
     this.padRows(map.length)
     let rightmostColumn: i32 = 0
     for (let i = 0; i < map.length; i++) {

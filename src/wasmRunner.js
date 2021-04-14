@@ -17,11 +17,8 @@ const importObject = {
       
       postMessage({ instruction: 'display', output })
     },
-    clear() {
-      postMessage({ instruction: 'clear' })
-    },
-    addLayer() {
-      postMessage({ instruction: 'addLayer' })
+    addLayer(clearBeforeAdd) {
+      postMessage({ instruction: 'addLayer', clearBeforeAdd })
     },
     onEventLoopComplete(timeTaken) {
       const delayFor = 100 - timeTaken

@@ -70,8 +70,7 @@ const loopCompleted = (start: i64): void => {
 }
 
 declare function display(arr: string, colour: string): void;
-declare function clear(): void;
-declare function addLayer(): void;
+declare function addLayer(clearBeforeAdd: boolean): void;
 declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 
 export function renderTimer(rightmostColumn: i32, time: u16): void {
@@ -84,12 +83,8 @@ export function renderToScreen(text: string, colour: string = ''): void {
   display(text, colour)
 }
 
-export function clearScreen(): void {
-  clear()
-}
-
-export function addLayerToScreen(): void {
-  addLayer()
+export function addLayerToScreen(clearBeforeAdd: boolean = false): void {
+  addLayer(clearBeforeAdd)
 }
 
 /** EXPORTED TO JS */
