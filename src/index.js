@@ -1,102 +1,54 @@
 // Copied from logrocket example code - https://blog.logrocket.com/the-introductory-guide-to-assemblyscript/
-(async () => {
-  const screen = document.querySelector('#screen')
-  
-  const importObject = {
-    index: {
-      log(msgPtr) {
-        console.log(module.exports.__getString(msgPtr))
-      }
-    },
-    loop: {
-      display(msgPtr, colourPtr) {
-        if (screen.childNodes.length === 0) {
-          console.log('No screen layers')
-          return
-        }
-        
-        const colour = module.exports.__getString(colourPtr)
-        const message = module.exports.__getString(msgPtr)
+const screen = document.querySelector('#screen')
+const dimensions = measureOneCharacter()
+const wasmRunner = new Worker('wasmRunner.js')
+wasmRunner.onmessage = (e) => {
+  switch(e.data.instruction) {
+    case 'initcomplete':
+      wasmRunner.postMessage({
+        instruction: 'setdimensions',
+        screenW: document.body.clientWidth,
+        screenH: document.body.clientHeight,
+        characterW: dimensions.width,
+        characterH: dimensions.height
+      })
+    break
+    case 'dimensionscomplete':
+      wasmRunner.postMessage({ instruction: 'start' })
+    break
+    case 'startcomplete':
+      registerAdditionalEvents()
+    break
+    case 'display':
+      display(e.data.output)
+    break
+    case 'clear':
+      screen.innerHTML = ''
+    break
+    case 'addLayer':
+      const newLayer = document.createElement('div')
+      newLayer.classList.add('screen')
+      screen.appendChild(newLayer)
+    break
+  }
+}
 
-        let output = message
-        if (colour !== '') {
-          output = `<span style="color: ${ colour };">${ output }</span>`
-        }
-
-        screen.lastChild.innerHTML += output + '<br>'
-      },
-      clear() {
-        screen.innerHTML = ''
-      },
-      addLayer() {
-        const newLayer = document.createElement('div')
-        newLayer.classList.add('screen')
-        screen.appendChild(newLayer)
-      },
-      onEventLoopComplete(timeTaken) {
-        const delayFor = 100 - timeTaken
-        if (delayFor <= 0) {
-          requestAnimationFrameForLoop()
-        } else {
-          setTimeout(requestAnimationFrameForLoop, delayFor)
-        }
-      }
-    },
-    env: {
-      abort(_msg, _file, line, column) {
-        console.error("abort called at index.ts:" + line + ":" + column);
-      },
-    }
-  };
-
-  const response = await fetch("/build/untouched.wasm");
-  const buffer = await response.arrayBuffer();
-  const module = await loader.instantiate(
-    buffer,
-    importObject
-  );
-  
-  const start = module.instance.exports.start;
-  const setScreenDimensions = module.instance.exports.setScreenDimensions
-  const setCharacterDimensions = module.instance.exports.setCharacterDimensions
-  const dimensions = measureOneCharacter()
-  
-  setScreenDimensions(document.body.clientWidth, document.body.clientHeight)
-  setCharacterDimensions(dimensions.width, dimensions.height)
-
-  window.addEventListener('mousemove', function(event) {
-    module.instance.exports.updateMouseCoordinates(event.clientX, event.clientY)
+function registerAdditionalEvents() {
+  window.addEventListener('mousemove', function(e) {
+    wasmRunner.postMessage({
+      instruction: 'mousemove',
+      clientX: e.clientX,
+      clientY: e.clientY
+    })
   })
 
-  window.addEventListener('click', function(event) {
+  window.addEventListener('click', function() {
     console.log('click js')
-    module.instance.exports.registerMouseClick()
+    wasmRunner.postMessage({ instruction: 'click' })
   })
-  
-  if (!start()) {
-    return
-  }
+}
 
-  // const loop = () => {
-  //   if (eventLoopComplete) {
-  //     eventLoopComplete = false
-  //     module.instance.exports.triggerEventLoop()
-  //   }
-  // }
-  
-  // setInterval(loop, 100)
-
-  const loop = () => {
-    module.instance.exports.triggerEventLoop()
-  }
-
-  const requestAnimationFrameForLoop = () => {
-    window.requestAnimationFrame(loop)
-  }
-
-  requestAnimationFrameForLoop()
-
-})();
+wasmRunner.postMessage({ instruction: 'init' })
 
 function measureOneCharacter() {
   const screen = document.createElement('span')
@@ -108,4 +60,13 @@ function measureOneCharacter() {
   const height = screen.clientHeight
   document.body.removeChild(screen)
   return { width, height }
+}
+
+function display(output) {
+  if (screen.childNodes.length === 0) {
+    console.log('No screen layers')
+    return
+  }
+  
+  screen.lastChild.innerHTML += output + '<br>'
 }
