@@ -10,7 +10,9 @@ function processInputs(): void {
   if (gameState.mouseClicked) {
     gameState.mouseClicked = false
     
-    if (gameState.mouseTileX > 0 && gameState.mouseTileY > 0 && gameState.mouseTileX < currentLevel.map[0].length && gameState.mouseTileY < currentLevel.map.length) {  
+    const isInMapXBounds = gameState.mouseTileX > 0 && gameState.mouseTileX < currentLevel.map[0].length
+    const isInMapYBounds = gameState.mouseTileY > 0  && gameState.mouseTileY < currentLevel.map.length
+    if (isInMapXBounds && isInMapYBounds) {
       for (let i = 0; i < currentLevel.uiControls.length; i++) {
         if (currentLevel.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
           currentLevel.uiControls[i].clicked()
@@ -29,6 +31,7 @@ function eventLoop(): void {
   processInputs()
 
   if (!gameState.shouldRun) {
+    loopCompleted(start)
     return
   }
 
@@ -57,6 +60,10 @@ function eventLoop(): void {
     currentLevel.renderLevel()
   }
 
+  loopCompleted(start)
+}
+
+const loopCompleted = (start: i64): void => {
   const end: i64 = Date.now()
   const timeTaken = i32(end - start)
   onEventLoopComplete(timeTaken)
