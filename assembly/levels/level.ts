@@ -124,10 +124,19 @@ export class Level extends BaseLevel {
   }
 
   public processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean {
+    if (this.lemmings.length == 0) {
+      log('no lemmings to process')
+      return false
+    }
+    
+    log('processLemmingSelect')
     const tag = this.getUIByTag('LEMMING_INFO')
+    log('has tag? ' + (tag != null).toString())
     if (tag != null) { tag.updateText('') }
     
+    log('loop? ' + this.lemmings.length.toString())
     for (let i = 0; i < this.lemmings.length; i++) {
+      log('in loop')
       if (mouseTileX == this.lemmings[i].position.x && mouseTileY == this.lemmings[i].position.y) {
         if (tag != null) {
           tag.updateText((i + 1).toString() + ': ' + this.lemmings[i].action.label())
@@ -135,6 +144,7 @@ export class Level extends BaseLevel {
         
         if (processLemmingClick) {
           const giftApplied = this.lemmings[i].setGift(gameState.selectedGift)
+          log('Processing clicks, gift applied? ' + processLemmingClick.toString())
           if (giftApplied) {
             gameState.setSelectedGift(LemmingGift.None)
             return true
@@ -143,6 +153,7 @@ export class Level extends BaseLevel {
       }
     }
 
+    log('returning')
     return false
   }
   

@@ -1,6 +1,8 @@
 // Copied from logrocket example code - https://blog.logrocket.com/the-introductory-guide-to-assemblyscript/
 (async () => {
   const screen = document.querySelector('#screen')
+  let eventLoopComplete = true
+
   const importObject = {
     index: {
       log(msgPtr) {
@@ -31,7 +33,11 @@
         const newLayer = document.createElement('div')
         newLayer.classList.add('screen')
         screen.appendChild(newLayer)
+      },
+      onEventLoopComplete() {
+        eventLoopComplete = true
       }
+
     },
     env: {
       abort(_msg, _file, line, column) {
@@ -68,7 +74,10 @@
   }
 
   const loop = () => {
-    module.instance.exports.triggerEventLoop()
+    if (eventLoopComplete) {
+      eventLoopComplete = false
+      module.instance.exports.triggerEventLoop()
+    }
   }
   
   setInterval(loop, 100)

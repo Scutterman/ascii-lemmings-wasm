@@ -1,20 +1,19 @@
 import { LemmingGift, LevelState } from "./types"
 
-import { gameState } from './index'
+import { gameState, log } from './index'
 
-const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
+const millisecondsPerFrameRender: i64 = Math.round(1000 / 1) as i64
 
 function processInputs(): void {
-  const level = gameState.currentLevel
   let processLemmingClick = gameState.mouseClicked && gameState.selectedGift != LemmingGift.None && gameState.selectedGift != LemmingGift.Nuke
   
   if (gameState.mouseClicked) {
     gameState.mouseClicked = false
     
-    if (gameState.mouseTileX > 0 && gameState.mouseTileY > 0 && gameState.mouseTileX < level.map[0].length && gameState.mouseTileY < level.map.length) {  
-      for (let i = 0; i < level.uiControls.length; i++) {
-        if (level.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
-          level.uiControls[i].clicked()
+    if (gameState.mouseTileX > 0 && gameState.mouseTileY > 0 && gameState.mouseTileX < gameState.currentLevel.map[0].length && gameState.mouseTileY < gameState.currentLevel.map.length) {  
+      for (let i = 0; i < gameState.currentLevel.uiControls.length; i++) {
+        if (gameState.currentLevel.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
+          gameState.currentLevel.uiControls[i].clicked()
           processLemmingClick = false
           break
         }
@@ -22,7 +21,9 @@ function processInputs(): void {
     }
   }
   
-  level.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
+  log('Begin process select')
+  gameState.currentLevel.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
+  log('End process inputs')
 }
 
 function eventLoop(): void {
@@ -54,11 +55,14 @@ function eventLoop(): void {
   if (renderOverdue) {
     gameState.currentLevel.renderLevel()
   }
+
+  onEventLoopComplete()
 }
 
 declare function display(arr: string, colour: string): void;
 declare function clear(): void;
 declare function addLayer(): void;
+declare function onEventLoopComplete(): void;
 
 export function renderTimer(rightmostColumn: i32, time: u16): void {
   const timeLeft = time.toString()
