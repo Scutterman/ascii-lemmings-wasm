@@ -4,7 +4,7 @@ import { Level } from "./level"
 
 export class Level1 extends Level {
   constructor() {
-    super(10, 1, mapToTiles([
+    super('ONE', 10, 1, mapToTiles([
       '____________________________',
       '|GGGGGGGGGGGGGGGGGGGGGGGGGG|',
       '|   O                 GG  G|',

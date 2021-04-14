@@ -1,4 +1,4 @@
-import { gameState } from "..";
+import { currentLevel } from "..";
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
 import { removeTerrain, SurroundingTiles, terrainIndestructible, TILE_BOUNDARY } from "../map";
@@ -17,7 +17,7 @@ export class Digger extends LemmingAction {
     } else if (terrainIndestructible(surroundingTiles.bottomCentre)) {
       lemming.action = new Walk()
     } else {
-      removeTerrain(gameState.currentLevel.map, new Vec2(lemming.position.x, lemming.position.y + 1))
+      removeTerrain(currentLevel.map, new Vec2(lemming.position.x, lemming.position.y + 1))
       lemming.position.y++
     }
   }

@@ -4,10 +4,10 @@ import { BaseLevel } from "./baseLevel";
 
 export class DefaultLevel extends BaseLevel {
   constructor() {
-    super(0,0,[],true)
+    super('DEFAULT', 0,0,[],true)
   }
   public updateLemmings(): void {}
-  public gameLoop(): void {}
+  public gameLoop(): boolean { return true}
   public nuke(): void {}
   public skillUsed(skill: LemmingGift): void {}
   public skillSelected(skill: LemmingGift): void {}

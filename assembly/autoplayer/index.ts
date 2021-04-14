@@ -1,4 +1,4 @@
-import { gameState } from ".."
+import { currentLevel, gameState, loadLevel } from ".."
 import { Lemming } from "../lemming"
 import { BaseLevel } from "../levels/baseLevel"
 import { LemmingGift } from "../types"
@@ -13,13 +13,13 @@ export abstract class AutoPlayer {
   // TODO:: Assemblyscript doesn't like reference to the concrete Level class here.
   // There might be a circular dependency
   constructor(level: BaseLevel, protected actions: Map<u32, AutoAction[]>) {
-    gameState.loadLevel(level)
+    loadLevel(level)
   }
 
   public update(): void {
     this.frameNumber++
     if (this.actions.has(this.frameNumber)) {
-      const level = gameState.currentLevel
+      const level = currentLevel
       const actions = this.actions.get(this.frameNumber)
       for (let i = 0; i < actions.length; i++) {
         if (actions[i].action == LemmingGift.Nuke) {

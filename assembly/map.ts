@@ -1,4 +1,4 @@
-import { gameState } from "."
+import { currentLevel } from "."
 import { Lemming } from "./lemming"
 import { Vec2 } from "./position"
 import { LevelMap, LevelTiles, Tile } from "./types"
@@ -56,7 +56,7 @@ function getSurroundingTile(map: LevelTiles, position: Vec2): string {
     return '_'
   }
 
-  if (gameState.currentLevel.isBlockerInLocation(position)) {
+  if (currentLevel.isBlockerInLocation(position)) {
     return 'T'
   } else {
     return map[position.y][position.x]
@@ -67,8 +67,8 @@ export function isWalkingDownStairs(lemming: Lemming): boolean {
   const deltaX: i16 = lemming.movingRight ? 1 : -1
   const tileBelowPosition: Vec2 = new Vec2(lemming.position.x + deltaX, lemming.position.y + 1)
   const tileTwoBelowPosition: Vec2 = new Vec2(lemming.position.x + deltaX, lemming.position.y + 2)
-  const tileBelow: string = getSurroundingTile(gameState.currentLevel.map, tileBelowPosition)
-  const tileTwoBelow: string = getSurroundingTile(gameState.currentLevel.map, tileTwoBelowPosition)
+  const tileBelow: string = getSurroundingTile(currentLevel.map, tileBelowPosition)
+  const tileTwoBelow: string = getSurroundingTile(currentLevel.map, tileTwoBelowPosition)
   return tileBelow == TILE_AIR && (tileTwoBelow == TILE_BRICK || tileTwoBelow == TILE_GROUND)
 }
 

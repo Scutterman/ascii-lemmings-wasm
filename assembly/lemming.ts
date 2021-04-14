@@ -1,4 +1,4 @@
-import { gameState } from ".";
+import { currentLevel } from ".";
 import { Basher } from "./actions/basher";
 import { Block } from "./actions/block";
 import { Builder } from "./actions/builder";
@@ -46,14 +46,14 @@ export class Lemming {
       this.framesUntilExplosion--
       return true
     } else {
-      removeTerrain(gameState.currentLevel.map, new Vec2(this.position.x - 1, this.position.y -1))
-      removeTerrain(gameState.currentLevel.map, new Vec2(this.position.x - 1, this.position.y))
-      removeTerrain(gameState.currentLevel.map, new Vec2(this.position.x - 1, this.position.y + 1))
-      removeTerrain(gameState.currentLevel.map, new Vec2(this.position.x, this.position.y - 1))
-      removeTerrain(gameState.currentLevel.map, new Vec2(this.position.x, this.position.y + 1))
-      removeTerrain(gameState.currentLevel.map, new Vec2(this.position.x + 1, this.position.y - 1))
-      removeTerrain(gameState.currentLevel.map, new Vec2(this.position.x + 1, this.position.y))
-      removeTerrain(gameState.currentLevel.map, new Vec2(this.position.x + 1, this.position.y + 1))
+      removeTerrain(currentLevel.map, new Vec2(this.position.x - 1, this.position.y -1))
+      removeTerrain(currentLevel.map, new Vec2(this.position.x - 1, this.position.y))
+      removeTerrain(currentLevel.map, new Vec2(this.position.x - 1, this.position.y + 1))
+      removeTerrain(currentLevel.map, new Vec2(this.position.x, this.position.y - 1))
+      removeTerrain(currentLevel.map, new Vec2(this.position.x, this.position.y + 1))
+      removeTerrain(currentLevel.map, new Vec2(this.position.x + 1, this.position.y - 1))
+      removeTerrain(currentLevel.map, new Vec2(this.position.x + 1, this.position.y))
+      removeTerrain(currentLevel.map, new Vec2(this.position.x + 1, this.position.y + 1))
       this.removed = true
       return false
     }
@@ -68,7 +68,7 @@ export class Lemming {
   }
 
   public setGift(gift: LemmingGift): boolean {
-    const level = gameState.currentLevel
+    const level = currentLevel
     if (gift != LemmingGift.Walk && level.canUseSkill(gift) == false) {
       return false
     } else {

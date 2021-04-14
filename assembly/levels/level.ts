@@ -1,4 +1,4 @@
-import { gameState, log } from ".."
+import { gameState, loadEndSlate } from ".."
 import { Lemming } from "../lemming"
 import { addLayerToScreen, clearScreen, renderTimer, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
@@ -16,8 +16,8 @@ export class Level extends BaseLevel {
   private skills: Map<LemmingGift, u8> = new Map()
   private isDirty: boolean = false
 
-  constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 14) {
-    super(lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
+  constructor(tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 14) {
+    super(tag, lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
     if (!this.isMetaScreen) {
       this.makeButton(1, this.buttonYCoordinate, 'C', () => { gameState.setSelectedGift(LemmingGift.ClimbingBoots) })
@@ -77,7 +77,6 @@ export class Level extends BaseLevel {
 
   public skillSelected(skill: LemmingGift): void {
     if (!lemmingGiftLabel.has(skill)) {
-      log('no label for gift ' + skill.toString())
       return
     }
     
@@ -125,18 +124,13 @@ export class Level extends BaseLevel {
 
   public processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean {
     if (this.lemmings.length == 0) {
-      log('no lemmings to process')
       return false
     }
     
-    log('processLemmingSelect')
     const tag = this.getUIByTag('LEMMING_INFO')
-    log('has tag? ' + (tag != null).toString())
     if (tag != null) { tag.updateText('') }
     
-    log('loop? ' + this.lemmings.length.toString())
     for (let i = 0; i < this.lemmings.length; i++) {
-      log('in loop')
       if (mouseTileX == this.lemmings[i].position.x && mouseTileY == this.lemmings[i].position.y) {
         if (tag != null) {
           tag.updateText((i + 1).toString() + ': ' + this.lemmings[i].action.label())
@@ -144,7 +138,6 @@ export class Level extends BaseLevel {
         
         if (processLemmingClick) {
           const giftApplied = this.lemmings[i].setGift(gameState.selectedGift)
-          log('Processing clicks, gift applied? ' + processLemmingClick.toString())
           if (giftApplied) {
             gameState.setSelectedGift(LemmingGift.None)
             return true
@@ -153,18 +146,17 @@ export class Level extends BaseLevel {
       }
     }
 
-    log('returning')
     return false
   }
   
-  public gameLoop(): void {
+  public gameLoop(): boolean {
     this.timeLeft--
     this.canSpawnMore = this.canSpawnMore && this.lemmings.length < (this.numberOfLemmings as i32)
     const allLemmingsRemoved = !this.canSpawnMore && this.numberOfLemmingsRemoved == this.lemmings.length
   
     if (allLemmingsRemoved || this.timeLeft == 0) {
-      gameState.endLevel()
-      return
+      loadEndSlate()
+      return false
     } else if (this.canSpawnMore) {
       if (gameState.framesSinceLastLemming >= gameState.framesBetweenLemmingSpawns) {
         const lemming = new Lemming()
@@ -182,6 +174,7 @@ export class Level extends BaseLevel {
   
     this.updateLemmings()
     this.isDirty = true
+    return true
   }
 
   public updateLemmings(): void {
@@ -244,7 +237,7 @@ export class Level extends BaseLevel {
 
   public clone(): BaseLevel {
     const newMap = this.cloneMap()
-    return new Level(this.numberOfLemmings, this.numberOfLemmingsForSucces, newMap, this.isMetaScreen, this.buttonYCoordinate)
+    return new Level(this.tag, this.numberOfLemmings, this.numberOfLemmingsForSucces, newMap, this.isMetaScreen, this.buttonYCoordinate)
   }
   
   private padRows(rowsWithContent: i32): void {

@@ -1,10 +1,10 @@
+import { currentLevel, loadLevel, log } from "."
 import { AutoPlayer } from "./autoplayer"
 import { BaseLevel } from "./levels/baseLevel"
 import { DefaultLevel } from "./levels/defaultLevel"
-import { EndSlate } from "./levels/endSlate"
 import { LemmingGift, LevelState } from "./types"
 
-export const baseMillisecondsPerGameLoop: u16 = 5000 as u16
+export const baseMillisecondsPerGameLoop: u16 = 500 as u16
 export const fastForwardMultiplier: u8 = 2 as u8
 
 const defaultLevel: DefaultLevel = new DefaultLevel()
@@ -20,7 +20,6 @@ export class GameState {
   public millisecondsPerGameLoop: u16 = baseMillisecondsPerGameLoop
   public releaseRate: u8 = 50
   public minimumReleaseRate: u8 = 50
-  public currentLevel: BaseLevel = defaultLevel
   public screenWidth: i32 = 0
   public screenHeight: i32 = 0
   public characterWidth: i32 = 0
@@ -49,22 +48,22 @@ export class GameState {
   }
 
   public setSelectedGift(gift: LemmingGift): void {
-    if (this.currentLevel.canUseSkill(gift)) {
+    if (currentLevel.canUseSkill(gift)) {
       this.selectedGift = gift
-      this.currentLevel.skillSelected(gift)
+      currentLevel.skillSelected(gift)
     }
   }
 
   public setNukeGift (): void {
     if (this.selectedGift == LemmingGift.Nuke) {
-      this.currentLevel.nuke()
+      currentLevel.nuke()
     } else {
       this.selectedGift = LemmingGift.Nuke
-      this.currentLevel.skillSelected(LemmingGift.Nuke)
+      currentLevel.skillSelected(LemmingGift.Nuke)
     }
   }
 
-  private reset (): void {
+  public reset (): void {
     this.shouldRun = true
     this.lastGameLoopRunTime = Date.now()
     this.lastRenderTime = Date.now()
@@ -72,7 +71,6 @@ export class GameState {
     this.millisecondsPerGameLoop = baseMillisecondsPerGameLoop
     this.framesSinceLastLemming = u16.MAX_VALUE
     this.selectedGift = LemmingGift.None
-    this.currentLevel.skillSelected(LemmingGift.None)
 
     const player = this.autoplayer
     if (player != null) {
@@ -81,8 +79,9 @@ export class GameState {
   }
 
   public restartLastLevel(): void {
-    this.currentLevel = this.lastLevel.clone()
+    const level = this.lastLevel.clone()
     this.reset()
+    loadLevel(level)
   }
   
   public toggleFastForward(): void {
@@ -91,27 +90,5 @@ export class GameState {
     if (this.fastForward) {
       this.millisecondsPerGameLoop /= fastForwardMultiplier
     }
-  }
-  
-  public loadLevel(newLevel: BaseLevel): void {
-    if (!newLevel.isMetaScreen) {
-      this.lastLevel = newLevel.clone()
-    }
-    
-    this.currentLevel = newLevel
-    // TODO:: We should set this to EndSlate or other values when necessary, or get rid of this entirely
-    this.levelState = LevelState.LevelRunning
-    this.shouldRun = true
-  }
-
-  public endLevel(): void {
-    this.shouldRun = false
-    
-    const needed = this.currentLevel.numberOfLemmingsForSucces.toString()
-    const rescued = this.currentLevel.numberOfLemmingsSaved.toString()
-    
-    const endSlate = new EndSlate()
-    this.loadLevel(endSlate)
-    endSlate.renderEndScreen(needed, rescued)
   }
 }

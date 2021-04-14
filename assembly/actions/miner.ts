@@ -1,4 +1,4 @@
-import { gameState } from "..";
+import { currentLevel } from "..";
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
 import { removeTerrain, SurroundingTiles, terrainIndestructible, TILE_AIR, TILE_BOUNDARY, TILE_SIDE } from "../map";
@@ -16,8 +16,8 @@ export class Miner extends LemmingAction {
       this.handleFalling(lemming)
     } else if (this.canMineNextTile(lemming, surroundingTiles)) {
       const xDelta: i16 = lemming.movingRight ? 1 : -1
-      removeTerrain(gameState.currentLevel.map, new Vec2(lemming.position.x, lemming.position.y + 1))
-      removeTerrain(gameState.currentLevel.map, new Vec2(lemming.position.x + xDelta, lemming.position.y + 1))
+      removeTerrain(currentLevel.map, new Vec2(lemming.position.x, lemming.position.y + 1))
+      removeTerrain(currentLevel.map, new Vec2(lemming.position.x + xDelta, lemming.position.y + 1))
       lemming.position.x += xDelta
       lemming.position.y ++
     } else {

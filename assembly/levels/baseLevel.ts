@@ -16,7 +16,7 @@ export abstract class BaseLevel {
 
   public abstract processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean
   public abstract updateLemmings(): void
-  public abstract gameLoop(): void
+  public abstract gameLoop(): boolean
   public abstract nuke(): void
   public abstract isBlockerInLocation(location: Vec2): boolean
   public abstract giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void
@@ -27,7 +27,7 @@ export abstract class BaseLevel {
   public abstract skillUsed(skill: LemmingGift): void
   public abstract skillSelected(skill: LemmingGift): void
   
-  constructor(lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
+  constructor(public tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
     this.numberOfLemmings = lemmingsToSpawn
     this.numberOfLemmingsForSucces = numberOfLemmingsForSucces
     this.map = map

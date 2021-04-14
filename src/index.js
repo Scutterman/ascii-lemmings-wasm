@@ -1,8 +1,7 @@
 // Copied from logrocket example code - https://blog.logrocket.com/the-introductory-guide-to-assemblyscript/
 (async () => {
   const screen = document.querySelector('#screen')
-  let eventLoopComplete = true
-
+  
   const importObject = {
     index: {
       log(msgPtr) {
@@ -34,10 +33,14 @@
         newLayer.classList.add('screen')
         screen.appendChild(newLayer)
       },
-      onEventLoopComplete() {
-        eventLoopComplete = true
+      onEventLoopComplete(timeTaken) {
+        const delayFor = 100 - timeTaken
+        if (delayFor <= 0) {
+          requestAnimationFrameForLoop()
+        } else {
+          setTimeout(requestAnimationFrameForLoop, delayFor)
+        }
       }
-
     },
     env: {
       abort(_msg, _file, line, column) {
@@ -66,6 +69,7 @@
   })
 
   window.addEventListener('click', function(event) {
+    console.log('click js')
     module.instance.exports.registerMouseClick()
   })
   
@@ -73,14 +77,25 @@
     return
   }
 
-  const loop = () => {
-    if (eventLoopComplete) {
-      eventLoopComplete = false
-      module.instance.exports.triggerEventLoop()
-    }
-  }
+  // const loop = () => {
+  //   if (eventLoopComplete) {
+  //     eventLoopComplete = false
+  //     module.instance.exports.triggerEventLoop()
+  //   }
+  // }
   
-  setInterval(loop, 100)
+  // setInterval(loop, 100)
+
+  const loop = () => {
+    module.instance.exports.triggerEventLoop()
+  }
+
+  const requestAnimationFrameForLoop = () => {
+    window.requestAnimationFrame(loop)
+  }
+
+  requestAnimationFrameForLoop()
+
 })();
 
 function measureOneCharacter() {

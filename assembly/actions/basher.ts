@@ -1,4 +1,4 @@
-import { gameState } from "..";
+import { currentLevel } from "..";
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
 import { removeTerrain, SurroundingTiles, terrainIndestructible } from "../map";
@@ -16,7 +16,7 @@ export class Basher extends LemmingAction {
       this.handleFalling(lemming)
     } else if (this.canMineNextTile(lemming, surroundingTiles)) {
       const xDelta: i16 = lemming.movingRight ? 1 : -1
-      removeTerrain(gameState.currentLevel.map, new Vec2(lemming.position.x + xDelta, lemming.position.y))
+      removeTerrain(currentLevel.map, new Vec2(lemming.position.x + xDelta, lemming.position.y))
       lemming.position.x += xDelta
     } else {
       lemming.action = new Walk()

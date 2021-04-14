@@ -1,8 +1,8 @@
 import { LemmingGift, LevelState } from "./types"
 
-import { gameState, log } from './index'
+import { currentLevel, gameState, log } from './index'
 
-const millisecondsPerFrameRender: i64 = Math.round(1000 / 1) as i64
+const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
 
 function processInputs(): void {
   let processLemmingClick = gameState.mouseClicked && gameState.selectedGift != LemmingGift.None && gameState.selectedGift != LemmingGift.Nuke
@@ -10,10 +10,10 @@ function processInputs(): void {
   if (gameState.mouseClicked) {
     gameState.mouseClicked = false
     
-    if (gameState.mouseTileX > 0 && gameState.mouseTileY > 0 && gameState.mouseTileX < gameState.currentLevel.map[0].length && gameState.mouseTileY < gameState.currentLevel.map.length) {  
-      for (let i = 0; i < gameState.currentLevel.uiControls.length; i++) {
-        if (gameState.currentLevel.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
-          gameState.currentLevel.uiControls[i].clicked()
+    if (gameState.mouseTileX > 0 && gameState.mouseTileY > 0 && gameState.mouseTileX < currentLevel.map[0].length && gameState.mouseTileY < currentLevel.map.length) {  
+      for (let i = 0; i < currentLevel.uiControls.length; i++) {
+        if (currentLevel.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
+          currentLevel.uiControls[i].clicked()
           processLemmingClick = false
           break
         }
@@ -21,12 +21,11 @@ function processInputs(): void {
     }
   }
   
-  log('Begin process select')
-  gameState.currentLevel.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
-  log('End process inputs')
+  currentLevel.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
 }
 
 function eventLoop(): void {
+  const start: i64 = Date.now()
   processInputs()
 
   if (!gameState.shouldRun) {
@@ -41,28 +40,32 @@ function eventLoop(): void {
   const delta = currentTime - gameState.lastGameLoopRunTime
   const gameLoopOverdue = delta > 65535 || delta as u16 >= gameState.millisecondsPerGameLoop
   
-  if (!gameState.currentLevel.isMetaScreen && levelRunning && gameLoopOverdue) {
+  let levelDidNotEnd = true
+  if (!currentLevel.isMetaScreen && levelRunning && gameLoopOverdue) {
     gameState.lastGameLoopRunTime = currentTime
 
     const player = gameState.autoplayer
     if (player != null) { player.update() }
-    gameState.currentLevel.gameLoop()
+    levelDidNotEnd = currentLevel.gameLoop()
   }
 
   const renderDelta = currentTime - gameState.lastRenderTime
-  const renderOverdue = renderDelta >= millisecondsPerFrameRender
+  const renderOverdue = levelDidNotEnd && renderDelta >= millisecondsPerFrameRender
   
   if (renderOverdue) {
-    gameState.currentLevel.renderLevel()
+    gameState.lastRenderTime = Date.now()
+    currentLevel.renderLevel()
   }
 
-  onEventLoopComplete()
+  const end: i64 = Date.now()
+  const timeTaken = i32(end - start)
+  onEventLoopComplete(timeTaken)
 }
 
 declare function display(arr: string, colour: string): void;
 declare function clear(): void;
 declare function addLayer(): void;
-declare function onEventLoopComplete(): void;
+declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 
 export function renderTimer(rightmostColumn: i32, time: u16): void {
   const timeLeft = time.toString()
@@ -94,6 +97,7 @@ export function updateMouseCoordinates(x: i32, y: i32): void {
 }
 
 export function registerMouseClick(): void {
+  log('click!')
   gameState.mouseClicked = true
 }
 
