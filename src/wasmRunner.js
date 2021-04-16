@@ -1,4 +1,6 @@
 importScripts("assemblyscript-loader.js")
+const timeBetweenLoops = 100
+
 const importObject = {
   index: {
     log(msgPtr) {
@@ -8,14 +10,14 @@ const importObject = {
   loop: {
     render(msgPtr) {
       const output = loadedModule.exports.__getString(msgPtr)
-      postMessage({ instruction: 'render', output })
+      postMessage(output)
     },
     onEventLoopComplete(timeTaken) {
-      const delayFor = 100 - timeTaken
+      const delayFor = timeBetweenLoops - timeTaken
       if (delayFor <= 0) {
-        loop()
+        requestInpus()
       } else {
-        setTimeout(loop, delayFor)
+        setTimeout(requestInpus, delayFor)
       }
     }
   },
@@ -26,7 +28,21 @@ const importObject = {
   }
 };
 
+let loadedModule
+let started = false
+
 onmessage = function(e) {
+  if (started) {
+    loadedModule.instance.exports.updateMouseCoordinates(e.data.mouseX, e.data.mouseY)
+    if (e.data.clicked) {
+      console.log('click web worker')
+      loadedModule.instance.exports.registerMouseClick()
+    }
+
+    loop()
+    return
+  }
+  
   switch (e.data.instruction) {
     case 'init':
       init().then(() => {
@@ -42,18 +58,8 @@ onmessage = function(e) {
       postMessage({ instruction: 'startcomplete' })
       loop()
     break
-    case 'mousemove':
-      loadedModule.instance.exports.updateMouseCoordinates(e.data.clientX, e.data.clientY)
-    break
-    case 'click':
-      console.log('click worker')
-      loadedModule.instance.exports.registerMouseClick()
-    break
   }
 }
-
-let loadedModule
-let started = false
 
 async function init() {
   const response = await fetch("/build/untouched.wasm");
@@ -70,9 +76,13 @@ function setDimensions(clientWidth, clientHeight, characterWidth, characterHeigh
 }
 
 function start() {
-  started = loadedModule.instance.exports.start()
+  started = (loadedModule.instance.exports.start() == 1)
 }
 
 function loop () {
   loadedModule.instance.exports.triggerEventLoop()
+}
+
+function requestInpus() {
+  postMessage('requestinputs')
 }

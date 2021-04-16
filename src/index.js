@@ -2,7 +2,21 @@
 const screen = document.querySelector('#screen')
 const dimensions = measureOneCharacter()
 const wasmRunner = new Worker('wasmRunner.js')
+
+let started = false
+const requestInputsMessage = 'requestinputs'
 wasmRunner.onmessage = (e) => {
+  if (started) {
+    if (e.data === requestInputsMessage) {
+      const _clicked = clicked
+      clicked = false
+      wasmRunner.postMessage({ mouseX, mouseY, clicked: _clicked })
+    } else {
+      screen.innerHTML = e.data
+    }
+    return
+  }
+
   switch(e.data.instruction) {
     case 'initcomplete':
       wasmRunner.postMessage({
@@ -17,30 +31,39 @@ wasmRunner.onmessage = (e) => {
       wasmRunner.postMessage({ instruction: 'start' })
     break
     case 'startcomplete':
-      registerAdditionalEvents()
-    break
-    case 'render':
-      screen.innerHTML = e.data.output
+      started = true
     break
   }
 }
 
-function registerAdditionalEvents() {
-  window.addEventListener('mousemove', function(e) {
-    wasmRunner.postMessage({
-      instruction: 'mousemove',
-      clientX: e.clientX,
-      clientY: e.clientY
-    })
-  })
+let mouseX = 0
+let mouseY = 0
+let clicked = false
 
-  window.addEventListener('click', function() {
-    console.log('click js')
-    wasmRunner.postMessage({ instruction: 'click' })
-  })
-}
+let calledTimes = 0
+let startTime = Date.now()
 
-wasmRunner.postMessage({ instruction: 'init' })
+let enableCall = true;
+window.addEventListener('mousemove', function(e) {
+  if (!enableCall) return;
+
+  enableCall = false;
+  calledTimes++
+  mouseX = e.clientX
+  mouseY = e.clientY
+  setTimeout(function () { enableCall = true }, 50);
+});
+
+window.addEventListener('click', function() {
+  console.log('click js')
+  const endTime = Date.now()
+  const duration = endTime - startTime
+  const msPerEvent = duration / calledTimes
+  console.log('msPerEvent', msPerEvent)
+  startTime = Date.now()
+  calledTimes = 0
+  clicked = true
+})
 
 function measureOneCharacter() {
   const screen = document.createElement('span')
@@ -53,3 +76,5 @@ function measureOneCharacter() {
   document.body.removeChild(screen)
   return { width, height }
 }
+
+wasmRunner.postMessage({ instruction: 'init' })
