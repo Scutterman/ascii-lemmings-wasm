@@ -26,7 +26,7 @@ export class Level extends BaseLevel {
       this.makeButton(4, this.buttonYCoordinate, 'U', () => { gameState.setSelectedGift(LemmingGift.Umbrella) })
       this.addLabel(LemmingGift.Umbrella, 4, this.buttonYCoordinate + 1)
       
-      this.makeButton(7, this.buttonYCoordinate, '*', () => { gameState.setSelectedGift(LemmingGift.Bomb) })
+      this.makeButton(7, this.buttonYCoordinate, 'E', () => { gameState.setSelectedGift(LemmingGift.Bomb) })
       this.addLabel(LemmingGift.Bomb, 7, this.buttonYCoordinate + 1)
       
       this.makeButton(10, this.buttonYCoordinate, 'T', () => { gameState.setSelectedGift(LemmingGift.Block) })
