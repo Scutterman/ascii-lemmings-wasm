@@ -6,19 +6,9 @@ const importObject = {
     }
   },
   loop: {
-    display(msgPtr, colourPtr) {
-      const colour = loadedModule.exports.__getString(colourPtr)
-      const message = loadedModule.exports.__getString(msgPtr)
-
-      let output = message
-      if (colour !== '') {
-        output = `<span style="color: ${ colour };">${ output }</span>`
-      }
-      
-      postMessage({ instruction: 'display', output })
-    },
-    addLayer(clearBeforeAdd) {
-      postMessage({ instruction: 'addLayer', clearBeforeAdd })
+    render(msgPtr) {
+      const output = loadedModule.exports.__getString(msgPtr)
+      postMessage({ instruction: 'render', output })
     },
     onEventLoopComplete(timeTaken) {
       const delayFor = 100 - timeTaken

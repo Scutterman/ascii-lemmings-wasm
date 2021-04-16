@@ -28,17 +28,17 @@ function processInputs(): void {
 
 function eventLoop(): void {
   const start: i64 = Date.now()
+  const currentTime = Date.now()
   processInputs()
 
   if (!gameState.shouldRun) {
-    loopCompleted(start)
+    endLoop(start, true)
     return
   }
 
   // Process inputs from browser
   // Send browser contextual clue updates
   // Check if frame loop should run
-  const currentTime = Date.now()
   const levelRunning = gameState.levelState == LevelState.LevelRunning
   const delta = currentTime - gameState.lastGameLoopRunTime
   const gameLoopOverdue = delta > 65535 || delta as u16 >= gameState.millisecondsPerGameLoop
@@ -52,12 +52,18 @@ function eventLoop(): void {
     levelDidNotEnd = currentLevel.gameLoop()
   }
 
+  endLoop(start, levelDidNotEnd)
+}
+
+function endLoop(start: i64, levelDidNotEnd: boolean): void {
+  const currentTime = Date.now()
   const renderDelta = currentTime - gameState.lastRenderTime
   const renderOverdue = levelDidNotEnd && renderDelta >= millisecondsPerFrameRender
   
   if (renderOverdue) {
     gameState.lastRenderTime = Date.now()
     currentLevel.renderLevel()
+    renderComplete()
   }
 
   loopCompleted(start)
@@ -69,22 +75,43 @@ const loopCompleted = (start: i64): void => {
   onEventLoopComplete(timeTaken)
 }
 
-declare function display(arr: string, colour: string): void;
-declare function addLayer(clearBeforeAdd: boolean): void;
+declare function render(output: string): void;
 declare function onEventLoopComplete(timeTakenToComplete: i32): void;
+
+let output: string = ''
+let outputSuffix = ''
 
 export function renderTimer(rightmostColumn: i32, time: u16): void {
   const timeLeft = time.toString()
   const paddingRequired = rightmostColumn - timeLeft.length
-  display(' '.repeat(paddingRequired) + timeLeft, '')
+  renderToScreen(' '.repeat(paddingRequired) + timeLeft)
 }
 
 export function renderToScreen(text: string, colour: string = ''): void {
-  display(text, colour)
+  let outputLine = text
+  if (colour !== '') {
+    outputLine = '<span style="color: ' + colour + ';">' + outputLine + '</span>'
+  }
+
+  output += outputLine + '<br>'
+}
+
+export function renderComplete(): void {
+  output += outputSuffix
+  render(output)
 }
 
 export function addLayerToScreen(clearBeforeAdd: boolean = false): void {
-  addLayer(clearBeforeAdd)
+  outputSuffix = '</div>'
+  if (clearBeforeAdd) {
+    output = ''
+  }
+
+  if (output != '') {
+    output += outputSuffix
+  }
+
+  output += '<div class="screen">'
 }
 
 /** EXPORTED TO JS */

@@ -19,17 +19,8 @@ wasmRunner.onmessage = (e) => {
     case 'startcomplete':
       registerAdditionalEvents()
     break
-    case 'display':
-      display(e.data.output)
-    break
-    case 'addLayer':
-      console.log('Adding layer at time ' + new Date().toISOString())
-      if (e.data.clearBeforeAdd) {
-        screen.innerHTML = ''
-      }
-      const newLayer = document.createElement('div')
-      newLayer.classList.add('screen')
-      screen.appendChild(newLayer)
+    case 'render':
+      screen.innerHTML = e.data.output
     break
   }
 }
@@ -61,13 +52,4 @@ function measureOneCharacter() {
   const height = screen.clientHeight
   document.body.removeChild(screen)
   return { width, height }
-}
-
-function display(output) {
-  if (screen.childNodes.length === 0) {
-    console.log('No screen layers')
-    return
-  }
-  
-  screen.lastChild.innerHTML += output + '<br>'
 }
