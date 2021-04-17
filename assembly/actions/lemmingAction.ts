@@ -1,6 +1,7 @@
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
 import { SurroundingTiles, TILE_AIR } from "../map";
+import { Climb } from "./climb";
 import { Fall } from "./fall";
 
 export abstract class LemmingAction {
@@ -22,6 +23,10 @@ export abstract class LemmingAction {
       lemming.action = new Fall()
     }
     lemming.position.y++
+  }
+
+  protected handleClimbing(lemming: Lemming): void {
+    lemming.action = new Climb()
   }
 
   public getNextAnimationFrame(progressFrame: boolean): string {

@@ -1,7 +1,6 @@
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
 import { isWalkingDownStairs, SurroundingTiles, TILE_AIR, TILE_BRICK, TILE_EXIT } from "../map";
-import { Climb } from "./climb";
 import { LemmingAction } from "./lemmingAction"
 
 export class Walk extends LemmingAction {
@@ -17,7 +16,7 @@ export class Walk extends LemmingAction {
       lemming.removed = true
     } else if (this.canWalkOnNextTile(lemming, surroundingTiles) == false) {
       if (lemming.isClimber) {
-        lemming.action = new Climb()
+        this.handleClimbing(lemming)
       } else {
         lemming.movingRight = !lemming.movingRight
       }
