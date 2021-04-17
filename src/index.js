@@ -1,5 +1,6 @@
 // Copied from logrocket example code - https://blog.logrocket.com/the-introductory-guide-to-assemblyscript/
 const screen = document.querySelector('#screen')
+const clickTarget = document.querySelector('#click-target')
 const dimensions = measureOneCharacter()
 const wasmRunner = new Worker('wasmRunner.js')
 
@@ -54,7 +55,7 @@ window.addEventListener('mousemove', function(e) {
   setTimeout(function () { enableCall = true }, 50);
 });
 
-window.addEventListener('click', function() {
+clickTarget.addEventListener('click', function() {
   console.log('click js')
   const endTime = Date.now()
   const duration = endTime - startTime
