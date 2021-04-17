@@ -41,28 +41,17 @@ let mouseX = 0
 let mouseY = 0
 let clicked = false
 
-let calledTimes = 0
-let startTime = Date.now()
-
 let enableCall = true;
 window.addEventListener('mousemove', function(e) {
   if (!enableCall) return;
 
   enableCall = false;
-  calledTimes++
   mouseX = e.clientX
   mouseY = e.clientY
   setTimeout(function () { enableCall = true }, 50);
 });
 
 clickTarget.addEventListener('click', function() {
-  console.log('click js')
-  const endTime = Date.now()
-  const duration = endTime - startTime
-  const msPerEvent = duration / calledTimes
-  console.log('msPerEvent', msPerEvent)
-  startTime = Date.now()
-  calledTimes = 0
   clicked = true
 })
 

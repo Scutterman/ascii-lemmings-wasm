@@ -28,7 +28,6 @@ onmessage = function(e) {
   if (started) {
     loadedModule.instance.exports.updateMouseCoordinates(e.data.mouseX, e.data.mouseY)
     if (e.data.clicked) {
-      console.log('click web worker')
       loadedModule.instance.exports.registerMouseClick()
     }
 
