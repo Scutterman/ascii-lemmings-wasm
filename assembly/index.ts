@@ -1,6 +1,7 @@
 import { Test } from './autoplayer/test'
 import { TestLevel } from './autoplayer/testLevel'
 import { GameState } from './gameState'
+import { Lemming } from './lemming'
 import { BaseLevel } from './levels/baseLevel'
 import { EndSlate } from './levels/endSlate'
 import { TitleScreen } from './levels/titleScreen'
@@ -8,6 +9,7 @@ import { LemmingGift, LevelState } from './types'
 
 export const gameState = new GameState()
 export let currentLevel: BaseLevel
+export let lemmings: Lemming[] = []
 
 export { triggerEventLoop, setCharacterDimensions, setScreenDimensions, updateMouseCoordinates, registerMouseClick } from './loop'
 

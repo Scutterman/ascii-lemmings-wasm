@@ -1,4 +1,4 @@
-import { gameState, log } from ".."
+import { gameState, lemmings } from ".."
 import { Lemming } from "../lemming"
 import { addLayerToScreen, renderTimer, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
@@ -11,7 +11,6 @@ import { Block } from "../actions/block"
 import { UILabel } from "../ui/uiLabel"
 
 export class Level extends BaseLevel {
-  public lemmings: Lemming[] = []
   private canSpawnMore: boolean = true
   private skills: Map<LemmingGift, u8> = new Map()
   private isDirty: boolean = false
@@ -117,27 +116,30 @@ export class Level extends BaseLevel {
 
   public nuke(): void {
     this.canSpawnMore = false
-    for (let i = 0; i < this.lemmings.length; i++) {
-      this.lemmings[i].triggerExplosion()
+    for (let i = 0; i < lemmings.length; i++) {
+      lemmings[i].triggerExplosion()
     }
   }
 
   public processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean {
-    if (this.lemmings.length == 0) {
+    if (lemmings.length == 0) {
       return false
     }
     
     const tag = this.getUIByTag('LEMMING_INFO')
     if (tag != null) { tag.updateText('') }
     
-    for (let i = 0; i < this.lemmings.length; i++) {
-      if (mouseTileX == this.lemmings[i].position.x && mouseTileY == this.lemmings[i].position.y) {
+    for (let i = 0; i < lemmings.length; i++) {
+      const position: Vec2 = lemmings[i].position
+      if (mouseTileX == position.x && mouseTileY == position.y) {
+        const action: string = lemmings[i].action.label()
         if (tag != null) {
-          tag.updateText((i + 1).toString() + ': ' + this.lemmings[i].action.label())
+          const newText: string = (i + 1).toString() + ': ' + action
+          tag.updateText(newText)
         }
         
         if (processLemmingClick) {
-          const giftApplied = this.lemmings[i].setGift(gameState.selectedGift)
+          const giftApplied = lemmings[i].setGift(gameState.selectedGift)
           if (giftApplied) {
             gameState.setSelectedGift(LemmingGift.None)
             return true
@@ -151,8 +153,8 @@ export class Level extends BaseLevel {
   
   public gameLoop(): boolean {
     this.timeLeft--
-    this.canSpawnMore = this.canSpawnMore && this.lemmings.length < (this.numberOfLemmings as i32)
-    const allLemmingsRemoved = !this.canSpawnMore && this.numberOfLemmingsRemoved == this.lemmings.length
+    this.canSpawnMore = this.canSpawnMore && lemmings.length < (this.numberOfLemmings as i32)
+    const allLemmingsRemoved = !this.canSpawnMore && this.numberOfLemmingsRemoved == lemmings.length
   
     if (allLemmingsRemoved || this.timeLeft == 0) {
       this.hasEnded = true
@@ -160,7 +162,7 @@ export class Level extends BaseLevel {
     } else if (this.canSpawnMore) {
       if (gameState.framesSinceLastLemming >= gameState.framesBetweenLemmingSpawns) {
         const lemming = new Lemming()
-        this.lemmings.push(lemming)
+        lemmings.push(lemming)
         gameState.framesSinceLastLemming = 0
         
         const player = gameState.autoplayer
@@ -178,28 +180,28 @@ export class Level extends BaseLevel {
   }
 
   public updateLemmings(): void {
-    for (let i = 0; i < this.lemmings.length; i++) {
-      if (this.lemmings[i].removed) { continue }
-      this.lemmings[i].update(getSurroundingTiles(this.map, this.lemmings[i].position))
-      if (this.lemmings[i].exited) {
+    for (let i = 0; i < lemmings.length; i++) {
+      if (lemmings[i].removed) { continue }
+      lemmings[i].update(getSurroundingTiles(this.map, lemmings[i].position))
+      if (lemmings[i].exited) {
         this.numberOfLemmingsSaved++
       }
 
-      if (this.lemmings[i].removed) {
+      if (lemmings[i].removed) {
         this.numberOfLemmingsRemoved++
       }
     }
   }
   
   public giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void {
-    if (lemmingNumber >= 0 && u8(this.lemmings.length) >= lemmingNumber) {
-      this.lemmings[lemmingNumber].setGift(gift)
+    if (lemmingNumber >= 0 && u8(lemmings.length) >= lemmingNumber) {
+      lemmings[lemmingNumber].setGift(gift)
     }
   }
   
   public isBlockerInLocation(location: Vec2): boolean {
-    for (let i = 0; i < this.lemmings.length; i++) {
-      if (this.lemmings[i].position.equals(location) && this.lemmings[i].action instanceof Block) {
+    for (let i = 0; i < lemmings.length; i++) {
+      if (lemmings[i].position.equals(location) && lemmings[i].action instanceof Block) {
         return true
       }
     }
@@ -213,8 +215,8 @@ export class Level extends BaseLevel {
 
     renderTimer(rightmostColumn, this.timeLeft)
 
-    for (let i = 0; i < this.lemmings.length; i++) {
-      const lemming = this.lemmings[i]
+    for (let i = 0; i < lemmings.length; i++) {
+      const lemming = lemmings[i]
       if (lemming.removed) { continue }
 
       const colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
