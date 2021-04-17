@@ -12,7 +12,7 @@ const MESSAGE_FAIL_1: string = 'You didn\'t save enough this time'
 const MESSAGE_FAIL_2: string = 'Would you like to try again?'
 
 export class EndSlate extends Level {
-  constructor() {
+  constructor(private needed: string, private rescued: string) {
     super('END', 0, 0, mapToTiles([
       '__________________________________',
       '|   All lemmings accounted for   |',
@@ -29,9 +29,7 @@ export class EndSlate extends Level {
       gameState.restartLastLevel()
     }))
     this.uiControls.push(new UIControl(new Vec2(17, 4), "Continue", () => {}))
-  }
 
-  public renderEndScreen(needed: string, rescued: string): void {
     let endSlateToRender = this.cloneMap()
     endSlateToRender = insertText(endSlateToRender, needed, new Vec2(21, 2))
     endSlateToRender = insertText(endSlateToRender, rescued, new Vec2(21, 3))
@@ -44,10 +42,15 @@ export class EndSlate extends Level {
       endSlateToRender = insertText(endSlateToRender, MESSAGE_FAIL_2, new Vec2(-1, 6))
     }
 
-    this.render(endSlateToRender)
+    this.map = endSlateToRender
+  }
+
+  public renderLevel(): void {
+    const map = this.cloneMap()
+    this.render(map)
   }
 
   public clone(): EndSlate {
-    return new EndSlate()
+    return new EndSlate(this.needed, this.rescued)
   }
 }
