@@ -1,6 +1,4 @@
 importScripts("assemblyscript-loader.js")
-const timeBetweenLoops = 100
-
 const importObject = {
   index: {
     log(msgPtr) {
@@ -12,13 +10,8 @@ const importObject = {
       const output = loadedModule.exports.__getString(msgPtr)
       postMessage(output)
     },
-    onEventLoopComplete(timeTaken) {
-      const delayFor = timeBetweenLoops - timeTaken
-      if (delayFor <= 0) {
-        requestInpus()
-      } else {
-        setTimeout(requestInpus, delayFor)
-      }
+    onEventLoopComplete(_timeTaken) {
+      requestInputs()
     }
   },
   env: {
@@ -83,6 +76,6 @@ function loop () {
   loadedModule.instance.exports.triggerEventLoop()
 }
 
-function requestInpus() {
+function requestInputs() {
   postMessage('requestinputs')
 }
