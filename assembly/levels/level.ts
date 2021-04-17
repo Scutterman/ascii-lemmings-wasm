@@ -15,7 +15,7 @@ export class Level extends BaseLevel {
   private skills: Map<LemmingGift, u8> = new Map()
   private isDirty: boolean = false
 
-  constructor(tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 14) {
+  constructor(tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 40) {
     super(tag, lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
     if (!this.isMetaScreen) {
