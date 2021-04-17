@@ -1,6 +1,6 @@
 import { gameState, lemmings } from ".."
 import { Lemming } from "../lemming"
-import { addLayerToScreen, renderTimer, renderToScreen } from "../loop"
+import { addLayerToScreen, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { getSurroundingTiles } from "../map"
@@ -43,6 +43,7 @@ export class Level extends BaseLevel {
       this.makeButton(22, this.buttonYCoordinate, 'D', () => { gameState.setSelectedGift(LemmingGift.Shovel) })
       this.addLabel(LemmingGift.Shovel, 22, this.buttonYCoordinate + 1)
 
+      this.uiLabels.push(new UILabel(new Vec2(23, this.buttonYCoordinate - 1), '', 'TIMER'))
       this.uiControls.push(new UIControl(new Vec2(25, this.buttonYCoordinate), 'm', () => { gameState.setNukeGift() }))
 
       this.uiLabels.push(new UILabel(new Vec2(1, this.buttonYCoordinate + 2), '', 'SELECTED_GIFT'))
@@ -211,9 +212,9 @@ export class Level extends BaseLevel {
   
   public renderLevel(): void {
     const map = this.cloneMap()
-    const rightmostColumn = this.render(map)
+    this.render(map)
 
-    renderTimer(rightmostColumn, this.timeLeft)
+    this.renderTimer()
 
     for (let i = 0; i < lemmings.length; i++) {
       const lemming = lemmings[i]
@@ -235,6 +236,13 @@ export class Level extends BaseLevel {
     }
 
     this.isDirty = false
+  }
+
+  protected renderTimer(): void {
+    const label = this.getUIByTag('TIMER')
+    if (label != null) {
+      label.updateText(this.timeLeft.toString())
+    }
   }
 
   public clone(): BaseLevel {

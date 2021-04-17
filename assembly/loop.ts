@@ -84,12 +84,6 @@ declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 let output: string = ''
 let outputSuffix = ''
 
-export function renderTimer(rightmostColumn: i32, time: u16): void {
-  const timeLeft = time.toString()
-  const paddingRequired = rightmostColumn - timeLeft.length
-  renderToScreen(' '.repeat(paddingRequired) + timeLeft)
-}
-
 export function renderToScreen(text: string, colour: string = ''): void {
   let outputLine = text
   if (colour !== '') {
