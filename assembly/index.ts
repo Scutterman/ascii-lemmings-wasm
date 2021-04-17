@@ -25,16 +25,14 @@ export function loadLevel(newLevel: BaseLevel): void {
 }
 
 export function loadEndSlate(): void {
-  const needed = currentLevel.numberOfLemmingsForSucces.toString()
+  const needed = currentLevel.numberOfLemmingsForSuccess.toString()
   const rescued = currentLevel.numberOfLemmingsSaved.toString()
   
   gameState.reset()
-  const level = new EndSlate()
+  const level = new EndSlate(needed, rescued)
   loadLevel(level)
   gameState.shouldRun = false
   gameState.levelState = LevelState.EndSlate
-  level.renderEndScreen(needed, rescued)
-  log('render done')
 }
 
 export function start(): boolean {

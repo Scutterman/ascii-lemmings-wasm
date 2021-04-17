@@ -1,6 +1,6 @@
 import { LemmingGift, LevelState } from "./types"
 
-import { currentLevel, gameState, log } from './index'
+import { currentLevel, gameState, loadEndSlate } from './index'
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
 
@@ -43,16 +43,19 @@ function eventLoop(): void {
   const delta = currentTime - gameState.lastGameLoopRunTime
   const gameLoopOverdue = delta > 65535 || delta as u16 >= gameState.millisecondsPerGameLoop
   
-  let levelDidNotEnd = true
   if (!currentLevel.isMetaScreen && levelRunning && gameLoopOverdue) {
     gameState.lastGameLoopRunTime = currentTime
 
     const player = gameState.autoplayer
     if (player != null) { player.update() }
-    levelDidNotEnd = currentLevel.gameLoop()
+    currentLevel.gameLoop()
   }
 
-  endLoop(start, levelDidNotEnd)
+  if (currentLevel.hasEnded) {
+    loadEndSlate()
+  }
+
+  endLoop(start, currentLevel.hasEnded == false)
 }
 
 function endLoop(start: i64, levelDidNotEnd: boolean): void {
@@ -126,7 +129,6 @@ export function updateMouseCoordinates(x: i32, y: i32): void {
 }
 
 export function registerMouseClick(): void {
-  log('click!')
   gameState.mouseClicked = true
 }
 

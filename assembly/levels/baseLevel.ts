@@ -5,7 +5,7 @@ import { UILabel } from "../ui/uiLabel"
 
 export abstract class BaseLevel {
   public numberOfLemmings: u8
-  public numberOfLemmingsForSucces: u8
+  public numberOfLemmingsForSuccess: u8
   public map: LevelTiles
   public timeLeft: u16 = 300
   public numberOfLemmingsSaved: u8 = 0
@@ -13,6 +13,7 @@ export abstract class BaseLevel {
   public uiControls: UIControl[] = []
   public uiLabels: UILabel[] = []
   public isMetaScreen: boolean
+  public hasEnded: boolean = false
 
   public abstract processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean
   public abstract updateLemmings(): void
@@ -29,7 +30,7 @@ export abstract class BaseLevel {
   
   constructor(public tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
     this.numberOfLemmings = lemmingsToSpawn
-    this.numberOfLemmingsForSucces = numberOfLemmingsForSucces
+    this.numberOfLemmingsForSuccess = numberOfLemmingsForSucces
     this.map = map
     this.isMetaScreen = isMetaScreen 
   }

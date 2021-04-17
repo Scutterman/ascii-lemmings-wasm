@@ -1,4 +1,4 @@
-import { gameState, loadEndSlate } from ".."
+import { gameState, log } from ".."
 import { Lemming } from "../lemming"
 import { addLayerToScreen, renderTimer, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
@@ -155,7 +155,7 @@ export class Level extends BaseLevel {
     const allLemmingsRemoved = !this.canSpawnMore && this.numberOfLemmingsRemoved == this.lemmings.length
   
     if (allLemmingsRemoved || this.timeLeft == 0) {
-      loadEndSlate()
+      this.hasEnded = true
       return false
     } else if (this.canSpawnMore) {
       if (gameState.framesSinceLastLemming >= gameState.framesBetweenLemmingSpawns) {
@@ -237,7 +237,7 @@ export class Level extends BaseLevel {
 
   public clone(): BaseLevel {
     const newMap = this.cloneMap()
-    return new Level(this.tag, this.numberOfLemmings, this.numberOfLemmingsForSucces, newMap, this.isMetaScreen, this.buttonYCoordinate)
+    return new Level(this.tag, this.numberOfLemmings, this.numberOfLemmingsForSuccess, newMap, this.isMetaScreen, this.buttonYCoordinate)
   }
   
   private padRows(rowsWithContent: i32): void {
