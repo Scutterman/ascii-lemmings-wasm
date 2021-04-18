@@ -187,10 +187,6 @@ export class Level extends BaseLevel {
     }
   }
 
-  public getLemmingSavedPercent(): u8 {
-    return Math.round(this.numberOfLemmingsSaved / (this.numberOfLemmings * 0.01)) as u8
-  }
-  
   public giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void {
     if (lemmingNumber >= 0 && u8(lemmings.length) >= lemmingNumber) {
       lemmings[lemmingNumber].setGift(gift)

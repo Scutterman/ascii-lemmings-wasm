@@ -28,8 +28,8 @@ export function loadLevel(newLevel: BaseLevel): void {
 }
 
 export function loadEndSlate(): void {
-  const needed = currentLevel.numberOfLemmingsForSuccess.toString()
-  const rescued = currentLevel.numberOfLemmingsSaved.toString()
+  const needed = currentLevel.getLemmingNeededPercent().toString() + '%'
+  const rescued = currentLevel.getLemmingSavedPercent().toString() + '%'
   
   gameState.reset()
   const level = new EndSlate(needed, rescued)

@@ -35,6 +35,14 @@ export abstract class BaseLevel {
     this.isMetaScreen = isMetaScreen 
   }
   
+  public getLemmingSavedPercent(): u8 {
+    return Math.round(this.numberOfLemmingsSaved / (this.numberOfLemmings * 0.01)) as u8
+  }
+  
+  public getLemmingNeededPercent(): u8 {
+    return Math.round(this.numberOfLemmingsForSuccess / (this.numberOfLemmings * 0.01)) as u8
+  }
+  
   protected cloneMap(): LevelTiles {
     const mapClone: LevelTiles = []
     for (let i = 0; i < this.map.length; i++) {
