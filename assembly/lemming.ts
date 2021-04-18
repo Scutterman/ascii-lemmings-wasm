@@ -18,7 +18,7 @@ export class Lemming {
   exited: boolean = false
   actionTimeLeft: u16 = 0
   action: LemmingAction = new Fall()
-  position: Vec2 = new Vec2(4, 2)
+  position: Vec2 = new Vec2(22, 13)
   hasUmbrella: boolean = false
   isClimber: boolean = false
   private isExploding: boolean = false
