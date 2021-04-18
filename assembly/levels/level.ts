@@ -43,11 +43,12 @@ export class Level extends BaseLevel {
       this.makeButton(22, this.buttonYCoordinate, 'D', () => { gameState.setSelectedGift(LemmingGift.Shovel) })
       this.addLabel(LemmingGift.Shovel, 22, this.buttonYCoordinate + 1)
 
-      this.uiLabels.push(new UILabel(new Vec2(23, this.buttonYCoordinate - 1), '', 'TIMER'))
+      this.uiLabels.push(new UILabel(new Vec2(0, this.buttonYCoordinate - 2), '', 'SELECTED_GIFT'))
+      this.uiLabels.push(new UILabel(new Vec2(18, this.buttonYCoordinate - 2), '', 'LEMMING_INFO'))
+      this.uiLabels.push(new UILabel(new Vec2(36, this.buttonYCoordinate - 2), 'OUT: 0', 'LEMMING_OUT'))
+      this.uiLabels.push(new UILabel(new Vec2(50, this.buttonYCoordinate - 2), 'SAVED: 0%', 'LEMMING_SAVED'))
+      this.uiLabels.push(new UILabel(new Vec2(69, this.buttonYCoordinate - 2), '', 'TIMER'))
       this.uiControls.push(new UIControl(new Vec2(25, this.buttonYCoordinate), 'm', () => { gameState.setNukeGift() }))
-
-      this.uiLabels.push(new UILabel(new Vec2(1, this.buttonYCoordinate + 2), '', 'SELECTED_GIFT'))
-      this.uiLabels.push(new UILabel(new Vec2(15, this.buttonYCoordinate + 2), '', 'LEMMING_INFO'))
     }
   }
 
@@ -153,6 +154,7 @@ export class Level extends BaseLevel {
       if (gameState.framesSinceLastLemming >= gameState.framesBetweenLemmingSpawns) {
         const lemming = new Lemming()
         lemmings.push(lemming)
+        this.updateLabel('LEMMING_OUT', 'OUT: ' + lemmings.length.toString())
         gameState.framesSinceLastLemming = 0
         
         const player = gameState.autoplayer
@@ -175,12 +177,18 @@ export class Level extends BaseLevel {
       lemmings[i].update(getSurroundingTiles(this.map, lemmings[i].position))
       if (lemmings[i].exited) {
         this.numberOfLemmingsSaved++
+        const savedPercent = this.getLemmingSavedPercent()
+        this.updateLabel('LEMMING_SAVED', 'Saved: ' + savedPercent.toString() + '%')
       }
 
       if (lemmings[i].removed) {
         this.numberOfLemmingsRemoved++
       }
     }
+  }
+
+  public getLemmingSavedPercent(): u8 {
+    return Math.round(this.numberOfLemmingsSaved / (this.numberOfLemmings * 0.01)) as u8
   }
   
   public giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void {
