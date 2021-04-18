@@ -53,15 +53,15 @@ export class Level extends BaseLevel {
 
   protected setSkillQuantity(skill: LemmingGift, quantity: u8): void {
     if (quantity < 1) {
-      this.updateLabel(skill, '0')
+      this.updateSkillQuantity(skill, '0')
       return
     }
 
     this.skills.set(skill, quantity)
     if (quantity == u8.MAX_VALUE) {
-      this.updateLabel(skill, '∞')
+      this.updateSkillQuantity(skill, '∞')
     } else {
-      this.updateLabel(skill, quantity.toString())
+      this.updateSkillQuantity(skill, quantity.toString())
     }
   }
 
@@ -80,10 +80,7 @@ export class Level extends BaseLevel {
       return
     }
     
-    const tag = this.getUIByTag('SELECTED_GIFT')
-    if (tag != null) {
-      tag.updateText(lemmingGiftLabel.get(skill))
-    }
+    this.updateLabel('SELECTED_GIFT', lemmingGiftLabel.get(skill))
   }
 
   public skillUsed(skill: LemmingGift): void {
@@ -91,11 +88,11 @@ export class Level extends BaseLevel {
       const currentQuantity: u8 = this.skills.get(skill)
       if (currentQuantity <= 1) {
         this.skills.delete(skill)
-        this.updateLabel(skill, '0')
+        this.updateSkillQuantity(skill, '0')
       } else if (currentQuantity != u8.MAX_VALUE) {
         const quantity = currentQuantity - 1
         this.skills.set(skill, quantity)
-        this.updateLabel(skill, quantity.toString())
+        this.updateSkillQuantity(skill, quantity.toString())
       }
     }
   }
@@ -108,11 +105,8 @@ export class Level extends BaseLevel {
     this.uiLabels.push(new UILabel(new Vec2(x, y), '0', 'GIFT_COUNTER_' + gift.toString()))
   }
 
-  public updateLabel(gift: LemmingGift, newText: string): void {
-    const label = this.getUIByTag('GIFT_COUNTER_' + gift.toString())
-    if (label != null) {
-      label.updateText(newText)
-    }
+  public updateSkillQuantity(gift: LemmingGift, newText: string): void {
+    this.updateLabel('GIFT_COUNTER_' + gift.toString(), newText)
   }
 
   public nuke(): void {
@@ -127,17 +121,12 @@ export class Level extends BaseLevel {
       return false
     }
     
-    const tag = this.getUIByTag('LEMMING_INFO')
-    if (tag != null) { tag.updateText('') }
+    this.updateLabel('LEMMING_INFO', '')
     
     for (let i = 0; i < lemmings.length; i++) {
       const position: Vec2 = lemmings[i].position
       if (mouseTileX == position.x && mouseTileY == position.y) {
-        const action: string = lemmings[i].action.label()
-        if (tag != null) {
-          const newText: string = (i + 1).toString() + ': ' + action
-          tag.updateText(newText)
-        }
+        this.updateLabel('LEMMING_INFO', lemmings[i].action.label())
         
         if (processLemmingClick) {
           const giftApplied = lemmings[i].setGift(gameState.selectedGift)
@@ -239,10 +228,7 @@ export class Level extends BaseLevel {
   }
 
   protected renderTimer(): void {
-    const label = this.getUIByTag('TIMER')
-    if (label != null) {
-      label.updateText(this.timeLeft.toString())
-    }
+    this.updateLabel('TIMER', this.timeLeft.toString())
   }
 
   public clone(): BaseLevel {
