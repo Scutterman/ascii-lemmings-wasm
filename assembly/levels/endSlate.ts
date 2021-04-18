@@ -1,4 +1,4 @@
-import { gameState, log } from "../index"
+import { gameState } from "../index"
 import { mapToTiles } from "../map"
 import { Vec2 } from "../position"
 import { insertText } from "../text"
@@ -25,7 +25,6 @@ export class EndSlate extends Level {
     ]), true)
 
     this.uiControls.push(new UIControl(new Vec2(6, 4), "Restart", () => {
-      log('Restarting ' + gameState.lastLevel.tag)
       gameState.restartLastLevel()
     }))
     this.uiControls.push(new UIControl(new Vec2(17, 4), "Continue", () => {}))

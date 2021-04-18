@@ -16,6 +16,7 @@ export { triggerEventLoop, setCharacterDimensions, setScreenDimensions, updateMo
 const useAutoPlayer: boolean = false
 
 export function loadLevel(newLevel: BaseLevel): void {
+  lemmings = []
   if (!newLevel.isMetaScreen) {
     gameState.lastLevel = newLevel.clone()
   }
