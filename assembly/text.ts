@@ -2,7 +2,16 @@ import { LevelTiles } from "./types";
 import { Vec2 } from "./position";
 import { log } from ".";
 
-export function insertText(map: LevelTiles, message: string, position: Vec2): LevelTiles {
+/**
+ * Insert text into the map
+ * 
+ * Postion can contain -1 for either or both dimensions
+ * and will centre the text in that dimension then update the Vec2 position.
+ * 
+ * This will cascade back up and change the position values
+ * stored in the object at its origin
+ **/
+ export function insertText(map: LevelTiles, message: string, position: Vec2): LevelTiles {
   if ((position.y as i32) >= map.length) {
     log('insertText: line argument out of map bounds');
     return map

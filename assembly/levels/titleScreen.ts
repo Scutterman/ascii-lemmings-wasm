@@ -49,7 +49,7 @@ export class TitleScreen extends Level {
 
     ]), true)
 
-    this.uiControls.push(new UIControl(new Vec2(32, 18), "Start", () => {
+    this.uiControls.push(new UIControl(new Vec2(-1, -1), "Start", () => {
       loadLevel(new Level1())
     }))
   }
