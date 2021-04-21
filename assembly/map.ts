@@ -14,6 +14,7 @@ export const TILE_BLOCKER   = 'T'
 
 export const VISIBLE_X: u8 = 72
 export const VISIBLE_Y: u8 = 36
+export const CONTROLS_Y: u8 = 8
 
 export class SurroundingTiles {
   topLeft: string

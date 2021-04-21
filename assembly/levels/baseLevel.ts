@@ -1,4 +1,4 @@
-import { VISIBLE_X, VISIBLE_Y } from "../map"
+import { CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "../map"
 import { Vec2 } from "../position"
 import { insertText } from "../text"
 import { LemmingGift, LevelTiles } from "../types"
@@ -79,7 +79,7 @@ export abstract class BaseLevel {
   }
 
   protected renderControls(): void {
-    let maxY: u16 = VISIBLE_Y
+    let maxY: u16 = VISIBLE_Y + CONTROLS_Y
     let maxX: u16 = VISIBLE_X
 
     for (let i = 0; i < this.uiControls.length; i++) {

@@ -14,17 +14,10 @@ export class EndSlate extends MetaScreen {
   constructor(private needed: string, private rescued: string) {
     super('END')
 
-    // TODO:: UI controls are rendering higher than they should do
-    // because UI control renderer starts out at game screen hight
-    // excluding control buttons at the bottom
-    // but meta screen include extra height to overlay button area
-    // 
-    // When the map is rendered, it vertically centres the UI controls map
-    // and ends up pushing them downwards
-    this.uiControls.push(new UIControl(new Vec2(25, 20), "Restart", () => {
+    this.uiControls.push(new UIControl(new Vec2(25, 25), "Restart", () => {
       gameState.restartLastLevel()
     }))
-    this.uiControls.push(new UIControl(new Vec2(37, 20), "Continue", () => {}))
+    this.uiControls.push(new UIControl(new Vec2(37, 25), "Continue", () => {}))
 
     let endSlateToRender = this.cloneMap()
     endSlateToRender = insertText(endSlateToRender, 'All lemmings accounted for', new Vec2(-1, 10))
