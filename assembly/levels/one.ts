@@ -43,14 +43,6 @@ export class Level1 extends Level {
       '|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|',
       '|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|',
       '__________________________________________________________________________',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '__________________________________________________________________________'
     ]))
 
     this.setSkillQuantity(LemmingGift.Shovel, u8.MAX_VALUE)
