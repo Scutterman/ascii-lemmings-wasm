@@ -205,7 +205,7 @@ export class Level extends BaseLevel {
   
   public renderLevel(): void {
     const map = this.cloneMap()
-    this.render(map)
+    this.render(map, true)
 
     this.renderTimer()
 
@@ -227,6 +227,8 @@ export class Level extends BaseLevel {
       const row = ' '.repeat(xPaddingLeft) + lemming.renderFrame(this.isDirty) + ' '.repeat(xPaddingRight)
       renderToScreen(this.padColumn(row), colour)
     }
+
+    this.renderControls()
 
     this.isDirty = false
   }
@@ -263,16 +265,8 @@ export class Level extends BaseLevel {
     return ' '.repeat(charactersRequiredOnLeft) + text
   }
 
-  protected render(map: LevelTiles): i32 {
-    for (let i = 0; i < this.uiControls.length; i++) {
-      insertText(map, this.uiControls[i].getText(), this.uiControls[i].getPosition())
-    }
-
-    for (let i = 0; i < this.uiLabels.length; i++) {
-      insertText(map, this.uiLabels[i].getText(), this.uiLabels[i].getPosition())
-    }
-    
-    addLayerToScreen(true)
+  protected render(map: LevelTiles, clear: boolean = false): i32 {
+    addLayerToScreen(clear)
     this.padRows(map.length)
     let rightmostColumn: i32 = 0
     for (let i = 0; i < map.length; i++) {

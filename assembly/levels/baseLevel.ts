@@ -1,4 +1,6 @@
+import { VISIBLE_X, VISIBLE_Y } from "../map"
 import { Vec2 } from "../position"
+import { insertText } from "../text"
 import { LemmingGift, LevelTiles } from "../types"
 import { UIControl } from "../ui/uiControl"
 import { UILabel } from "../ui/uiLabel"
@@ -23,6 +25,7 @@ export abstract class BaseLevel {
   public abstract giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void
   public abstract clone(): BaseLevel
   public abstract renderLevel(): void
+  protected abstract render(map: LevelTiles, clear: boolean): i32
 
   public abstract canUseSkill(skill: LemmingGift): boolean
   public abstract skillUsed(skill: LemmingGift): void
@@ -73,5 +76,41 @@ export abstract class BaseLevel {
     }
     
     return null
+  }
+
+  protected renderControls(): void {
+    let maxY: u16 = VISIBLE_Y
+    let maxX: u16 = VISIBLE_X
+
+    for (let i = 0; i < this.uiControls.length; i++) {
+      const position = this.uiControls[i].getPosition()
+      const text = this.uiControls[i].getText()
+      maxY = Math.max(maxY, position.y) as u16
+      const x = position.x > 0 ? position.x : 0
+      maxX = Math.max(maxX, x + text.length) as u16
+    }
+
+    for (let i = 0; i < this.uiLabels.length; i++) {
+      const position = this.uiLabels[i].getPosition()
+      const text = this.uiLabels[i].getText()
+      maxY = Math.max(maxY, position.y) as u16
+      const x = position.x > 0 ? position.x : 0
+      maxX = Math.max(maxX, x + text.length) as u16
+    }
+
+    let map: LevelTiles = []
+    for (let i: u16 = 0; i <= maxY; i++) {
+      map.push(' '.repeat(maxX).split(''))
+    }
+
+    for (let i = 0; i < this.uiControls.length; i++) {
+      map = insertText(map, this.uiControls[i].getText(), this.uiControls[i].getPosition())
+    }
+
+    for (let i = 0; i < this.uiLabels.length; i++) {
+      map = insertText(map, this.uiLabels[i].getText(), this.uiLabels[i].getPosition())
+    }
+    
+    this.render(map, false)
   }
 }

@@ -1,5 +1,5 @@
 import { Vec2 } from "../position";
-import { LemmingGift } from "../types";
+import { LemmingGift, LevelTiles } from "../types";
 import { BaseLevel } from "./baseLevel";
 
 export class DefaultLevel extends BaseLevel {
@@ -15,6 +15,7 @@ export class DefaultLevel extends BaseLevel {
   public giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void {}
   public isBlockerInLocation(location: Vec2): boolean { return false }
   public renderLevel(): void {}
+  protected render(map: LevelTiles, clear: boolean): i32 { return 0}
   public processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean {
     return true
   }
