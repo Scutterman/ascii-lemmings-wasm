@@ -1,53 +1,12 @@
 import { loadLevel } from "../index"
-import { mapToTiles } from "../map"
 import { Vec2 } from "../position"
 import { UIControl } from "../ui/uiControl"
-import { Level } from "./level"
+import { MetaScreen } from "./metascreen"
 import { Level1 } from "./one"
 
-export class TitleScreen extends Level {
+export class TitleScreen extends MetaScreen {
   constructor() {
-    super('TITLE', 0, 0, mapToTiles([
-      '__________________________________________________________________________',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '__________________________________________________________________________',
-
-    ]), true)
+    super('TITLE')
 
     this.uiControls.push(new UIControl(new Vec2(-1, -1), "Start", () => {
       loadLevel(new Level1())
