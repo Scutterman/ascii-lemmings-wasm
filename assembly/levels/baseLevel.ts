@@ -16,6 +16,7 @@ export abstract class BaseLevel {
   public uiLabels: UILabel[] = []
   public isMetaScreen: boolean
   public hasEnded: boolean = false
+  public scrollPosition: Vec2 = new Vec2(0,0)
 
   public abstract processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean
   public abstract updateLemmings(): void
@@ -25,7 +26,7 @@ export abstract class BaseLevel {
   public abstract giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void
   public abstract clone(): BaseLevel
   public abstract renderLevel(): void
-  protected abstract render(map: LevelTiles, clear: boolean): i32
+  protected abstract render(map: LevelTiles, isRenderingGameSection: boolean): void
 
   public abstract canUseSkill(skill: LemmingGift): boolean
   public abstract skillUsed(skill: LemmingGift): void

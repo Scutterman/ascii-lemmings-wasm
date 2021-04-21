@@ -1,4 +1,4 @@
-import { currentLevel, loadLevel, log } from "."
+import { currentLevel, loadLevel } from "."
 import { AutoPlayer } from "./autoplayer"
 import { BaseLevel } from "./levels/baseLevel"
 import { DefaultLevel } from "./levels/defaultLevel"

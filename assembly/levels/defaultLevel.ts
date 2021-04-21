@@ -15,7 +15,7 @@ export class DefaultLevel extends BaseLevel {
   public giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void {}
   public isBlockerInLocation(location: Vec2): boolean { return false }
   public renderLevel(): void {}
-  protected render(map: LevelTiles, clear: boolean): i32 { return 0}
+  protected render(map: LevelTiles, isRenderingGameSection: boolean): void { }
   public processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean {
     return true
   }

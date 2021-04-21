@@ -12,6 +12,8 @@ export const TILE_GROUND    = 'G'
 export const TILE_BRICK     = '-'
 export const TILE_BLOCKER   = 'T'
 
+// TODO:: These numbers may need to be tweaked
+// to prevent the map border from being cut off
 export const VISIBLE_X: u8 = 72
 export const VISIBLE_Y: u8 = 36
 export const CONTROLS_Y: u8 = 8

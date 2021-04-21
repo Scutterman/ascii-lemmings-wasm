@@ -3,7 +3,7 @@ import { Lemming } from "../lemming"
 import { addLayerToScreen, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
-import { getSurroundingTiles, mapToTiles } from "../map"
+import { getSurroundingTiles, mapToTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { Block } from "../actions/block"
@@ -225,19 +225,25 @@ export class Level extends BaseLevel {
       const lemming = lemmings[i]
       if (lemming.removed) { continue }
 
+      if (
+        lemming.position.x < this.scrollPosition.x ||
+        lemming.position.x > this.scrollPosition.x + VISIBLE_X ||
+        lemming.position.y < this.scrollPosition.y ||
+        lemming.position.y > this.scrollPosition.y + VISIBLE_Y
+      ) { continue }
+
       const colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
       
       addLayerToScreen()
-      this.padRows(map.length)
-      this.setYPosition(lemming.position.y)
+      this.setYPosition(lemming.position.y - this.scrollPosition.y)
 
       // Pad from the beginning of the screen to the character before the lemming so the lemming is in the correct position
-      const xPaddingLeft = lemming.position.x
+      const xPaddingLeft = lemming.position.x - this.scrollPosition.x
       
       // Pad between the end lemming character to the edge of the screen
       const xPaddingRight = map[0].length - lemming.position.x - 1
       const row = ' '.repeat(xPaddingLeft) + lemming.renderFrame(this.isDirty) + ' '.repeat(xPaddingRight)
-      renderToScreen(this.padColumn(row), colour)
+      renderToScreen(row, colour)
     }
 
     this.renderControls()
@@ -254,39 +260,22 @@ export class Level extends BaseLevel {
     return new Level(this.tag, this.numberOfLemmings, this.numberOfLemmingsForSuccess, newMap, this.isMetaScreen, this.buttonYCoordinate)
   }
   
-  private padRows(rowsWithContent: i32): void {
-    const totalRows: i32 = gameState.screenHeight / gameState.characterHeight
-    gameState.lastRowPadding = 0
-    for (let i = totalRows; i > rowsWithContent; i -= 2) {
-      gameState.lastRowPadding++
-      renderToScreen('')
-    }
-  }
-
   private setYPosition(yPosition: i16): void {
     for (let i = 0; i < yPosition; i++) {
       renderToScreen('')
     }
   }
 
-  private padColumn(text: string): string {
-    const totalColumns = gameState.screenWidth / gameState.characterWidth
-    const charactersSpare = totalColumns - text.length
-    const charactersRequiredOnLeft = Math.floor(charactersSpare / 2) as i32
-    gameState.lastColumnPadding = charactersRequiredOnLeft
-    return ' '.repeat(charactersRequiredOnLeft) + text
-  }
-
-  protected render(map: LevelTiles, clear: boolean = false): i32 {
-    addLayerToScreen(clear)
-    this.padRows(map.length)
-    let rightmostColumn: i32 = 0
-    for (let i = 0; i < map.length; i++) {
-      const column = this.padColumn(map[i].join(''))
-      rightmostColumn = Math.max(rightmostColumn, column.length) as i32
-      renderToScreen(column);
+  protected render(map: LevelTiles, isRenderingGameSection: boolean = false): void {
+    const startY = isRenderingGameSection ? this.scrollPosition.y : 0
+    const endY = isRenderingGameSection ? this.scrollPosition.y + VISIBLE_Y : map.length
+    
+    addLayerToScreen(isRenderingGameSection)
+    for (let i = startY; i < endY; i++) {
+      const mapLine = isRenderingGameSection
+        ? map[i].join('').slice(this.scrollPosition.x, this.scrollPosition.x + VISIBLE_X)
+        : map[i].join('')
+      renderToScreen(mapLine);
     }
-
-    return rightmostColumn
   }
 }
