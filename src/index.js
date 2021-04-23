@@ -46,8 +46,8 @@ window.addEventListener('mousemove', function(e) {
   if (!enableCall) return;
 
   enableCall = false;
-  mouseX = e.clientX
-  mouseY = e.clientY
+  mouseX = e.clientX - 25
+  mouseY = e.clientY - 25
   setTimeout(function () { enableCall = true }, 50);
 });
 

@@ -16,7 +16,7 @@
                 height: 100%;
                 white-space: pre;
                 position: absolute;
-                top: 0; left: 0;
+                top: 0; left: 0; right: 0; bottom: 0;
                 -webkit-touch-callout: none;
                 -webkit-user-select: none;
                 -khtml-user-select: none;
@@ -24,6 +24,8 @@
                 -ms-user-select: none;
                 user-select: none;
             }
+            
+            #screen, #click-target { top: 25px; left: 25px; }
 
             #click-target {
                 z-index: 9001;
