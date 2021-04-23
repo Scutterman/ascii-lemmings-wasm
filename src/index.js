@@ -1,5 +1,5 @@
 // Copied from logrocket example code - https://blog.logrocket.com/the-introductory-guide-to-assemblyscript/
-const screen = document.querySelector('#screen')
+const gameArea = document.querySelector('#screen')
 const clickTarget = document.querySelector('#click-target')
 const dimensions = measureOneCharacter()
 const wasmRunner = new Worker('wasmRunner.js')
@@ -13,7 +13,7 @@ wasmRunner.onmessage = (e) => {
       clicked = false
       wasmRunner.postMessage({ mouseX, mouseY, clicked: _clicked })
     } else {
-      screen.innerHTML = e.data
+      gameArea.innerHTML = e.data
     }
     return
   }
@@ -56,14 +56,14 @@ clickTarget.addEventListener('click', function() {
 })
 
 function measureOneCharacter() {
-  const screen = document.createElement('span')
-  screen.classList.add('screen')
-  screen.classList.add('measure-text')
-  screen.textContent = 'A'
-  document.body.appendChild(screen)
-  const width = screen.clientWidth
-  const height = screen.clientHeight
-  document.body.removeChild(screen)
+  const measeureTextBox = document.createElement('span')
+  measeureTextBox.classList.add('screen')
+  measeureTextBox.classList.add('measure-text')
+  measeureTextBox.textContent = 'A'
+  document.body.appendChild(measeureTextBox)
+  const width = measeureTextBox.clientWidth
+  const height = measeureTextBox.clientHeight
+  document.body.removeChild(measeureTextBox)
   return { width, height }
 }
 
