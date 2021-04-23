@@ -105,7 +105,9 @@ export abstract class BaseLevel {
 
     if (!this.isMetaScreen) {
       for (let buttonAreaRow = 0; buttonAreaRow < buttonArea.length; buttonAreaRow++) {
-        map[delta + buttonAreaRow] = buttonArea[buttonAreaRow]
+        for (let buttonAreaColumn = 0; buttonAreaColumn < buttonArea[buttonAreaRow].length; buttonAreaColumn++) {
+          map[delta + buttonAreaRow][buttonAreaColumn] = buttonArea[buttonAreaRow][buttonAreaColumn]
+        }
       }
     }
 
