@@ -1,5 +1,4 @@
 import { gameState } from "../index"
-import { addLayerToScreen } from "../loop"
 import { Vec2 } from "../position"
 import { insertText } from "../text"
 import { UIControl } from "../ui/uiControl"
@@ -34,13 +33,6 @@ export class EndSlate extends MetaScreen {
     }
 
     this.map = endSlateToRender
-  }
-
-  public renderLevel(): void {
-    const map = this.cloneMap()
-    addLayerToScreen(true)
-    this.render(map, false)
-    this.renderControls()
   }
 
   public clone(): EndSlate {

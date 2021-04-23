@@ -1,3 +1,4 @@
+import { addLayerToScreen } from "../loop";
 import { mapToTiles } from "../map";
 import { Level } from "./level";
 
@@ -51,5 +52,12 @@ export class MetaScreen extends Level {
       '|                                                                        |',
       '__________________________________________________________________________',
     ]), true)
+  }
+  
+  public renderLevel(): void {
+    const map = this.cloneMap()
+    addLayerToScreen(true)
+    this.render(map, false)
+    this.renderControls()
   }
 }
