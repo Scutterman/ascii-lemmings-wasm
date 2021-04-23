@@ -18,7 +18,7 @@ export const VISIBLE_X: u8 = 72
 export const BOUNDARIES_X: u8 = 2
 export const VISIBLE_Y: u8 = 36
 export const BOUNDARIES_Y: u8 = 2
-export const CONTROLS_Y: u8 = 10
+export const CONTROLS_Y: u8 = 8
 
 export class SurroundingTiles {
   topLeft: string

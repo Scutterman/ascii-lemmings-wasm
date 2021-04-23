@@ -3,7 +3,7 @@ import { Lemming } from "../lemming"
 import { addLayerToScreen, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
-import { getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
+import { BOUNDARIES_Y, getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { Block } from "../actions/block"
@@ -206,7 +206,7 @@ export class Level extends BaseLevel {
     const map = this.cloneMap()
     this.render(map, true)
 
-    this.renderTimer()
+    this.updateLabel('TIMER', this.timeLeft.toString())
 
     for (let i = 0; i < lemmings.length; i++) {
       const lemming = lemmings[i]
@@ -238,10 +238,6 @@ export class Level extends BaseLevel {
     this.isDirty = false
   }
 
-  protected renderTimer(): void {
-    this.updateLabel('TIMER', this.timeLeft.toString())
-  }
-
   public clone(): BaseLevel {
     const newMap = this.cloneMap()
     return new Level(this.tag, this.numberOfLemmings, this.numberOfLemmingsForSuccess, newMap, this.isMetaScreen, this.buttonYCoordinate)
@@ -255,7 +251,7 @@ export class Level extends BaseLevel {
 
   protected render(map: LevelTiles, isRenderingGameSection: boolean = false): void {
     const startY = isRenderingGameSection ? this.scrollPosition.y : 0
-    const endY = isRenderingGameSection ? this.scrollPosition.y + VISIBLE_Y : map.length
+    const endY = isRenderingGameSection ? this.scrollPosition.y + VISIBLE_Y + BOUNDARIES_Y : map.length
     
     addLayerToScreen(isRenderingGameSection)
     for (let i = startY; i < endY; i++) {
