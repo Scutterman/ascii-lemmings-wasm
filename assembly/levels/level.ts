@@ -123,6 +123,8 @@ export class Level extends BaseLevel {
     
     this.updateLabel('LEMMING_INFO', '')
     
+    mouseTileX += this.scrollPosition.x
+    mouseTileY += this.scrollPosition.y
     for (let i = 0; i < lemmings.length; i++) {
       const position: Vec2 = lemmings[i].position
       if (mouseTileX == position.x && mouseTileY == position.y) {

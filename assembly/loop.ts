@@ -1,18 +1,51 @@
 import { LemmingGift, LevelState } from "./types"
 
 import { currentLevel, gameState, loadEndSlate } from './index'
+import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "./map"
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
 
+function isCursorInBounds(checkGameArea: boolean): boolean {
+  if (currentLevel.isMetaScreen) {
+    return (
+      gameState.mouseTileY >= 0 &&
+      gameState.mouseTileY < currentLevel.map.length &&
+      gameState.mouseTileX >= 0 &&
+      gameState.mouseTileX < currentLevel.map[gameState.mouseTileY].length
+    )
+  } else if (checkGameArea) {
+    return (
+      // TODO:: This is probably wrong.
+      // gameState.mouseTile* variables are tied to screen space not map space
+      // so we can probably use the code block below
+      // and use the checkGameArea variable to decide whether to add on CONTROLS_Y or not
+      gameState.mouseTileY >= currentLevel.scrollPosition.y &&
+      gameState.mouseTileY < currentLevel.scrollPosition.y + VISIBLE_Y &&
+      gameState.mouseTileX > currentLevel.scrollPosition.x &&
+      gameState.mouseTileX < currentLevel.map[gameState.mouseTileY + currentLevel.scrollPosition.y].length
+    )
+  } else {
+    return (
+      gameState.mouseTileY >= i32(VISIBLE_Y + BOUNDARIES_Y) &&
+      gameState.mouseTileY < i32(VISIBLE_Y + BOUNDARIES_Y + CONTROLS_Y) &&
+      gameState.mouseTileX >= 0 &&
+      gameState.mouseTileX < i32(VISIBLE_X + BOUNDARIES_X)
+    )
+  }
+}
+
 function processInputs(): void {
-  let processLemmingClick = gameState.mouseClicked && gameState.selectedGift != LemmingGift.None && gameState.selectedGift != LemmingGift.Nuke
+  let processLemmingClick = (
+    gameState.mouseClicked &&
+    gameState.selectedGift != LemmingGift.None &&
+    gameState.selectedGift != LemmingGift.Nuke &&
+    isCursorInBounds(true)
+  )
   
   if (gameState.mouseClicked) {
     gameState.mouseClicked = false
     
-    const isInMapXBounds = gameState.mouseTileX > 0 && gameState.mouseTileX < currentLevel.map[0].length
-    const isInMapYBounds = gameState.mouseTileY > 0  && gameState.mouseTileY < currentLevel.map.length
-    if (isInMapXBounds && isInMapYBounds) {
+    if (isCursorInBounds(false)) {
       for (let i = 0; i < currentLevel.uiControls.length; i++) {
         if (currentLevel.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
           currentLevel.uiControls[i].clicked()
