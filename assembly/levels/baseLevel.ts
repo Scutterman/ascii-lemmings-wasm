@@ -1,9 +1,20 @@
-import { CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "../map"
+import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, mapToTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { Vec2 } from "../position"
 import { insertText } from "../text"
 import { LemmingGift, LevelTiles } from "../types"
 import { UIControl } from "../ui/uiControl"
 import { UILabel } from "../ui/uiLabel"
+
+const buttonArea = mapToTiles([
+  '|                                                                        |',
+  '|                                                                        |',
+  '|                                                                        |',
+  '|                                                                        |',
+  '|                                                                        |',
+  '|                                                                        |',
+  '|                                                                        |',
+  '__________________________________________________________________________'
+])
 
 export abstract class BaseLevel {
   public numberOfLemmings: u8
@@ -79,37 +90,35 @@ export abstract class BaseLevel {
     return null
   }
 
-  protected renderControls(): void {
-    let maxY: u16 = VISIBLE_Y + CONTROLS_Y
-    let maxX: u16 = VISIBLE_X
-
-    for (let i = 0; i < this.uiControls.length; i++) {
-      const position = this.uiControls[i].getPosition()
-      const text = this.uiControls[i].getText()
-      maxY = Math.max(maxY, position.y) as u16
-      const x = position.x > 0 ? position.x : 0
-      maxX = Math.max(maxX, x + text.length) as u16
-    }
-
-    for (let i = 0; i < this.uiLabels.length; i++) {
-      const position = this.uiLabels[i].getPosition()
-      const text = this.uiLabels[i].getText()
-      maxY = Math.max(maxY, position.y) as u16
-      const x = position.x > 0 ? position.x : 0
-      maxX = Math.max(maxX, x + text.length) as u16
-    }
-
+  private fillMap(x: u16, y: u16): LevelTiles {
     let map: LevelTiles = []
-    for (let i: u16 = 0; i <= maxY; i++) {
-      map.push(' '.repeat(maxX).split(''))
+    for (let i: u16 = 0; i < y; i++) { map.push(' '.repeat(x).split('')) }
+    return map
+  }
+
+  protected renderControls(): void {
+    let maxY: u16 = VISIBLE_Y + CONTROLS_Y + BOUNDARIES_Y
+    let maxX: u16 = VISIBLE_X + BOUNDARIES_X
+    
+    let map = this.fillMap(maxX, maxY)
+    const delta = map.length - buttonArea.length
+
+    if (!this.isMetaScreen) {
+      for (let buttonAreaRow = 0; buttonAreaRow < buttonArea.length; buttonAreaRow++) {
+        map[delta + buttonAreaRow] = buttonArea[buttonAreaRow]
+      }
     }
 
     for (let i = 0; i < this.uiControls.length; i++) {
-      map = insertText(map, this.uiControls[i].getText(), this.uiControls[i].getPosition())
+      if (this.uiControls[i].isVisible(map)) {
+        map = insertText(map, this.uiControls[i].getText(), this.uiControls[i].getPosition())
+      }
     }
 
     for (let i = 0; i < this.uiLabels.length; i++) {
-      map = insertText(map, this.uiLabels[i].getText(), this.uiLabels[i].getPosition())
+      if (this.uiLabels[i].isVisible(map)) {
+        map = insertText(map, this.uiLabels[i].getText(), this.uiLabels[i].getPosition())
+      }
     }
     
     this.render(map, false)

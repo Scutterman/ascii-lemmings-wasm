@@ -3,7 +3,7 @@ import { Lemming } from "../lemming"
 import { addLayerToScreen, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
-import { getSurroundingTiles, mapToTiles, VISIBLE_X, VISIBLE_Y } from "../map"
+import { getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { Block } from "../actions/block"
@@ -18,19 +18,6 @@ export class Level extends BaseLevel {
     super(tag, lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
     if (!this.isMetaScreen) {
-      const buttonArea = mapToTiles([
-        '|                                                                        |',
-        '|                                                                        |',
-        '|                                                                        |',
-        '|                                                                        |',
-        '|                                                                        |',
-        '|                                                                        |',
-        '|                                                                        |',
-        '__________________________________________________________________________'
-      ])
-
-      for (let i = 0; i < buttonArea.length; i++) { map.push(buttonArea[i]) }
-
       this.makeButton(1, this.buttonYCoordinate, 'C', () => { gameState.setSelectedGift(LemmingGift.ClimbingBoots) })
       this.addLabel(LemmingGift.ClimbingBoots, 1, this.buttonYCoordinate + 1)
       
