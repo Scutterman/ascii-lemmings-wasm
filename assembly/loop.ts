@@ -152,13 +152,9 @@ export function addLayerToScreen(clearBeforeAdd: boolean = false): void {
 
 /** EXPORTED TO JS */
 
-export function updateMouseCoordinates(x: i32, y: i32): void {
-  gameState.mouseX = x
-  gameState.mouseY = y
-  gameState.normalizedMouseX = i32(Math.floor(gameState.mouseX / gameState.characterWidth)) + 1
-  gameState.normalizedMouseY = i32(Math.floor(gameState.mouseY / gameState.characterHeight))
-  gameState.mouseTileX = gameState.normalizedMouseX - gameState.lastColumnPadding
-  gameState.mouseTileY = gameState.normalizedMouseY - gameState.lastRowPadding
+export function updateMouseCoordinates(x: f32, y: f32): void {
+  gameState.mouseTileX = i32(Math.round(x / gameState.characterWidth))
+  gameState.mouseTileY = i32(Math.round(y / gameState.characterHeight))
 }
 
 export function registerMouseClick(): void {
@@ -170,7 +166,7 @@ export function setScreenDimensions(screenWidth: i32, screenHeight: i32): void {
   gameState.screenHeight = screenHeight
 }
 
-export function setCharacterDimensions(characterWidth: i32, characterHeight: i32): void {
+export function setCharacterDimensions(characterWidth: f32, characterHeight: f32): void {
   gameState.characterWidth = characterWidth
   gameState.characterHeight = characterHeight
 }

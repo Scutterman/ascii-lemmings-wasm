@@ -22,12 +22,8 @@ export class GameState {
   public minimumReleaseRate: u8 = 50
   public screenWidth: i32 = 0
   public screenHeight: i32 = 0
-  public characterWidth: i32 = 0
-  public characterHeight: i32 = 0
-  public mouseX: i32 = 0
-  public mouseY: i32 = 0
-  public normalizedMouseX: i32 = 0
-  public normalizedMouseY: i32 = 0
+  public characterWidth: f32 = 0
+  public characterHeight: f32 = 0
   public mouseTileX: i32 = 0
   public mouseTileY: i32 = 0
   public mouseClicked: boolean = false
