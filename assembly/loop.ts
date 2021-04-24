@@ -81,12 +81,28 @@ function eventLoop(): void {
   endLoop(start, currentLevel.hasEnded == false)
 }
 
+function handleScroll(): void {
+  // TODO:: beware off-by-one bugs that are triggered by boundaries
+  if (gameState.mouseTileX < 0 && currentLevel.scrollPosition.x > 0) {
+    currentLevel.scrollPosition.x--
+  } else if (gameState.mouseTileX > i32(VISIBLE_X) && (currentLevel.scrollPosition.x + VISIBLE_X) < currentLevel.map[0].length) {
+    currentLevel.scrollPosition.x++
+  }
+
+  if (gameState.mouseTileY < 0 && currentLevel.scrollPosition.y > 0) {
+    currentLevel.scrollPosition.y--
+  } else if (gameState.mouseTileY > i32(VISIBLE_Y + CONTROLS_Y) && (currentLevel.scrollPosition.y + VISIBLE_Y) < currentLevel.map.length) {
+    currentLevel.scrollPosition.x++
+  }
+}
+
 function endLoop(start: i64, levelDidNotEnd: boolean): void {
   const currentTime = Date.now()
   const renderDelta = currentTime - gameState.lastRenderTime
   const renderOverdue = levelDidNotEnd && renderDelta >= millisecondsPerFrameRender
   
   if (renderOverdue) {
+    handleScroll()
     gameState.lastRenderTime = Date.now()
     currentLevel.renderLevel()
     renderComplete()
