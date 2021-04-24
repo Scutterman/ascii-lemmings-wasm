@@ -91,8 +91,7 @@ function handleScroll(): void {
 
   if (gameState.mouseTileY < 0 && currentLevel.scrollPosition.y > 0) {
     currentLevel.scrollPosition.y--
-  } else if (gameState.mouseTileY > i32(VISIBLE_Y + CONTROLS_Y) && (currentLevel.scrollPosition.y + VISIBLE_Y) < currentLevel.map.length) {
-    currentLevel.scrollPosition.x++
+  } else if (gameState.mouseTileY > i32(VISIBLE_Y + CONTROLS_Y) && (currentLevel.scrollPosition.y + VISIBLE_Y + BOUNDARIES_Y) < currentLevel.map.length) {
   }
 }
 
