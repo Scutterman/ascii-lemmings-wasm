@@ -16,7 +16,7 @@ function isCursorInBounds(checkGameArea: boolean): boolean {
   } else {
     const additionalYRows = checkGameArea ? 0 : CONTROLS_Y
     return (
-      gameState.mouseTileY >= i32(VISIBLE_Y + BOUNDARIES_Y) &&
+      gameState.mouseTileY >= 0 &&
       gameState.mouseTileY < i32(VISIBLE_Y + BOUNDARIES_Y + additionalYRows) &&
       gameState.mouseTileX >= 0 &&
       gameState.mouseTileX < i32(VISIBLE_X + BOUNDARIES_X)
