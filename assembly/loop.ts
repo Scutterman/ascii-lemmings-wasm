@@ -34,7 +34,7 @@ function processInputs(): void {
   
   if (gameState.mouseClicked) {
     gameState.mouseClicked = false
-    
+
     if (isCursorInBounds(false)) {
       for (let i = 0; i < currentLevel.uiControls.length; i++) {
         if (currentLevel.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
@@ -92,6 +92,7 @@ function handleScroll(): void {
   if (gameState.mouseTileY < 0 && currentLevel.scrollPosition.y > 0) {
     currentLevel.scrollPosition.y--
   } else if (gameState.mouseTileY > i32(VISIBLE_Y + CONTROLS_Y) && (currentLevel.scrollPosition.y + VISIBLE_Y + BOUNDARIES_Y) < currentLevel.map.length) {
+    currentLevel.scrollPosition.y++
   }
 }
 
