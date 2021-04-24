@@ -85,7 +85,7 @@ function handleScroll(): void {
   // TODO:: beware off-by-one bugs that are triggered by boundaries
   if (gameState.mouseTileX < 0 && currentLevel.scrollPosition.x > 0) {
     currentLevel.scrollPosition.x--
-  } else if (gameState.mouseTileX > i32(VISIBLE_X) && (currentLevel.scrollPosition.x + VISIBLE_X) < currentLevel.map[0].length) {
+  } else if (gameState.mouseTileX > i32(VISIBLE_X) && (currentLevel.scrollPosition.x + VISIBLE_X + BOUNDARIES_X) < currentLevel.map[0].length) {
     currentLevel.scrollPosition.x++
   }
 

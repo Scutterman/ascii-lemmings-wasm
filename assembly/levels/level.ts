@@ -3,7 +3,7 @@ import { Lemming } from "../lemming"
 import { addLayerToScreen, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
-import { BOUNDARIES_Y, getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
+import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { Block } from "../actions/block"
@@ -258,7 +258,7 @@ export class Level extends BaseLevel {
     addLayerToScreen(isRenderingGameSection)
     for (let i = startY; i < endY; i++) {
       const mapLine = isRenderingGameSection
-        ? map[i].join('').slice(this.scrollPosition.x, this.scrollPosition.x + VISIBLE_X)
+        ? map[i].join('').slice(this.scrollPosition.x, this.scrollPosition.x + VISIBLE_X + BOUNDARIES_X)
         : map[i].join('')
       renderToScreen(mapLine);
     }
