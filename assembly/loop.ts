@@ -13,21 +13,11 @@ function isCursorInBounds(checkGameArea: boolean): boolean {
       gameState.mouseTileX >= 0 &&
       gameState.mouseTileX < currentLevel.map[gameState.mouseTileY].length
     )
-  } else if (checkGameArea) {
-    return (
-      // TODO:: This is probably wrong.
-      // gameState.mouseTile* variables are tied to screen space not map space
-      // so we can probably use the code block below
-      // and use the checkGameArea variable to decide whether to add on CONTROLS_Y or not
-      gameState.mouseTileY >= currentLevel.scrollPosition.y &&
-      gameState.mouseTileY < currentLevel.scrollPosition.y + VISIBLE_Y &&
-      gameState.mouseTileX > currentLevel.scrollPosition.x &&
-      gameState.mouseTileX < currentLevel.map[gameState.mouseTileY + currentLevel.scrollPosition.y].length
-    )
   } else {
+    const additionalYRows = checkGameArea ? 0 : CONTROLS_Y
     return (
       gameState.mouseTileY >= i32(VISIBLE_Y + BOUNDARIES_Y) &&
-      gameState.mouseTileY < i32(VISIBLE_Y + BOUNDARIES_Y + CONTROLS_Y) &&
+      gameState.mouseTileY < i32(VISIBLE_Y + BOUNDARIES_Y + additionalYRows) &&
       gameState.mouseTileX >= 0 &&
       gameState.mouseTileX < i32(VISIBLE_X + BOUNDARIES_X)
     )
