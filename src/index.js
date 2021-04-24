@@ -61,8 +61,9 @@ function measureOneCharacter() {
   measeureTextBox.classList.add('measure-text')
   measeureTextBox.textContent = 'A'
   document.body.appendChild(measeureTextBox)
-  const width = measeureTextBox.clientWidth
-  const height = measeureTextBox.clientHeight
+  const box = measeureTextBox.getBoundingClientRect()
+  const width = box.width
+  const height = box.height
   document.body.removeChild(measeureTextBox)
   return { width, height }
 }
