@@ -105,6 +105,7 @@ function endLoop(start: i64, levelDidNotEnd: boolean): void {
     handleScroll()
     gameState.lastRenderTime = Date.now()
     currentLevel.renderLevel()
+    renderCursor()
     renderComplete()
   }
 
@@ -122,6 +123,20 @@ declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 
 let output: string = ''
 let outputSuffix = ''
+
+export function renderCursor(): void {
+  if (!isCursorInBounds(false)) {
+    return
+  }
+  
+  const x = gameState.mouseTileX
+  const y = gameState.mouseTileY
+
+  addLayerToScreen()
+  for (let i = 0; i < y; i++) { renderToScreen('') }
+  renderToScreen(' '.repeat(x) + '<span style="border: 1px dashed black;"> </span>')
+  addLayerToScreen()
+}
 
 export function renderToScreen(text: string, colour: string = ''): void {
   let outputLine = text
