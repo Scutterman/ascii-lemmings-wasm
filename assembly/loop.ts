@@ -1,7 +1,7 @@
 import { LemmingGift, LevelState } from "./types"
-
 import { currentLevel, gameState, loadEndSlate } from './index'
 import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "./map"
+import { upscale, UPSCALE_MULTIPLIER } from './upscale'
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
 
@@ -144,7 +144,10 @@ export function renderToScreen(text: string, colour: string = ''): void {
     outputLine = '<span style="color: ' + colour + ';">' + outputLine + '</span>'
   }
 
-  output += outputLine + '<br>'
+  const outputLines = upscale(outputLine)
+  for (let i = 0; i < outputLines.length; i++) {
+    output += outputLines[i] + '<br>'
+  }
 }
 
 export function renderComplete(): void {
@@ -168,8 +171,8 @@ export function addLayerToScreen(clearBeforeAdd: boolean = false): void {
 /** EXPORTED TO JS */
 
 export function updateMouseCoordinates(x: f32, y: f32): void {
-  gameState.mouseTileX = i32(Math.round(x / gameState.characterWidth))
-  gameState.mouseTileY = i32(Math.round(y / gameState.characterHeight))
+  gameState.mouseTileX = i32(Math.round(x / (gameState.characterWidth * UPSCALE_MULTIPLIER)))
+  gameState.mouseTileY = i32(Math.round(y / (gameState.characterHeight * UPSCALE_MULTIPLIER)))
 }
 
 export function registerMouseClick(): void {
