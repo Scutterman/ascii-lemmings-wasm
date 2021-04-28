@@ -1,10 +1,8 @@
 export const UPSCALE_MULTIPLIER: u8 = 4
 
-
 /**
- * We want to upscale all tile characters.
- * For buttons and labels, we want to upscale so the text is still readable.
- * We need to ensure the cursor renders correctly.
+ * We want to upscale each lemming animation frame.
+ * We want to ensure the skills are in the correct position
  */
 export function upscale(outputLine: string): string[] {
   const upscaledOutput: string[] = []
