@@ -129,12 +129,20 @@ export function renderCursor(): void {
     return
   }
   
-  const x = gameState.mouseTileX
-  const y = gameState.mouseTileY
+  const x = gameState.mouseTileX * UPSCALE_MULTIPLIER
+  const y = gameState.mouseTileY * UPSCALE_MULTIPLIER
 
   addLayerToScreen()
-  for (let i = 0; i < y; i++) { renderToScreen('') }
-  renderToScreen(' '.repeat(x) + '<span style="border: 1px dashed black;"> </span>')
+  for (let i = 0; i < y; i++) { output += '<br />' }
+  
+  const borderSize = UPSCALE_MULTIPLIER.toString() + 'px'
+  const defaultStyles = 'border-left: ' + borderSize + ' dashed black; border-right: ' + borderSize + ' dashed black;'
+  for (let i: u8 = 0; i < UPSCALE_MULTIPLIER; i++) {
+    let styles = defaultStyles
+    if (i == 0) { styles += 'border-top: ' + borderSize + ' dashed black;' }
+    if (i == UPSCALE_MULTIPLIER - 1) { styles += 'border-bottom: ' + borderSize + ' dashed black;' }
+    output += ' '.repeat(x) + '<span style="' + styles + '">' + ' '.repeat(UPSCALE_MULTIPLIER) + '</span><br />'
+  }
   addLayerToScreen()
 }
 
