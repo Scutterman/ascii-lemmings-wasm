@@ -2,6 +2,8 @@ import { LemmingGift, LevelState } from "./types"
 import { currentLevel, gameState, loadEndSlate } from './index'
 import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "./map"
 import { upscale, UPSCALE_MULTIPLIER } from './upscale'
+import { UILabel } from './ui/uiLabel'
+import { getCharacterRender } from "./text"
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
 
@@ -143,6 +145,40 @@ export function renderCursor(): void {
     if (i == UPSCALE_MULTIPLIER - 1) { styles += 'border-bottom: ' + borderSize + ' dashed black;' }
     output += ' '.repeat(x) + '<span style="' + styles + '">' + ' '.repeat(UPSCALE_MULTIPLIER) + '</span><br />'
   }
+  addLayerToScreen()
+}
+
+export function renderUiLabel(element: UILabel): void {
+  const text: string[] = []
+  const elementTextCharacters = element.getText().split('')
+  for (let i = 0; i < elementTextCharacters.length; i++) {
+    const renderedCharacter = getCharacterRender(elementTextCharacters[i])
+    for (let j = 0; j < renderedCharacter.length; j++) {
+      if (j >= text.length) { text.push('') }
+      text[j] += renderedCharacter[j]
+    }
+  }
+  
+  if (element.getPosition().x == -1) {
+    const mapLengthInBlocks = i16(VISIBLE_X + BOUNDARIES_X)
+    const textLengthInBlocks = elementTextCharacters.length
+    element.getPosition().x = i16(f32(mapLengthInBlocks - textLengthInBlocks) / 2)
+  }
+  
+  
+  if (element.getPosition().y == -1) {
+    const mapHeightInBlocks = i16(VISIBLE_Y + BOUNDARIES_Y + CONTROLS_Y)
+    const textHeightInBlocks = 1
+    element.getPosition().y = i16(f32(mapHeightInBlocks - textHeightInBlocks) / 2)
+  }
+
+  const xMultiplier = i16(gameState.characterWidth * f32(UPSCALE_MULTIPLIER))
+  const yMultiplier = i16(gameState.characterHeight * f32(UPSCALE_MULTIPLIER))
+  const x = element.getPosition().x * xMultiplier
+  const y = element.getPosition().y * yMultiplier
+  const label = '<div style="display: inline-block; width: auto; height: auto; position: relative; border: ' + UPSCALE_MULTIPLIER.toString() + 'px dashed black; left: ' + x.toString() + 'px; top:' + y.toString() + 'px;">' + text.join('<br />') + '</span>'
+  addLayerToScreen()
+  output += label
   addLayerToScreen()
 }
 
