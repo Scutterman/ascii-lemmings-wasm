@@ -51,11 +51,13 @@ export abstract class BaseLevel {
   }
   
   public getLemmingSavedPercent(): u8 {
-    return Math.round(this.numberOfLemmingsSaved / (this.numberOfLemmings * 0.01)) as u8
+    if (this.numberOfLemmings == 0) { return 100 }
+    return u8(Math.round(this.numberOfLemmingsSaved / (this.numberOfLemmings * 0.01)))
   }
   
   public getLemmingNeededPercent(): u8 {
-    return Math.round(this.numberOfLemmingsForSuccess / (this.numberOfLemmings * 0.01)) as u8
+    if (this.numberOfLemmings == 0) { return 0 }
+    return u8(Math.round(this.numberOfLemmingsForSuccess / (this.numberOfLemmings * 0.01)))
   }
   
   protected cloneMap(): LevelTiles {
