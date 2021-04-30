@@ -148,6 +148,12 @@ declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 let output: string = ''
 let outputSuffix = ''
 
+function getPositionInPixels(blockPosition: Vec2): Vec2 {
+  const x = i16(f32(blockPosition.x) * gameState.characterWidth * f32(UPSCALE_MULTIPLIER))
+  const y = i16(f32(blockPosition.y) * gameState.characterHeight * f32(UPSCALE_MULTIPLIER))
+  return new Vec2(x, y)
+}
+
 export function renderCursor(): void {
   if (!isCursorInBounds(false)) {
     return
@@ -223,16 +229,18 @@ export function renderUiLabel(element: UILabel): Rect {
     element.getPosition().y = i16(f32(mapHeightInBlocks - labelDimensions.size.y) / 2)
   }
 
-  const xMultiplier = i16(gameState.characterWidth * f32(UPSCALE_MULTIPLIER))
-  const yMultiplier = i16(gameState.characterHeight * f32(UPSCALE_MULTIPLIER))
-  const x = element.getPosition().x * xMultiplier
-  const y = element.getPosition().y * yMultiplier
-  const label = '<div style="display: inline-block; width: auto; height: auto; position: relative; border: ' + UPSCALE_MULTIPLIER.toString() + 'px dashed black; left: ' + x.toString() + 'px; top:' + y.toString() + 'px;">' + text.join('<br />') + '</span>'
+  renderRelativeElement(text.join('<br />'), element.getPosition(), true)
+
+  return labelDimensions
+}
+
+function renderRelativeElement(text: string, blockPosition: Vec2, border: boolean = false): void {
+  const pixelPosition = getPositionInPixels(blockPosition)
+  const borderStyles = border ? 'border: ' + UPSCALE_MULTIPLIER.toString() + 'px dashed black;' : ''
+  const label = '<div style="display: inline-block; width: auto; height: auto; position: relative; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '">' + text + '</span>'
   addLayerToScreen()
   output += label
   addLayerToScreen()
-
-  return labelDimensions
 }
 
 export function renderToScreen(text: string, colour: string = ''): void {
