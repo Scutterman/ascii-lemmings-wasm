@@ -55,7 +55,7 @@ export class Level extends BaseLevel {
       this.uiLabels.push(new UILabel(new Vec2(36, this.buttonYCoordinate - 2), 'OUT: 0', 'LEMMING_OUT'))
       this.uiLabels.push(new UILabel(new Vec2(50, this.buttonYCoordinate - 2), 'SAVED: 0%', 'LEMMING_SAVED'))
       this.uiLabels.push(new UILabel(new Vec2(69, this.buttonYCoordinate - 2), '', 'TIMER'))
-      this.uiControls.push(new UIControl(new Vec2(25, this.buttonYCoordinate), 'm', () => { gameState.setNukeGift() }))
+      this.skillsPanel.items.push(new UIControl(new Vec2(0,0), 'm', () => { gameState.setNukeGift() }))
     }
   }
 
