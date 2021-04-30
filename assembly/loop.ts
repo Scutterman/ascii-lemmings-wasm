@@ -6,6 +6,7 @@ import { UILabel } from './ui/uiLabel'
 import { getCharacterRender } from "./text"
 import { Panel } from "./ui/panel"
 import { Rect, Vec2 } from "./position"
+import { UIControl } from "./ui/uiControl"
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
 
@@ -40,17 +41,36 @@ function processInputs(): void {
     gameState.mouseClicked = false
 
     if (isCursorInBounds(false)) {
-      for (let i = 0; i < currentLevel.uiControls.length; i++) {
-        if (currentLevel.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
-          currentLevel.uiControls[i].clicked()
-          processLemmingClick = false
-          break
-        }
+      const controlHasBeenClicked = processControlClicks()
+      if (controlHasBeenClicked) {
+        processLemmingClick = false
       }
     }
   }
   
   currentLevel.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
+}
+
+function processControlClicks(): boolean {
+  for (let i = 0; i < currentLevel.uiControls.length; i++) {
+    if (currentLevel.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
+      currentLevel.uiControls[i].clicked()
+      return true
+    }
+  }
+
+  for (let i = 0; i < currentLevel.uiPanels.length; i++) {
+    const panel = currentLevel.uiPanels[i]
+    for (let j = 0; j < panel.items.length; j++) {
+      const item = panel.items[j]
+      if (item instanceof UIControl && (item as UIControl).isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
+        (item as UIControl).clicked()
+        return true
+      }
+    }
+  }
+
+  return false
 }
 
 function eventLoop(): void {
