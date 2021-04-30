@@ -178,17 +178,15 @@ export function renderPanel(panel: Panel, map: LevelTiles): void {
   let lastLabelDimensions: Rect | null = null
 
   for (let i = 0; i < panel.items.length; i++) {
-    const label = panel.items[i]
-
-    if (!label.isVisible(map)) { continue }
+    if (!panel.items[i].isVisible(map)) { continue }
 
     if (lastLabelDimensions != null) {
       nextLabelPosition.x += lastLabelDimensions.size.x + 3
       nextLabelPosition.y
     }
     
-    label.setPosition(nextLabelPosition.clone())
-    lastLabelDimensions = renderUiLabel(label)
+    panel.items[i].setPosition(nextLabelPosition.clone())
+    lastLabelDimensions = renderUiLabel(panel.items[i])
   }
 }
 
