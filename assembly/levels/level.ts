@@ -8,39 +8,47 @@ import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { Block } from "../actions/block"
 import { UILabel } from "../ui/uiLabel"
+import { Panel } from "../ui/panel"
 
 export class Level extends BaseLevel {
   private canSpawnMore: boolean = true
   private skills: Map<LemmingGift, u8> = new Map()
   private isDirty: boolean = false
+  private skillsPanel: Panel
+  private skillsLabelPanel: Panel
 
   constructor(tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 40) {
     super(tag, lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
+    this.skillsPanel = new Panel(new Vec2(1, this.buttonYCoordinate))
+    this.skillsLabelPanel = new Panel(new Vec2(1, this.buttonYCoordinate + 2))
+    this.uiPanels.push(this.skillsPanel)
+    this.uiPanels.push(this.skillsLabelPanel)
+
     if (!this.isMetaScreen) {
-      this.makeButton(1, this.buttonYCoordinate, 'C', () => { gameState.setSelectedGift(LemmingGift.ClimbingBoots) })
-      this.addLabel(LemmingGift.ClimbingBoots, 1, this.buttonYCoordinate + 1)
+      this.addSkillToPanel('C', () => { gameState.setSelectedGift(LemmingGift.ClimbingBoots) })
+      this.addSkillLabelToPanel(LemmingGift.ClimbingBoots)
       
-      this.makeButton(4, this.buttonYCoordinate, 'U', () => { gameState.setSelectedGift(LemmingGift.Umbrella) })
-      this.addLabel(LemmingGift.Umbrella, 4, this.buttonYCoordinate + 1)
+      this.addSkillToPanel('U', () => { gameState.setSelectedGift(LemmingGift.Umbrella) })
+      this.addSkillLabelToPanel(LemmingGift.Umbrella)
       
-      this.makeButton(7, this.buttonYCoordinate, 'E', () => { gameState.setSelectedGift(LemmingGift.Bomb) })
-      this.addLabel(LemmingGift.Bomb, 7, this.buttonYCoordinate + 1)
+      this.addSkillToPanel('E', () => { gameState.setSelectedGift(LemmingGift.Bomb) })
+      this.addSkillLabelToPanel(LemmingGift.Bomb)
       
-      this.makeButton(10, this.buttonYCoordinate, 'T', () => { gameState.setSelectedGift(LemmingGift.Block) })
-      this.addLabel(LemmingGift.Block, 10, this.buttonYCoordinate + 1)
+      this.addSkillToPanel('T', () => { gameState.setSelectedGift(LemmingGift.Block) })
+      this.addSkillLabelToPanel(LemmingGift.Block)
       
-      this.makeButton(13, this.buttonYCoordinate, '/', () => { gameState.setSelectedGift(LemmingGift.BrickSack) })
-      this.addLabel(LemmingGift.BrickSack, 13, this.buttonYCoordinate + 1)
+      this.addSkillToPanel('/', () => { gameState.setSelectedGift(LemmingGift.BrickSack) })
+      this.addSkillLabelToPanel(LemmingGift.BrickSack)
       
-      this.makeButton(16, this.buttonYCoordinate, 'B', () => { gameState.setSelectedGift(LemmingGift.Hammer) })
-      this.addLabel(LemmingGift.Hammer, 16, this.buttonYCoordinate + 1)
+      this.addSkillToPanel('B', () => { gameState.setSelectedGift(LemmingGift.Hammer) })
+      this.addSkillLabelToPanel(LemmingGift.Hammer)
       
-      this.makeButton(19, this.buttonYCoordinate, '\\', () => { gameState.setSelectedGift(LemmingGift.Pickaxe) })
-      this.addLabel(LemmingGift.Pickaxe, 19, this.buttonYCoordinate + 1)
+      this.addSkillToPanel('\\', () => { gameState.setSelectedGift(LemmingGift.Pickaxe) })
+      this.addSkillLabelToPanel(LemmingGift.Pickaxe)
       
-      this.makeButton(22, this.buttonYCoordinate, 'D', () => { gameState.setSelectedGift(LemmingGift.Shovel) })
-      this.addLabel(LemmingGift.Shovel, 22, this.buttonYCoordinate + 1)
+      this.addSkillToPanel('D', () => { gameState.setSelectedGift(LemmingGift.Shovel) })
+      this.addSkillLabelToPanel(LemmingGift.Shovel)
 
       this.uiLabels.push(new UILabel(new Vec2(0, this.buttonYCoordinate - 2), '', 'SELECTED_GIFT'))
       this.uiLabels.push(new UILabel(new Vec2(18, this.buttonYCoordinate - 2), '', 'LEMMING_INFO'))
@@ -97,12 +105,12 @@ export class Level extends BaseLevel {
     }
   }
 
-  public makeButton(x: i16, y:i16, text: string, action: UIAction): void {
-    this.uiControls.push(new UIControl(new Vec2(x, y), text, action))
+  public addSkillToPanel(text: string, action: UIAction): void {
+    this.skillsPanel.items.push(new UIControl(new Vec2(0, 0), text, action))
   }
 
-  public addLabel(gift: LemmingGift, x: i16, y: i16): void {
-    this.uiLabels.push(new UILabel(new Vec2(x, y), '0', 'GIFT_COUNTER_' + gift.toString()))
+  public addSkillLabelToPanel(gift: LemmingGift): void {
+    this.skillsLabelPanel.items.push(new UILabel(new Vec2(0, 0), '0', 'GIFT_COUNTER_' + gift.toString()))
   }
 
   public updateSkillQuantity(gift: LemmingGift, newText: string): void {
