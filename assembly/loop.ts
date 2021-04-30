@@ -1,5 +1,5 @@
 import { LemmingGift, LevelState, LevelTiles } from "./types"
-import { currentLevel, gameState, loadEndSlate } from './index'
+import { currentLevel, gameState, loadEndSlate, log } from './index'
 import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "./map"
 import { upscale, UPSCALE_MULTIPLIER } from './upscale'
 import { UILabel } from './ui/uiLabel'
@@ -199,10 +199,20 @@ export function renderUiLabel(element: UILabel): Rect {
 
   for (let i = 0; i < elementTextCharacters.length; i++) {
     const renderedCharacter = getCharacterRender(elementTextCharacters[i])
+    if (renderedCharacter.length == 0) {
+      log('Canot render character: ' + elementTextCharacters[i])
+      continue
+    }
+    
     for (let j = 0; j < renderedCharacter.length; j++) {
       if (j >= text.length) { text.push('') }
       text[j] += renderedCharacter[j]
     }
+  }
+
+  if (text.length == 0) {
+    log('No characters to render so not rendering anything')
+    return new Rect(element.getPosition().clone(), new Vec2(0,0))
   }
   
   if (element.getPosition().x == -1) {
