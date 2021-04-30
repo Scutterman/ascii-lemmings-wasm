@@ -4,6 +4,7 @@ import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "./
 import { upscale, UPSCALE_MULTIPLIER } from './upscale'
 import { UILabel } from './ui/uiLabel'
 import { getCharacterRender } from "./text"
+import { Rect, Vec2 } from "./position"
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
 
@@ -148,9 +149,12 @@ export function renderCursor(): void {
   addLayerToScreen()
 }
 
-export function renderUiLabel(element: UILabel): void {
+
+export function renderUiLabel(element: UILabel): Rect {
   const text: string[] = []
   const elementTextCharacters = element.getText().split('')
+  const labelDimensions = new Rect(element.getPosition().clone(), new Vec2(i16(elementTextCharacters.length), 1))
+
   for (let i = 0; i < elementTextCharacters.length; i++) {
     const renderedCharacter = getCharacterRender(elementTextCharacters[i])
     for (let j = 0; j < renderedCharacter.length; j++) {
@@ -161,15 +165,13 @@ export function renderUiLabel(element: UILabel): void {
   
   if (element.getPosition().x == -1) {
     const mapLengthInBlocks = i16(VISIBLE_X + BOUNDARIES_X)
-    const textLengthInBlocks = elementTextCharacters.length
-    element.getPosition().x = i16(f32(mapLengthInBlocks - textLengthInBlocks) / 2)
+    element.getPosition().x = i16(f32(mapLengthInBlocks - labelDimensions.size.x) / 2)
   }
   
   
   if (element.getPosition().y == -1) {
     const mapHeightInBlocks = i16(VISIBLE_Y + BOUNDARIES_Y + CONTROLS_Y)
-    const textHeightInBlocks = 1
-    element.getPosition().y = i16(f32(mapHeightInBlocks - textHeightInBlocks) / 2)
+    element.getPosition().y = i16(f32(mapHeightInBlocks - labelDimensions.size.y) / 2)
   }
 
   const xMultiplier = i16(gameState.characterWidth * f32(UPSCALE_MULTIPLIER))
@@ -180,6 +182,8 @@ export function renderUiLabel(element: UILabel): void {
   addLayerToScreen()
   output += label
   addLayerToScreen()
+
+  return labelDimensions
 }
 
 export function renderToScreen(text: string, colour: string = ''): void {
