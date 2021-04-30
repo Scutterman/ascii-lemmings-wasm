@@ -1,9 +1,10 @@
 import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, mapToTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { Vec2 } from "../position"
-import { renderUiLabel } from "../loop"
+import { renderPanel, renderUiLabel } from "../loop"
 import { LemmingGift, LevelTiles } from "../types"
 import { UIControl } from "../ui/uiControl"
 import { UILabel } from "../ui/uiLabel"
+import { Panel } from "../ui/panel"
 
 const buttonArea = mapToTiles([
   '|                                                                        |',
@@ -25,6 +26,7 @@ export abstract class BaseLevel {
   public numberOfLemmingsRemoved: u8 = 0
   public uiControls: UIControl[] = []
   public uiLabels: UILabel[] = []
+  public uiPanels: Panel[] = []
   public isMetaScreen: boolean
   public hasEnded: boolean = false
   public scrollPosition: Vec2 = new Vec2(0,0)
@@ -125,6 +127,10 @@ export abstract class BaseLevel {
       }
     }
 
-      this.render(map, false)
+    for (let i = 0; i < this.uiPanels.length; i++) {
+      renderPanel(this.uiPanels[i], map)
+    }
+    
+    this.render(map, false)
   }
 }
