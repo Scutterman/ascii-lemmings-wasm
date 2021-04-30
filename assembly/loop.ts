@@ -1,9 +1,10 @@
-import { LemmingGift, LevelState } from "./types"
+import { LemmingGift, LevelState, LevelTiles } from "./types"
 import { currentLevel, gameState, loadEndSlate } from './index'
 import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "./map"
 import { upscale, UPSCALE_MULTIPLIER } from './upscale'
 import { UILabel } from './ui/uiLabel'
 import { getCharacterRender } from "./text"
+import { Panel } from "./ui/panel"
 import { Rect, Vec2 } from "./position"
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
@@ -149,6 +150,27 @@ export function renderCursor(): void {
   addLayerToScreen()
 }
 
+export function renderPanel(panel: Panel, map: LevelTiles): void {
+  if (panel.items.length == 0) { return }
+
+  const nextLabelPosition = panel.position.clone()
+  panel.items[0].setPosition(panel.position)
+  let lastLabelDimensions: Rect | null = null
+
+  for (let i = 0; i < panel.items.length; i++) {
+    const label = panel.items[i]
+
+    if (!label.isVisible(map)) { continue }
+
+    if (lastLabelDimensions != null) {
+      nextLabelPosition.x += lastLabelDimensions.size.x + 3
+      nextLabelPosition.y
+    }
+    
+    label.setPosition(nextLabelPosition.clone())
+    lastLabelDimensions = renderUiLabel(label)
+  }
+}
 
 export function renderUiLabel(element: UILabel): Rect {
   const text: string[] = []
