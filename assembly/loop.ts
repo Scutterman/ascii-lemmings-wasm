@@ -159,21 +159,16 @@ export function renderCursor(): void {
     return
   }
   
-  const x = gameState.mouseTileX * UPSCALE_MULTIPLIER
-  const y = gameState.mouseTileY * UPSCALE_MULTIPLIER
-
-  addLayerToScreen()
-  for (let i = 0; i < y; i++) { output += '<br />' }
-  
+  let text = ''
   const borderSize = UPSCALE_MULTIPLIER.toString() + 'px'
   const defaultStyles = 'border-left: ' + borderSize + ' dashed black; border-right: ' + borderSize + ' dashed black;'
   for (let i: u8 = 0; i < UPSCALE_MULTIPLIER; i++) {
     let styles = defaultStyles
     if (i == 0) { styles += 'border-top: ' + borderSize + ' dashed black;' }
     if (i == UPSCALE_MULTIPLIER - 1) { styles += 'border-bottom: ' + borderSize + ' dashed black;' }
-    output += ' '.repeat(x) + '<span style="' + styles + '">' + ' '.repeat(UPSCALE_MULTIPLIER) + '</span><br />'
+    text += '<span style="' + styles + '">' + ' '.repeat(UPSCALE_MULTIPLIER) + '</span><br />'
   }
-  addLayerToScreen()
+  renderRelativeElement(text, new Vec2(i16(gameState.mouseTileX), i16(gameState.mouseTileY)))
 }
 
 export function renderPanel(panel: Panel, map: LevelTiles): void {
