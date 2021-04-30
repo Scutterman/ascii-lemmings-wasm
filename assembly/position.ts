@@ -14,4 +14,6 @@ export class Vec2 {
   public clone(): Vec2 { return new Vec2(this.x, this.y) }
 }
 
+export class Rect {
+  constructor(public position: Vec2, public size: Vec2) {}
 }
