@@ -9,6 +9,7 @@ export class UILabel {
   ) { }
 
   public getPosition(): Vec2 { return this.positionOnScreen }
+  public setPosition(postion: Vec2): void { this.positionOnScreen = postion }
   public getText(): string { return this.text }
   public getTag(): string { return this.tag }
   public updateText(text: string): void { this.text = text }
