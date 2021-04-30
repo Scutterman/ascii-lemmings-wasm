@@ -211,7 +211,6 @@ export function renderUiLabel(element: UILabel): Rect {
   }
 
   if (text.length == 0) {
-    log('No characters to render so not rendering anything')
     return new Rect(element.getPosition().clone(), new Vec2(0,0))
   }
   
