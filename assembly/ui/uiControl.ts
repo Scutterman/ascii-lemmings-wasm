@@ -17,6 +17,6 @@ export class UIControl extends UILabel {
     const posX = i32(pos.x)
     const posY = i32(pos.y)
 
-    return (x > posX && x < (posX + textLength) && y == posY)
+    return (x >= posX && x <= (posX + textLength) && y == posY)
   }
 }
