@@ -10,4 +10,8 @@ export class Vec2 {
   public equals(vec2: Vec2): boolean {
     return this.x == vec2.x && this.y == vec2.y
   }
+
+  public clone(): Vec2 { return new Vec2(this.x, this.y) }
+}
+
 }
