@@ -11,7 +11,8 @@ const importObject = {
       postMessage(output)
     },
     onEventLoopComplete(_timeTaken) {
-      requestInputs()
+      // requestInputs()
+      requestAnimationFrame(loop)
     }
   },
   env: {
@@ -31,7 +32,7 @@ onmessage = function(e) {
       loadedModule.instance.exports.registerMouseClick()
     }
 
-    loop()
+    // loop()
     return
   }
   

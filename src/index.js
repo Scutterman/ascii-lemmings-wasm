@@ -43,12 +43,16 @@ let clicked = false
 
 let enableCall = true;
 window.addEventListener('mousemove', function(e) {
-  if (!enableCall) return;
-
+  if (!started || !enableCall) return;
+  
   enableCall = false;
+  const _clicked = clicked
+  clicked = false
   mouseX = e.clientX - 25
   mouseY = e.clientY - 25
-  setTimeout(function () { enableCall = true }, 50);
+  wasmRunner.postMessage({ mouseX, mouseY, clicked: _clicked })
+  requestAnimationFrame(() => { enableCall = true })
+  //setTimeout(function () { enableCall = true }, 33);
 });
 
 clickTarget.addEventListener('click', function() {
