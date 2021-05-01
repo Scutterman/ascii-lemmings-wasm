@@ -160,7 +160,7 @@ export function renderCursor(): void {
   }
   
   let text = ''
-  const borderSize = UPSCALE_MULTIPLIER.toString() + 'px'
+  const borderSize = '1px'
   const defaultStyles = 'border-left: ' + borderSize + ' dashed black; border-right: ' + borderSize + ' dashed black;'
   for (let i: u8 = 0; i < UPSCALE_MULTIPLIER; i++) {
     let styles = defaultStyles
