@@ -145,8 +145,9 @@ const loopCompleted = (start: i64): void => {
 declare function render(output: string): void;
 declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 
-let output: string = ''
+let output = ''
 let outputSuffix = ''
+const lineBreak = '<br />'
 
 function getPositionInPixels(blockPosition: Vec2): Vec2 {
   const x = i16(f32(blockPosition.x) * gameState.characterWidth * f32(UPSCALE_MULTIPLIER))
@@ -166,7 +167,7 @@ export function renderCursor(): void {
     let styles = defaultStyles
     if (i == 0) { styles += 'border-top: ' + borderSize + ' dashed black;' }
     if (i == UPSCALE_MULTIPLIER - 1) { styles += 'border-bottom: ' + borderSize + ' dashed black;' }
-    text += '<span style="' + styles + '">' + ' '.repeat(UPSCALE_MULTIPLIER) + '</span><br />'
+    text += '<span style="' + styles + '">' + ' '.repeat(UPSCALE_MULTIPLIER) + '</span>' + lineBreak
   }
   renderRelativeElement(text, new Vec2(i16(gameState.mouseTileX), i16(gameState.mouseTileY)))
 }
@@ -224,7 +225,7 @@ export function renderUiLabel(element: UILabel): Rect {
     element.getPosition().y = i16(f32(mapHeightInBlocks - labelDimensions.size.y) / 2)
   }
 
-  renderRelativeElement(text.join('<br />'), element.getPosition(), true)
+  renderRelativeElement(text.join(lineBreak), element.getPosition(), true)
 
   return labelDimensions
 }
@@ -245,7 +246,7 @@ export function renderToScreen(text: string, colour: string = ''): void {
 
   const outputLines = upscale(text)
   for (let i = 0; i < outputLines.length; i++) {
-    output += outputLines[i] + '<br>'
+    output += outputLines[i] + lineBreak
   }
 
   if (colour != '') {
