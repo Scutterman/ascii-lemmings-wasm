@@ -239,14 +239,17 @@ function renderRelativeElement(text: string, blockPosition: Vec2, border: boolea
 }
 
 export function renderToScreen(text: string, colour: string = ''): void {
-  let outputLine = text
   if (colour !== '') {
-    outputLine = '<span style="color: ' + colour + ';">' + outputLine + '</span>'
+    output += '<span style="color: ' + colour + ';">'
   }
 
-  const outputLines = upscale(outputLine)
+  const outputLines = upscale(text)
   for (let i = 0; i < outputLines.length; i++) {
     output += outputLines[i] + '<br>'
+  }
+
+  if (colour != '') {
+    output += '</span>'
   }
 }
 
