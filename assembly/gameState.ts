@@ -4,7 +4,7 @@ import { BaseLevel } from "./levels/baseLevel"
 import { DefaultLevel } from "./levels/defaultLevel"
 import { LemmingGift, LevelState } from "./types"
 
-export const baseMillisecondsPerGameLoop: u16 = 500 as u16
+export const baseMillisecondsPerGameLoop: u16 = 1000 as u16
 export const fastForwardMultiplier: u8 = 2 as u8
 
 const defaultLevel: DefaultLevel = new DefaultLevel()
