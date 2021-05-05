@@ -147,6 +147,7 @@ declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 
 let output = ''
 let outputSuffix = ''
+let relativeItems = ''
 const lineBreak = '<br />'
 
 function getPositionInPixels(blockPosition: Vec2): Vec2 {
@@ -236,10 +237,8 @@ export function renderTextToScreen(textToRender: string, position: Vec2, border:
 function renderRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): void {
   const pixelPosition = getPositionInPixels(blockPosition)
   const borderStyles = border ? 'box-shadow: inset 0 0 1px #000000' : ''
-  const label = '<div style="display: inline-block; width: auto; height: auto; position: relative; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '; color: ' + colour + '">' + text + '</span>'
-  addLayerToScreen()
-  output += label
-  addLayerToScreen()
+  const relativeItem = '<span style="display: inline-block; width: auto; height: auto; position: absolute; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '; color: ' + colour + '">' + text + '</span>'
+  relativeItems += relativeItem
 }
 
 export function renderToScreen(text: string, colour: string = ''): void {
@@ -259,6 +258,9 @@ export function renderToScreen(text: string, colour: string = ''): void {
 
 export function renderComplete(): void {
   output += outputSuffix
+  if (relativeItems != '') {
+    output += '<div class="screen">' + relativeItems + '</div>'
+  }
   render(output)
 }
 
@@ -266,6 +268,7 @@ export function addLayerToScreen(clearBeforeAdd: boolean = false): void {
   outputSuffix = '</div>'
   if (clearBeforeAdd) {
     output = ''
+    relativeItems = ''
   }
 
   if (output != '') {
