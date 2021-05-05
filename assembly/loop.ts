@@ -193,10 +193,13 @@ export function renderPanel(panel: Panel, map: LevelTiles): void {
 }
 
 export function renderUiLabel(element: UILabel): Rect {
-  const text: string[] = []
-  const elementTextCharacters = element.getText().split('')
-  const labelDimensions = new Rect(element.getPosition().clone(), new Vec2(i16(elementTextCharacters.length), 1))
+  return renderTextToScreen(element.getText(), element.getPosition())
+}
 
+export function renderTextToScreen(textToRender: string, position: Vec2): Rect {
+  const text: string[] = []
+  const elementTextCharacters = textToRender.split('')
+  const labelDimensions = new Rect(position.clone(), new Vec2(i16(elementTextCharacters.length), 1))
   for (let i = 0; i < elementTextCharacters.length; i++) {
     const renderedCharacter = getCharacterRender(elementTextCharacters[i])
     if (renderedCharacter.length == 0) {
@@ -211,21 +214,21 @@ export function renderUiLabel(element: UILabel): Rect {
   }
 
   if (text.length == 0) {
-    return new Rect(element.getPosition().clone(), new Vec2(0,0))
+    return new Rect(position.clone(), new Vec2(0,0))
   }
   
-  if (element.getPosition().x == -1) {
+  if (position.x == -1) {
     const mapLengthInBlocks = i16(VISIBLE_X + BOUNDARIES_X)
-    element.getPosition().x = i16(f32(mapLengthInBlocks - labelDimensions.size.x) / 2)
+    position.x = i16(f32(mapLengthInBlocks - labelDimensions.size.x) / 2)
   }
   
   
-  if (element.getPosition().y == -1) {
+  if (position.y == -1) {
     const mapHeightInBlocks = i16(VISIBLE_Y + BOUNDARIES_Y + CONTROLS_Y)
-    element.getPosition().y = i16(f32(mapHeightInBlocks - labelDimensions.size.y) / 2)
+    position.y = i16(f32(mapHeightInBlocks - labelDimensions.size.y) / 2)
   }
 
-  renderRelativeElement(text.join(lineBreak), element.getPosition(), true)
+  renderRelativeElement(text.join(lineBreak), position, true)
 
   return labelDimensions
 }
