@@ -24,15 +24,15 @@ export class EndSlate extends MetaScreen {
     this.controlsPanel.items.push(new UIControl(new Vec2(0, 0), "Continue", () => {}))
 
     this.uiLabels.push(new UILabel(new Vec2(-1, 10), 'All lemmings accounted for'))
-    this.uiLabels.push(new UILabel(new Vec2(-1, 15), 'You needed ' + needed))
+    this.uiLabels.push(new UILabel(new Vec2(-1, 14), 'You needed ' + needed))
     this.uiLabels.push(new UILabel(new Vec2(-1, 16), 'You rescued ' + rescued))
 
     if (rescued >= needed) {
       this.uiLabels.push(new UILabel(new Vec2(-1, 20), MESSAGE_SUCCESS_1))
-      this.uiLabels.push(new UILabel(new Vec2(-1, 21), MESSAGE_SUCCESS_2))
+      this.uiLabels.push(new UILabel(new Vec2(-1, 22), MESSAGE_SUCCESS_2))
     } else {
       this.uiLabels.push(new UILabel(new Vec2(-1, 20), MESSAGE_FAIL_1))
-      this.uiLabels.push(new UILabel(new Vec2(-1, 21), MESSAGE_FAIL_2))
+      this.uiLabels.push(new UILabel(new Vec2(-1, 22), MESSAGE_FAIL_2))
     }
   }
 
