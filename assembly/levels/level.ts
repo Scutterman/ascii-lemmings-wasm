@@ -20,8 +20,8 @@ export class Level extends BaseLevel {
   constructor(tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 40) {
     super(tag, lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
-    this.skillsPanel = new Panel(new Vec2(1, this.buttonYCoordinate))
-    this.skillsLabelPanel = new Panel(new Vec2(1, this.buttonYCoordinate + 2))
+    this.skillsPanel = new Panel(new Vec2(2, this.buttonYCoordinate))
+    this.skillsLabelPanel = new Panel(new Vec2(2, this.buttonYCoordinate + 2))
     this.uiPanels.push(this.skillsPanel)
     this.uiPanels.push(this.skillsLabelPanel)
 
@@ -50,11 +50,11 @@ export class Level extends BaseLevel {
       this.addSkillToPanel('D', () => { gameState.setSelectedGift(LemmingGift.Shovel) })
       this.addSkillLabelToPanel(LemmingGift.Shovel)
 
-      this.uiLabels.push(new UILabel(new Vec2(0, this.buttonYCoordinate - 2), '', 'SELECTED_GIFT'))
-      this.uiLabels.push(new UILabel(new Vec2(18, this.buttonYCoordinate - 2), '', 'LEMMING_INFO'))
-      this.uiLabels.push(new UILabel(new Vec2(36, this.buttonYCoordinate - 2), 'OUT: 0', 'LEMMING_OUT'))
-      this.uiLabels.push(new UILabel(new Vec2(50, this.buttonYCoordinate - 2), 'SAVED: 0%', 'LEMMING_SAVED'))
-      this.uiLabels.push(new UILabel(new Vec2(69, this.buttonYCoordinate - 2), '', 'TIMER'))
+      this.uiLabels.push(new UILabel(new Vec2(2, this.buttonYCoordinate - 2), '', 'SELECTED_GIFT'))
+      this.uiLabels.push(new UILabel(new Vec2(16, this.buttonYCoordinate - 2), '', 'LEMMING_INFO'))
+      this.uiLabels.push(new UILabel(new Vec2(32, this.buttonYCoordinate - 2), 'OUT: 0', 'LEMMING_OUT'))
+      this.uiLabels.push(new UILabel(new Vec2(46, this.buttonYCoordinate - 2), 'SAVED: 0%', 'LEMMING_SAVED'))
+      this.uiLabels.push(new UILabel(new Vec2(65, this.buttonYCoordinate - 2), '', 'TIMER'))
       this.skillsPanel.items.push(new UIControl(new Vec2(0,0), 'm', () => { gameState.setNukeGift() }))
     }
   }
