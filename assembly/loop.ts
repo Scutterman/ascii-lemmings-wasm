@@ -200,7 +200,7 @@ export function renderUiLabel(element: UILabel): Rect {
 export function renderTextToScreen(textToRender: string, position: Vec2, border: boolean = true, colour: string = '#000000'): Rect {
   const text: string[] = []
   const elementTextCharacters = textToRender.split('')
-  const labelDimensions = new Rect(position.clone(), new Vec2(i16(elementTextCharacters.length), 1))
+  
   for (let i = 0; i < elementTextCharacters.length; i++) {
     const renderedCharacter = getCharacterRender(elementTextCharacters[i])
     if (renderedCharacter.length == 0) {
@@ -217,6 +217,13 @@ export function renderTextToScreen(textToRender: string, position: Vec2, border:
   if (text.length == 0) {
     return new Rect(position.clone(), new Vec2(0,0))
   }
+  
+  const size = new Vec2(
+    i16(Math.ceil(f32(text[0].length) / f32(UPSCALE_MULTIPLIER))),
+    i16(Math.ceil(f32(text.length) / f32(UPSCALE_MULTIPLIER)))
+  )
+
+  const labelDimensions = new Rect(position.clone(), size)
   
   if (position.x == -1) {
     const mapLengthInBlocks = i16(VISIBLE_X + BOUNDARIES_X)
