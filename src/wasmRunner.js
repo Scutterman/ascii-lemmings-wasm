@@ -11,7 +11,6 @@ const importObject = {
       postMessage(output)
     },
     onEventLoopComplete(_timeTaken) {
-      // requestInputs()
       requestAnimationFrame(loop)
     }
   },
@@ -27,8 +26,11 @@ let started = false
 
 onmessage = function(e) {
   if (started) {
-    loadedModule.instance.exports.updateMouseCoordinates(e.data.mouseX, e.data.mouseY)
-    if (e.data.clicked) {
+    if (e.data.mouseX != null && e.data.mouseY != null) {
+      loadedModule.instance.exports.updateMouseCoordinates(e.data.mouseX, e.data.mouseY)
+    }
+
+    if (e.data.clicked != null) {
       loadedModule.instance.exports.registerMouseClick()
     }
 
@@ -74,8 +76,4 @@ function start() {
 
 function loop () {
   loadedModule.instance.exports.triggerEventLoop()
-}
-
-function requestInputs() {
-  postMessage('requestinputs')
 }

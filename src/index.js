@@ -5,16 +5,9 @@ const dimensions = measureOneCharacter()
 const wasmRunner = new Worker('wasmRunner.js')
 
 let started = false
-const requestInputsMessage = 'requestinputs'
 wasmRunner.onmessage = (e) => {
   if (started) {
-    if (e.data === requestInputsMessage) {
-      const _clicked = clicked
-      clicked = false
-      wasmRunner.postMessage({ mouseX, mouseY, clicked: _clicked })
-    } else {
-      gameArea.innerHTML = e.data
-    }
+    gameArea.innerHTML = e.data
     return
   }
 
@@ -39,24 +32,20 @@ wasmRunner.onmessage = (e) => {
 
 let mouseX = 0
 let mouseY = 0
-let clicked = false
 
 let enableCall = true;
 window.addEventListener('mousemove', function(e) {
   if (!started || !enableCall) return;
   
   enableCall = false;
-  const _clicked = clicked
-  clicked = false
   mouseX = e.clientX - 25
   mouseY = e.clientY - 25
-  wasmRunner.postMessage({ mouseX, mouseY, clicked: _clicked })
+  wasmRunner.postMessage({ mouseX, mouseY })
   requestAnimationFrame(() => { enableCall = true })
-  //setTimeout(function () { enableCall = true }, 33);
 });
 
 clickTarget.addEventListener('click', function() {
-  clicked = true
+  wasmRunner.postMessage({ clicked: true })
 })
 
 function measureOneCharacter() {
