@@ -244,12 +244,6 @@ export class Level extends BaseLevel {
     return new Level(this.tag, this.numberOfLemmings, this.numberOfLemmingsForSuccess, newMap, this.isMetaScreen, this.buttonYCoordinate)
   }
   
-  private setYPosition(yPosition: i16): void {
-    for (let i = 0; i < yPosition; i++) {
-      renderToScreen('')
-    }
-  }
-
   protected render(map: LevelTiles, isRenderingGameSection: boolean = false): void {
     const startY = isRenderingGameSection ? this.scrollPosition.y : 0
     const endY = isRenderingGameSection ? this.scrollPosition.y + VISIBLE_Y + BOUNDARIES_Y : map.length
