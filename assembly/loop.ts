@@ -275,8 +275,8 @@ export function addLayerToScreen(clearBeforeAdd: boolean = false): void {
 /** EXPORTED TO JS */
 
 export function updateMouseCoordinates(x: f32, y: f32): void {
-  gameState.mouseTileX = i32(Math.round(x / (gameState.characterWidth * UPSCALE_MULTIPLIER)))
-  gameState.mouseTileY = i32(Math.round(y / (gameState.characterHeight * UPSCALE_MULTIPLIER)))
+  gameState.mouseTileX = i32(Math.floor(x / (gameState.characterWidth * UPSCALE_MULTIPLIER)))
+  gameState.mouseTileY = i32(Math.floor(y / (gameState.characterHeight * UPSCALE_MULTIPLIER)))
 }
 
 export function registerMouseClick(): void {
