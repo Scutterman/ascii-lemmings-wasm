@@ -196,7 +196,7 @@ export function renderUiLabel(element: UILabel): Rect {
   return renderTextToScreen(element.getText(), element.getPosition())
 }
 
-export function renderTextToScreen(textToRender: string, position: Vec2): Rect {
+export function renderTextToScreen(textToRender: string, position: Vec2, border: boolean = true, colour: string = '#000000'): Rect {
   const text: string[] = []
   const elementTextCharacters = textToRender.split('')
   const labelDimensions = new Rect(position.clone(), new Vec2(i16(elementTextCharacters.length), 1))
@@ -228,15 +228,15 @@ export function renderTextToScreen(textToRender: string, position: Vec2): Rect {
     position.y = i16(f32(mapHeightInBlocks - labelDimensions.size.y) / 2)
   }
 
-  renderRelativeElement(text.join(lineBreak), position, true)
+  renderRelativeElement(text.join(lineBreak), position, border, colour)
 
   return labelDimensions
 }
 
-function renderRelativeElement(text: string, blockPosition: Vec2, border: boolean = false): void {
+function renderRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): void {
   const pixelPosition = getPositionInPixels(blockPosition)
   const borderStyles = border ? 'border: ' + UPSCALE_MULTIPLIER.toString() + 'px dashed black;' : ''
-  const label = '<div style="display: inline-block; width: auto; height: auto; position: relative; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '">' + text + '</span>'
+  const label = '<div style="display: inline-block; width: auto; height: auto; position: relative; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '; color: ' + colour + '">' + text + '</span>'
   addLayerToScreen()
   output += label
   addLayerToScreen()

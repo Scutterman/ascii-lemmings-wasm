@@ -1,6 +1,6 @@
 import { gameState, lemmings } from ".."
 import { Lemming } from "../lemming"
-import { addLayerToScreen, renderToScreen } from "../loop"
+import { addLayerToScreen, renderTextToScreen, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
@@ -231,16 +231,7 @@ export class Level extends BaseLevel {
 
       const colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
       
-      addLayerToScreen()
-      this.setYPosition(lemming.position.y - this.scrollPosition.y)
-
-      // Pad from the beginning of the screen to the character before the lemming so the lemming is in the correct position
-      const xPaddingLeft = lemming.position.x - this.scrollPosition.x
-      
-      // Pad between the end lemming character to the edge of the screen
-      const xPaddingRight = map[0].length - lemming.position.x - 1
-      const row = ' '.repeat(xPaddingLeft) + lemming.renderFrame(this.isDirty) + ' '.repeat(xPaddingRight)
-      renderToScreen(row, colour)
+      renderTextToScreen(lemming.renderFrame(this.isDirty), lemming.position, false, colour)
     }
 
     this.renderControls()
