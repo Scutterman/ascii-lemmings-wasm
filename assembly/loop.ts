@@ -235,7 +235,7 @@ export function renderTextToScreen(textToRender: string, position: Vec2, border:
 
 function renderRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): void {
   const pixelPosition = getPositionInPixels(blockPosition)
-  const borderStyles = border ? 'border: 1px dashed black' : ''
+  const borderStyles = border ? 'box-shadow: inset 0 0 1px #000000' : ''
   const label = '<div style="display: inline-block; width: auto; height: auto; position: relative; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '; color: ' + colour + '">' + text + '</span>'
   addLayerToScreen()
   output += label
