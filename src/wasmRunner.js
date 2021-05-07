@@ -57,7 +57,7 @@ onmessage = function(e) {
 }
 
 async function init() {
-  const response = await fetch("/build/untouched.wasm");
+  const response = await fetch("/build/untouched.wasm?t=" + Date.now());
   const buffer = await response.arrayBuffer();
   loadedModule = await loader.instantiate(
     buffer,
