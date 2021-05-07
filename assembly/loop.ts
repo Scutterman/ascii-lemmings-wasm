@@ -178,26 +178,47 @@ export function renderPanel(panel: Panel, map: LevelTiles): void {
 
   const nextLabelPosition = panel.position.clone()
   panel.items[0].setPosition(panel.position)
-  let lastLabelDimensions: Rect | null = null
-
+  
+  const texts: string[][] = []
+  const sizes: Vec2[] = []
+  const panelSize: Vec2 = new Vec2(0,0)
+  const borders: boolean[] = []
+  const panelItemIndexes: i32[] = []
+  
   for (let i = 0; i < panel.items.length; i++) {
     if (!panel.items[i].isVisible(map)) { continue }
+    const text = getRenderedTextArray(panel.items[i].getText())
+    const size = getSizeFromRenderedTextArray(text)
+    texts.push(text)
+    sizes.push(size)
+    borders.push(panel.items[i] instanceof UIControl)
+    panelItemIndexes.push(i)
+    panelSize.x += size.x
+    panelSize.y = i16(Math.max(panelSize.y, size.y))
+  }
 
-    if (lastLabelDimensions != null) {
-      nextLabelPosition.x += lastLabelDimensions.size.x + 3
-      nextLabelPosition.y
-    }
-    
-    panel.items[i].setPosition(nextLabelPosition.clone())
-    lastLabelDimensions = renderUiLabel(panel.items[i])
+  if (nextLabelPosition.x == -1) {
+    const mapLengthInBlocks = i16(VISIBLE_X + BOUNDARIES_X)
+    nextLabelPosition.x = i16(f32(mapLengthInBlocks - panelSize.x) / 2)
+  }
+  
+  if (nextLabelPosition.y == -1) {
+    const mapHeightInBlocks = i16(VISIBLE_Y + BOUNDARIES_Y + CONTROLS_Y)
+    nextLabelPosition.y = i16(f32(mapHeightInBlocks - panelSize.y) / 2)
+  }
+
+  for (let i = 0; i < texts.length; i++) {
+    renderRelativeElement(texts[i].join(lineBreak), nextLabelPosition, borders[i])
+    panel.items[panelItemIndexes[i]].setPosition(nextLabelPosition.clone())
+    nextLabelPosition.x += sizes[i].x + 3
   }
 }
 
 export function renderUiLabel(element: UILabel): Rect {
-  return renderTextToScreen(element.getText(), element.getPosition())
+  return renderTextToScreen(element.getText(), element.getPosition(), element instanceof UIControl)
 }
 
-export function renderTextToScreen(textToRender: string, position: Vec2, border: boolean = true, colour: string = '#000000'): Rect {
+function getRenderedTextArray(textToRender: string): string[] {
   const text: string[] = []
   const elementTextCharacters = textToRender.split('')
   
@@ -214,17 +235,25 @@ export function renderTextToScreen(textToRender: string, position: Vec2, border:
     }
   }
 
+  return text
+}
+
+function getSizeFromRenderedTextArray(text: string[]): Vec2 {
+  return new Vec2(
+    i16(Math.ceil(f32(text[0].length) / f32(UPSCALE_MULTIPLIER))),
+    i16(Math.ceil(f32(text.length) / f32(UPSCALE_MULTIPLIER)))
+  )
+}
+
+export function renderTextToScreen(textToRender: string, position: Vec2, border: boolean = true, colour: string = '#000000'): Rect {
+  const text = getRenderedTextArray(textToRender)
+
   if (text.length == 0) {
     return new Rect(position.clone(), new Vec2(0,0))
   }
   
-  const size = new Vec2(
-    i16(Math.ceil(f32(text[0].length) / f32(UPSCALE_MULTIPLIER))),
-    i16(Math.ceil(f32(text.length) / f32(UPSCALE_MULTIPLIER)))
-  )
-
+  const size = getSizeFromRenderedTextArray(text)
   const labelDimensions = new Rect(position.clone(), size)
-  
   if (position.x == -1) {
     const mapLengthInBlocks = i16(VISIBLE_X + BOUNDARIES_X)
     position.x = i16(f32(mapLengthInBlocks - labelDimensions.size.x) / 2)
