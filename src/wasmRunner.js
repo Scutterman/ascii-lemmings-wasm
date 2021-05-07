@@ -46,7 +46,8 @@ onmessage = function(e) {
     break
     case 'setdimensions':
       setDimensions(e.data.screenW, e.data.screenH, e.data.characterW, e.data.characterH)
-      postMessage({ instruction: 'dimensionscomplete' })
+      const screenSize = getScreenSize()
+      postMessage({ instruction: 'dimensionscomplete', screenSize })
     break
     case 'start':
       start()
@@ -68,6 +69,11 @@ async function init() {
 function setDimensions(clientWidth, clientHeight, characterWidth, characterHeight) {
   loadedModule.instance.exports.setScreenDimensions(clientWidth, clientHeight)
   loadedModule.instance.exports.setCharacterDimensions(characterWidth, characterHeight)
+}
+
+function getScreenSize() {
+  return {
+    width: loadedModule.instance.exports.getScreenWidth(), height: loadedModule.instance.exports.getScreenHeight() }
 }
 
 function start() {

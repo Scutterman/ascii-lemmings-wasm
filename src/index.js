@@ -22,6 +22,7 @@ wasmRunner.onmessage = (e) => {
       })
     break
     case 'dimensionscomplete':
+      setScreenSize(e.data.screenSize)      
       wasmRunner.postMessage({ instruction: 'start' })
     break
     case 'startcomplete':
@@ -47,6 +48,15 @@ window.addEventListener('mousemove', function(e) {
 clickTarget.addEventListener('click', function() {
   wasmRunner.postMessage({ clicked: true })
 })
+
+function setScreenSize(screenSize) {
+  const style = document.createElement('style')
+  style.setAttribute('type', 'text/css')
+  style.appendChild(document.createTextNode(
+    '#screen, #screen div, #click-target, .grid { width: ' + screenSize.width + 'px; height: ' + screenSize.height + 'px; }'
+  ))
+  document.head.appendChild(style)
+}
 
 function measureOneCharacter() {
   const measeureTextBox = document.createElement('span')

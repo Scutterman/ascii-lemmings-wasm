@@ -5,7 +5,9 @@ import { Lemming } from './lemming'
 import { BaseLevel } from './levels/baseLevel'
 import { EndSlate } from './levels/endSlate'
 import { TitleScreen } from './levels/titleScreen'
+import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from './map'
 import { LemmingGift, LevelState } from './types'
+import { UPSCALE_MULTIPLIER } from './upscale'
 
 export const gameState = new GameState()
 export let currentLevel: BaseLevel
@@ -54,6 +56,13 @@ export function start(): boolean {
   }
   
   return true
+}
+
+export function getScreenWidth(): f32 {
+  return f32(BOUNDARIES_X + VISIBLE_X) * f32(UPSCALE_MULTIPLIER) * gameState.characterWidth
+}
+export function getScreenHeight(): f32 {
+  return f32(BOUNDARIES_Y + VISIBLE_Y + CONTROLS_Y) * f32(UPSCALE_MULTIPLIER) * gameState.characterHeight
 }
 
 export declare function log(text: string): void
