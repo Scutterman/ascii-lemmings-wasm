@@ -14,9 +14,15 @@ export class LemmingActionControl extends UIControl {
     super(positionOnScreen, '', () => {}, 'GIFT_COUNTER_' + gift.toString())
   }
 
+  /** start overrides */
   public clicked(): void { gameState.setSelectedGift(this.gift) }
+  /** end overrides */
 
   public getTextForRender(isDirty: boolean): string[] {
+    if (!this.hasMouseFocus) {
+      this.animation.reset()
+    }
+    
     // Step 1: Get label text
     const labelText = getRenderedTextArray(this.getText())
     // Step 2: Get animation frame

@@ -7,6 +7,10 @@ export class Animation {
     this.frames = frames
   }
 
+  public reset(): void {
+    this.currentFrameIndex = 0
+  }
+
   public getNextFrame(progressFrame: boolean): AnimationFrame {
     const frame = this.frames[this.currentFrameIndex]
 
