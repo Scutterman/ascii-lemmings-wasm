@@ -8,7 +8,8 @@ import { getRenderedTextArray, getSizeFromRenderedTextArray, lineBreak } from '.
 
 export class Panel {
   constructor(public position: Vec2, public items: UILabel[] = []) {}
-  public render(map: LevelTiles): void {
+
+  public render(map: LevelTiles, _isDirty: boolean): void {
     if (this.items.length == 0) { return }
 
     const nextLabelPosition = this.position.clone()

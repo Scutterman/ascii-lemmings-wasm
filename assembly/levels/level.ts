@@ -234,7 +234,7 @@ export class Level extends BaseLevel {
       renderTextToScreen(lemming.renderFrame(this.isDirty), lemming.position, false, colour)
     }
 
-    this.renderControls()
+    this.renderControls(this.isDirty)
 
     this.isDirty = false
   }

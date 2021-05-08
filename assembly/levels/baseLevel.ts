@@ -114,7 +114,7 @@ export abstract class BaseLevel {
     return map
   }
 
-  protected renderControls(): void {
+  protected renderControls(isDirty: boolean): void {
     let maxY: u16 = VISIBLE_Y + CONTROLS_Y + BOUNDARIES_Y
     let maxX: u16 = VISIBLE_X + BOUNDARIES_X
     
@@ -130,15 +130,15 @@ export abstract class BaseLevel {
     }
 
     for (let i = 0; i < this.uiControls.length; i++) {
-      this.uiControls[i].render(map)
+      this.uiControls[i].render(map, isDirty)
     }
 
     for (let i = 0; i < this.uiLabels.length; i++) {
-      this.uiLabels[i].render(map)
+      this.uiLabels[i].render(map, isDirty)
     }
 
     for (let i = 0; i < this.uiPanels.length; i++) {
-      this.uiPanels[i].render(map)
+      this.uiPanels[i].render(map, isDirty)
     }
     
     this.render(map, false)

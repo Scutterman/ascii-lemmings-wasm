@@ -29,7 +29,7 @@ export class UILabel {
     return true
   }
 
-  public render(map: LevelTiles): void {
+  public render(map: LevelTiles, _isDirty: boolean): void {
     if (!this.isVisible(map)) { return }
     renderUiLabel(this)
   }
