@@ -36,22 +36,24 @@ function processInputs(): void {
     isCursorInBounds(true)
   )
   
-  if (gameState.mouseClicked) {
-    gameState.mouseClicked = false
+  const clickProcessed = !gameState.mouseClicked
+  gameState.mouseClicked = false
 
-    if (isCursorInBounds(false)) {
-      const controlHasBeenClicked = processControlClicks()
-      if (controlHasBeenClicked) {
-        processLemmingClick = false
-      }
+  if (isCursorInBounds(false)) {
+    const controlHasBeenClicked = processControlClicks(clickProcessed)
+    if (controlHasBeenClicked) {
+      processLemmingClick = false
     }
   }
-  
+
   currentLevel.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
 }
 
-function processControlClicks(): boolean {
-  let clickProcessed = false
+function processControlClicks(clickProcessed: boolean): boolean {
+  for (let i = 0; i < currentLevel.uiLabels.length; i++) {
+    clickProcessed = processLabelEvents(currentLevel.uiLabels[i], clickProcessed)
+  }
+
   for (let i = 0; i < currentLevel.uiControls.length; i++) {
     clickProcessed = processLabelEvents(currentLevel.uiControls[i], clickProcessed)
   }
@@ -67,18 +69,13 @@ function processControlClicks(): boolean {
 }
 
 function processLabelEvents(label: UILabel, clickProcessed: boolean): boolean {
-  if (clickProcessed) {
-    label.setFocus(false)
-  } else {
-    const hasFocus = label.isInBounds(gameState.mouseTileX, gameState.mouseTileY)
-    label.setFocus(hasFocus)
-    
-    if (hasFocus && label instanceof UIControl) {
-      (label as UIControl).clicked()
-      clickProcessed = true
-    }
+  const hasFocus = label.isInBounds(gameState.mouseTileX, gameState.mouseTileY)
+  label.setFocus(hasFocus)
+  if (!clickProcessed && hasFocus && label instanceof UIControl) {
+    (label as UIControl).clicked()
+    clickProcessed = true
   }
-
+  
   return clickProcessed
 }
 
