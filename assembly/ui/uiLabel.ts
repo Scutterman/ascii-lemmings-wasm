@@ -1,3 +1,4 @@
+import { renderUiLabel } from "../loop";
 import { Vec2 } from "../position";
 import { LevelTiles } from "../types";
 
@@ -26,5 +27,10 @@ export class UILabel {
     }
 
     return true
+  }
+
+  public render(map: LevelTiles): void {
+    if (!this.isVisible(map)) { return }
+    renderUiLabel(this)
   }
 }

@@ -1,6 +1,5 @@
 import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, mapToTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { Vec2 } from "../position"
-import { renderPanel, renderUiLabel } from "../loop"
 import { LemmingGift, LevelTiles } from "../types"
 import { UIControl } from "../ui/uiControl"
 import { UILabel } from "../ui/uiLabel"
@@ -131,19 +130,15 @@ export abstract class BaseLevel {
     }
 
     for (let i = 0; i < this.uiControls.length; i++) {
-      if (this.uiControls[i].isVisible(map)) {
-        renderUiLabel(this.uiControls[i])
-      }
+      this.uiControls[i].render(map)
     }
 
     for (let i = 0; i < this.uiLabels.length; i++) {
-      if (this.uiLabels[i].isVisible(map)) {
-        renderUiLabel(this.uiLabels[i])
-      }
+      this.uiLabels[i].render(map)
     }
 
     for (let i = 0; i < this.uiPanels.length; i++) {
-      renderPanel(this.uiPanels[i], map)
+      this.uiPanels[i].render(map)
     }
     
     this.render(map, false)
