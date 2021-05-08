@@ -23,16 +23,24 @@ export class LemmingActionControl extends UIControl {
       this.animation.reset()
     }
     
-    // Step 1: Get label text
     const labelText = getRenderedTextArray(this.getText())
-    // Step 2: Get animation frame
     const shouldProgressAnimation = isDirty && this.hasMouseFocus
     const animationText = getRenderedTextArray(this.animation.getNextFrame(shouldProgressAnimation)[0][0])
-    // Step 3: Compose item so it is stacked vertically with label on top and animation frame below
+    const maxLabelWidth: i32 = labelText.length > 0 ? labelText[0].length : 0
+    const maxAnimationWidth: i32 = animationText.length > 0 ? animationText[0].length : 0
+    
+    // Ensure both elements are centred in the control
+    if (maxAnimationWidth < maxLabelWidth) {
+      const padding = ' '.repeat(i32(Math.floor(maxLabelWidth - maxAnimationWidth) / 2))
+      for (let row = 0; row < animationText.length; row++) { animationText[row] = padding + animationText[row] + padding }
+    } else if (maxLabelWidth < maxAnimationWidth) {
+      const padding = ' '.repeat(i32(Math.floor(maxAnimationWidth - maxLabelWidth) / 2))
+      for (let row = 0; row < labelText.length; row++) { labelText[row] = padding + labelText[row] + padding }
+    }
+
     for (let row = 0; row < animationText.length; row++) {
       labelText.push(animationText[row])
     }
-    // Step 4: Render as relative element
     return labelText
   }
 }
