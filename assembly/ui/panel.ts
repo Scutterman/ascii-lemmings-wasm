@@ -46,6 +46,7 @@ export class Panel {
     for (let i = 0; i < texts.length; i++) {
       renderRelativeElement(texts[i].join(lineBreak), nextLabelPosition, borders[i])
       this.items[panelItemIndexes[i]].setPosition(nextLabelPosition.clone())
+      this.items[panelItemIndexes[i]].setSize(sizes[i])
       nextLabelPosition.x += sizes[i].x + 3
     }
   }
