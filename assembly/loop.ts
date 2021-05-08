@@ -183,7 +183,7 @@ export function renderCursor(): void {
 }
 
 export function renderUiLabel(element: UILabel): Rect {
-  return renderTextArrayToScreen(getRenderedTextArray(element.getText()), element.getPosition(), element instanceof UIControl)
+  return renderTextArrayToScreen(element.getTextForRender(false), element.getPosition(), element instanceof UIControl)
 }
 
 export function getRenderedTextArray(textToRender: string): string[] {
@@ -207,6 +207,8 @@ export function getRenderedTextArray(textToRender: string): string[] {
 }
 
 export function getSizeFromRenderedTextArray(text: string[]): Vec2 {
+  if (text.length == 0) { return new Vec2(0,0) }
+
   return new Vec2(
     i16(Math.ceil(f32(text[0].length) / f32(UPSCALE_MULTIPLIER))),
     i16(Math.ceil(f32(text.length) / f32(UPSCALE_MULTIPLIER)))

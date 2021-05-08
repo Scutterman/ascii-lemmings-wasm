@@ -6,8 +6,9 @@ export class UIControl extends UILabel {
   constructor(
     positionOnScreen: Vec2,
     text: string,
-    private action: UIAction
-  ) { super(positionOnScreen, text) }
+    private action: UIAction,
+    tag: string = ''
+  ) { super(positionOnScreen, text, tag) }
 
   public clicked(): void { this.action() }
 }

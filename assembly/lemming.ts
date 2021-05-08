@@ -12,6 +12,10 @@ import { removeTerrain, SurroundingTiles } from "./map";
 import { Vec2 } from "./position";
 import { LemmingGift } from "./types";
 
+export class BomberAnimation extends Animation {
+  constructor() { super([[['5']], [['4']], [['3']], [['2']], [['1']], [['0']]]) }
+}
+
 export class Lemming {
   movingRight: boolean = true
   removed: boolean = false
@@ -23,7 +27,7 @@ export class Lemming {
   isClimber: boolean = false
   private isExploding: boolean = false
   private framesUntilExplosion: u16 = 5
-  private explosionAnimation: Animation = new Animation([[['5']], [['4']], [['3']], [['2']], [['1']], [['0']]])
+  private explosionAnimation: Animation = new BomberAnimation()
 
   public update(surroundingTiles: SurroundingTiles): void {
     const processUpdate = !this.isExploding || this.updateExplosion()

@@ -1,14 +1,22 @@
 import { gameState, lemmings } from ".."
-import { Lemming } from "../lemming"
+import { BomberAnimation, Lemming } from "../lemming"
 import { addLayerToScreen, getRenderedTextArray, renderTextArrayToScreen, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
-import { Block } from "../actions/block"
+import { Block, BlockerAnimation } from "../actions/block"
 import { UILabel } from "../ui/uiLabel"
 import { Panel } from "../ui/panel"
+import { Animation } from "../animation"
+import { LemmingActionControl } from "../ui/lemmingActionControl"
+import { BasherAnimation } from "../actions/basher"
+import { BuilderAnimation } from "../actions/builder"
+import { ClimberAnimation } from "../actions/climb"
+import { DiggerAnimation } from "../actions/digger"
+import { MinerAnimation } from "../actions/miner"
+import { FloaterAnimation } from "../actions/umbrella"
 
 export class Level extends BaseLevel {
   private canSpawnMore: boolean = true
@@ -26,29 +34,14 @@ export class Level extends BaseLevel {
     this.uiPanels.push(this.skillsLabelPanel)
 
     if (!this.isMetaScreen) {
-      this.addSkillToPanel('C', () => { gameState.setSelectedGift(LemmingGift.ClimbingBoots) })
-      this.addSkillLabelToPanel(LemmingGift.ClimbingBoots)
-      
-      this.addSkillToPanel('U', () => { gameState.setSelectedGift(LemmingGift.Umbrella) })
-      this.addSkillLabelToPanel(LemmingGift.Umbrella)
-      
-      this.addSkillToPanel('E', () => { gameState.setSelectedGift(LemmingGift.Bomb) })
-      this.addSkillLabelToPanel(LemmingGift.Bomb)
-      
-      this.addSkillToPanel('T', () => { gameState.setSelectedGift(LemmingGift.Block) })
-      this.addSkillLabelToPanel(LemmingGift.Block)
-      
-      this.addSkillToPanel('/', () => { gameState.setSelectedGift(LemmingGift.BrickSack) })
-      this.addSkillLabelToPanel(LemmingGift.BrickSack)
-      
-      this.addSkillToPanel('B', () => { gameState.setSelectedGift(LemmingGift.Hammer) })
-      this.addSkillLabelToPanel(LemmingGift.Hammer)
-      
-      this.addSkillToPanel('\\', () => { gameState.setSelectedGift(LemmingGift.Pickaxe) })
-      this.addSkillLabelToPanel(LemmingGift.Pickaxe)
-      
-      this.addSkillToPanel('D', () => { gameState.setSelectedGift(LemmingGift.Shovel) })
-      this.addSkillLabelToPanel(LemmingGift.Shovel)
+      this.addSkillToPanel(new ClimberAnimation(), LemmingGift.ClimbingBoots)
+      this.addSkillToPanel(new FloaterAnimation(), LemmingGift.Umbrella)
+      this.addSkillToPanel(new BomberAnimation(), LemmingGift.Bomb)
+      this.addSkillToPanel(new BlockerAnimation(), LemmingGift.Block)
+      this.addSkillToPanel(new BuilderAnimation(), LemmingGift.BrickSack)
+      this.addSkillToPanel(new BasherAnimation(), LemmingGift.Hammer)
+      this.addSkillToPanel(new MinerAnimation(), LemmingGift.Pickaxe)
+      this.addSkillToPanel(new DiggerAnimation(), LemmingGift.Shovel)
 
       this.uiLabels.push(new UILabel(new Vec2(2, this.buttonYCoordinate - 2), '', 'SELECTED_GIFT'))
       this.uiLabels.push(new UILabel(new Vec2(16, this.buttonYCoordinate - 2), '', 'LEMMING_INFO'))
@@ -105,12 +98,8 @@ export class Level extends BaseLevel {
     }
   }
 
-  public addSkillToPanel(text: string, action: UIAction): void {
-    this.skillsPanel.items.push(new UIControl(new Vec2(0, 0), text, action))
-  }
-
-  public addSkillLabelToPanel(gift: LemmingGift): void {
-    this.skillsLabelPanel.items.push(new UILabel(new Vec2(0, 0), '0', 'GIFT_COUNTER_' + gift.toString()))
+  public addSkillToPanel(skillAnimation: Animation, gift: LemmingGift): void {
+    this.skillsPanel.items.push(new LemmingActionControl(new Vec2(0, 0), gift, skillAnimation))
   }
 
   public updateSkillQuantity(gift: LemmingGift, newText: string): void {

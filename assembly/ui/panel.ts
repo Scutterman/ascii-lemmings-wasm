@@ -4,12 +4,12 @@ import { Vec2 } from "../position"
 import { LevelTiles } from "../types"
 import { UIControl } from "./uiControl"
 import { UILabel } from './uiLabel'
-import { getRenderedTextArray, getSizeFromRenderedTextArray, lineBreak } from '../loop'
+import { getSizeFromRenderedTextArray, lineBreak } from '../loop'
 
 export class Panel {
   constructor(public position: Vec2, public items: UILabel[] = []) {}
 
-  public render(map: LevelTiles, _isDirty: boolean): void {
+  public render(map: LevelTiles, isDirty: boolean): void {
     if (this.items.length == 0) { return }
 
     const nextLabelPosition = this.position.clone()
@@ -23,7 +23,7 @@ export class Panel {
     
     for (let i = 0; i < this.items.length; i++) {
       if (!this.items[i].isVisible(map)) { continue }
-      const text = getRenderedTextArray(this.items[i].getText())
+      const text = this.items[i].getTextForRender(isDirty)
       const size = getSizeFromRenderedTextArray(text)
       texts.push(text)
       sizes.push(size)
