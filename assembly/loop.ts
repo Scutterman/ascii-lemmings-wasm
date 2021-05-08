@@ -4,7 +4,6 @@ import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "./
 import { upscale, UPSCALE_MULTIPLIER } from './upscale'
 import { UILabel } from './ui/uiLabel'
 import { getCharacterRender } from "./text"
-import { Panel } from "./ui/panel"
 import { Rect, Vec2 } from "./position"
 import { UIControl } from "./ui/uiControl"
 
@@ -52,25 +51,35 @@ function processInputs(): void {
 }
 
 function processControlClicks(): boolean {
+  let clickProcessed = false
   for (let i = 0; i < currentLevel.uiControls.length; i++) {
-    if (currentLevel.uiControls[i].isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
-      currentLevel.uiControls[i].clicked()
-      return true
-    }
+    clickProcessed = processLabelEvents(currentLevel.uiControls[i], clickProcessed)
   }
 
   for (let i = 0; i < currentLevel.uiPanels.length; i++) {
     const panel = currentLevel.uiPanels[i]
     for (let j = 0; j < panel.items.length; j++) {
-      const item = panel.items[j]
-      if (item instanceof UIControl && (item as UIControl).isInBounds(gameState.mouseTileX, gameState.mouseTileY)) {
-        (item as UIControl).clicked()
-        return true
-      }
+      clickProcessed = processLabelEvents(panel.items[j], clickProcessed)
     }
   }
 
-  return false
+  return clickProcessed
+}
+
+function processLabelEvents(label: UILabel, clickProcessed: boolean): boolean {
+  if (clickProcessed) {
+    label.setFocus(false)
+  } else {
+    const hasFocus = label.isInBounds(gameState.mouseTileX, gameState.mouseTileY)
+    label.setFocus(hasFocus)
+    
+    if (hasFocus && label instanceof UIControl) {
+      (label as UIControl).clicked()
+      clickProcessed = true
+    }
+  }
+
+  return clickProcessed
 }
 
 function eventLoop(): void {
