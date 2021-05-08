@@ -5,11 +5,15 @@ import { LemmingAction } from "./lemmingAction"
 import { Walk } from "./walk";
 import { BLOCKS_FALLEN_BEFORE_UMBRELLA, Umbrella } from './umbrella'
 
+export class FallerAnimation extends Animation {
+  constructor() { super([[['Y']], [['T']]]) }
+}
+
 export class Fall extends LemmingAction {
   private blocksFallen: u8 = 0
 
   constructor() {
-    super(new Animation([[['Y']], [['T']]]))
+    super(new FallerAnimation())
   }
   
   public update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {

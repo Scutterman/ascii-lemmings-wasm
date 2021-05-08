@@ -4,9 +4,13 @@ import { SurroundingTiles, TILE_AIR } from "../map";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
+export class ClimberAnimation extends Animation {
+  constructor() { super([[['l']], [['c']]]) }
+}
+
 export class Climb extends LemmingAction {
   constructor() {
-    super(new Animation([[['l']], [['c']]]))
+    super(new ClimberAnimation())
   }
 
   private hasHitCeiling(surroundingTiles: SurroundingTiles): boolean {

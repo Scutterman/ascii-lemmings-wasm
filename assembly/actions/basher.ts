@@ -6,9 +6,13 @@ import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
+export class BasherAnimation extends Animation {
+  constructor() { super([[['B']]]) }
+}
+
 export class Basher extends LemmingAction {
   constructor() {
-    super(new Animation([[['B']]]))
+    super(new BasherAnimation())
   }
   
   update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {

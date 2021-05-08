@@ -6,9 +6,13 @@ import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
+export class MinerAnimation extends Animation {
+  constructor() { super([[['\\']]]) }
+}
+
 export class Miner extends LemmingAction {
   constructor() {
-    super(new Animation([[['\\']]]))
+    super(new MinerAnimation())
   }
   
   update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {

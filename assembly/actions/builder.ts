@@ -6,12 +6,16 @@ import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
+export class BuilderAnimation extends Animation {
+  constructor() { super([[['/']]]) }
+}
+
 export class Builder extends LemmingAction {
   private bricksRemaining: u8 = 12
   private moveOntoBrick: boolean = false
   
   constructor() {
-    super(new Animation([[['/']]]))
+    super(new BuilderAnimation())
   }
   
   update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {

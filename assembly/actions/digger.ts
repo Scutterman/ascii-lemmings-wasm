@@ -6,9 +6,13 @@ import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
+export class DiggerAnimation extends Animation {
+  constructor() { super([[['D']]]) }
+}
+
 export class Digger extends LemmingAction {
   constructor() {
-    super(new Animation([[['D']]]))
+    super(new DiggerAnimation())
   }
   
   update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {

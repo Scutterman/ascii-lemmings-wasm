@@ -4,9 +4,13 @@ import { SurroundingTiles } from "../map";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
+export class BlockerAnimation extends Animation {
+  constructor() { super([[['T']]]) }
+}
+
 export class Block extends LemmingAction {
   constructor() {
-    super(new Animation([[['T']]]))
+    super(new BlockerAnimation())
   }
   
   update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {

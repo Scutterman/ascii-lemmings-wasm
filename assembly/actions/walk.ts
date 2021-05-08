@@ -3,9 +3,13 @@ import { Lemming } from "../lemming";
 import { isWalkingDownStairs, SurroundingTiles, TILE_AIR, TILE_BRICK, TILE_EXIT } from "../map";
 import { LemmingAction } from "./lemmingAction"
 
+export class WalkerAnimation extends Animation {
+  constructor() { super([[['k']], [['l']]]) }
+}
+
 export class Walk extends LemmingAction {
   constructor() {
-    super(new Animation([[['k']], [['l']]]))
+    super(new WalkerAnimation())
   }
   
   public update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {

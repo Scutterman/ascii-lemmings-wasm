@@ -7,10 +7,14 @@ import { Walk } from "./walk";
 export const BLOCKS_FALLEN_BEFORE_UMBRELLA: u8 = 4
 export const FRAMES_BETWEEN_FALLING: u16 = 2
 
+export class FloaterAnimation extends Animation {
+  constructor() { super([[['U']]]) }
+}
+
 export class Umbrella extends LemmingAction {
   private framesSinceFall: u16 = 0
   constructor() {
-    super(new Animation([[['U']]]))
+    super(new FloaterAnimation())
   }
 
   update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
