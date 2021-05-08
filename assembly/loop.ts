@@ -1,4 +1,4 @@
-import { LemmingGift, LevelState, LevelTiles } from "./types"
+import { LemmingGift, LevelState } from "./types"
 import { currentLevel, gameState, loadEndSlate, log } from './index'
 import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "./map"
 import { upscale, UPSCALE_MULTIPLIER } from './upscale'
@@ -179,8 +179,10 @@ export function renderCursor(): void {
   renderRelativeElement(text, new Vec2(i16(gameState.mouseTileX), i16(gameState.mouseTileY)))
 }
 
-export function renderUiLabel(element: UILabel): Rect {
-  return renderTextArrayToScreen(element.getTextForRender(false), element.getPosition(), element instanceof UIControl)
+export function renderUiLabel(element: UILabel): void {
+  const labelDimensions = renderTextArrayToScreen(element.getTextForRender(false), element.getPosition(), element instanceof UIControl)
+  element.setPosition(labelDimensions.position)
+  element.setSize(labelDimensions.size)
 }
 
 export function getRenderedTextArray(textToRender: string): string[] {
@@ -213,24 +215,26 @@ export function getSizeFromRenderedTextArray(text: string[]): Vec2 {
 }
 
 export function renderTextArrayToScreen(text: string[], position: Vec2, border: boolean = true, colour: string = '#000000'): Rect {
+  const labelDimensions = new Rect(position.clone(), new Vec2(0,0))
   if (text.length == 0) {
-    return new Rect(position.clone(), new Vec2(0,0))
+    return labelDimensions
   }
   
   const size = getSizeFromRenderedTextArray(text)
-  const labelDimensions = new Rect(position.clone(), size)
-  if (position.x == -1) {
+  labelDimensions.size = size
+
+  if (labelDimensions.position.x == -1) {
     const mapLengthInBlocks = i16(VISIBLE_X + BOUNDARIES_X)
-    position.x = i16(f32(mapLengthInBlocks - labelDimensions.size.x) / 2)
+    labelDimensions.position.x = i16(f32(mapLengthInBlocks - labelDimensions.size.x) / 2)
   }
   
   
-  if (position.y == -1) {
+  if (labelDimensions.position.y == -1) {
     const mapHeightInBlocks = i16(VISIBLE_Y + BOUNDARIES_Y + CONTROLS_Y)
-    position.y = i16(f32(mapHeightInBlocks - labelDimensions.size.y) / 2)
+    labelDimensions.position.y = i16(f32(mapHeightInBlocks - labelDimensions.size.y) / 2)
   }
 
-  renderRelativeElement(text.join(lineBreak), position, border, colour)
+  renderRelativeElement(text.join(lineBreak), labelDimensions.position, border, colour)
 
   return labelDimensions
 }

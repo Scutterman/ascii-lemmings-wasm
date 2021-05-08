@@ -4,25 +4,28 @@ import { LevelTiles } from "../types";
 
 export class UILabel {
   protected hasMouseFocus: boolean = false
+  private size: Vec2 = new Vec2(0,0)
   constructor(
     protected positionOnScreen: Vec2,
     protected text: string,
     protected tag: string = ''
   ) { }
 
-  public getPosition(): Vec2 { return this.positionOnScreen }
-  public setPosition(postion: Vec2): void { this.positionOnScreen = postion }
+  public getPosition(): Vec2 { return this.positionOnScreen.clone() }
+  public setPosition(postion: Vec2): void { this.positionOnScreen = postion.clone() }
+  public getSize(): Vec2 { return this.size.clone() }
+  public setSize(size: Vec2): void { this.size = size.clone() }
   public getText(): string { return this.text }
   public getTag(): string { return this.tag }
   public updateText(text: string): void { this.text = text }
   public setFocus(hasFocus: boolean): void { this.hasMouseFocus = hasFocus }
 
   public isInBounds(x: i32, y: i32): boolean {
-    const textLength = this.getText().length
     const pos = this.getPosition()
+    const size = this.getSize()
     const posX = i32(pos.x)
     const posY = i32(pos.y)
-    return x >= posX && x <= (posX + textLength) && y == posY
+    return x >= posX && x <= (posX + size.x) && y >= posY && y <= (posY + size.y)
   }
   
   public isVisible(map: LevelTiles): boolean {
@@ -43,7 +46,7 @@ export class UILabel {
     return getRenderedTextArray(this.getText())
   }
 
-  public render(map: LevelTiles, isDirty: boolean): void {
+  public render(map: LevelTiles, _isDirty: boolean): void {
     if (!this.isVisible(map)) { return }
     renderUiLabel(this)
   }

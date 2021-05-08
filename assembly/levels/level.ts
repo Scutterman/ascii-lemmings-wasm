@@ -220,7 +220,9 @@ export class Level extends BaseLevel {
 
       const colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
       
-      renderTextArrayToScreen(getRenderedTextArray(lemming.renderFrame(this.isDirty)), lemming.position, false, colour)
+      const labelDimensions = renderTextArrayToScreen(getRenderedTextArray(lemming.renderFrame(this.isDirty)), lemming.position, false, colour)
+      lemming.position = labelDimensions.position
+      lemming.size = labelDimensions.size
     }
 
     this.renderControls(this.isDirty)
