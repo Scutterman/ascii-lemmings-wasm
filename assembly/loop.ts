@@ -183,7 +183,7 @@ export function renderCursor(): void {
 }
 
 export function renderUiLabel(element: UILabel): Rect {
-  return renderTextToScreen(element.getText(), element.getPosition(), element instanceof UIControl)
+  return renderTextArrayToScreen(getRenderedTextArray(element.getText()), element.getPosition(), element instanceof UIControl)
 }
 
 export function getRenderedTextArray(textToRender: string): string[] {
@@ -213,9 +213,7 @@ export function getSizeFromRenderedTextArray(text: string[]): Vec2 {
   )
 }
 
-export function renderTextToScreen(textToRender: string, position: Vec2, border: boolean = true, colour: string = '#000000'): Rect {
-  const text = getRenderedTextArray(textToRender)
-
+export function renderTextArrayToScreen(text: string[], position: Vec2, border: boolean = true, colour: string = '#000000'): Rect {
   if (text.length == 0) {
     return new Rect(position.clone(), new Vec2(0,0))
   }

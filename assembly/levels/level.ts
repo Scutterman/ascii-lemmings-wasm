@@ -1,6 +1,6 @@
 import { gameState, lemmings } from ".."
 import { Lemming } from "../lemming"
-import { addLayerToScreen, renderTextToScreen, renderToScreen } from "../loop"
+import { addLayerToScreen, getRenderedTextArray, renderTextArrayToScreen, renderToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
@@ -231,7 +231,7 @@ export class Level extends BaseLevel {
 
       const colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
       
-      renderTextToScreen(lemming.renderFrame(this.isDirty), lemming.position, false, colour)
+      renderTextArrayToScreen(getRenderedTextArray(lemming.renderFrame(this.isDirty)), lemming.position, false, colour)
     }
 
     this.renderControls(this.isDirty)
