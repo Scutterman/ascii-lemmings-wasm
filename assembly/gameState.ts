@@ -2,6 +2,7 @@ import { currentLevel, loadLevel } from "."
 import { AutoPlayer } from "./autoplayer"
 import { BaseLevel } from "./levels/baseLevel"
 import { DefaultLevel } from "./levels/defaultLevel"
+import { allowedUserInputCharacters } from "./text"
 import { LemmingGift, LevelState } from "./types"
 
 export const baseMillisecondsPerGameLoop: u16 = 1000 as u16
@@ -33,6 +34,8 @@ export class GameState {
   public framesSinceLastLemming: u16 = u16.MAX_VALUE
   public framesBetweenLemmingSpawns: u16 = 4
   public selectedGift: LemmingGift = LemmingGift.None
+
+  public userEnteredText: string = ''
 
   public canStart(): boolean {
     return (
@@ -86,5 +89,15 @@ export class GameState {
     if (this.fastForward) {
       this.millisecondsPerGameLoop /= fastForwardMultiplier
     }
+  }
+
+  public addTextCharacter(character: string): void {
+    if (allowedUserInputCharacters.includes(character)) {
+      this.userEnteredText += allowedUserInputCharacters
+    }
+  }
+
+  public resetText(): void {
+    this.userEnteredText = ''
   }
 }

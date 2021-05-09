@@ -59,6 +59,12 @@ export function start(): boolean {
   return true
 }
 
+export declare function keyPressListener(shouldListen: boolean): void
+
+export function keyDown(character: string): void {
+  gameState.addTextCharacter(character)
+}
+
 export function getScreenWidth(): f32 {
   return f32(BOUNDARIES_X + VISIBLE_X) * f32(UPSCALE_MULTIPLIER) * gameState.characterWidth
 }

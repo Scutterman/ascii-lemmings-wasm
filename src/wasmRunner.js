@@ -3,6 +3,9 @@ const importObject = {
   index: {
     log(msgPtr) {
       console.log(loadedModule.exports.__getString(msgPtr))
+    },
+    keyPressListener(shouldListen) {
+      postMessage({ instruction: 'keypresslistener', shouldListen })
     }
   },
   loop: {
@@ -26,12 +29,16 @@ let started = false
 
 onmessage = function(e) {
   if (started) {
-    if (e.data.mouseX != null && e.data.mouseY != null) {
-      loadedModule.instance.exports.updateMouseCoordinates(e.data.mouseX, e.data.mouseY)
-    }
+    if (e.data.instruction === 'keydown') {
+      loadedModule.instance.exports.keyDown(e.data.character)
+    } else {
+      if (e.data.mouseX != null && e.data.mouseY != null) {
+        loadedModule.instance.exports.updateMouseCoordinates(e.data.mouseX, e.data.mouseY)
+      }
 
-    if (e.data.clicked != null) {
-      loadedModule.instance.exports.registerMouseClick()
+      if (e.data.clicked != null) {
+        loadedModule.instance.exports.registerMouseClick()
+      }
     }
 
     // loop()

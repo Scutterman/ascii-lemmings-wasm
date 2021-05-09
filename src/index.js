@@ -5,9 +5,18 @@ const dimensions = measureOneCharacter()
 const wasmRunner = new Worker('wasmRunner.js')
 
 let started = false
+const keyPressListenerMessage = 'keypresslistener'
 wasmRunner.onmessage = (e) => {
   if (started) {
-    gameArea.innerHTML = e.data
+    if (e.data.instruction === keyPressListenerMessage) {
+      if (e.shouldListen) {
+        document.addEventListener('keydown', onKeyDown)
+      } else {
+        document.removeEventListener('keydown', onKeyDown)
+      }
+    } else {
+      gameArea.innerHTML = e.data
+    }
     return
   }
 
@@ -48,6 +57,13 @@ window.addEventListener('mousemove', function(e) {
 clickTarget.addEventListener('click', function() {
   wasmRunner.postMessage({ clicked: true })
 })
+
+function onKeyDown(e) {
+  // TODO:: May need to uppercase or lowercase the character based on what it defaults to and whether the shift key is pressed
+  // What about caps lock?
+  const character =  String.fromCharCode(e.keyCode)
+  wasmRunner.postMessage({ instruction: 'keydown', character })
+}
 
 function setScreenSize(screenSize) {
   const style = document.createElement('style')
