@@ -9,7 +9,7 @@ const keyPressListenerMessage = 'keypresslistener'
 wasmRunner.onmessage = (e) => {
   if (started) {
     if (e.data.instruction === keyPressListenerMessage) {
-      if (e.shouldListen) {
+      if (e.data.shouldListen) {
         document.addEventListener('keydown', onKeyDown)
       } else {
         document.removeEventListener('keydown', onKeyDown)
