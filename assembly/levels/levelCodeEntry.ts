@@ -1,4 +1,4 @@
-import { loadLevel, Difficulty, LEVEL_DIFFICULTY_CODES, keyPressListener, gameState, resetText, currentLevel } from "../index"
+import { loadLevel, LEVEL_DIFFICULTY_CODES, keyPressListener, gameState, resetText, currentLevel } from "../index"
 import { Vec2 } from "../position"
 import { Panel } from "../ui/panel"
 import { UIControl } from "../ui/uiControl"
@@ -32,11 +32,12 @@ export class LevelCodeEntry extends MetaScreen {
 
     this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Go", () => {
       const levelCode = gameState.userEnteredText
-      const difficulties = [Difficulty.Fun, Difficulty.Tricky, Difficulty.Taxing, Difficulty.Mayhem]
       let level: BaseLevel | null = null
-      for (let i = 0; i < difficulties.length; i++) {
-        if (LEVEL_DIFFICULTY_CODES.get(difficulties[i]).has(levelCode)) {
-          const levelFactory = LEVEL_DIFFICULTY_CODES.get(difficulties[i]).get(levelCode)
+
+      const levelCodes = LEVEL_DIFFICULTY_CODES.values()
+      for (let i = 0; i < levelCodes.length; i++) {
+        if (levelCodes[i].has(levelCode)) {
+          const levelFactory = levelCodes[i].get(levelCode)
           level = levelFactory()
           break
         }
