@@ -72,7 +72,7 @@ export abstract class BaseLevel {
     return mapClone
   }
 
-  protected updateLabel(tag: string, newText: string): void {
+  public updateLabel(tag: string, newText: string): void {
     const label = this.getUIByTag(tag)
     if (label != null) {
       label.updateText(newText)
