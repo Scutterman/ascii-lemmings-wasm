@@ -9,6 +9,7 @@ import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from './
 import { LemmingGift, LevelState } from './types'
 import { UPSCALE_MULTIPLIER } from './upscale'
 import { Level1 } from "./levels/one"
+import { allowedUserInputCharacters } from './text'
 
 export const gameState = new GameState()
 export let currentLevel: BaseLevel
@@ -62,7 +63,13 @@ export function start(): boolean {
 export declare function keyPressListener(shouldListen: boolean): void
 
 export function keyDown(character: string): void {
-  gameState.addTextCharacter(character)
+  if (allowedUserInputCharacters.includes(character)) {
+    gameState.userEnteredText += character
+  }
+}
+
+export function resetText(): void {
+  gameState.userEnteredText = ''
 }
 
 export function getScreenWidth(): f32 {
