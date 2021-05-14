@@ -1,7 +1,8 @@
 import { currentLevel } from "."
+import { Animation } from "./animation"
 import { Lemming } from "./lemming"
 import { Vec2 } from "./position"
-import { LevelMap, LevelTiles, Tile } from "./types"
+import { LevelMap, LevelTileDetail, LevelTiles, Tile, TileDetail } from "./types"
 
 export const TILE_BOUNDARY  = '_'
 export const TILE_SIDE      = '|'
@@ -32,15 +33,19 @@ export class SurroundingTiles {
   bottomRight: string
 }
 
-export function mapToTiles(map: LevelMap): LevelTiles {
-  const arr: LevelTiles = []
+export function mapToTiles(map: LevelMap): LevelTileDetail {
+  const arr: LevelTileDetail = []
   for (let i = 0; i < map.length; i++) {
-    arr[i] = map[i].split('')
+    arr.push([])
+    const cols = map[i].split('')
+    for (let j = 0; j < cols.length; j++) {
+      arr[i].push(new TileDetail(cols[j], '#000000', new Animation([])))
+    }
   }
   return arr
 }
 
-export function getSurroundingTiles(map: LevelTiles, position: Vec2): SurroundingTiles {
+export function getSurroundingTiles(map: LevelTileDetail, position: Vec2): SurroundingTiles {
   const surrounding: SurroundingTiles = {
     topLeft: getSurroundingTile(map, new Vec2(position.x - 1, position.y - 1)),
     topCentre: getSurroundingTile(map, new Vec2(position.x, position.y - 1)),
@@ -55,11 +60,11 @@ export function getSurroundingTiles(map: LevelTiles, position: Vec2): Surroundin
   return surrounding
 }
 
-function isOutOfMapBounds(map: LevelTiles, location: Vec2): boolean {
+function isOutOfMapBounds(map: LevelTileDetail, location: Vec2): boolean {
   return location.x < 0 || location.y < 0 || location.y >= map.length || location.x >= map[location.y].length
 }
 
-function getSurroundingTile(map: LevelTiles, position: Vec2): string {
+function getSurroundingTile(map: LevelTileDetail, position: Vec2): string {
   if (isOutOfMapBounds(map, position)) {
     return '_'
   }
@@ -67,7 +72,7 @@ function getSurroundingTile(map: LevelTiles, position: Vec2): string {
   if (currentLevel.isBlockerInLocation(position)) {
     return 'T'
   } else {
-    return map[position.y][position.x]
+    return map[position.y][position.x].tile
   }
 }
 
@@ -84,20 +89,20 @@ export function terrainIndestructible(tile: Tile): boolean {
   return tile == TILE_AIR || tile == TILE_ENTRANCE || tile == TILE_EXIT || tile == TILE_BOUNDARY || tile == TILE_SIDE || tile == TILE_BLOCKER
 }
 
-export function removeTerrain(map: LevelTiles, location: Vec2): boolean {
-  if (isOutOfMapBounds(map, location) || terrainIndestructible(map[location.y][location.x])) {
+export function removeTerrain(map: LevelTileDetail, location: Vec2): boolean {
+  if (isOutOfMapBounds(map, location) || terrainIndestructible(map[location.y][location.x].tile)) {
     return false
   } else {
-    map[location.y][location.x] = TILE_AIR
+    map[location.y][location.x].tile = TILE_AIR
     return true
   }
 }
 
-export function addBrick(map: LevelTiles, location: Vec2): boolean {
-  if (isOutOfMapBounds(map, location) || map[location.y][location.x] != TILE_AIR) {
+export function addBrick(map: LevelTileDetail, location: Vec2): boolean {
+  if (isOutOfMapBounds(map, location) || map[location.y][location.x].tile != TILE_AIR) {
     return false
   } else {
-    map[location.y][location.x] = TILE_BRICK
+    map[location.y][location.x].tile = TILE_BRICK
     return true
   }
 }

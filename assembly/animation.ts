@@ -24,4 +24,8 @@ export class Animation {
 
     return frame
   }
+
+  public clone(): Animation {
+    return new Animation(this.frames)
+  }
 }

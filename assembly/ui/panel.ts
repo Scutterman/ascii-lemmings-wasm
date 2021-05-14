@@ -1,7 +1,7 @@
 import { renderRelativeElement } from "../loop"
 import { VISIBLE_X, BOUNDARIES_X, VISIBLE_Y, BOUNDARIES_Y, CONTROLS_Y } from "../map"
 import { Vec2 } from "../position"
-import { LevelTiles } from "../types"
+import { LevelTileDetail, LevelTiles } from "../types"
 import { UIControl } from "./uiControl"
 import { UILabel } from './uiLabel'
 import { getSizeFromRenderedTextArray, lineBreak } from '../loop'
@@ -9,7 +9,7 @@ import { getSizeFromRenderedTextArray, lineBreak } from '../loop'
 export class Panel {
   constructor(public position: Vec2, public items: UILabel[] = []) {}
 
-  public render(map: LevelTiles, isDirty: boolean): void {
+  public render(map: LevelTileDetail, isDirty: boolean): void {
     if (this.items.length == 0) { return }
 
     const nextLabelPosition = this.position.clone()

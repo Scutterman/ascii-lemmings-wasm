@@ -1,9 +1,10 @@
-import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, mapToTiles, VISIBLE_X, VISIBLE_Y } from "../map"
+import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, mapToTiles, SurroundingTiles, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE, VISIBLE_X, VISIBLE_Y } from "../map"
 import { Vec2 } from "../position"
-import { LemmingGift, LevelTiles } from "../types"
+import { LemmingGift, LevelTiles, Tile, TileDetail, LevelTileDetail } from "../types"
 import { UIControl } from "../ui/uiControl"
 import { UILabel } from "../ui/uiLabel"
 import { Panel } from "../ui/panel"
+import { Animation } from "../animation"
 
 const buttonArea = mapToTiles([
   '|                                                                        |',
@@ -19,7 +20,6 @@ const buttonArea = mapToTiles([
 export abstract class BaseLevel {
   public numberOfLemmings: u8
   public numberOfLemmingsForSuccess: u8
-  public map: LevelTiles
   public timeLeft: u16 = 300
   public numberOfLemmingsSaved: u8 = 0
   public numberOfLemmingsRemoved: u8 = 0
@@ -38,16 +38,15 @@ export abstract class BaseLevel {
   public abstract giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void
   public abstract clone(): BaseLevel
   public abstract renderLevel(): void
-  protected abstract render(map: LevelTiles, isRenderingGameSection: boolean): void
+  protected abstract render(map: LevelTileDetail, isRenderingGameSection: boolean): void
 
   public abstract canUseSkill(skill: LemmingGift): boolean
   public abstract skillUsed(skill: LemmingGift): void
   public abstract skillSelected(skill: LemmingGift): void
   
-  constructor(public tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false) {
+  constructor(public tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, public map: LevelTileDetail, isMetaScreen: boolean = false) {
     this.numberOfLemmings = lemmingsToSpawn
     this.numberOfLemmingsForSuccess = numberOfLemmingsForSucces
-    this.map = map
     this.isMetaScreen = isMetaScreen 
   }
   
@@ -61,8 +60,8 @@ export abstract class BaseLevel {
     return u8(Math.round(this.numberOfLemmingsForSuccess / (this.numberOfLemmings * 0.01)))
   }
   
-  protected cloneMap(): LevelTiles {
-    const mapClone: LevelTiles = []
+  protected cloneMap(): LevelTileDetail {
+    const mapClone: LevelTileDetail = []
     for (let i = 0; i < this.map.length; i++) {
       for (let j = 0; j < this.map[i].length; j++) {
         if (j == 0) { mapClone[i] = [] }
@@ -108,9 +107,14 @@ export abstract class BaseLevel {
     return null
   }
 
-  private fillMap(x: u16, y: u16): LevelTiles {
-    let map: LevelTiles = []
-    for (let i: u16 = 0; i < y; i++) { map.push(' '.repeat(x).split('')) }
+  private fillMap(x: u16, y: u16): LevelTileDetail {
+    let map: LevelTileDetail = []
+    for (let i: u16 = 0; i < y; i++) { 
+      map.push([])
+      for (let j: u16 = 0; j < x; j++) {
+        map[i].push(new TileDetail(' ', '#000000', new Animation([])))
+      }
+      }
     return map
   }
 
@@ -124,7 +128,7 @@ export abstract class BaseLevel {
     if (!this.isMetaScreen) {
       for (let buttonAreaRow = 0; buttonAreaRow < buttonArea.length; buttonAreaRow++) {
         for (let buttonAreaColumn = 0; buttonAreaColumn < buttonArea[buttonAreaRow].length; buttonAreaColumn++) {
-          map[delta + buttonAreaRow][buttonAreaColumn] = buttonArea[buttonAreaRow][buttonAreaColumn]
+          map[delta + buttonAreaRow][buttonAreaColumn] = buttonArea[buttonAreaRow][buttonAreaColumn].clone()
         }
       }
     }
@@ -142,5 +146,40 @@ export abstract class BaseLevel {
     }
     
     this.render(map, false)
+  }
+
+  protected static characterToAnimation(character: string): Animation {
+    const line = [character, character, character, character]
+    return new Animation([[line, line, line, line]])
+  }
+  
+  protected static tileToTileDetail(tile: Tile, _surrounding: SurroundingTiles): TileDetail | null {
+    const detail = new TileDetail(tile, '#000000', new Animation([]))
+    switch(true) {
+      case tile == TILE_BOUNDARY:
+        detail.animation = this.characterToAnimation('-')
+      break;
+      case tile == TILE_SIDE:
+        detail.animation = this.characterToAnimation('|')
+      break;
+      case tile == TILE_EXIT: 
+        detail.colour = '#3b2a15'
+        detail.animation = new Animation([
+          [
+            '^  ^'.split(''),
+            '#/\\#'.split(''),
+            '/  \\'.split(''),
+            '|  |'.split('')
+          ],
+          [
+            'w  w'.split(''),
+            '#/\\#'.split(''),
+            '/  \\'.split(''),
+            '|  |'.split('')
+          ]
+        ])
+      break
+    }
+    return detail
   }
 }

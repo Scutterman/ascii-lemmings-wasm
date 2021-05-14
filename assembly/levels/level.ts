@@ -1,7 +1,7 @@
 import { gameState, lemmings } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
 import { addLayerToScreen, getRenderedTextArray, renderTextArrayToScreen, renderToScreen } from "../loop"
-import { LemmingGift, lemmingGiftLabel, LevelTiles, UIAction } from "../types"
+import { LemmingGift, lemmingGiftLabel, LevelTileDetail, LevelTiles, UIAction } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
@@ -25,7 +25,7 @@ export class Level extends BaseLevel {
   private skillsPanel: Panel
   private skillsLabelPanel: Panel
 
-  constructor(tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTiles, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 40) {
+  constructor(tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTileDetail, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 40) {
     super(tag, lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
 
     this.skillsPanel = new Panel(new Vec2(2, this.buttonYCoordinate))
@@ -235,15 +235,17 @@ export class Level extends BaseLevel {
     return new Level(this.tag, this.numberOfLemmings, this.numberOfLemmingsForSuccess, newMap, this.isMetaScreen, this.buttonYCoordinate)
   }
   
-  protected render(map: LevelTiles, isRenderingGameSection: boolean = false): void {
+  protected render(map: LevelTileDetail, isRenderingGameSection: boolean = false): void {
     const startY = isRenderingGameSection ? this.scrollPosition.y : 0
     const endY = isRenderingGameSection ? this.scrollPosition.y + VISIBLE_Y + BOUNDARIES_Y : map.length
     
     addLayerToScreen(isRenderingGameSection)
     for (let i = startY; i < endY; i++) {
+      let line = ''
+      for (let j = 0; j < map[i].length; j++) { line += map[i][j].tile }
       const mapLine = isRenderingGameSection
-        ? map[i].join('').slice(this.scrollPosition.x, this.scrollPosition.x + VISIBLE_X + BOUNDARIES_X)
-        : map[i].join('')
+        ? line.slice(this.scrollPosition.x, this.scrollPosition.x + VISIBLE_X + BOUNDARIES_X)
+        : line
       renderToScreen(mapLine);
     }
   }

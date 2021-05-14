@@ -1,7 +1,7 @@
 import { currentLevel } from "..";
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
-import { removeTerrain, SurroundingTiles, terrainIndestructible, TILE_AIR, TILE_BOUNDARY, TILE_SIDE } from "../map";
+import { removeTerrain, SurroundingTiles, terrainIndestructible } from "../map";
 import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";

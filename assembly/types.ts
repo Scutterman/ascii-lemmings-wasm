@@ -1,3 +1,4 @@
+import { Animation } from "./animation"
 
 export enum LemmingGift {
   None = 0,
@@ -42,3 +43,12 @@ export type LevelMap = string[]
 export type Tile = string
 
 export type UIAction = () => void
+
+export class TileDetail {
+  constructor(public tile: Tile, public colour: string, public animation: Animation) {}
+  public clone(): TileDetail {
+    return new TileDetail(this.tile, this.colour, this.animation.clone())
+  }
+}
+
+export type LevelTileDetail = TileDetail[][]
