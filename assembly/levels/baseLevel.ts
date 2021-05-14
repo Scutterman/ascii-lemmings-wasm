@@ -1,6 +1,6 @@
-import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, mapToTiles, SurroundingTiles, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE, VISIBLE_X, VISIBLE_Y } from "../map"
+import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, getSurroundingTiles, mapToTiles, SurroundingTiles, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE, VISIBLE_X, VISIBLE_Y } from "../map"
 import { Vec2 } from "../position"
-import { LemmingGift, LevelTiles, Tile, TileDetail, LevelTileDetail } from "../types"
+import { LemmingGift, Tile, TileDetail, LevelTileDetail, LevelMap } from "../types"
 import { UIControl } from "../ui/uiControl"
 import { UILabel } from "../ui/uiLabel"
 import { Panel } from "../ui/panel"
@@ -16,6 +16,8 @@ const buttonArea = mapToTiles([
   '|                                                                        |',
   '__________________________________________________________________________'
 ])
+
+type TileResolver = (tile: Tile, surrounding: SurroundingTiles) => TileDetail | null
 
 export abstract class BaseLevel {
   public numberOfLemmings: u8
@@ -152,6 +154,29 @@ export abstract class BaseLevel {
     return new Animation([[line, line, line, line]])
   }
   
+  protected static mapToTileDetail(map: LevelMap, tileResolver: TileResolver | null = null): LevelTileDetail {
+    const tiles = mapToTiles(map)
+    const tileDetail: LevelTileDetail = []
+    for (let row = 0; row < tiles.length; row++) {
+      tileDetail.push([])
+      for (let col = 0; col < tiles[row].length; col++) {
+        const surrounding = getSurroundingTiles(tiles, new Vec2(i16(col), i16(row)))
+        let maybeTile: TileDetail | null = null
+        if (tileResolver != null) {
+          maybeTile = tileResolver(tiles[row][col].tile, surrounding)
+        }
+        if (maybeTile == null) {
+          maybeTile = BaseLevel.tileToTileDetail(tiles[row][col].tile, surrounding)
+        }
+        if (maybeTile == null) {
+          maybeTile = tiles[row][col].clone()
+        }
+        tileDetail[row].push(maybeTile)
+      }
+    }
+    return tileDetail
+  }
+
   protected static tileToTileDetail(tile: Tile, _surrounding: SurroundingTiles): TileDetail | null {
     const detail = new TileDetail(tile, '#000000', new Animation([]))
     switch(true) {

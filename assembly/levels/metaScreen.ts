@@ -1,10 +1,10 @@
 import { addLayerToScreen } from "../loop";
-import { mapToTiles } from "../map";
+import { BaseLevel } from "./baseLevel";
 import { Level } from "./level";
 
 export class MetaScreen extends Level {
   constructor(tag: string) {
-    super(tag, 0, 0, mapToTiles([
+    super(tag, 0, 0, BaseLevel.mapToTileDetail([
       '__________________________________________________________________________',
       '|                                                                        |',
       '|                                                                        |',
