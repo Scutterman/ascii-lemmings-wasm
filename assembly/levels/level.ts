@@ -1,7 +1,7 @@
 import { gameState, lemmings } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
-import { addLayerToScreen, getRenderedTextArray, renderTextArrayToScreen, renderToScreen } from "../loop"
-import { LemmingGift, lemmingGiftLabel, LevelTileDetail, LevelTiles, UIAction } from "../types"
+import { addLayerToScreen, getRenderedTextArray, renderTextArrayToScreen } from "../loop"
+import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
@@ -226,17 +226,24 @@ export class Level extends BaseLevel {
   }
   
   protected render(map: LevelTileDetail, isRenderingGameSection: boolean = false): void {
+    addLayerToScreen(isRenderingGameSection)
     const startY = isRenderingGameSection ? this.scrollPosition.y : 0
     const endY = isRenderingGameSection ? this.scrollPosition.y + VISIBLE_Y + BOUNDARIES_Y : map.length
+    const startX = this.scrollPosition.x
+    const endX = this.scrollPosition.x + VISIBLE_X + BOUNDARIES_X
     
-    addLayerToScreen(isRenderingGameSection)
-    for (let i = startY; i < endY; i++) {
-      let line = ''
-      for (let j = 0; j < map[i].length; j++) { line += map[i][j].tile }
-      const mapLine = isRenderingGameSection
-        ? line.slice(this.scrollPosition.x, this.scrollPosition.x + VISIBLE_X + BOUNDARIES_X)
-        : line
-      renderToScreen(mapLine);
+    for (let row: i16 = startY; row < endY; row++) {
+      for (let col: i16 = startX; col < endX; col++) {
+        const text: string[] = []
+        const frame = map[row][col].animation.getNextFrame(this.isDirty)
+        for (let frameRow = 0; frameRow < frame.length; frameRow++) {
+          if (frameRow >= text.length) { text.push('') }
+          for (let frameCol = 0; frameCol < frame[frameRow].length; frameCol++) {
+            text[frameRow] += frame[frameRow][frameCol]
+          }
+        }
+        renderTextArrayToScreen(text, new Vec2(col, row), false, map[row][col].colour)
+      }
     }
   }
 }
