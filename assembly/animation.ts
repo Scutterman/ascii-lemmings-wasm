@@ -12,6 +12,7 @@ export class Animation {
   }
 
   public getNextFrame(progressFrame: boolean): AnimationFrame {
+    if (this.frames.length == 0) { return [] }
     const frame = this.frames[this.currentFrameIndex]
 
     if (progressFrame) {
