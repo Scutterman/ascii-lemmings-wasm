@@ -1,4 +1,4 @@
-import { currentLevel } from ".";
+import { currentLevel, lemmings } from ".";
 import { Basher } from "./actions/basher";
 import { Block } from "./actions/block";
 import { Builder } from "./actions/builder";
@@ -125,4 +125,14 @@ export class Lemming {
     }
     return true
   }
+}
+
+export function isBlockerInLocation(location: Vec2): boolean {
+  for (let i = 0; i < lemmings.length; i++) {
+    if (lemmings[i].position.equals(location) && lemmings[i].action instanceof Block) {
+      return true
+    }
+  }
+
+  return false
 }

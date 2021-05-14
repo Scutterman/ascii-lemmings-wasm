@@ -191,16 +191,6 @@ export class Level extends BaseLevel {
     }
   }
   
-  public isBlockerInLocation(location: Vec2): boolean {
-    for (let i = 0; i < lemmings.length; i++) {
-      if (lemmings[i].position.equals(location) && lemmings[i].action instanceof Block) {
-        return true
-      }
-    }
-
-    return false
-  }
-  
   public renderLevel(): void {
     const map = this.cloneMap()
     this.render(map, true)

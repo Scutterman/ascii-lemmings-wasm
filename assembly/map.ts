@@ -1,8 +1,8 @@
 import { currentLevel } from "."
 import { Animation } from "./animation"
-import { Lemming } from "./lemming"
+import { isBlockerInLocation, Lemming } from "./lemming"
 import { Vec2 } from "./position"
-import { LevelMap, LevelTileDetail, LevelTiles, Tile, TileDetail } from "./types"
+import { LevelMap, LevelTileDetail, Tile, TileDetail } from "./types"
 
 export const TILE_BOUNDARY  = '_'
 export const TILE_SIDE      = '|'
@@ -69,7 +69,7 @@ function getSurroundingTile(map: LevelTileDetail, position: Vec2): string {
     return '_'
   }
 
-  if (currentLevel.isBlockerInLocation(position)) {
+  if (isBlockerInLocation(position)) {
     return 'T'
   } else {
     return map[position.y][position.x].tile

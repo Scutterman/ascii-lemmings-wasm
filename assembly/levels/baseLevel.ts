@@ -34,7 +34,6 @@ export abstract class BaseLevel {
   public abstract updateLemmings(): void
   public abstract gameLoop(): boolean
   public abstract nuke(): void
-  public abstract isBlockerInLocation(location: Vec2): boolean
   public abstract giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void
   public abstract clone(): BaseLevel
   public abstract renderLevel(): void
