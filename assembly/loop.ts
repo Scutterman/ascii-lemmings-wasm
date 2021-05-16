@@ -148,12 +148,19 @@ const loopCompleted = (start: i64): void => {
   onEventLoopComplete(timeTaken)
 }
 
+declare function removeElement(elementId: string): void;
+declare function renderBackground(content: string): void;
+declare function renderMap(content: string): void;
 declare function render(output: string): void;
 declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 
 let output = ''
 let outputSuffix = ''
 let relativeItems = ''
+let backgroundLayer = ''
+let mapTiles = ''
+let mapTilesToRemove: string[] = []
+let relativeItemId = 1
 export const lineBreak = '<br />'
 
 function getPositionInPixels(blockPosition: Vec2): Vec2 {
@@ -214,7 +221,7 @@ export function getSizeFromRenderedTextArray(text: string[]): Vec2 {
   )
 }
 
-export function renderTextArrayToScreen(text: string[], position: Vec2, border: boolean = true, colour: string = '#000000'): Rect {
+export function getTextDimensions(text: string[], position: Vec2): Rect {
   const labelDimensions = new Rect(position.clone(), new Vec2(0,0))
   if (text.length == 0) {
     return labelDimensions
@@ -234,16 +241,51 @@ export function renderTextArrayToScreen(text: string[], position: Vec2, border: 
     labelDimensions.position.y = i16(f32(mapHeightInBlocks - labelDimensions.size.y) / 2)
   }
 
-  renderRelativeElement(text.join(lineBreak), labelDimensions.position, border, colour)
-
   return labelDimensions
 }
 
-export function renderRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): void {
+export function renderTextArrayToScreen(text: string[], position: Vec2, border: boolean = true, colour: string = '#000000'): Rect {
+  const labelDimensions = getTextDimensions(text, position)
+  renderRelativeElement(text.join(lineBreak), labelDimensions.position, border, colour)
+  return labelDimensions
+}
+
+class RelativeElement {
+  constructor(public html: string, public id: string) {}
+}
+
+export function constructRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000', needsId: boolean = false): RelativeElement {
   const pixelPosition = getPositionInPixels(blockPosition)
   const borderStyles = border ? 'box-shadow: inset 0 0 1px #000000' : ''
-  const relativeItem = '<span style="display: inline-block; width: auto; height: auto; position: absolute; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '; color: ' + colour + '">' + text + '</span>'
-  relativeItems += relativeItem
+  const elementId = needsId ? 'id="RELATIVE_' + relativeItemId.toString() + '"' : ''
+  relativeItemId++
+  const html = '<span ' + elementId + ' style="display: inline-block; width: auto; height: auto; position: absolute; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '; color: ' + colour + '">' + text + '</span>'
+  return new RelativeElement(html, elementId)
+}
+
+export function renderRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): string {
+  const element = constructRelativeElement(text, blockPosition, border, colour, false)
+  relativeItems += element.html
+  return element.id
+}
+
+export function removeMapTile(elementId: string): void {
+  if (elementId.length > 0) {
+    mapTilesToRemove.push(elementId)
+  }
+}
+
+export function renderMapTile(text: string[], blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): string {
+  const tileDimensions = getTextDimensions(text, blockPosition)
+  const element = constructRelativeElement(text.join(lineBreak), tileDimensions.position, border, colour, true)
+  mapTiles += element.html
+  return element.id
+}
+
+export function renderBackgroundToScreen(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): string {
+  const element = constructRelativeElement(text, blockPosition, border, colour, false)
+  backgroundLayer += element.html
+  return element.id
 }
 
 export function renderToScreen(text: string, colour: string = ''): void {
@@ -263,6 +305,20 @@ export function renderToScreen(text: string, colour: string = ''): void {
 
 export function renderComplete(): void {
   output += outputSuffix
+  if (backgroundLayer != '') {
+    renderBackground('<div class="screen">' + backgroundLayer + '</div>')
+  }
+
+  if (mapTilesToRemove.length > 0) {
+    for (let i = 0; i < mapTilesToRemove.length; i++) {
+      removeElement(mapTilesToRemove[i])
+    }
+  }
+  
+  if (mapTiles != '') {
+    renderMap(mapTiles)
+  }
+  
   if (relativeItems != '') {
     output += '<div class="screen">' + relativeItems + '</div>'
   }
@@ -273,6 +329,8 @@ export function addLayerToScreen(clearBeforeAdd: boolean = false): void {
   outputSuffix = '</div>'
   if (clearBeforeAdd) {
     output = ''
+    backgroundLayer = ''
+    mapTiles = ''
     relativeItems = ''
   }
 

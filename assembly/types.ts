@@ -45,9 +45,24 @@ export type Tile = string
 export type UIAction = () => void
 
 export class TileDetail {
-  constructor(public tile: Tile, public colour: string, public animation: Animation) {}
+  constructor(
+    public tile: Tile,
+    public colour: string,
+    public animation: Animation,
+    public elementId: string = '',
+    public needsRemoval: boolean = false,
+    public isDirty: boolean = true
+  ) {}
+  
   public clone(): TileDetail {
-    return new TileDetail(this.tile, this.colour, this.animation.clone())
+    return new TileDetail(
+      this.tile,
+      this.colour,
+      this.animation.clone(),
+      this.elementId,
+      this.needsRemoval,
+      this.isDirty
+    )
   }
 }
 

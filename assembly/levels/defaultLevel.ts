@@ -1,5 +1,4 @@
-import { Vec2 } from "../position";
-import { LemmingGift, LevelTileDetail, LevelTiles } from "../types";
+import { LemmingGift, LevelTileDetail } from "../types";
 import { BaseLevel } from "./baseLevel";
 
 export class DefaultLevel extends BaseLevel {

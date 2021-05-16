@@ -1,9 +1,9 @@
-import { gameState, lemmings } from ".."
+import { gameState, lemmings, log } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
-import { addLayerToScreen, getRenderedTextArray, renderTextArrayToScreen } from "../loop"
+import { addLayerToScreen, getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
 import { BaseLevel } from "./baseLevel"
-import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, VISIBLE_X, VISIBLE_Y } from "../map"
+import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { Block, BlockerAnimation } from "../actions/block"
@@ -192,8 +192,8 @@ export class Level extends BaseLevel {
   }
   
   public renderLevel(): void {
-    const map = this.cloneMap()
-    this.render(map, true)
+    addLayerToScreen(true)
+    this.render(this.map, true)
 
     this.updateLabel('TIMER', this.timeLeft.toString())
 
@@ -226,14 +226,27 @@ export class Level extends BaseLevel {
   }
   
   protected render(map: LevelTileDetail, isRenderingGameSection: boolean = false): void {
-    addLayerToScreen(isRenderingGameSection)
     const startY = isRenderingGameSection ? this.scrollPosition.y : 0
     const endY = isRenderingGameSection ? this.scrollPosition.y + VISIBLE_Y + BOUNDARIES_Y : map.length
     const startX = this.scrollPosition.x
     const endX = this.scrollPosition.x + VISIBLE_X + BOUNDARIES_X
     
+    let renderedItems = 0
+
     for (let row: i16 = startY; row < endY; row++) {
       for (let col: i16 = startX; col < endX; col++) {
+        if (map[row][col].needsRemoval) {
+          removeMapTile(map[row][col].elementId)
+          map[row][col].needsRemoval = false
+          map[row][col].isDirty = false
+          continue
+        }
+        
+        if (map[row][col].tile == TILE_AIR || !map[row][col].isDirty) {
+          map[row][col].isDirty = false
+          continue
+        }
+        
         const text: string[] = []
         const frame = map[row][col].animation.getNextFrame(this.isDirty)
         for (let frameRow = 0; frameRow < frame.length; frameRow++) {
@@ -242,8 +255,15 @@ export class Level extends BaseLevel {
             text[frameRow] += frame[frameRow][frameCol]
           }
         }
-        renderTextArrayToScreen(text, new Vec2(col, row), false, map[row][col].colour)
+        
+        map[row][col].elementId = renderMapTile(text, new Vec2(col, row), false, map[row][col].colour)
+        map[row][col].isDirty = false
+        renderedItems++
       }
+    }
+
+    if (renderedItems > 0) {
+      log('Rendered: ' + renderedItems.toString())
     }
   }
 }

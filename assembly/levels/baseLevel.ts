@@ -48,7 +48,10 @@ export abstract class BaseLevel {
   constructor(public tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, public map: LevelTileDetail, isMetaScreen: boolean = false) {
     this.numberOfLemmings = lemmingsToSpawn
     this.numberOfLemmingsForSuccess = numberOfLemmingsForSucces
-    this.isMetaScreen = isMetaScreen 
+    this.isMetaScreen = isMetaScreen
+    if (!this.isMetaScreen) {
+      this.renderControlBorders()
+    }
   }
   
   public getLemmingSavedPercent(): u8 {
@@ -66,7 +69,7 @@ export abstract class BaseLevel {
     for (let i = 0; i < this.map.length; i++) {
       for (let j = 0; j < this.map[i].length; j++) {
         if (j == 0) { mapClone[i] = [] }
-        mapClone[i].push(this.map[i][j])
+        mapClone[i].push(this.map[i][j].clone())
       }
     }
     return mapClone
@@ -115,17 +118,17 @@ export abstract class BaseLevel {
       for (let j: u16 = 0; j < x; j++) {
         map[i].push(new TileDetail(' ', '#000000', new Animation([])))
       }
-      }
+    }
     return map
   }
 
-  protected renderControls(isDirty: boolean): void {
+  private renderControlBorders(): void {
     let maxY: u16 = VISIBLE_Y + CONTROLS_Y + BOUNDARIES_Y
     let maxX: u16 = VISIBLE_X + BOUNDARIES_X
     
     let map = this.fillMap(maxX, maxY)
     const delta = map.length - buttonArea.length
-
+  
     if (!this.isMetaScreen) {
       for (let buttonAreaRow = 0; buttonAreaRow < buttonArea.length; buttonAreaRow++) {
         for (let buttonAreaColumn = 0; buttonAreaColumn < buttonArea[buttonAreaRow].length; buttonAreaColumn++) {
@@ -133,20 +136,22 @@ export abstract class BaseLevel {
         }
       }
     }
+    
+    this.render(map, false)
+  }
 
+  protected renderControls(isDirty: boolean): void {
     for (let i = 0; i < this.uiControls.length; i++) {
-      this.uiControls[i].render(map, isDirty)
+      this.uiControls[i].render()
     }
 
     for (let i = 0; i < this.uiLabels.length; i++) {
-      this.uiLabels[i].render(map, isDirty)
+      this.uiLabels[i].render()
     }
 
     for (let i = 0; i < this.uiPanels.length; i++) {
-      this.uiPanels[i].render(map, isDirty)
+      this.uiPanels[i].render(isDirty)
     }
-    
-    this.render(map, false)
   }
 
   protected static characterToAnimation(character: string): Animation {

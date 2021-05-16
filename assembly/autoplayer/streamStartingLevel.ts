@@ -3,7 +3,7 @@ import { mapToTiles } from "../map";
 
 export class StreamStartingLevel extends Level {
   constructor() {
-    super(41, 35, mapToTiles([
+    super('STARTING_SOON', 41, 35, mapToTiles([
       '__________________________________________',
       '|                                        |',
       '|   O                                    |',

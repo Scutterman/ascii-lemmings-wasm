@@ -9,6 +9,18 @@ const importObject = {
     }
   },
   loop: {
+    removeElement(msgPtr) {
+      const elementId = loadedModule.exports.__getString(msgPtr)
+      postMessage({ instruction: 'removeelement', elementId })
+    },
+    renderBackground(msgPtr) {
+      const content = loadedModule.exports.__getString(msgPtr)
+      postMessage({ instruction: 'renderbackgroundmessage', content })
+    },
+    renderMap(msgPtr) {
+      const content = loadedModule.exports.__getString(msgPtr)
+      postMessage({ instruction: 'rendermapmessage', content })
+    },
     render(msgPtr) {
       const output = loadedModule.exports.__getString(msgPtr)
       postMessage(output)

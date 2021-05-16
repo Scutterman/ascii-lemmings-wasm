@@ -55,9 +55,8 @@ export class MetaScreen extends Level {
   }
   
   public renderLevel(): void {
-    const map = this.cloneMap()
     addLayerToScreen(true)
-    this.render(map, false)
+    this.render(this.map, false)
     this.renderControls(false)
   }
 }

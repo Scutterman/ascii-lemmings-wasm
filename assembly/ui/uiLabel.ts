@@ -1,6 +1,6 @@
 import { renderUiLabel, getRenderedTextArray } from "../loop";
 import { Vec2 } from "../position";
-import { LevelTileDetail, LevelTiles } from "../types";
+import { LevelTileDetail } from "../types";
 
 export class UILabel {
   protected hasMouseFocus: boolean = false
@@ -46,8 +46,7 @@ export class UILabel {
     return getRenderedTextArray(this.getText())
   }
 
-  public render(map: LevelTileDetail, _isDirty: boolean): void {
-    if (!this.isVisible(map)) { return }
+  public render(): void {
     renderUiLabel(this)
   }
 }

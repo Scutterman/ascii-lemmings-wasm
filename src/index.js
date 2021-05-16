@@ -1,4 +1,6 @@
 // Copied from logrocket example code - https://blog.logrocket.com/the-introductory-guide-to-assemblyscript/
+const background = document.querySelector('#background')
+const map = document.querySelector('#map')
 const gameArea = document.querySelector('#screen')
 const clickTarget = document.querySelector('#click-target')
 const dimensions = measureOneCharacter()
@@ -6,6 +8,10 @@ const wasmRunner = new Worker('wasmRunner.js')
 
 let started = false
 const keyPressListenerMessage = 'keypresslistener'
+const renderBackgroundMessage = 'renderbackgroundmessage'
+const renderMapMessage = 'rendermapmessage'
+const removeElementMessage = 'removeelement'
+
 wasmRunner.onmessage = (e) => {
   if (started) {
     if (e.data.instruction === keyPressListenerMessage) {
@@ -14,6 +20,12 @@ wasmRunner.onmessage = (e) => {
       } else {
         document.removeEventListener('keydown', onKeyDown)
       }
+    } else if (e.data.instruction === removeElementMessage) {
+      document.body.removeChild(document.getElementById(e.data.elementId))
+    } else if (e.data.instruction === renderBackgroundMessage) {
+      background.innerHTML = e.data.content
+    } else if (e.data.instruction === renderMapMessage) {
+      map.innerHTML += e.data.content
     } else {
       gameArea.innerHTML = e.data
     }

@@ -10,7 +10,7 @@
                 padding: 0;
             }
 
-            #screen, #screen div, #click-target, .grid {
+            .top-level-element, .top-level-element div {
                 cursor: none;
                 z-index: 100;
                 width: 100%;
@@ -26,7 +26,7 @@
                 user-select: none;
             }
             
-            #screen, #click-target, .grid { top: 25px; left: 25px; }
+            .top-level-element { top: 25px; left: 25px; }
 
             #click-target {
                 z-index: 9001;
@@ -53,9 +53,11 @@
         </style>
     </head>
     <body>
-        <div id="screen" class="screen"></div>
-        <div id="click-target"></div>
-        <!-- <div class="grid"></div> -->
+        <div id="background" class="screen top-level-element"></div>
+        <div id="map" class="screen top-level-element"></div>
+        <div id="screen" class="screen top-level-element"></div>
+        <div id="click-target" class="top-level-element"></div>
+        <!-- <div class="grid, top-level-element"></div> -->
         <script src="index.js"></script>
     </body>
 </html>
