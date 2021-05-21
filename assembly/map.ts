@@ -94,6 +94,8 @@ export function removeTerrain(map: LevelTileDetail, location: Vec2): boolean {
     return false
   } else {
     map[location.y][location.x].tile = TILE_AIR
+    map[location.y][location.x].needsRemoval = true
+    map[location.y][location.x].isDirty = true
     return true
   }
 }
