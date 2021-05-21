@@ -1,8 +1,9 @@
-import { addLayerToScreen } from "../loop";
+import { clearScreen } from "../loop";
 import { BaseLevel } from "./baseLevel";
 import { Level } from "./level";
 
 export class MetaScreen extends Level {
+  private mapRendered: boolean = false
   constructor(tag: string) {
     super(tag, 0, 0, BaseLevel.mapToTileDetail([
       '__________________________________________________________________________',
@@ -55,8 +56,11 @@ export class MetaScreen extends Level {
   }
   
   public renderLevel(): void {
-    addLayerToScreen(true)
-    this.render(this.map, false)
+    clearScreen()
+    if (!this.mapRendered) {
+      this.render(this.map, false)
+      this.mapRendered = true
+    }
     this.renderControls(false)
   }
 }
