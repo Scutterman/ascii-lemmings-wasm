@@ -50,12 +50,34 @@
                 repeating-linear-gradient(90deg, #ccc 0 1px, transparent 1px 100%);
                 background-size: 9.625px 16px;
             }
+
+            #loading {
+                text-align: center;
+                background-color: white;
+                font-size: 20px;
+                display: none;
+                justify-content: center;
+                align-items: center; 
+            }
+
+            #loading div {
+                width: auto;
+                height: 20px;
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            #loading.shown {
+                display: block;
+            }
         </style>
     </head>
     <body>
         <div id="background" class="screen top-level-element"></div>
         <div id="map" class="screen top-level-element"></div>
         <div id="screen" class="screen top-level-element"></div>
+        <div id="loading" class="screen top-level-element"><div>loading...</div></div>
         <div id="click-target" class="top-level-element"></div>
         <!-- <div class="grid, top-level-element"></div> -->
         <script src="index.js"></script>

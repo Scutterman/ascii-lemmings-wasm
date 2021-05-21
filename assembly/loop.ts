@@ -235,7 +235,6 @@ export function getTextDimensions(text: string[], position: Vec2): Rect {
     labelDimensions.position.x = i16(f32(mapLengthInBlocks - labelDimensions.size.x) / 2)
   }
   
-  
   if (labelDimensions.position.y == -1) {
     const mapHeightInBlocks = i16(VISIBLE_Y + BOUNDARIES_Y + CONTROLS_Y)
     labelDimensions.position.y = i16(f32(mapHeightInBlocks - labelDimensions.size.y) / 2)

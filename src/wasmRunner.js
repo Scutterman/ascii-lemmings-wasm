@@ -1,6 +1,9 @@
 importScripts("assemblyscript-loader.js")
 const importObject = {
   index: {
+    showLoading() {
+      postMessage({ instruction: 'showloading' })
+    },
     log(msgPtr) {
       console.log(loadedModule.exports.__getString(msgPtr))
     },

@@ -20,6 +20,7 @@ export { triggerEventLoop, setCharacterDimensions, setScreenDimensions, updateMo
 const useAutoPlayer: boolean = false
 
 export function loadLevel(newLevel: BaseLevel): void {
+  showLoading()
   lemmings = []
   if (!newLevel.isMetaScreen) {
     gameState.lastLevel = newLevel.clone()
@@ -61,6 +62,7 @@ export function start(): boolean {
 }
 
 export declare function keyPressListener(shouldListen: boolean): void
+declare function showLoading(): void;
 
 export function keyDown(character: string): void {
   if (allowedUserInputCharacters.includes(character)) {

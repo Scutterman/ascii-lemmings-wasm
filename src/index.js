@@ -11,6 +11,7 @@ const keyPressListenerMessage = 'keypresslistener'
 const renderBackgroundMessage = 'renderbackgroundmessage'
 const renderMapMessage = 'rendermapmessage'
 const removeElementMessage = 'removeelement'
+const showLoadingMessage = 'showloading'
 
 wasmRunner.onmessage = (e) => {
   if (started) {
@@ -20,6 +21,8 @@ wasmRunner.onmessage = (e) => {
       } else {
         document.removeEventListener('keydown', onKeyDown)
       }
+    } else if (e.data.instruction === showLoadingMessage) {
+      document.querySelector('#loading').classList.add('shown')
     } else if (e.data.instruction === removeElementMessage) {
       document.body.removeChild(document.getElementById(e.data.elementId))
     } else if (e.data.instruction === renderBackgroundMessage) {
@@ -28,6 +31,7 @@ wasmRunner.onmessage = (e) => {
       map.innerHTML += e.data.content
     } else {
       gameArea.innerHTML = e.data
+      document.querySelector('#loading').classList.remove('shown')
     }
     return
   }
