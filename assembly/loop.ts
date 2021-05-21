@@ -324,13 +324,17 @@ export function renderComplete(): void {
   render(output)
 }
 
+export function clearScreen(): void {
+  output = ''
+  backgroundLayer = ''
+  mapTiles = ''
+  relativeItems = ''
+}
+
 export function addLayerToScreen(clearBeforeAdd: boolean = false): void {
   outputSuffix = '</div>'
   if (clearBeforeAdd) {
-    output = ''
-    backgroundLayer = ''
-    mapTiles = ''
-    relativeItems = ''
+    clearScreen()
   }
 
   if (output != '') {
