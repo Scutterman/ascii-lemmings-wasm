@@ -289,7 +289,7 @@ export function renderBackgroundToScreen(text: string, blockPosition: Vec2, bord
 }
 
 export function renderToScreen(text: string, colour: string = ''): void {
-  if (colour !== '') {
+  if (colour != '') {
     output += '<span style="color: ' + colour + ';">'
   }
 

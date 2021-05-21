@@ -65,7 +65,7 @@ export class Level1 extends Level {
     const detail = new TileDetail(tile, '#000000', new Animation([]))
     switch(true) {
       case tile == TILE_GROUND:
-        if (surrounding.topCentre === TILE_AIR) {
+        if (surrounding.topCentre == TILE_AIR) {
           detail.animation = BaseLevel.characterToAnimation('"')
           detail.colour = '#00ff00'
         } else {
