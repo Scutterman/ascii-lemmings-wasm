@@ -256,9 +256,10 @@ class RelativeElement {
 export function constructRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000', needsId: boolean = false): RelativeElement {
   const pixelPosition = getPositionInPixels(blockPosition)
   const borderStyles = border ? 'box-shadow: inset 0 0 1px #000000' : ''
-  const elementId = needsId ? 'id="RELATIVE_' + relativeItemId.toString() + '"' : ''
+  const elementId = needsId ? 'RELATIVE_' + relativeItemId.toString() : ''
+  const elementIdHtml = needsId ? 'id="' + elementId + '"' : ''
   relativeItemId++
-  const html = '<span ' + elementId + ' style="display: inline-block; width: auto; height: auto; position: absolute; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '; color: ' + colour + '">' + text + '</span>'
+  const html = '<span ' + elementIdHtml + ' style="display: inline-block; width: auto; height: auto; position: absolute; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '; color: ' + colour + '">' + text + '</span>'
   return new RelativeElement(html, elementId)
 }
 
