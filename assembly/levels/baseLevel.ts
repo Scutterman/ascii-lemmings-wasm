@@ -154,7 +154,7 @@ export abstract class BaseLevel {
     }
   }
 
-  protected static characterToAnimation(character: string): Animation {
+  public static characterToAnimation(character: string): Animation {
     const line = [character, character, character, character]
     return new Animation([[line, line, line, line]])
   }
