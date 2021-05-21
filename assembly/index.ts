@@ -55,7 +55,6 @@ export function start(): boolean {
   } else {
     const titleScreen = new TitleScreen()
     loadLevel(titleScreen)
-    titleScreen.renderLevel()
   }
   
   return true
