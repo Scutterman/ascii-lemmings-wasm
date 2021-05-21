@@ -313,6 +313,7 @@ export function renderComplete(): void {
     for (let i = 0; i < mapTilesToRemove.length; i++) {
       removeElement(mapTilesToRemove[i])
     }
+    mapTilesToRemove = []
   }
   
   if (mapTiles != '') {
