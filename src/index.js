@@ -25,7 +25,7 @@ wasmRunner.onmessage = (e) => {
       document.querySelector('#loading').classList.add('shown')
       map.innerHTML = ''
     } else if (e.data.instruction === removeElementMessage) {
-      document.body.removeChild(document.getElementById(e.data.elementId))
+      document.querySelector('#' + e.data.elementId).remove()
     } else if (e.data.instruction === renderBackgroundMessage) {
       background.innerHTML = e.data.content
     } else if (e.data.instruction === renderMapMessage) {

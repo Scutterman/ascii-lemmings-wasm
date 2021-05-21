@@ -105,6 +105,7 @@ export function addBrick(map: LevelTileDetail, location: Vec2): boolean {
     return false
   } else {
     map[location.y][location.x].tile = TILE_BRICK
+    map[location.y][location.x].isDirty = true
     return true
   }
 }
