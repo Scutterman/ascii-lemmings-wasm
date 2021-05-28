@@ -102,3 +102,23 @@ function measureOneCharacter() {
 }
 
 wasmRunner.postMessage({ instruction: 'init' })
+
+
+async function saveFile(name, content) {
+  const newHandle = await window.showSaveFilePicker({
+    suggestedName: name,
+    types: [{
+      description: 'JSON file',
+      accept: {'application/json': ['.json']},
+    }],
+  })
+  const writableStream = await newHandle.createWritable()
+  await writableStream.write(new Blob([content], {
+    type: 'application/json'
+  }))
+  await writableStream.close();
+}
+
+clickTarget.addEventListener('click', () => {
+  saveFile('test.json', '{ "Hello": "World" }').then(() => console.log('done')).catch(console.error)
+})
