@@ -15,24 +15,31 @@ const showLoadingMessage = 'showloading'
 
 wasmRunner.onmessage = (e) => {
   if (started) {
-    if (e.data.instruction === keyPressListenerMessage) {
-      if (e.data.shouldListen) {
-        document.addEventListener('keyup', onKeyUp)
-      } else {
-        document.removeEventListener('keyup', onKeyUp)
-      }
-    } else if (e.data.instruction === showLoadingMessage) {
-      document.querySelector('#loading').classList.add('shown')
-      map.innerHTML = ''
-    } else if (e.data.instruction === removeElementMessage) {
-      document.querySelector('#' + e.data.elementId).remove()
-    } else if (e.data.instruction === renderBackgroundMessage) {
-      background.innerHTML = e.data.content
-    } else if (e.data.instruction === renderMapMessage) {
-      map.innerHTML += e.data.content
-    } else {
-      gameArea.innerHTML = e.data
-      document.querySelector('#loading').classList.remove('shown')
+    switch(e.data.instruction) {
+      case keyPressListenerMessage:
+        if (e.data.shouldListen) {
+          document.addEventListener('keyup', onKeyUp)
+        } else {
+          document.removeEventListener('keyup', onKeyUp)
+        }
+      break
+      case showLoadingMessage:
+        document.querySelector('#loading').classList.add('shown')
+        map.innerHTML = ''
+      break
+      case removeElementMessage:
+        document.querySelector('#' + e.data.elementId).remove()
+      break
+      case renderBackgroundMessage:
+        background.innerHTML = e.data.content
+      break
+      case renderMapMessage:
+        map.innerHTML += e.data.content
+      break
+      default:
+        gameArea.innerHTML = e.data
+        document.querySelector('#loading').classList.remove('shown')
+      break
     }
     return
   }
