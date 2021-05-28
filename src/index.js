@@ -17,9 +17,9 @@ wasmRunner.onmessage = (e) => {
   if (started) {
     if (e.data.instruction === keyPressListenerMessage) {
       if (e.data.shouldListen) {
-        document.addEventListener('keydown', onKeyDown)
+        document.addEventListener('keyup', onKeyUp)
       } else {
-        document.removeEventListener('keydown', onKeyDown)
+        document.removeEventListener('keyup', onKeyUp)
       }
     } else if (e.data.instruction === showLoadingMessage) {
       document.querySelector('#loading').classList.add('shown')
@@ -75,11 +75,8 @@ clickTarget.addEventListener('click', function() {
   wasmRunner.postMessage({ clicked: true })
 })
 
-function onKeyDown(e) {
-  // TODO:: May need to uppercase or lowercase the character based on what it defaults to and whether the shift key is pressed
-  // What about caps lock?
-  const character =  String.fromCharCode(e.keyCode)
-  wasmRunner.postMessage({ instruction: 'keydown', character })
+function onKeyUp(e) {
+  wasmRunner.postMessage({ instruction: 'keyup', character: e.key })
 }
 
 function setScreenSize(screenSize) {

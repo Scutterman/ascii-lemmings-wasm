@@ -44,9 +44,9 @@ let started = false
 
 onmessage = function(e) {
   if (started) {
-    if (e.data.instruction === 'keydown') {
+    if (e.data.instruction === 'keyup') {
       const string = loadedModule.exports.__newString(e.data.character)
-      loadedModule.instance.exports.keyDown(string)
+      loadedModule.instance.exports.keyUp(string)
     } else {
       if (e.data.mouseX != null && e.data.mouseY != null) {
         loadedModule.instance.exports.updateMouseCoordinates(e.data.mouseX, e.data.mouseY)

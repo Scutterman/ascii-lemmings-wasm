@@ -63,7 +63,7 @@ export function start(): boolean {
 export declare function keyPressListener(shouldListen: boolean): void
 declare function showLoading(): void;
 
-export function keyDown(character: string): void {
+export function keyUp(character: string): void {
   if (allowedUserInputCharacters.includes(character)) {
     gameState.userEnteredText += character
   }
