@@ -1,4 +1,4 @@
-// Copied from logrocket example code - https://blog.logrocket.com/the-introductory-guide-to-assemblyscript/
+// Wasm setup explained here: https://blog.logrocket.com/the-introductory-guide-to-assemblyscript/
 const background = document.querySelector('#background')
 const map = document.querySelector('#map')
 const gameArea = document.querySelector('#screen')
@@ -12,6 +12,31 @@ const renderBackgroundMessage = 'renderbackgroundmessage'
 const renderMapMessage = 'rendermapmessage'
 const removeElementMessage = 'removeelement'
 const showLoadingMessage = 'showloading'
+const messageResposne = 'messageresposne'
+const isEditing = 'isediting'
+
+/*
+  can be a function:
+  ({
+    cancel: boolean
+    name: string
+    content: string
+  }): void {}
+*/
+let messageResponseCallback = undefined
+let isEditingMap = false
+
+function setMessageResponseCallback(cb) {
+  if (typeof messageResponseCallback === 'function') {
+    messageResponseCallback({
+      cancel: true,
+      name: '',
+      content: ''
+    })
+  }
+
+  messageResponseCallback = cb
+}
 
 wasmRunner.onmessage = (e) => {
   if (started) {
@@ -36,6 +61,17 @@ wasmRunner.onmessage = (e) => {
       case renderMapMessage:
         map.innerHTML += e.data.content
       break
+      case isEditing:
+        isEditingMap = e.data.isEditing
+      break
+      case messageResposne:
+        if (typeof messageResponseCallback === 'function') {
+          messageResponseCallback({
+            cancel: false,
+            name: e.data.name,
+            content: e.data.content
+          })
+        }
       default:
         gameArea.innerHTML = e.data
         document.querySelector('#loading').classList.remove('shown')
@@ -79,6 +115,19 @@ window.addEventListener('mousemove', function(e) {
 });
 
 clickTarget.addEventListener('click', function() {
+  if (isEditingMap) {
+    setMessageResponseCallback(data => {
+      if (data.cancel === true) {
+        return
+      }
+
+      setMessageResponseCallback(undefined)
+      if (data.content.length > 0) {
+        saveFile(data.name, data.content)
+      }
+    })
+  }
+  
   wasmRunner.postMessage({ clicked: true })
 })
 
@@ -110,6 +159,11 @@ function measureOneCharacter() {
 
 wasmRunner.postMessage({ instruction: 'init' })
 
+/**
+ * web assembly tells javascript when it's editing a file
+ * for every click, call into web assembly to see whether the downlod button was clicked
+ * if so, save the file
+ */
 
 async function saveFile(name, content) {
   const newHandle = await window.showSaveFilePicker({

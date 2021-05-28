@@ -30,6 +30,25 @@ const importObject = {
     },
     onEventLoopComplete(_timeTaken) {
       requestAnimationFrame(loop)
+    },
+    messageResponse(saveButtonClicked, namePtr, contentPtr) {
+      if (saveButtonClicked) {
+        postMessage({
+          instruction: 'messageresposne',
+          name: loadedModule.exports.__getString(namePtr),
+          content: loadedModule.exports.__getString(contentPtr)
+        })
+      }
+    }
+  },
+  levels: {
+    levelCodeEntry: {
+      isEditingMap(isEditing) {
+        postMessage({
+          instruction: 'isediting',
+          isEditing: isEditing === 1
+        })
+      }
     }
   },
   env: {
