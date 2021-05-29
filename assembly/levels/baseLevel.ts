@@ -1,10 +1,12 @@
-import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, getSurroundingTiles, mapToTiles, SurroundingTiles, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE, VISIBLE_X, VISIBLE_Y } from "../map"
+import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, mapToTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { Vec2 } from "../position"
-import { LemmingGift, Tile, TileDetail, LevelTileDetail, LevelMap } from "../types"
+import { LemmingGift, TileDetail, LevelTileDetail } from "../types"
 import { UIControl } from "../ui/uiControl"
 import { UILabel } from "../ui/uiLabel"
 import { Panel } from "../ui/panel"
 import { Animation } from "../animation"
+import { allowedUserInputCharacters } from "../text"
+import { LevelMapDetail } from "../maps/types"
 
 const buttonArea = mapToTiles([
   '|                                                                        |',
@@ -16,8 +18,6 @@ const buttonArea = mapToTiles([
   '|                                                                        |',
   '__________________________________________________________________________'
 ])
-
-type TileResolver = (tile: Tile, surrounding: SurroundingTiles) => TileDetail | null
 
 export abstract class BaseLevel {
   public numberOfLemmings: u8
@@ -45,7 +45,18 @@ export abstract class BaseLevel {
   public abstract skillUsed(skill: LemmingGift): void
   public abstract skillSelected(skill: LemmingGift): void
   
-  constructor(public tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, public map: LevelTileDetail, isMetaScreen: boolean = false) {
+  protected tag: string = ''
+  public map: LevelTileDetail
+
+  constructor(tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelMapDetail, isMetaScreen: boolean = false) {
+    this.map = map.toTileDetail()
+    const tagCharacters = tag.split('')
+    for (let i = 0; i < tagCharacters.length; i++) {
+      if (allowedUserInputCharacters.includes(tagCharacters[i])) {
+        this.tag += tagCharacters[i]
+      }
+    }
+    
     this.numberOfLemmings = lemmingsToSpawn
     this.numberOfLemmingsForSuccess = numberOfLemmingsForSucces
     this.isMetaScreen = isMetaScreen
@@ -152,63 +163,5 @@ export abstract class BaseLevel {
     for (let i = 0; i < this.uiPanels.length; i++) {
       this.uiPanels[i].render(isDirty)
     }
-  }
-
-  public static characterToAnimation(character: string): Animation {
-    const line = [character, character, character, character]
-    return new Animation([[line, line, line, line]])
-  }
-  
-  protected static mapToTileDetail(map: LevelMap, tileResolver: TileResolver | null = null): LevelTileDetail {
-    const tiles = mapToTiles(map)
-    const tileDetail: LevelTileDetail = []
-    for (let row = 0; row < tiles.length; row++) {
-      tileDetail.push([])
-      for (let col = 0; col < tiles[row].length; col++) {
-        const surrounding = getSurroundingTiles(tiles, new Vec2(i16(col), i16(row)))
-        let maybeTile: TileDetail | null = null
-        if (tileResolver != null) {
-          maybeTile = tileResolver(tiles[row][col].tile, surrounding)
-        }
-        if (maybeTile == null) {
-          maybeTile = BaseLevel.tileToTileDetail(tiles[row][col].tile, surrounding)
-        }
-        if (maybeTile == null) {
-          maybeTile = tiles[row][col].clone()
-        }
-        tileDetail[row].push(maybeTile)
-      }
-    }
-    return tileDetail
-  }
-
-  protected static tileToTileDetail(tile: Tile, _surrounding: SurroundingTiles): TileDetail | null {
-    const detail = new TileDetail(tile, '#000000', new Animation([]))
-    switch(true) {
-      case tile == TILE_BOUNDARY:
-        detail.animation = this.characterToAnimation('-')
-      break;
-      case tile == TILE_SIDE:
-        detail.animation = this.characterToAnimation('|')
-      break;
-      case tile == TILE_EXIT: 
-        detail.colour = '#3b2a15'
-        detail.animation = new Animation([
-          [
-            '^  ^'.split(''),
-            '#/\\#'.split(''),
-            '/  \\'.split(''),
-            '|  |'.split('')
-          ],
-          [
-            'w  w'.split(''),
-            '#/\\#'.split(''),
-            '/  \\'.split(''),
-            '|  |'.split('')
-          ]
-        ])
-      break
-    }
-    return detail
   }
 }

@@ -1,58 +1,11 @@
 import { clearScreen } from "../loop";
-import { BaseLevel } from "./baseLevel";
+import { load } from "../maps/meta/metaScreenMap";
 import { Level } from "./level";
 
 export class MetaScreen extends Level {
   private mapRendered: boolean = false
   constructor(tag: string) {
-    super(tag, 0, 0, BaseLevel.mapToTileDetail([
-      '__________________________________________________________________________',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '|                                                                        |',
-      '__________________________________________________________________________',
-    ]), true)
+    super(tag, 'meta', 0, 0, load(), true)
   }
   
   public renderLevel(): void {

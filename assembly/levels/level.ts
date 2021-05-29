@@ -6,7 +6,7 @@ import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
-import { Block, BlockerAnimation } from "../actions/block"
+import { BlockerAnimation } from "../actions/block"
 import { UILabel } from "../ui/uiLabel"
 import { Panel } from "../ui/panel"
 import { Animation } from "../animation"
@@ -17,6 +17,7 @@ import { ClimberAnimation } from "../actions/climb"
 import { DiggerAnimation } from "../actions/digger"
 import { MinerAnimation } from "../actions/miner"
 import { FloaterAnimation } from "../actions/umbrella"
+import { LevelMapDetail } from "../maps/types"
 
 export class Level extends BaseLevel {
   private canSpawnMore: boolean = true
@@ -25,8 +26,8 @@ export class Level extends BaseLevel {
   private skillsPanel: Panel
   private skillsLabelPanel: Panel
 
-  constructor(tag: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, map: LevelTileDetail, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 40) {
-    super(tag, lemmingsToSpawn, numberOfLemmingsForSucces, map, isMetaScreen)
+  constructor(tag: string, private difficulty: string, lemmingsToSpawn: u8, numberOfLemmingsForSucces: u8, private _map: LevelMapDetail, isMetaScreen: boolean = false, private buttonYCoordinate: u8 = 40) {
+    super(tag, lemmingsToSpawn, numberOfLemmingsForSucces, _map, isMetaScreen)
 
     this.skillsPanel = new Panel(new Vec2(2, this.buttonYCoordinate))
     this.skillsLabelPanel = new Panel(new Vec2(2, this.buttonYCoordinate + 2))
@@ -221,8 +222,8 @@ export class Level extends BaseLevel {
   }
 
   public clone(): BaseLevel {
-    const newMap = this.cloneMap()
-    return new Level(this.tag, this.numberOfLemmings, this.numberOfLemmingsForSuccess, newMap, this.isMetaScreen, this.buttonYCoordinate)
+    const newMap = this._map.clone()
+    return new Level(this.tag, this.difficulty, this.numberOfLemmings, this.numberOfLemmingsForSuccess, newMap, this.isMetaScreen, this.buttonYCoordinate)
   }
   
   protected render(map: LevelTileDetail, isRenderingGameSection: boolean = false): void {
