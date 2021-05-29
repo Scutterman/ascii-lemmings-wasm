@@ -6,8 +6,7 @@ import { UILabel } from "../ui/uiLabel"
 import { BaseLevel } from "./baseLevel"
 import { MetaScreen } from "./metascreen"
 import { TitleScreen } from "./titleScreen"
-
-declare function isEditingMap(isEditing: u8): void
+import { isEditingMap } from '../imports'
 
 export class LevelCodeEntry extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, -1))

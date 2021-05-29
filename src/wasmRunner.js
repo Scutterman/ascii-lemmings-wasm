@@ -41,14 +41,12 @@ const importObject = {
       }
     }
   },
-  levels: {
-    levelCodeEntry: {
-      isEditingMap(isEditing) {
-        postMessage({
-          instruction: 'isediting',
-          isEditing: isEditing === 1
-        })
-      }
+  imports: {
+    isEditingMap(isEditing) {
+      postMessage({
+        instruction: 'isediting',
+        isEditing: isEditing === 1
+      })
     }
   },
   env: {
