@@ -1,7 +1,11 @@
 import { Animation } from "../animation";
-import { BaseLevel } from "../levels/baseLevel";
 import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
 import { LevelMap, LevelTileDetail, TileDetail } from "../types";
+
+export function characterToAnimation(character: string): Animation {
+  const line = [character, character, character, character]
+  return new Animation([[line, line, line, line]])
+}
 
 export class LevelMapDetail {
   constructor(private tiles: LevelMap) {}
@@ -33,10 +37,10 @@ export class LevelMapDetail {
         let detail = new TileDetail(tile, '#000000', new Animation([]))
         switch(true) {
           case tile == TILE_BOUNDARY:
-            detail.animation = BaseLevel.characterToAnimation('-')
+            detail.animation = characterToAnimation('-')
           break;
           case tile == TILE_SIDE:
-            detail.animation = BaseLevel.characterToAnimation('|')
+            detail.animation = characterToAnimation('|')
           break;
           case tile == TILE_EXIT: 
             detail.colour = '#3b2a15'
@@ -90,6 +94,6 @@ export class SingleCharacterAnimation extends AnimationListItem {
   }
   
   public getAnimation(): Animation {
-    return BaseLevel.characterToAnimation(this.character)
+    return characterToAnimation(this.character)
   }
 }

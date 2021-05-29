@@ -1,7 +1,7 @@
 import { currentLevel } from "."
 import { Animation } from "./animation"
 import { isBlockerInLocation, Lemming } from "./lemming"
-import { BaseLevel } from "./levels/baseLevel"
+import { characterToAnimation } from "./maps/types"
 import { Vec2 } from "./position"
 import { LevelMap, LevelTileDetail, Tile, TileDetail } from "./types"
 
@@ -106,7 +106,7 @@ export function addBrick(map: LevelTileDetail, location: Vec2): boolean {
     return false
   } else {
     map[location.y][location.x].tile = TILE_BRICK
-    map[location.y][location.x].animation = BaseLevel.characterToAnimation(TILE_BRICK)
+    map[location.y][location.x].animation = characterToAnimation(TILE_BRICK)
     map[location.y][location.x].isDirty = true
     return true
   }
