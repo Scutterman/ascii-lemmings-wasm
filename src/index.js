@@ -181,5 +181,5 @@ async function saveFile(name, content) {
 }
 
 clickTarget.addEventListener('click', () => {
-  saveFile('test.json', '{ "Hello": "World" }').then(() => console.log('done')).catch(console.error)
+  // saveFile('test.json', '{ "Hello": "World" }').then(() => console.log('done')).catch(console.error)
 })
