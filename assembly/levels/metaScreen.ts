@@ -16,4 +16,8 @@ export class MetaScreen extends Level {
     }
     this.renderControls(false)
   }
+
+  public mapSwapped(): void {
+    this.mapRendered = false
+  }
 }

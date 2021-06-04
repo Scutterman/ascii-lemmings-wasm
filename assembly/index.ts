@@ -11,6 +11,7 @@ import { UPSCALE_MULTIPLIER } from './upscale'
 import { Level1 } from "./levels/one"
 import { allowedUserInputCharacters } from './text'
 import { Parser } from './maps/types'
+import { Editor } from './levels/editor'
 
 export const gameState = new GameState()
 export let currentLevel: BaseLevel
@@ -21,7 +22,10 @@ export { triggerEventLoop, setCharacterDimensions, setScreenDimensions, updateMo
 const useAutoPlayer: boolean = false
 
 export function loadLevelFromString(level: string): void {
-  currentLevel.map = new Parser().parseGeneratedMap(level)
+  if (currentLevel instanceof Editor) {
+    currentLevel.map = new Parser().parseGeneratedMap(level)
+    ;(currentLevel as Editor).mapSwapped()
+  }
 }
 
 export function loadLevel(newLevel: BaseLevel): void {
