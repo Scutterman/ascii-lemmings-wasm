@@ -100,9 +100,9 @@ export class SingleCharacterAnimation extends AnimationListItem {
 
 export class Parser {
   private lmd: LevelMapDetail = new LevelMapDetail([])
-  private processingMapSection = false
+  private processingMapSection: boolean = false
   
-  public parseGeneratedMap(generatedMap: string): void {
+  public parseGeneratedMap(generatedMap: string): LevelTileDetail {
     const mapLines = generatedMap.replaceAll('\r\n', '\n').split('\n')
     for (let i = 0; i < mapLines.length; i++) {
       const line = mapLines[i].trim()
@@ -118,24 +118,26 @@ export class Parser {
         continue
       }
       
-      switch (instructions[1]) {
-        case 'MAP_START':
+      switch (true) {
+        case instructions[1] == 'MAP_START':
           this.processingMapSection = true
         break
-        case 'MAP_END':
+        case instructions[1] == 'MAP_END':
           this.processingMapSection = false
         break
-        case 'ANIMATION_LIST':
+        case instructions[1] == 'ANIMATION_LIST':
           this.addCharacterAnimation(instructions)
         break
-        case 'DEFAULT_ANIMATIONS':
+        case instructions[1] == 'DEFAULT_ANIMATIONS':
           this.addDefaultAnimation(instructions)
         break
-        case 'CUSTOM_ANIMATIONS':
+        case instructions[1] == 'CUSTOM_ANIMATIONS':
           this.addCustomAnimation(instructions)
         break
       }
     }
+
+    return this.lmd.toTileDetail()
   }
   
   private addMapLine(generatedMapLine: string): void {
@@ -157,8 +159,8 @@ export class Parser {
     const type = instructions[2]
     const data = instructions[3].split(',')
     const key = data[0]
-    switch (type) {
-      case 'SINGLE':
+    switch (true) {
+      case type == 'SINGLE':
         const character = data[1]
         const colour = data[2]
         this.lmd.animationList.set(key, new SingleCharacterAnimation(character, colour))
