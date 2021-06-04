@@ -8,7 +8,7 @@ export function characterToAnimation(character: string): Animation {
 }
 
 export class LevelMapDetail {
-  constructor(private tiles: LevelMap) {}
+  constructor(public tiles: LevelMap) {}
   animationList: Map<string, AnimationListItem> = new Map()
   defaultAnimations: Map<string, string> = new Map()
   customAnimations: Map<string, string> = new Map()
@@ -95,5 +95,89 @@ export class SingleCharacterAnimation extends AnimationListItem {
   
   public getAnimation(): Animation {
     return characterToAnimation(this.character)
+  }
+}
+
+export class Parser {
+  private lmd: LevelMapDetail = new LevelMapDetail([])
+  private processingMapSection = false
+  
+  public parseGeneratedMap(generatedMap: string): void {
+    const mapLines = generatedMap.replaceAll('\r\n', '\n').split('\n')
+    for (let i = 0; i < mapLines.length; i++) {
+      const line = mapLines[i].trim()
+      if (!line.startsWith('//')) {
+        if (this.processingMapSection) {
+          this.addMapLine(line)
+        }
+        continue
+      }
+  
+      const instructions = line.substr(2).split('::')
+      if (instructions[0] != 'EDITORHINT') {
+        continue
+      }
+      
+      switch (instructions[1]) {
+        case 'MAP_START':
+          this.processingMapSection = true
+        break
+        case 'MAP_END':
+          this.processingMapSection = false
+        break
+        case 'ANIMATION_LIST':
+          this.addCharacterAnimation(instructions)
+        break
+        case 'DEFAULT_ANIMATIONS':
+          this.addDefaultAnimation(instructions)
+        break
+        case 'CUSTOM_ANIMATIONS':
+          this.addCustomAnimation(instructions)
+        break
+      }
+    }
+  }
+  
+  private addMapLine(generatedMapLine: string): void {
+    // Remove opening quote
+    generatedMapLine = generatedMapLine.substr(1)
+  
+    // Remove comma if present
+    if (generatedMapLine.endsWith(',')) {
+      generatedMapLine = generatedMapLine.substr(0, -1)
+    }
+  
+    // Remove closing quote
+    generatedMapLine = generatedMapLine.substr(0, -1)
+  
+    this.lmd.tiles.push(generatedMapLine)
+  }
+  
+  private addCharacterAnimation(instructions: string[]): void {
+    const type = instructions[2]
+    const data = instructions[3].split(',')
+    const key = data[0]
+    switch (type) {
+      case 'SINGLE':
+        const character = data[1]
+        const colour = data[2]
+        this.lmd.animationList.set(key, new SingleCharacterAnimation(character, colour))
+    }
+  }
+
+  private addDefaultAnimation(instructions: string[]): void {
+    const data = instructions[2].split(',')
+    const character = data[0]
+    const animationListKey = data[1]
+    this.lmd.defaultAnimations.set(character, animationListKey)
+  }
+  
+  private addCustomAnimation(instructions: string[]): void {
+    const data = instructions[2].split(',')
+    const x = data[0]
+    const y = data[1]
+    const animationListKey = data[2]
+    const key = x + ',' + y
+    this.lmd.customAnimations.set(key, animationListKey)
   }
 }
