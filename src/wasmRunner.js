@@ -62,6 +62,9 @@ onmessage = function(e) {
     if (e.data.instruction === 'keyup') {
       const string = loadedModule.exports.__newString(e.data.character)
       loadedModule.instance.exports.keyUp(string)
+    } else if (e.data.instruction === 'loadlevel') {
+      const level = loadedModule.exports.__newString(e.data.content)
+      loadedModule.instance.exports.loadLevelFromString(level)
     } else {
       if (e.data.mouseX != null && e.data.mouseY != null) {
         loadedModule.instance.exports.updateMouseCoordinates(e.data.mouseX, e.data.mouseY)

@@ -63,6 +63,7 @@ wasmRunner.onmessage = (e) => {
       break
       case isEditing:
         isEditingMap = e.data.isEditing
+        editStateChanged(isEditingMap)
       break
       case saveMessage:
       case loadMessage:
@@ -130,6 +131,9 @@ clickTarget.addEventListener('click', function() {
             saveFile(data.name, data.content)
           }
         break
+        case 'load': {
+          document.querySelector('#loadLevel').click()
+        }
       }
     })
   }
@@ -186,6 +190,19 @@ async function saveFile(name, content) {
   await writableStream.close();
 }
 
-clickTarget.addEventListener('click', () => {
-  // saveFile('test.json', '{ "Hello": "World" }').then(() => console.log('done')).catch(console.error)
-})
+function editStateChanged(isEditing) {
+  if (isEditing) {
+    document.querySelector('#loadLevel').addEventListener('change', loadLevelChanged)
+  } else {
+    document.querySelector('#loadLevel').removeEventListener('change', loadLevelChanged)
+  }
+}
+
+function loadLevelChanged() {
+  const file = this.files[0]
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    wasmRunner.postMessage({ instruction: 'loadlevel', content: e.target.result })
+  }
+  reader.readAsText(file);
+}

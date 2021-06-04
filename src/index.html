@@ -71,9 +71,18 @@
             #loading.shown {
                 display: block;
             }
+
+            #loadLevel {
+                position: absolute !important;
+                height: 1px;
+                width: 1px;
+                overflow: hidden;
+                clip: rect(1px, 1px, 1px, 1px);
+            }
         </style>
     </head>
     <body>
+        <input type="file" id="loadLevel">
         <div id="background" class="screen top-level-element"></div>
         <div id="map" class="screen top-level-element"></div>
         <div id="screen" class="screen top-level-element"></div>
