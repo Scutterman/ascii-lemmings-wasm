@@ -12,15 +12,17 @@ const renderBackgroundMessage = 'renderbackgroundmessage'
 const renderMapMessage = 'rendermapmessage'
 const removeElementMessage = 'removeelement'
 const showLoadingMessage = 'showloading'
-const messageResposne = 'messageresposne'
+const saveMessage = 'save'
+const loadMessage = 'load'
 const isEditing = 'isediting'
 
 /*
   can be a function:
   ({
     cancel: boolean
-    name: string
-    content: string
+    instruction?: string
+    name?: string
+    content?: string
   }): void {}
 */
 let messageResponseCallback = undefined
@@ -29,9 +31,7 @@ let isEditingMap = false
 function setMessageResponseCallback(cb) {
   if (typeof messageResponseCallback === 'function') {
     messageResponseCallback({
-      cancel: true,
-      name: '',
-      content: ''
+      cancel: true
     })
   }
 
@@ -64,12 +64,12 @@ wasmRunner.onmessage = (e) => {
       case isEditing:
         isEditingMap = e.data.isEditing
       break
-      case messageResposne:
+      case saveMessage:
+      case loadMessage:
         if (typeof messageResponseCallback === 'function') {
           messageResponseCallback({
             cancel: false,
-            name: e.data.name,
-            content: e.data.content
+            ...e.data
           })
         }
       default:
@@ -122,8 +122,14 @@ clickTarget.addEventListener('click', function() {
       }
 
       setMessageResponseCallback(undefined)
-      if (data.content.length > 0) {
-        saveFile(data.name, data.content)
+
+      console.log('got message', data)
+      switch (data.instruction) {
+        case 'save':
+          if (data.content.length > 0) {
+            saveFile(data.name, data.content)
+          }
+        break
       }
     })
   }

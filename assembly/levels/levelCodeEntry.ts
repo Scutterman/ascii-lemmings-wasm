@@ -7,6 +7,7 @@ import { BaseLevel } from "./baseLevel"
 import { MetaScreen } from "./metascreen"
 import { TitleScreen } from "./titleScreen"
 import { isEditingMap } from '../imports'
+import { Editor } from "./editor"
 
 export class LevelCodeEntry extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, -1))
@@ -39,6 +40,9 @@ export class LevelCodeEntry extends MetaScreen {
         levelCode = levelCode.replace('EDIT:', '')
         // TODO:: when exiting the edit screen this needs to be reset
         isEditingMap(1)
+        const level = new Editor()
+        doBeforeLeaving()
+        loadLevel(level)
         return
       }
 

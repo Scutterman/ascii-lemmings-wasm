@@ -61,6 +61,7 @@ export function start(): boolean {
 }
 
 export declare function keyPressListener(shouldListen: boolean): void
+export declare function messageResponse(instruction: string, name: string, content: string): void
 declare function showLoading(): void;
 
 export function keyUp(character: string): void {

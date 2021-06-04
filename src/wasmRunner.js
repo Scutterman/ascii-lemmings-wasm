@@ -9,6 +9,13 @@ const importObject = {
     },
     keyPressListener(shouldListen) {
       postMessage({ instruction: 'keypresslistener', shouldListen })
+    },
+    messageResponse(instructionPtr, namePtr, contentPtr) {
+      postMessage({
+        instruction: loadedModule.exports.__getString(instructionPtr),
+        name: loadedModule.exports.__getString(namePtr),
+        content: loadedModule.exports.__getString(contentPtr)
+      })
     }
   },
   loop: {
@@ -30,15 +37,6 @@ const importObject = {
     },
     onEventLoopComplete(_timeTaken) {
       requestAnimationFrame(loop)
-    },
-    messageResponse(saveButtonClicked, namePtr, contentPtr) {
-      if (saveButtonClicked) {
-        postMessage({
-          instruction: 'messageresposne',
-          name: loadedModule.exports.__getString(namePtr),
-          content: loadedModule.exports.__getString(contentPtr)
-        })
-      }
     }
   },
   imports: {

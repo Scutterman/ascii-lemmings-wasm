@@ -133,7 +133,7 @@ export abstract class BaseLevel {
     return map
   }
 
-  private renderControlBorders(): void {
+  protected renderControlBorders(): void {
     let maxY: u16 = VISIBLE_Y + CONTROLS_Y + BOUNDARIES_Y
     let maxX: u16 = VISIBLE_X + BOUNDARIES_X
     
