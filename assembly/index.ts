@@ -10,6 +10,7 @@ import { LemmingGift, LevelState } from './types'
 import { UPSCALE_MULTIPLIER } from './upscale'
 import { Level1 } from "./levels/one"
 import { allowedUserInputCharacters } from './text'
+import { Parser } from './maps/types'
 
 export const gameState = new GameState()
 export let currentLevel: BaseLevel
@@ -18,6 +19,10 @@ export let lemmings: Lemming[] = []
 export { triggerEventLoop, setCharacterDimensions, setScreenDimensions, updateMouseCoordinates, registerMouseClick } from './loop'
 
 const useAutoPlayer: boolean = false
+
+export function loadLevelFromString(level: string): void {
+  currentLevel.map = new Parser().parseGeneratedMap(level)
+}
 
 export function loadLevel(newLevel: BaseLevel): void {
   showLoading()
