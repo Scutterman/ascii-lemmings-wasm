@@ -146,11 +146,11 @@ export class Parser {
   
     // Remove comma if present
     if (generatedMapLine.endsWith(',')) {
-      generatedMapLine = generatedMapLine.substr(0, -1)
+      generatedMapLine = generatedMapLine.substr(0, generatedMapLine.length - 1)
     }
   
     // Remove closing quote
-    generatedMapLine = generatedMapLine.substr(0, -1)
+    generatedMapLine = generatedMapLine.substr(0, generatedMapLine.length - 1)
   
     this.lmd.tiles.push(generatedMapLine)
   }
