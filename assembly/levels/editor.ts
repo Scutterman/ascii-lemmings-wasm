@@ -1,10 +1,12 @@
 import { currentLevel, messageResponse } from ".."
-import { TILE_AIR, TILE_GROUND } from "../map"
+import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, TILE_AIR, TILE_GROUND, VISIBLE_X, VISIBLE_Y } from "../map"
 import { LevelMapDetail } from "../maps/types"
 import { Vec2 } from "../position"
 import { Panel } from "../ui/panel"
 import { UIControl } from "../ui/uiControl"
 import { MetaScreen } from "./metascreen"
+import { TileDetail } from '../types'
+import { Animation } from "../animation"
 
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
@@ -112,7 +114,16 @@ export class Editor extends MetaScreen {
   public mapSwapped(map: LevelMapDetail): void {
     this.mapRendered = false
     this.metaMap = map
-    this.map = this.metaMap.toTileDetail()
+    const tileDetail = this.metaMap.toTileDetail()
+    let maxY: i32 = VISIBLE_Y + CONTROLS_Y + BOUNDARIES_Y
+    let maxX: i32 = VISIBLE_X + BOUNDARIES_X
+    for (let row = tileDetail.length; row < maxY; row++) {
+      tileDetail.push([])
+      for (let col = 0; col < maxX; col++) {
+        tileDetail[row].push(new TileDetail(' ', '#000000', new Animation([])))
+      }
+    }
+    this.map = tileDetail
   }
 
   public clone(): Editor {
