@@ -7,6 +7,10 @@ import { MetaScreen } from "./metascreen"
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
   private levelLoaded: boolean = false
+  private selectedBlockKey: string = ''
+  private selectedBlockX: i32 = -1
+  private selectedBlockY: i32 = -1
+  private metaMap: LevelMapDetail = new LevelMapDetail([])
 
   constructor() {
     super('EDITOR')
@@ -19,6 +23,15 @@ export class Editor extends MetaScreen {
     this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Save", () => {
       messageResponse('save', 'foobar.json', '{ "hello": "world" }')
     }))
+
+
+  public mapSquareClicked(mouseTileX: i32, mouseTileY: i32): void {
+    if (mouseTileY >= 0 && mouseTileY < this.metaMap.tiles.length && mouseTileX >= 0 && mouseTileY < this.metaMap.tiles[mouseTileY].length) {
+      this.selectedBlockKey = mouseTileX.toString() + ',' + mouseTileY.toString()
+      this.selectedBlockX = mouseTileX
+      this.selectedBlockY = mouseTileY
+    }
+  }
 
   public mapSwapped(map: LevelMapDetail): void {
     this.mapRendered = false

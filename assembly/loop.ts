@@ -6,6 +6,7 @@ import { UILabel } from './ui/uiLabel'
 import { getCharacterRender } from "./text"
 import { Rect, Vec2 } from "./position"
 import { UIControl } from "./ui/uiControl"
+import { Editor } from "./levels/editor"
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
 
@@ -46,7 +47,11 @@ function processInputs(): void {
     }
   }
 
-  currentLevel.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
+  if (currentLevel instanceof Editor) {
+    (currentLevel as Editor).mapSquareClicked(gameState.mouseTileX, gameState.mouseTileY)
+  } else {
+    currentLevel.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
+  }
 }
 
 function processControlClicks(clickProcessed: boolean): boolean {
