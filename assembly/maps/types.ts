@@ -102,7 +102,7 @@ export class Parser {
   private lmd: LevelMapDetail = new LevelMapDetail([])
   private processingMapSection: boolean = false
   
-  public parseGeneratedMap(generatedMap: string): LevelTileDetail {
+  public parseGeneratedMap(generatedMap: string): LevelMapDetail {
     const mapLines = generatedMap.replaceAll('\r\n', '\n').split('\n')
     for (let i = 0; i < mapLines.length; i++) {
       const line = mapLines[i].trim()
@@ -137,7 +137,7 @@ export class Parser {
       }
     }
 
-    return this.lmd.toTileDetail()
+    return this.lmd
   }
   
   private addMapLine(generatedMapLine: string): void {

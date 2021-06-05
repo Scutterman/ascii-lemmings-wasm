@@ -3,7 +3,7 @@ import { load } from "../maps/meta/metaScreenMap";
 import { Level } from "./level";
 
 export class MetaScreen extends Level {
-  private mapRendered: boolean = false
+  protected mapRendered: boolean = false
   constructor(tag: string) {
     super(tag, 'meta', 0, 0, load(), true)
   }
@@ -15,9 +15,5 @@ export class MetaScreen extends Level {
       this.mapRendered = true
     }
     this.renderControls(false)
-  }
-
-  public mapSwapped(): void {
-    this.mapRendered = false
   }
 }

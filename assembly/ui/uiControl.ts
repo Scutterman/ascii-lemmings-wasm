@@ -10,5 +10,5 @@ export class UIControl extends UILabel {
     tag: string = ''
   ) { super(positionOnScreen, text, tag) }
 
-  public clicked(): void { this.action() }
+  public clicked(): void { this.action(this.tag) }
 }

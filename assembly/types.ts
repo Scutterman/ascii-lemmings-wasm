@@ -42,7 +42,7 @@ export type LevelTiles = string[][]
 export type LevelMap = string[]
 export type Tile = string
 
-export type UIAction = () => void
+export type UIAction = (tag?: string) => void
 
 export class TileDetail {
   constructor(
