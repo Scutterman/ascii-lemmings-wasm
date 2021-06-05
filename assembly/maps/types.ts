@@ -32,53 +32,58 @@ export class LevelMapDetail {
       tileDetail.push([])
       const tileRow = this.tiles[row].split('')
       for (let col = 0; col < tileRow.length; col++) {
-
         const tile = tileRow[col]
-        let detail = new TileDetail(tile, '#000000', new Animation([]))
-        switch(true) {
-          case tile == TILE_BOUNDARY:
-            detail.animation = characterToAnimation('-')
-          break;
-          case tile == TILE_SIDE:
-            detail.animation = characterToAnimation('|')
-          break;
-          case tile == TILE_EXIT: 
-            detail.colour = '#3b2a15'
-            detail.animation = new Animation([
-              [
-                '^  ^'.split(''),
-                '#/\\#'.split(''),
-                '/  \\'.split(''),
-                '|  |'.split('')
-              ],
-              [
-                'w  w'.split(''),
-                '#/\\#'.split(''),
-                '/  \\'.split(''),
-                '|  |'.split('')
-              ]
-            ])
-          case tile == TILE_AIR:
-          break
-          default:
-            const positionString = col.toString() + ',' + row.toString()
-            if (this.customAnimations.has(positionString)) {
-              const _detail = this.getDetailFromAnimationLabel(tile, this.customAnimations.get(positionString))
-              if (_detail != null) {
-                detail = _detail
-              }
-            } else if (this.defaultAnimations.has(tile)) {
-              const _detail = this.getDetailFromAnimationLabel(tile, this.defaultAnimations.get(tile))
-              if (_detail != null) {
-                detail = _detail
-              }
-            }
-          break
-        }
-        tileDetail[row].push(detail)
+        
+        tileDetail[row].push(this.detailFromTile(tile, row, col))
       }
     }
     return tileDetail
+  }
+
+  public detailFromTile(tile: string, row: i32, col: i32): TileDetail {
+    let detail = new TileDetail(tile, '#000000', new Animation([]))
+    switch(true) {
+      case tile == TILE_BOUNDARY:
+        detail.animation = characterToAnimation('-')
+      break;
+      case tile == TILE_SIDE:
+        detail.animation = characterToAnimation('|')
+      break;
+      case tile == TILE_EXIT: 
+        detail.colour = '#3b2a15'
+        detail.animation = new Animation([
+          [
+            '^  ^'.split(''),
+            '#/\\#'.split(''),
+            '/  \\'.split(''),
+            '|  |'.split('')
+          ],
+          [
+            'w  w'.split(''),
+            '#/\\#'.split(''),
+            '/  \\'.split(''),
+            '|  |'.split('')
+          ]
+        ])
+      case tile == TILE_AIR:
+      break
+      default:
+        const positionString = col.toString() + ',' + row.toString()
+        if (this.customAnimations.has(positionString)) {
+          const _detail = this.getDetailFromAnimationLabel(tile, this.customAnimations.get(positionString))
+          if (_detail != null) {
+            detail = _detail
+          }
+        } else if (this.defaultAnimations.has(tile)) {
+          const _detail = this.getDetailFromAnimationLabel(tile, this.defaultAnimations.get(tile))
+          if (_detail != null) {
+            detail = _detail
+          }
+        }
+      break
+    }
+
+    return detail
   }
 }
 
