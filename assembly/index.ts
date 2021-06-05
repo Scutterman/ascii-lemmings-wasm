@@ -23,8 +23,10 @@ const useAutoPlayer: boolean = false
 
 export function loadLevelFromString(level: string): void {
   if (currentLevel instanceof Editor) {
-    currentLevel.map = new Parser().parseGeneratedMap(level)
-    ;(currentLevel as Editor).mapSwapped()
+    const editor = (currentLevel as Editor)
+    const map = new Parser().parseGeneratedMap(level)
+    editor.map = map
+    editor.mapSwapped()
   }
 }
 
