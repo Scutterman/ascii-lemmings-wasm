@@ -25,8 +25,7 @@ export function loadLevelFromString(level: string): void {
   if (currentLevel instanceof Editor) {
     const editor = (currentLevel as Editor)
     const map = new Parser().parseGeneratedMap(level)
-    editor.map = map
-    editor.mapSwapped()
+    editor.mapSwapped(map)
   }
 }
 

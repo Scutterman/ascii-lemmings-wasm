@@ -19,8 +19,13 @@ export class Editor extends MetaScreen {
     this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Save", () => {
       messageResponse('save', 'foobar.json', '{ "hello": "world" }')
     }))
+
+  public mapSwapped(map: LevelMapDetail): void {
+    this.mapRendered = false
+    this.metaMap = map
+    this.map = this.metaMap.toTileDetail()
   }
-  
+
   public clone(): Editor {
     return new Editor()
   }
