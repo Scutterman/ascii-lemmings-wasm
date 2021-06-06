@@ -236,6 +236,14 @@ export class Level extends BaseLevel {
 
     for (let row: i16 = startY; row < endY; row++) {
       for (let col: i16 = startX; col < endX; col++) {
+        if (row >= map.length) {
+          continue
+        }
+
+        if (col >= map[row].length) {
+          continue
+        }
+        
         if (map[row][col].needsRemoval) {
           removeMapTile(map[row][col].elementId)
           map[row][col].needsRemoval = false
