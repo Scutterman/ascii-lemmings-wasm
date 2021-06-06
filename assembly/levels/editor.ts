@@ -26,25 +26,29 @@ export class Editor extends MetaScreen {
       messageResponse('load', '', '')
     }))
 
+    this.uiPanels.push(this.tileOptions)
+    this.uiPanels.push(this.animationListItemKeys)
+  }
+
+  private showOptionsAfterLoad(): void {
+    this.actionPanel.items = []
     this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Save", () => {
       messageResponse('save', 'foobar.json', '{ "hello": "world" }')
     }))
 
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Update Tile", () => {
+    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Tile", () => {
       if (currentLevel instanceof Editor) {
         const editor = currentLevel as Editor
         editor.showTilePanel()
       }
     }))
 
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Update Animation", () => {
+    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Animation", () => {
       if (currentLevel instanceof Editor) {
         const editor = currentLevel as Editor
         editor.showAnimationPanel()
       }
     }))
-
-    this.uiPanels.push(this.animationListItemKeys)
   }
 
   public mapSquareClicked(mouseTileX: i32, mouseTileY: i32): void {
@@ -73,7 +77,7 @@ export class Editor extends MetaScreen {
   }
  
   public setTileOption(tile: string): void {
-    tile = tile.replace('ANIMATION_LIST_ITEM_KEY_', '')
+    tile = tile.replace('TILE_OPTION_', '')
     this.tileOptions.items = []
 
     if (tile == 'Cancel') {
@@ -124,6 +128,8 @@ export class Editor extends MetaScreen {
       }
     }
     this.map = tileDetail
+
+    this.showOptionsAfterLoad()
   }
 
   public clone(): Editor {
