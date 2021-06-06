@@ -4,6 +4,8 @@ import { Level } from "./level";
 
 export class MetaScreen extends Level {
   protected mapRendered: boolean = false
+  protected renderGameSection: boolean = false
+
   constructor(tag: string) {
     super(tag, 'meta', 0, 0, load(), true)
   }
@@ -11,8 +13,9 @@ export class MetaScreen extends Level {
   public renderLevel(): void {
     clearScreen()
     if (!this.mapRendered) {
-      this.render(this.map, false)
+      this.render(this.map, this.renderGameSection)
       this.mapRendered = true
+      this.renderGameSection = false
     }
     this.renderControls(false)
   }
