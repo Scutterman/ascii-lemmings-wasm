@@ -232,8 +232,6 @@ export class Level extends BaseLevel {
     const startX = this.scrollPosition.x
     const endX = this.scrollPosition.x + VISIBLE_X + BOUNDARIES_X
     
-    let renderedItems = 0
-
     for (let row: i16 = startY; row < endY; row++) {
       for (let col: i16 = startX; col < endX; col++) {
         if (row >= map.length) {
@@ -243,12 +241,15 @@ export class Level extends BaseLevel {
         if (col >= map[row].length) {
           continue
         }
-        
+
+        if (map[row][col].animation.hasNextFrame()) {
+          map[row][col].isDirty = true
+          map[row][col].needsRemoval = true
+        }
+
         if (map[row][col].needsRemoval) {
           removeMapTile(map[row][col].elementId)
           map[row][col].needsRemoval = false
-          map[row][col].isDirty = false
-          continue
         }
         
         if (map[row][col].tile == TILE_AIR || !map[row][col].isDirty) {
@@ -267,7 +268,6 @@ export class Level extends BaseLevel {
         
         map[row][col].elementId = renderMapTile(text, new Vec2(col, row), false, map[row][col].colour)
         map[row][col].isDirty = false
-        renderedItems++
       }
     }
   }

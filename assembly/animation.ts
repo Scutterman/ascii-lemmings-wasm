@@ -26,6 +26,10 @@ export class Animation {
     return frame
   }
 
+  public hasNextFrame(): boolean {
+    return this.frames.length > 1
+  }
+
   public clone(): Animation {
     return new Animation(this.frames)
   }
