@@ -53,7 +53,8 @@ wasmRunner.onmessage = (e) => {
         map.innerHTML = ''
       break
       case removeElementMessage:
-        document.querySelector('#' + e.data.elementId).remove()
+        const element = document.querySelector('#' + e.data.elementId)
+        if (element) { element.remove() }
       break
       case renderBackgroundMessage:
         background.innerHTML = e.data.content
