@@ -37,18 +37,21 @@ function processInputs(): void {
     isCursorInBounds(true)
   )
   
-  const clickProcessed = !gameState.mouseClicked
+  let clickProcessed = !gameState.mouseClicked
   gameState.mouseClicked = false
 
   if (isCursorInBounds(false)) {
     const controlHasBeenClicked = processControlClicks(clickProcessed)
     if (controlHasBeenClicked) {
+      clickProcessed = true
       processLemmingClick = false
     }
   }
 
   if (currentLevel instanceof Editor) {
-    (currentLevel as Editor).mapSquareClicked(gameState.mouseTileX, gameState.mouseTileY)
+    if (!clickProcessed) {
+      (currentLevel as Editor).mapSquareClicked(gameState.mouseTileX, gameState.mouseTileY)
+    }
   } else {
     currentLevel.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
   }
