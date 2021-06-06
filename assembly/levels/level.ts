@@ -1,4 +1,4 @@
-import { gameState, lemmings, log } from ".."
+import { gameState, lemmings } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
 import { addLayerToScreen, getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
@@ -261,10 +261,6 @@ export class Level extends BaseLevel {
         map[row][col].isDirty = false
         renderedItems++
       }
-    }
-
-    if (renderedItems > 0) {
-      log('Rendered: ' + renderedItems.toString())
     }
   }
 }
