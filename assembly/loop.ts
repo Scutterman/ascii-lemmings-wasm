@@ -177,11 +177,15 @@ function getPositionInPixels(blockPosition: Vec2): Vec2 {
   return new Vec2(x, y)
 }
 
-export function renderCursor(): void {
+function renderCursor(): void {
   if (!isCursorInBounds(false)) {
     return
   }
-  
+
+  renderBoxAroundBlock(i16(gameState.mouseTileX), i16(gameState.mouseTileY))
+}
+
+export function renderBoxAroundBlock(blockX: i16, blockY: i16): void {
   let text = ''
   const borderSize = '1px'
   const defaultStyles = 'border-left: ' + borderSize + ' dashed black; border-right: ' + borderSize + ' dashed black;'
@@ -191,7 +195,7 @@ export function renderCursor(): void {
     if (i == UPSCALE_MULTIPLIER - 1) { styles += 'border-bottom: ' + borderSize + ' dashed black;' }
     text += '<span style="' + styles + '">' + ' '.repeat(UPSCALE_MULTIPLIER) + '</span>' + lineBreak
   }
-  renderRelativeElement(text, new Vec2(i16(gameState.mouseTileX), i16(gameState.mouseTileY)))
+  renderRelativeElement(text, new Vec2(blockX, blockY))
 }
 
 export function renderUiLabel(element: UILabel): void {
