@@ -132,6 +132,14 @@ export class Editor extends MetaScreen {
     this.showOptionsAfterLoad()
   }
 
+  public renderLevel(): void {
+    super.renderLevel()
+
+    if (this.selectedBlockX >= 0 && this.selectedBlockY >= 0) {
+      renderBoxAroundBlock(i16(this.selectedBlockX), i16(this.selectedBlockY))
+    }
+  }
+
   public clone(): Editor {
     return new Editor()
   }
