@@ -7,6 +7,7 @@ import { UIControl } from "../ui/uiControl"
 import { MetaScreen } from "./metascreen"
 import { TileDetail } from '../types'
 import { Animation } from "../animation"
+import { renderBoxAroundBlock } from "../loop"
 
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
@@ -71,9 +72,15 @@ export class Editor extends MetaScreen {
       this.metaMap.customAnimations.delete(this.selectedBlockKey)
     }
 
+    const id = this.map[this.selectedBlockY][this.selectedBlockX].elementId
     const tile = this.metaMap.tiles[this.selectedBlockY].slice(this.selectedBlockX, this.selectedBlockX + 1)
     const tileDetail = this.metaMap.detailFromTile(tile, this.selectedBlockY, this.selectedBlockX)
+    tileDetail.elementId = id
+    tileDetail.isDirty = true
     this.map[this.selectedBlockY][this.selectedBlockX] = tileDetail
+
+    this.renderGameSection = true
+    this.mapRendered = false
   }
  
   public setTileOption(tile: string): void {
@@ -89,8 +96,17 @@ export class Editor extends MetaScreen {
       this.metaMap.tiles[this.selectedBlockY] = beginning + tile + end
     }
 
+    const id = this.map[this.selectedBlockY][this.selectedBlockX].elementId
     const tileDetail = this.metaMap.detailFromTile(tile, this.selectedBlockY, this.selectedBlockX)
+    tileDetail.elementId = id
+    tileDetail.isDirty = true
+    if (tile == TILE_AIR) {
+      tileDetail.needsRemoval = true
+    }
     this.map[this.selectedBlockY][this.selectedBlockX] = tileDetail
+
+    this.renderGameSection = true
+    this.mapRendered = false
   }
  
   public showTilePanel(): void {
