@@ -132,7 +132,6 @@ export class Editor extends MetaScreen {
   }
 
   public mapSwapped(map: LevelMapDetail): void {
-    this.mapRendered = false
     this.metaMap = map
     const tileDetail = this.metaMap.toTileDetail()
     let maxY: i32 = VISIBLE_Y + CONTROLS_Y + BOUNDARIES_Y
@@ -146,6 +145,8 @@ export class Editor extends MetaScreen {
     this.map = tileDetail
 
     this.showOptionsAfterLoad()
+    this.renderGameSection = true
+    this.mapRendered = false
   }
 
   public renderLevel(): void {
