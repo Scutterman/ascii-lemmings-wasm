@@ -1,6 +1,6 @@
 import { gameState, lemmings } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
-import { addLayerToScreen, getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
+import { getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
@@ -18,6 +18,7 @@ import { DiggerAnimation } from "../actions/digger"
 import { MinerAnimation } from "../actions/miner"
 import { FloaterAnimation } from "../actions/umbrella"
 import { LevelMapDetail } from "../maps/types"
+import { removeItem } from "../vdom/elements"
 
 export class Level extends BaseLevel {
   private canSpawnMore: boolean = true
@@ -173,7 +174,9 @@ export class Level extends BaseLevel {
   public updateLemmings(): void {
     for (let i = 0; i < lemmings.length; i++) {
       if (lemmings[i].removed) { continue }
+      
       lemmings[i].update(getSurroundingTiles(this.map, lemmings[i].position))
+      
       if (lemmings[i].exited) {
         this.numberOfLemmingsSaved++
         const savedPercent = this.getLemmingSavedPercent()
@@ -193,7 +196,6 @@ export class Level extends BaseLevel {
   }
   
   public renderLevel(): void {
-    addLayerToScreen(true)
     this.render(this.map, true)
 
     this.updateLabel('TIMER', this.timeLeft.toString())
@@ -211,9 +213,11 @@ export class Level extends BaseLevel {
 
       const colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
       
-      const labelDimensions = renderTextArrayToScreen(getRenderedTextArray(lemming.renderFrame(this.isDirty)), lemming.position, false, colour)
-      lemming.position = labelDimensions.position
-      lemming.size = labelDimensions.size
+      removeItem(lemming.elementId)
+      const info = renderTextArrayToScreen(getRenderedTextArray(lemming.renderFrame(this.isDirty)), lemming.position, false, colour)
+      lemming.elementId = info.id
+      lemming.position = info.dimensions.position
+      lemming.size = info.dimensions.size
     }
 
     this.renderControls(this.isDirty)

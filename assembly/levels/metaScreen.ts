@@ -1,4 +1,3 @@
-import { clearScreen } from "../loop";
 import { load } from "../maps/meta/metaScreenMap";
 import { Level } from "./level";
 
@@ -11,7 +10,6 @@ export class MetaScreen extends Level {
   }
   
   public renderLevel(): void {
-    clearScreen()
     if (!this.mapRendered) {
       this.render(this.map, this.renderGameSection)
       this.mapRendered = true

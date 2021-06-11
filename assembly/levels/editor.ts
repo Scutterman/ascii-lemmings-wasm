@@ -153,6 +153,7 @@ export class Editor extends MetaScreen {
     super.renderLevel()
 
     if (this.selectedBlockX >= 0 && this.selectedBlockY >= 0) {
+      // TODO:: Remove the select block before re-adding
       renderBoxAroundBlock(i16(this.selectedBlockX), i16(this.selectedBlockY))
     }
   }

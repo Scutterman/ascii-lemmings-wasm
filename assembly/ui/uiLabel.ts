@@ -3,6 +3,7 @@ import { Vec2 } from "../position";
 import { LevelTileDetail } from "../types";
 
 export class UILabel {
+  public elementId: string = ''
   protected hasMouseFocus: boolean = false
   private size: Vec2 = new Vec2(0,0)
   constructor(

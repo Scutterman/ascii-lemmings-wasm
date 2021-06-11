@@ -27,7 +27,7 @@ export class Fall extends LemmingAction {
       }
     } else {
       if (this.blocksFallen >= 16) {
-        lemming.removed = true
+        lemming.removeFromGame()
       } else {
         lemming.action = new Walk()
       }

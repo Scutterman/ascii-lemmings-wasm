@@ -4,6 +4,7 @@ import { Vec2 } from "../position"
 import { UIControl } from "./uiControl"
 import { UILabel } from './uiLabel'
 import { getSizeFromRenderedTextArray, lineBreak } from '../loop'
+import { removeItem } from "../vdom/elements"
 
 export class Panel {
   constructor(public position: Vec2, public items: UILabel[] = []) {}
@@ -42,7 +43,9 @@ export class Panel {
     }
 
     for (let i = 0; i < texts.length; i++) {
-      renderRelativeElement(texts[i].join(lineBreak), nextLabelPosition, borders[i])
+      removeItem(this.items[panelItemIndexes[i]].elementId)
+      const id = renderRelativeElement(texts[i].join(lineBreak), nextLabelPosition, borders[i])
+      this.items[panelItemIndexes[i]].elementId = id
       this.items[panelItemIndexes[i]].setPosition(nextLabelPosition.clone())
       this.items[panelItemIndexes[i]].setSize(sizes[i])
       nextLabelPosition.x += sizes[i].x + 3

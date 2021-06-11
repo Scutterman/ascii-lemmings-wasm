@@ -17,7 +17,7 @@ export class Walk extends LemmingAction {
       this.handleFalling(lemming)
     } else if ((!lemming.movingRight && surroundingTiles.left == TILE_EXIT) || (lemming.movingRight && surroundingTiles.right == TILE_EXIT)) {
       lemming.exited = true
-      lemming.removed = true
+      lemming.removeFromGame()
     } else if (this.canWalkOnNextTile(lemming, surroundingTiles) == false) {
       if (lemming.isClimber) {
         this.handleClimbing(lemming)

@@ -1,12 +1,13 @@
 import { LemmingGift, LevelState } from "./types"
 import { currentLevel, gameState, loadEndSlate, log } from './index'
 import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from "./map"
-import { upscale, UPSCALE_MULTIPLIER } from './upscale'
+import { UPSCALE_MULTIPLIER } from './upscale'
 import { UILabel } from './ui/uiLabel'
 import { getCharacterRender } from "./text"
 import { Rect, Vec2 } from "./position"
 import { UIControl } from "./ui/uiControl"
 import { Editor } from "./levels/editor"
+import { compileItems, ITEM_SET_BACKGROUND, ITEM_SET_MAP, removeItem, setItem } from "./vdom/elements"
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
 
@@ -145,7 +146,7 @@ function endLoop(start: i64, levelDidNotEnd: boolean): void {
     gameState.lastRenderTime = Date.now()
     currentLevel.renderLevel()
     renderCursor()
-    renderComplete()
+    render(compileItems())
   }
 
   loopCompleted(start)
@@ -157,18 +158,12 @@ const loopCompleted = (start: i64): void => {
   onEventLoopComplete(timeTaken)
 }
 
-declare function removeElement(elementId: string): void;
-declare function renderBackground(content: string): void;
-declare function renderMap(content: string): void;
+// declare function removeElement(elementId: string): void;
+// declare function renderBackground(content: string): void;
+// declare function renderMap(content: string): void;
 declare function render(output: string): void;
 declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 
-let output = ''
-let outputSuffix = ''
-let relativeItems = ''
-let backgroundLayer = ''
-let mapTiles = ''
-let mapTilesToRemove: string[] = []
 let relativeItemId = 1
 export const lineBreak = '<br />'
 
@@ -178,15 +173,17 @@ function getPositionInPixels(blockPosition: Vec2): Vec2 {
   return new Vec2(x, y)
 }
 
+let cursorId = ''
 function renderCursor(): void {
   if (!isCursorInBounds(false)) {
     return
   }
 
-  renderBoxAroundBlock(i16(gameState.mouseTileX), i16(gameState.mouseTileY))
+  removeItem(cursorId)
+  cursorId = renderBoxAroundBlock(i16(gameState.mouseTileX), i16(gameState.mouseTileY))
 }
 
-export function renderBoxAroundBlock(blockX: i16, blockY: i16): void {
+export function renderBoxAroundBlock(blockX: i16, blockY: i16): string {
   let text = ''
   const borderSize = '1px'
   const defaultStyles = 'border-left: ' + borderSize + ' dashed black; border-right: ' + borderSize + ' dashed black;'
@@ -196,13 +193,17 @@ export function renderBoxAroundBlock(blockX: i16, blockY: i16): void {
     if (i == UPSCALE_MULTIPLIER - 1) { styles += 'border-bottom: ' + borderSize + ' dashed black;' }
     text += '<span style="' + styles + '">' + ' '.repeat(UPSCALE_MULTIPLIER) + '</span>' + lineBreak
   }
-  renderRelativeElement(text, new Vec2(blockX, blockY))
+  const id = renderRelativeElement(text, new Vec2(blockX, blockY))
+  return id
 }
 
 export function renderUiLabel(element: UILabel): void {
-  const labelDimensions = renderTextArrayToScreen(element.getTextForRender(false), element.getPosition(), element instanceof UIControl)
-  element.setPosition(labelDimensions.position)
-  element.setSize(labelDimensions.size)
+  removeItem(element.elementId)
+  const info = renderTextArrayToScreen(element.getTextForRender(false), element.getPosition(), element instanceof UIControl)
+
+  element.elementId = info.id
+  element.setPosition(info.dimensions.position)
+  element.setSize(info.dimensions.size)
 }
 
 export function getRenderedTextArray(textToRender: string): string[] {
@@ -256,107 +257,54 @@ export function getTextDimensions(text: string[], position: Vec2): Rect {
   return labelDimensions
 }
 
-export function renderTextArrayToScreen(text: string[], position: Vec2, border: boolean = true, colour: string = '#000000'): Rect {
+class RenderedTextArray {
+  constructor (public id: string, public dimensions: Rect) {}
+}
+
+export function renderTextArrayToScreen(text: string[], position: Vec2, border: boolean = true, colour: string = '#000000'): RenderedTextArray {
   const labelDimensions = getTextDimensions(text, position)
-  renderRelativeElement(text.join(lineBreak), labelDimensions.position, border, colour)
-  return labelDimensions
+  const id = renderRelativeElement(text.join(lineBreak), labelDimensions.position, border, colour)
+  return new RenderedTextArray(id, labelDimensions)
 }
 
 class RelativeElement {
   constructor(public html: string, public id: string) {}
 }
 
-export function constructRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000', needsId: boolean = false): RelativeElement {
+export function constructRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): RelativeElement {
   const pixelPosition = getPositionInPixels(blockPosition)
   const borderStyles = border ? 'box-shadow: inset 0 0 1px #000000' : ''
-  const elementId = needsId ? 'RELATIVE_' + relativeItemId.toString() : ''
-  const elementIdHtml = needsId ? 'id="' + elementId + '"' : ''
+  const elementId = 'RELATIVE_' + relativeItemId.toString()
+  const elementIdHtml = 'id="' + elementId + '"'
   relativeItemId++
+
   const html = '<span ' + elementIdHtml + ' style="display: inline-block; width: auto; height: auto; position: absolute; left: ' + pixelPosition.x.toString() + 'px; top:' + pixelPosition.y.toString() + 'px;' + borderStyles + '; color: ' + colour + '">' + text + '</span>'
   return new RelativeElement(html, elementId)
 }
 
 export function renderRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): string {
-  const element = constructRelativeElement(text, blockPosition, border, colour, false)
-  relativeItems += element.html
+  const element = constructRelativeElement(text, blockPosition, border, colour)
+  setItem(element.id, element.html)
   return element.id
 }
 
 export function removeMapTile(elementId: string): void {
   if (elementId.length > 0) {
-    mapTilesToRemove.push(elementId)
+    removeItem(elementId, ITEM_SET_MAP)
   }
 }
 
 export function renderMapTile(text: string[], blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): string {
   const tileDimensions = getTextDimensions(text, blockPosition)
-  const element = constructRelativeElement(text.join(lineBreak), tileDimensions.position, border, colour, true)
-  mapTiles += element.html
+  const element = constructRelativeElement(text.join(lineBreak), tileDimensions.position, border, colour)
+  setItem(element.id, element.html, ITEM_SET_MAP)
   return element.id
 }
 
 export function renderBackgroundToScreen(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): string {
-  const element = constructRelativeElement(text, blockPosition, border, colour, false)
-  backgroundLayer += element.html
+  const element = constructRelativeElement(text, blockPosition, border, colour)
+  setItem(element.id, element.html, ITEM_SET_BACKGROUND)
   return element.id
-}
-
-export function renderToScreen(text: string, colour: string = ''): void {
-  if (colour != '') {
-    output += '<span style="color: ' + colour + ';">'
-  }
-
-  const outputLines = upscale(text)
-  for (let i = 0; i < outputLines.length; i++) {
-    output += outputLines[i] + lineBreak
-  }
-
-  if (colour != '') {
-    output += '</span>'
-  }
-}
-
-export function renderComplete(): void {
-  output += outputSuffix
-  if (backgroundLayer != '') {
-    renderBackground('<div class="screen">' + backgroundLayer + '</div>')
-  }
-
-  if (mapTilesToRemove.length > 0) {
-    for (let i = 0; i < mapTilesToRemove.length; i++) {
-      removeElement(mapTilesToRemove[i])
-    }
-    mapTilesToRemove = []
-  }
-  
-  if (mapTiles != '') {
-    renderMap(mapTiles)
-  }
-  
-  if (relativeItems != '') {
-    output += '<div class="screen">' + relativeItems + '</div>'
-  }
-  render(output)
-}
-
-export function clearScreen(): void {
-  output = ''
-  backgroundLayer = ''
-  mapTiles = ''
-  relativeItems = ''
-}
-
-export function addLayerToScreen(clearBeforeAdd: boolean = false): void {
-  outputSuffix = '</div>'
-  if (clearBeforeAdd) {
-    clearScreen()
-  }
-
-  if (output != '') {
-    output += outputSuffix
-  }
-
-  output += '<div class="screen">'
 }
 
 /** EXPORTED TO JS */

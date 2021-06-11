@@ -12,6 +12,7 @@ import { Level1 } from "./levels/one"
 import { allowedUserInputCharacters } from './text'
 import { Parser } from './maps/types'
 import { Editor } from './levels/editor'
+import { ITEM_SET_BACKGROUND, ITEM_SET_MAP, ITEM_SET_RELATIVE, resetItems } from './vdom/elements'
 
 export const gameState = new GameState()
 export let currentLevel: BaseLevel
@@ -30,6 +31,10 @@ export function loadLevelFromString(level: string): void {
 }
 
 export function loadLevel(newLevel: BaseLevel): void {
+  resetItems(ITEM_SET_RELATIVE)
+  resetItems(ITEM_SET_BACKGROUND)
+  resetItems(ITEM_SET_MAP)
+  
   showLoading()
   lemmings = []
   if (!newLevel.isMetaScreen) {

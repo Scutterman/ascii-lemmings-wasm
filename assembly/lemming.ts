@@ -11,12 +11,15 @@ import { Animation } from "./animation";
 import { removeTerrain, SurroundingTiles } from "./map";
 import { Vec2 } from "./position";
 import { LemmingGift } from "./types";
+import { removeItem } from "./vdom/elements";
 
 export class BomberAnimation extends Animation {
   constructor() { super([[['5']], [['4']], [['3']], [['2']], [['1']], [['0']]]) }
 }
 
 export class Lemming {
+  public elementId: string = ''
+
   movingRight: boolean = true
   removed: boolean = false
   exited: boolean = false
@@ -45,6 +48,11 @@ export class Lemming {
     return this.isExploding
   }
 
+  public removeFromGame(): void {
+    this.removed = true
+    removeItem(this.elementId)
+  }
+
   // returns whether the lemming is still alive (for now)
   private updateExplosion(): boolean {
     if (this.framesUntilExplosion > 0) {
@@ -59,7 +67,7 @@ export class Lemming {
       removeTerrain(currentLevel.map, new Vec2(this.position.x + 1, this.position.y - 1))
       removeTerrain(currentLevel.map, new Vec2(this.position.x + 1, this.position.y))
       removeTerrain(currentLevel.map, new Vec2(this.position.x + 1, this.position.y + 1))
-      this.removed = true
+      this.removeFromGame()
       return false
     }
   }
