@@ -50,7 +50,6 @@ wasmRunner.onmessage = (e) => {
       break
       case showLoadingMessage:
         document.querySelector('#loading').classList.add('shown')
-        map.innerHTML = ''
       break
       case removeElementMessage:
         const element = document.querySelector('#' + e.data.elementId)
@@ -60,7 +59,14 @@ wasmRunner.onmessage = (e) => {
         background.innerHTML = e.data.content
       break
       case renderMapMessage:
-        map.innerHTML += e.data.content
+        requestAnimationFrame(() => {
+          e.data.keys.forEach((key, index) => {
+            const $element = document.querySelector('#' + key)
+            if ($element != null) {
+              $element.innerHTML = e.data.contents[index]
+            }
+          })
+        })
       break
       case isEditing:
         isEditingMap = e.data.isEditing

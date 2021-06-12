@@ -27,12 +27,16 @@ const importObject = {
     //   const content = loadedModule.exports.__getString(msgPtr)
     //   postMessage({ instruction: 'renderbackgroundmessage', content })
     // },
-    // renderMap(msgPtr) {
-    //   const content = loadedModule.exports.__getString(msgPtr)
-    //   postMessage({ instruction: 'rendermapmessage', content })
-    // },
+    renderMap(msgPtr) {
+      const encodedMessage = loadedModule.exports.__getString(msgPtr)
+      if (encodedMessage.trim().length == 0) { return }
+      const [encodedKeys, encodedContent] = encodedMessage.split(':')
+      const keys = encodedKeys.split(';').map(key => key.replaceAll('{{colon}}', ':').replaceAll('{{semicolon}}', ';'))
+      const contents = encodedContent.split(';').map(content => content.replaceAll('{{colon}}', ':').replaceAll('{{semicolon}}', ';'))
+      postMessage({ instruction: 'rendermapmessage', keys, contents })
+    },
     render(msgPtr) {
-      const output = loadedModule.exports.__getString(msgPtr)
+      const output = loadedModule.exports.__getString(msgPtr).replaceAll('{{colon}}', ':').replaceAll('{{semicolon}}', ';')
       postMessage(output)
     },
     onEventLoopComplete(_timeTaken) {

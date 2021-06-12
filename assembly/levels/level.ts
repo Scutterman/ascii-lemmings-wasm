@@ -248,7 +248,6 @@ export class Level extends BaseLevel {
 
         if (map[row][col].animation.hasNextFrame()) {
           map[row][col].isDirty = true
-          map[row][col].needsRemoval = true
         }
 
         if (map[row][col].needsRemoval) {
@@ -270,7 +269,7 @@ export class Level extends BaseLevel {
           }
         }
         
-        map[row][col].elementId = renderMapTile(text, new Vec2(col, row), false, map[row][col].colour)
+        map[row][col].elementId = renderMapTile(text, new Vec2(col, row), map[row][col].colour)
         map[row][col].isDirty = false
       }
     }

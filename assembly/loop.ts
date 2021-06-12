@@ -7,7 +7,7 @@ import { getCharacterRender } from "./text"
 import { Rect, Vec2 } from "./position"
 import { UIControl } from "./ui/uiControl"
 import { Editor } from "./levels/editor"
-import { compileItems, ITEM_SET_BACKGROUND, ITEM_SET_MAP, removeItem, setItem } from "./vdom/elements"
+import { compileItems, compileMapChanges, ITEM_SET_BACKGROUND, ITEM_SET_MAP, removeItem, resetItems, setItem } from "./vdom/elements"
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
 
@@ -147,6 +147,8 @@ function endLoop(start: i64, levelDidNotEnd: boolean): void {
     currentLevel.renderLevel()
     renderCursor()
     render(compileItems())
+    renderMap(compileMapChanges())
+    resetItems(ITEM_SET_MAP)
   }
 
   loopCompleted(start)
@@ -160,7 +162,7 @@ const loopCompleted = (start: i64): void => {
 
 // declare function removeElement(elementId: string): void;
 // declare function renderBackground(content: string): void;
-// declare function renderMap(content: string): void;
+declare function renderMap(content: string): void;
 declare function render(output: string): void;
 declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 
@@ -290,15 +292,19 @@ export function renderRelativeElement(text: string, blockPosition: Vec2, border:
 
 export function removeMapTile(elementId: string): void {
   if (elementId.length > 0) {
-    removeItem(elementId, ITEM_SET_MAP)
+    setItem(elementId, '', ITEM_SET_MAP)
   }
 }
 
-export function renderMapTile(text: string[], blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): string {
-  const tileDimensions = getTextDimensions(text, blockPosition)
-  const element = constructRelativeElement(text.join(lineBreak), tileDimensions.position, border, colour)
-  setItem(element.id, element.html, ITEM_SET_MAP)
-  return element.id
+export function renderMapTile(text: string[], blockPosition: Vec2, colour: string = '#000000'): string {
+  let content = text.join(lineBreak)
+  if (colour != '#000000') {
+    content = '<span style="color: ' + colour + ';">' + content + '</span>'
+  }
+
+  const elementId = 'block_' + blockPosition.y.toString() + '_' + blockPosition.x.toString()
+  setItem(elementId, content, ITEM_SET_MAP)
+  return elementId
 }
 
 export function renderBackgroundToScreen(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): string {
