@@ -8,6 +8,7 @@ import { MetaScreen } from "./metascreen"
 import { TileDetail } from '../types'
 import { Animation } from "../animation"
 import { renderBoxAroundBlock } from "../loop"
+import { removeItem } from "../vdom/elements"
 
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
@@ -149,12 +150,13 @@ export class Editor extends MetaScreen {
     this.mapRendered = false
   }
 
+  private selectedBlockId: string = ''
   public renderLevel(): void {
     super.renderLevel()
 
     if (this.selectedBlockX >= 0 && this.selectedBlockY >= 0) {
-      // TODO:: Remove the select block before re-adding
-      renderBoxAroundBlock(i16(this.selectedBlockX), i16(this.selectedBlockY))
+      removeItem(this.selectedBlockId)
+      this.selectedBlockId =  renderBoxAroundBlock(i16(this.selectedBlockX), i16(this.selectedBlockY))
     }
   }
 
