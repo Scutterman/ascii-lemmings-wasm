@@ -34,13 +34,13 @@ export class SurroundingTiles {
   bottomRight: string
 }
 
-export function mapToTiles(map: LevelMap, isControlBorder: boolean = false): LevelTileDetail {
+export function mapToTiles(map: LevelMap): LevelTileDetail {
   const arr: LevelTileDetail = []
   for (let i = 0; i < map.length; i++) {
     arr.push([])
     const cols = map[i].split('')
     for (let j = 0; j < cols.length; j++) {
-      arr[i].push(new TileDetail(cols[j], '#000000', characterToAnimation(cols[j]), '', false, true, isControlBorder))
+      arr[i].push(new TileDetail(cols[j], '#000000', characterToAnimation(cols[j]), '', false, true))
     }
   }
   return arr
