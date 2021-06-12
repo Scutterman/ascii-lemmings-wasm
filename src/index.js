@@ -1,6 +1,6 @@
 // Wasm setup explained here: https://blog.logrocket.com/the-introductory-guide-to-assemblyscript/
 const background = document.querySelector('#background')
-const map = document.querySelector('#map')
+let map // html element containing all map squares
 const gameArea = document.querySelector('#screen')
 const clickTarget = document.querySelector('#click-target')
 const dimensions = measureOneCharacter()
@@ -125,7 +125,6 @@ clickTarget.addEventListener('click', function() {
 
       setMessageResponseCallback(undefined)
 
-      console.log('got message', data)
       switch (data.instruction) {
         case 'save':
           if (data.content.length > 0) {
@@ -147,12 +146,45 @@ function onKeyUp(e) {
 }
 
 function setScreenSize(screenSize) {
+  const blockWidthPixels = screenSize.width / screenSize.blockWidth
+  const blockHeightPixels = screenSize.height / screenSize.blockHeight
+
   const style = document.createElement('style')
   style.setAttribute('type', 'text/css')
-  style.appendChild(document.createTextNode(
-    '#screen, #screen div, #click-target, .grid { width: ' + screenSize.width + 'px; height: ' + screenSize.height + 'px; }'
-  ))
+  let css = `
+    #screen, #screen div, #click-target, .grid {
+      width: ${ screenSize.width }px; height: ${ screenSize.height }px !important;
+    }
+
+    .block {
+      width: ${ blockWidthPixels }px; height: ${ blockHeightPixels }px !important;
+      position: absolute;
+    }
+  `
+
+  for (let row = 0; row < screenSize.blockHeight; row++) {
+    css += '.row_' + row + ' { top: ' + (blockHeightPixels * row) + 'px !important; }'
+  }
+
+  for (let col = 0; col < screenSize.blockWidth; col++) {
+    css += '.col_' + col + ' { left: ' + (blockWidthPixels * col) + 'px !important; }'
+  }
+  
+  style.appendChild(document.createTextNode(css))
+  
+  map = document.createElement('div')
+  map.classList.add('screen', 'top-level-element')
+  for (let row = 0; row < screenSize.blockHeight; row++) {
+    for (let col = 0; col < screenSize.blockWidth; col++) {
+      const element = document.createElement('div')
+      element.setAttribute('id', 'block_' + row + '_' + col)
+      element.classList.add('block', 'row_' + row, 'col_' + col)
+      map.appendChild(element)
+    }
+  }
+  
   document.head.appendChild(style)
+  document.body.appendChild(map)
 }
 
 function measureOneCharacter() {

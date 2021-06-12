@@ -75,7 +75,6 @@ onmessage = function(e) {
       }
     }
 
-    // loop()
     return
   }
   
@@ -114,7 +113,11 @@ function setDimensions(clientWidth, clientHeight, characterWidth, characterHeigh
 
 function getScreenSize() {
   return {
-    width: loadedModule.instance.exports.getScreenWidth(), height: loadedModule.instance.exports.getScreenHeight() }
+    width: loadedModule.instance.exports.getScreenWidth(),
+    height: loadedModule.instance.exports.getScreenHeight(),
+    blockWidth: loadedModule.instance.exports.getBlockWidth(),
+    blockHeight: loadedModule.instance.exports.getBlockHeight()
+  }
 }
 
 function start() {

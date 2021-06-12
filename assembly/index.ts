@@ -96,6 +96,13 @@ export function getScreenHeight(): f32 {
   return f32(BOUNDARIES_Y + VISIBLE_Y + CONTROLS_Y) * f32(UPSCALE_MULTIPLIER) * gameState.characterHeight
 }
 
+export function getBlockWidth(): f32 {
+  return f32(BOUNDARIES_X + VISIBLE_X)
+}
+export function getBlockHeight(): f32 {
+  return f32(BOUNDARIES_Y + VISIBLE_Y + CONTROLS_Y)
+}
+
 export declare function log(text: string): void
 
 // TODO:: I wanted all of this in another file, but the compile fails if I do
