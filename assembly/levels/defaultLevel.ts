@@ -14,7 +14,7 @@ export class DefaultLevel extends BaseLevel {
   public canUseSkill(skill: LemmingGift): boolean { return false }
   public giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void {}
   public renderLevel(): void {}
-  protected render(map: LevelTileDetail, isRenderingGameSection: boolean): void { }
+  protected render(map: LevelTileDetail, isRenderingGameSection: boolean, resetAll: boolean): void { }
   public processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean {
     return true
   }

@@ -230,7 +230,7 @@ export class Level extends BaseLevel {
     return new Level(this.tag, this.difficulty, this.numberOfLemmings, this.numberOfLemmingsForSuccess, newMap, this.isMetaScreen, this.buttonYCoordinate)
   }
   
-  protected render(map: LevelTileDetail, isRenderingGameSection: boolean = false): void {
+  protected render(map: LevelTileDetail, isRenderingGameSection: boolean = false, resetAll: boolean = false): void {
     const startY = isRenderingGameSection ? this.scrollPosition.y : 0
     const endY = isRenderingGameSection ? this.scrollPosition.y + VISIBLE_Y + BOUNDARIES_Y : map.length
     const startX = this.scrollPosition.x
@@ -255,7 +255,7 @@ export class Level extends BaseLevel {
           map[row][col].needsRemoval = false
         }
         
-        if (map[row][col].tile == TILE_AIR || !map[row][col].isDirty) {
+        if (!resetAll && (map[row][col].tile == TILE_AIR || !map[row][col].isDirty)) {
           map[row][col].isDirty = false
           continue
         }

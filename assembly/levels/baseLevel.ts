@@ -39,7 +39,7 @@ export abstract class BaseLevel {
   public abstract giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void
   public abstract clone(): BaseLevel
   public abstract renderLevel(): void
-  protected abstract render(map: LevelTileDetail, isRenderingGameSection: boolean): void
+  protected abstract render(map: LevelTileDetail, isRenderingGameSection: boolean, resetAll: boolean): void
 
   public abstract canUseSkill(skill: LemmingGift): boolean
   public abstract skillUsed(skill: LemmingGift): void
@@ -148,7 +148,7 @@ export abstract class BaseLevel {
       }
     }
     
-    this.render(map, false)
+    this.render(map, false, false)
   }
 
   protected renderControls(isDirty: boolean): void {
