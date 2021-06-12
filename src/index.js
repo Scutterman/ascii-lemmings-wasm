@@ -158,7 +158,7 @@ function setScreenSize(screenSize) {
   const style = document.createElement('style')
   style.setAttribute('type', 'text/css')
   let css = `
-    #screen, #screen div, #click-target, .grid {
+    #screen, #screen > div, #click-target, .grid {
       width: ${ screenSize.width }px; height: ${ screenSize.height }px !important;
     }
 
