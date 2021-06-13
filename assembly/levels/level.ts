@@ -204,18 +204,21 @@ export class Level extends BaseLevel {
       const lemming = lemmings[i]
       if (lemming.removed) { continue }
 
+      removeItem(lemming.elementId)
+      const position = new Vec2(lemming.position.x - this.scrollPosition.x, lemming.position.y - this.scrollPosition.y)
       if (
-        lemming.position.x < this.scrollPosition.x ||
-        lemming.position.x > this.scrollPosition.x + VISIBLE_X ||
-        lemming.position.y < this.scrollPosition.y ||
-        lemming.position.y > this.scrollPosition.y + VISIBLE_Y
+        position.x < 0 ||
+        position.x > i16(VISIBLE_X) ||
+        position.y < 0 ||
+        position.y > i16(VISIBLE_Y)
       ) { continue }
 
       const colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
       
-      removeItem(lemming.elementId)
-      const info = renderTextArrayToScreen(getRenderedTextArray(lemming.renderFrame(this.isDirty)), lemming.position, false, colour)
+      const info = renderTextArrayToScreen(getRenderedTextArray(lemming.renderFrame(this.isDirty)), position, false, colour)
       lemming.elementId = info.id
+      info.dimensions.position.x += this.scrollPosition.x
+      info.dimensions.position.y += this.scrollPosition.y
       lemming.position = info.dimensions.position
       lemming.size = info.dimensions.size
     }
