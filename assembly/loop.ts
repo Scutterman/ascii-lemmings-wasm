@@ -30,6 +30,21 @@ function isCursorInBounds(checkGameArea: boolean): boolean {
   }
 }
 
+function getClippedCursorPosition(): Vec2 {
+  let x: i16 = i16(gameState.mouseTileX)
+  let y: i16 = i16(gameState.mouseTileY)
+  const maxX = i16(VISIBLE_X + BOUNDARIES_X - 1)
+  const maxY = i16(VISIBLE_Y + BOUNDARIES_Y + CONTROLS_Y - 1)
+
+  if (x < 0) { x = 0 }
+  else if (x > maxX) { x = maxX }
+  
+  if (y < 0) { y = 0 }
+  else if (y > maxY) { y = maxY }
+
+  return new Vec2(x, y)
+}
+
 function processInputs(): void {
   let processLemmingClick = (
     gameState.mouseClicked &&
@@ -177,12 +192,9 @@ function getPositionInPixels(blockPosition: Vec2): Vec2 {
 
 let cursorId = ''
 function renderCursor(): void {
-  if (!isCursorInBounds(false)) {
-    return
-  }
-
+  const clippedCursorPosition = getClippedCursorPosition()
   removeItem(cursorId)
-  cursorId = renderBoxAroundBlock(i16(gameState.mouseTileX), i16(gameState.mouseTileY))
+  cursorId = renderBoxAroundBlock(clippedCursorPosition.x, clippedCursorPosition.y)
 }
 
 export function renderBoxAroundBlock(blockX: i16, blockY: i16): string {
