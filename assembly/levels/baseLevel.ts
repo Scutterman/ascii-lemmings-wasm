@@ -31,6 +31,7 @@ export abstract class BaseLevel {
   public isMetaScreen: boolean
   public hasEnded: boolean = false
   public scrollPosition: Vec2 = new Vec2(0,0)
+  protected lastScrollPosition: Vec2 = new Vec2(0,0)
 
   public abstract processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean
   public abstract updateLemmings(): void

@@ -235,6 +235,8 @@ export class Level extends BaseLevel {
     const endY = isRenderingGameSection ? this.scrollPosition.y + VISIBLE_Y + BOUNDARIES_Y : map.length
     const startX = this.scrollPosition.x
     const endX = this.scrollPosition.x + VISIBLE_X + BOUNDARIES_X
+
+    const hasScrolled = this.scrollPosition.x != this.lastScrollPosition.x || this.scrollPosition.y != this.lastScrollPosition.y
     
     for (let row: i16 = startY; row < endY; row++) {
       for (let col: i16 = startX; col < endX; col++) {
@@ -246,7 +248,7 @@ export class Level extends BaseLevel {
           continue
         }
 
-        if (map[row][col].animation.hasNextFrame()) {
+        if (hasScrolled || map[row][col].animation.hasNextFrame()) {
           map[row][col].isDirty = true
         }
 
@@ -255,7 +257,7 @@ export class Level extends BaseLevel {
           map[row][col].needsRemoval = false
         }
         
-        if (!resetAll && (map[row][col].tile == TILE_AIR || !map[row][col].isDirty)) {
+        if (!hasScrolled && !resetAll && (map[row][col].tile == TILE_AIR || !map[row][col].isDirty)) {
           map[row][col].isDirty = false
           continue
         }
@@ -269,9 +271,11 @@ export class Level extends BaseLevel {
           }
         }
         
-        map[row][col].elementId = renderMapTile(text, new Vec2(col, row), map[row][col].colour)
+        map[row][col].elementId = renderMapTile(text, new Vec2(col - this.scrollPosition.x, row - this.scrollPosition.y), map[row][col].colour)
         map[row][col].isDirty = false
       }
     }
+
+    this.lastScrollPosition = this.scrollPosition.clone()
   }
 }
