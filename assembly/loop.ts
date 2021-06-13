@@ -9,7 +9,7 @@ import { UIControl } from "./ui/uiControl"
 import { Editor } from "./levels/editor"
 import { compileItems, compileMapChanges, ITEM_SET_BACKGROUND, ITEM_SET_MAP, removeItem, resetItems, setItem } from "./vdom/elements"
 
-const millisecondsPerFrameRender: i64 = Math.round(1000 / 30) as i64
+const millisecondsPerFrameRender: i64 = Math.round(1000 / 60) as i64
 
 function isCursorInBounds(checkGameArea: boolean): boolean {
   if (currentLevel.isMetaScreen) {

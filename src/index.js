@@ -165,6 +165,7 @@ function setScreenSize(screenSize) {
     .block {
       width: ${ blockWidthPixels }px; height: ${ blockHeightPixels }px !important;
       position: absolute;
+      overflow: hidden;
     }
   `
 
