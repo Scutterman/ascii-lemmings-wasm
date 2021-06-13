@@ -198,17 +198,7 @@ function renderCursor(): void {
 }
 
 export function renderBoxAroundBlock(blockX: i16, blockY: i16): string {
-  let text = ''
-  const borderSize = '1px'
-  const defaultStyles = 'border-left: ' + borderSize + ' dashed black; border-right: ' + borderSize + ' dashed black;'
-  for (let i: u8 = 0; i < UPSCALE_MULTIPLIER; i++) {
-    let styles = defaultStyles
-    if (i == 0) { styles += 'border-top: ' + borderSize + ' dashed black;' }
-    if (i == UPSCALE_MULTIPLIER - 1) { styles += 'border-bottom: ' + borderSize + ' dashed black;' }
-    text += '<span style="' + styles + '">' + ' '.repeat(UPSCALE_MULTIPLIER) + '</span>' + lineBreak
-  }
-  const id = renderRelativeElement(text, new Vec2(blockX, blockY))
-  return id
+  return renderRelativeElement('<span class="box"></span>', new Vec2(blockX, blockY))
 }
 
 export function renderUiLabel(element: UILabel): void {

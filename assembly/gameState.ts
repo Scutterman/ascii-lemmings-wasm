@@ -15,7 +15,7 @@ export class GameState {
   public shouldRun: boolean = false
   public levelState: LevelState = LevelState.TitleScreen
   public lastGameLoopRunTime: i64 = Date.now()
-  public lastRenderTime: i64 = Date.now()
+  public lastRenderTime: i64 = 0
   public fastForward: boolean = false
   public millisecondsPerGameLoop: u16 = baseMillisecondsPerGameLoop
   public releaseRate: u8 = 50

@@ -167,6 +167,12 @@ function setScreenSize(screenSize) {
       position: absolute;
       overflow: hidden;
     }
+    
+    .box {
+      display: block;
+      width: ${ blockWidthPixels }px; height: ${ blockHeightPixels }px !important;
+      box-shadow: inset 0 0 2px #000000;
+    }
   `
 
   for (let row = 0; row < screenSize.blockHeight; row++) {
