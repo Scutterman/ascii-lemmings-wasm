@@ -61,6 +61,7 @@ wasmRunner.onmessage = (e) => {
       break
       case renderMapMessage:
         requestAnimationFrame(() => {
+          updateMapScroll(e.data.scrollX, e.data.scrollY)
           e.data.keys.forEach((key, index) => {
             const $element = document.querySelector('#' + key)
             if ($element != null) {
@@ -152,6 +153,8 @@ function onKeyUp(e) {
 
 function setScreenSize(screenSize) {
   dimensions.screenSize = screenSize
+  dimensions.scrollX = 0
+  dimensions.scrollY = 0
   dimensions.blockWidthPixels = screenSize.width / screenSize.blockWidth
   dimensions.blockHeightPixels = screenSize.height / screenSize.blockHeight
 
@@ -228,6 +231,29 @@ function setupClient(mapWidth, mapHeight) {
     `)
     wasmRunner.postMessage({ instruction: 'runlevel' })
   })
+}
+
+/**
+ * Must call from inside requestAnimationFrame
+ */
+function updateMapScroll(scrollX, scrollY) {
+  const hasScrolledX = scrollX != dimensions.scrollX
+  const hasScrolledY = scrollY != dimensions.scrollY
+  dimensions.scrollX = scrollX
+  dimensions.scrollY = scrollY
+
+  if (hasScrolledX || hasScrolledY) {
+    const $maps = document.querySelectorAll('.full-map')
+    for (let i = 0; i < $maps.length; i++) {
+      if (hasScrolledX) {
+        $maps[i].style.left = (scrollX * dimensions.blockWidthPixels) * -1
+      }
+
+      if (hasScrolledY) {
+        $maps[i].style.top = (scrollY * dimensions.blockHeightPixels) * -1
+      }
+    }
+  }
 }
 
 wasmRunner.postMessage({ instruction: 'init' })

@@ -162,7 +162,7 @@ function endLoop(start: i64, levelDidNotEnd: boolean): void {
     currentLevel.renderLevel()
     renderCursor()
     render(compileItems())
-    renderMap(compileMapChanges())
+    renderMap(compileMapChanges(), currentLevel.scrollPosition.x, currentLevel.scrollPosition.y)
     resetItems(ITEM_SET_MAP)
   }
 
@@ -177,7 +177,7 @@ const loopCompleted = (start: i64): void => {
 
 // declare function removeElement(elementId: string): void;
 // declare function renderBackground(content: string): void;
-declare function renderMap(content: string): void;
+declare function renderMap(content: string, scrollX: i16, scrollY: i16): void;
 declare function render(output: string): void;
 declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 

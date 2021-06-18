@@ -27,13 +27,13 @@ const importObject = {
     //   const content = loadedModule.exports.__getString(msgPtr)
     //   postMessage({ instruction: 'renderbackgroundmessage', content })
     // },
-    renderMap(msgPtr) {
+    renderMap(msgPtr, scrollX, scrollY) {
       const encodedMessage = loadedModule.exports.__getString(msgPtr)
       if (encodedMessage.trim().length == 0) { return }
       const [encodedKeys, encodedContent] = encodedMessage.split(':')
       const keys = encodedKeys.split(';').map(key => key.replaceAll('{{colon}}', ':').replaceAll('{{semicolon}}', ';'))
       const contents = encodedContent.split(';').map(content => content.replaceAll('{{colon}}', ':').replaceAll('{{semicolon}}', ';'))
-      postMessage({ instruction: 'rendermapmessage', keys, contents })
+      postMessage({ instruction: 'rendermapmessage', keys, contents, scrollX, scrollY })
     },
     render(msgPtr) {
       const output = loadedModule.exports.__getString(msgPtr).replaceAll('{{colon}}', ':').replaceAll('{{semicolon}}', ';')
