@@ -1,5 +1,0 @@
-What has to happen:
-- Create a style element which we keep a reference to so we can update it with level map width and height
-- When loadLevel is called from the wasm, it pings the javascript layer so it know to update the style element
-- Ensure there are the right number of blocks in the map div when the level has loaded
-- Ensure the first render of each level doesn't happen until all of the blocks are there
