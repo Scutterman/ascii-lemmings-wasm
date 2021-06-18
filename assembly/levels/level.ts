@@ -234,12 +234,21 @@ export class Level extends BaseLevel {
   }
   
   protected render(map: LevelTileDetail, isRenderingGameSection: boolean = false, resetAll: boolean = false): void {
+    const firstRender = this.firstRender
+    if (firstRender) {
+      this.firstRender = false
+      resetAll = true
+      isRenderingGameSection = false
+    }
+    
     const startY = isRenderingGameSection ? this.scrollPosition.y : 0
     const endY = isRenderingGameSection ? this.scrollPosition.y + VISIBLE_Y + BOUNDARIES_Y : map.length
-    const startX = this.scrollPosition.x
-    const endX = this.scrollPosition.x + VISIBLE_X + BOUNDARIES_X
-
-    const hasScrolled = this.scrollPosition.x != this.lastScrollPosition.x || this.scrollPosition.y != this.lastScrollPosition.y
+    const startX = isRenderingGameSection ? this.scrollPosition.x : 0
+    const endX = isRenderingGameSection
+      ? this.scrollPosition.x + VISIBLE_X + BOUNDARIES_X
+      : map.length > 0
+        ? map[0].length
+        : 0
     
     for (let row: i16 = startY; row < endY; row++) {
       for (let col: i16 = startX; col < endX; col++) {
@@ -251,7 +260,7 @@ export class Level extends BaseLevel {
           continue
         }
 
-        if (hasScrolled || map[row][col].animation.hasNextFrame()) {
+        if (map[row][col].animation.hasNextFrame()) {
           map[row][col].isDirty = true
         }
 
@@ -260,7 +269,7 @@ export class Level extends BaseLevel {
           map[row][col].needsRemoval = false
         }
         
-        if (!hasScrolled && !resetAll && (map[row][col].tile == TILE_AIR || !map[row][col].isDirty)) {
+        if (!resetAll && (map[row][col].tile == TILE_AIR || !map[row][col].isDirty)) {
           map[row][col].isDirty = false
           continue
         }
@@ -274,7 +283,7 @@ export class Level extends BaseLevel {
           }
         }
         
-        map[row][col].elementId = renderMapTile(text, new Vec2(col - this.scrollPosition.x, row - this.scrollPosition.y), map[row][col].colour)
+        map[row][col].elementId = renderMapTile(text, new Vec2(col, row), map[row][col].colour)
         map[row][col].isDirty = false
       }
     }
