@@ -178,14 +178,6 @@ function setScreenSize(screenSize) {
     }
   `
 
-  for (let row = 0; row < screenSize.blockHeight; row++) {
-    css += '.row_' + row + ' { top: ' + (dimensions.blockHeightPixels * row) + 'px !important; }'
-  }
-
-  for (let col = 0; col < screenSize.blockWidth; col++) {
-    css += '.col_' + col + ' { left: ' + (dimensions.blockWidthPixels * col) + 'px !important; }'
-  }
-  
   style.appendChild(document.createTextNode(css))
   document.head.appendChild(style)
 }
@@ -206,7 +198,7 @@ function measureOneCharacter() {
 function setupClient(mapWidth, mapHeight) {
   const mapContainerWidthPx = mapWidth * dimensions.blockWidthPixels
   const mapContainerHeightPx = mapHeight * dimensions.blockHeightPixels
-
+  
   map = document.createElement('div')
   map.classList.add('top-level-element', 'full-map')
   for (let row = 0; row < mapHeight; row++) {
@@ -218,17 +210,27 @@ function setupClient(mapWidth, mapHeight) {
     }
   }
   
-  requestAnimationFrame(() => {
+  let css = ''
+  for (let row = 0; row < mapHeight; row++) {
+    css += '.row_' + row + ' { top: ' + (dimensions.blockHeightPixels * row) + 'px !important; }'
+  }
 
+  for (let col = 0; col < mapWidth; col++) {
+    css += '.col_' + col + ' { left: ' + (dimensions.blockWidthPixels * col) + 'px !important; }'
+  }
+  
+  requestAnimationFrame(() => {
+    console.log(document.querySelector('#block-styles'), css.length)
+    document.querySelector('#block-styles').innerHTML = css
     document.querySelector('#map').innerHTML = ''
     document.querySelector('#map').appendChild(map)
     
-    document.querySelector('#map-dimensions').innerHTML = document.createTextNode(`
+    document.querySelector('#map-dimensions').innerHTML = `
       .full-map {
         width: ${ mapContainerWidthPx }px !important;
         height: ${ mapContainerHeightPx }px !important;
       }
-    `)
+    `
     wasmRunner.postMessage({ instruction: 'runlevel' })
   })
 }
