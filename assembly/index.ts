@@ -46,7 +46,7 @@ export function loadLevel(newLevel: BaseLevel): void {
   currentLevel = newLevel
   const height = currentLevel.map.length
   const width = height > 0 ? currentLevel.map[0].length : 0
-  setupClientForLevel(width, height)
+  setupClientForLevel(width, height + CONTROLS_Y + BOUNDARIES_Y)
 }
 
 export function runLevel(): void {
