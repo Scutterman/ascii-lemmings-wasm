@@ -29,6 +29,7 @@ lemmingGiftLabel
   .set(LemmingGift.Walk, 'Walker')
 
 export enum LevelState {
+  Preparing,
   TitleScreen,
   LevelSelect,
   LevelRunning,

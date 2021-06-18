@@ -1,8 +1,8 @@
 importScripts("assemblyscript-loader.js")
 const importObject = {
   index: {
-    showLoading() {
-      postMessage({ instruction: 'showloading' })
+    setupClientForLevel(mapWidth, mapHeight) {
+      postMessage({ instruction: 'setupclientforlevel', mapWidth, mapHeight })
     },
     log(msgPtr) {
       console.log(loadedModule.exports.__getString(msgPtr))
@@ -69,6 +69,8 @@ onmessage = function(e) {
     } else if (e.data.instruction === 'loadlevel') {
       const level = loadedModule.exports.__newString(e.data.content)
       loadedModule.instance.exports.loadLevelFromString(level)
+    } else if (e.data.instruction === 'runlevel') {
+      loadedModule.instance.exports.runLevel()
     } else {
       if (e.data.mouseX != null && e.data.mouseY != null) {
         loadedModule.instance.exports.updateMouseCoordinates(e.data.mouseX, e.data.mouseY)
@@ -95,7 +97,6 @@ onmessage = function(e) {
     break
     case 'start':
       start()
-      postMessage({ instruction: 'startcomplete' })
       loop()
     break
   }

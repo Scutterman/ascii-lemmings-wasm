@@ -31,11 +31,12 @@ export function loadLevelFromString(level: string): void {
 }
 
 export function loadLevel(newLevel: BaseLevel): void {
+  gameState.levelState = LevelState.Preparing
+  gameState.shouldRun = false
   resetItems(ITEM_SET_RELATIVE)
   resetItems(ITEM_SET_BACKGROUND)
   resetItems(ITEM_SET_MAP)
   
-  showLoading()
   lemmings = []
   if (!newLevel.isMetaScreen) {
     gameState.lastLevel = newLevel.clone()
@@ -43,6 +44,12 @@ export function loadLevel(newLevel: BaseLevel): void {
   
   newLevel.skillSelected(LemmingGift.None)
   currentLevel = newLevel
+  const height = currentLevel.map.length
+  const width = height > 0 ? currentLevel.map[0].length : 0
+  setupClientForLevel(width, height)
+}
+
+export function runLevel(): void {
   gameState.levelState = LevelState.LevelRunning
   gameState.shouldRun = true
 }
@@ -77,7 +84,7 @@ export function start(): boolean {
 
 export declare function keyPressListener(shouldListen: boolean): void
 export declare function messageResponse(instruction: string, name: string, content: string): void
-declare function showLoading(): void;
+declare function setupClientForLevel(mapWidth: u32, mapHeight: i32): void;
 
 export function keyUp(character: string): void {
   if (allowedUserInputCharacters.includes(character)) {

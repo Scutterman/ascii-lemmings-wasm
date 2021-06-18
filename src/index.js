@@ -11,7 +11,7 @@ const keyPressListenerMessage = 'keypresslistener'
 const renderBackgroundMessage = 'renderbackgroundmessage'
 const renderMapMessage = 'rendermapmessage'
 const removeElementMessage = 'removeelement'
-const showLoadingMessage = 'showloading'
+const setupClientMessage = 'setupclientforlevel'
 const saveMessage = 'save'
 const loadMessage = 'load'
 const isEditing = 'isediting'
@@ -48,8 +48,9 @@ wasmRunner.onmessage = (e) => {
           document.removeEventListener('keyup', onKeyUp)
         }
       break
-      case showLoadingMessage:
+      case setupClientMessage:
         document.querySelector('#loading').classList.add('shown')
+        setupClient(e.data.mapWidth, e.data.mapHeight)
       break
       case removeElementMessage:
         const element = document.querySelector('#' + e.data.elementId)
@@ -100,10 +101,8 @@ wasmRunner.onmessage = (e) => {
     break
     case 'dimensionscomplete':
       setScreenSize(e.data.screenSize)      
-      wasmRunner.postMessage({ instruction: 'start' })
-    break
-    case 'startcomplete':
       started = true
+      wasmRunner.postMessage({ instruction: 'start' })
     break
   }
 }
@@ -152,52 +151,40 @@ function onKeyUp(e) {
 }
 
 function setScreenSize(screenSize) {
-  const blockWidthPixels = screenSize.width / screenSize.blockWidth
-  const blockHeightPixels = screenSize.height / screenSize.blockHeight
+  dimensions.screenSize = screenSize
+  dimensions.blockWidthPixels = screenSize.width / screenSize.blockWidth
+  dimensions.blockHeightPixels = screenSize.height / screenSize.blockHeight
 
   const style = document.createElement('style')
   style.setAttribute('type', 'text/css')
   let css = `
-  .screen, #click-target {
+    .screen, #click-target {
       width: ${ screenSize.width }px; height: ${ screenSize.height }px !important;
     }
 
     .block {
-      width: ${ blockWidthPixels }px !important; height: ${ blockHeightPixels }px !important;
+      width: ${ dimensions.blockWidthPixels }px !important; height: ${ dimensions.blockHeightPixels }px !important;
       position: absolute;
       overflow: hidden;
     }
     
     .box {
       display: block;
-      width: ${ blockWidthPixels }px; height: ${ blockHeightPixels }px !important;
+      width: ${ dimensions.blockWidthPixels }px; height: ${ dimensions.blockHeightPixels }px !important;
       box-shadow: inset 0 0 2px #000000;
     }
   `
 
   for (let row = 0; row < screenSize.blockHeight; row++) {
-    css += '.row_' + row + ' { top: ' + (blockHeightPixels * row) + 'px !important; }'
+    css += '.row_' + row + ' { top: ' + (dimensions.blockHeightPixels * row) + 'px !important; }'
   }
 
   for (let col = 0; col < screenSize.blockWidth; col++) {
-    css += '.col_' + col + ' { left: ' + (blockWidthPixels * col) + 'px !important; }'
+    css += '.col_' + col + ' { left: ' + (dimensions.blockWidthPixels * col) + 'px !important; }'
   }
   
   style.appendChild(document.createTextNode(css))
-  
-  map = document.createElement('div')
-  map.classList.add('screen', 'top-level-element')
-  for (let row = 0; row < screenSize.blockHeight; row++) {
-    for (let col = 0; col < screenSize.blockWidth; col++) {
-      const element = document.createElement('div')
-      element.setAttribute('id', 'block_' + row + '_' + col)
-      element.classList.add('block', 'row_' + row, 'col_' + col)
-      map.appendChild(element)
-    }
-  }
-  
   document.head.appendChild(style)
-  document.body.appendChild(map)
 }
 
 function measureOneCharacter() {
@@ -211,6 +198,36 @@ function measureOneCharacter() {
   const height = box.height
   document.body.removeChild(measeureTextBox)
   return { width, height }
+}
+
+function setupClient(mapWidth, mapHeight) {
+  const mapContainerWidthPx = mapWidth * dimensions.blockWidthPixels
+  const mapContainerHeightPx = mapHeight * dimensions.blockHeightPixels
+
+  map = document.createElement('div')
+  map.classList.add('top-level-element', 'full-map')
+  for (let row = 0; row < mapHeight; row++) {
+    for (let col = 0; col < mapWidth; col++) {
+      const element = document.createElement('div')
+      element.setAttribute('id', 'block_' + row + '_' + col)
+      element.classList.add('block', 'row_' + row, 'col_' + col)
+      map.appendChild(element)
+    }
+  }
+  
+  requestAnimationFrame(() => {
+
+    document.querySelector('#map').innerHTML = ''
+    document.querySelector('#map').appendChild(map)
+    
+    document.querySelector('#map-dimensions').innerHTML = document.createTextNode(`
+      .full-map {
+        width: ${ mapContainerWidthPx }px !important;
+        height: ${ mapContainerHeightPx }px !important;
+      }
+    `)
+    wasmRunner.postMessage({ instruction: 'runlevel' })
+  })
 }
 
 wasmRunner.postMessage({ instruction: 'init' })
