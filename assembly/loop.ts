@@ -210,8 +210,7 @@ export function renderUiLabel(element: UILabel): void {
   element.setSize(info.dimensions.size)
 }
 
-export function getRenderedTextArray(textToRender: string): string[] {
-  const text: string[] = []
+export function getRenderedTextArray(textToRender: string, text: string[] = []): string[] {
   const elementTextCharacters = textToRender.split('')
   
   for (let i = 0; i < elementTextCharacters.length; i++) {
