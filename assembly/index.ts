@@ -46,7 +46,15 @@ export function loadLevel(newLevel: BaseLevel): void {
   currentLevel = newLevel
   const height = currentLevel.map.length
   const width = height > 0 ? currentLevel.map[0].length : 0
-  setupClientForLevel(width, height, i32(VISIBLE_X + BOUNDARIES_X), i32(VISIBLE_Y + BOUNDARIES_Y - 1))
+
+  const visibleWidth = i32(VISIBLE_X + BOUNDARIES_X)
+  let visibleHeight = VISIBLE_Y + BOUNDARIES_Y
+  if (currentLevel.isMetaScreen) {
+    visibleHeight += CONTROLS_Y // Meta screen map is full height - including what's usually control area
+  } else {
+    visibleHeight -= 1 // Only one boundary (top) is included in the map, the other boundary is added by the control area
+  }
+  setupClientForLevel(width, height, visibleWidth, i32(visibleHeight))
 }
 
 export function runLevel(): void {
