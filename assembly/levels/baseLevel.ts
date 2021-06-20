@@ -1,23 +1,10 @@
-import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, mapToTiles, VISIBLE_X, VISIBLE_Y } from "../map"
 import { Vec2 } from "../position"
-import { LemmingGift, TileDetail, LevelTileDetail } from "../types"
+import { LemmingGift, LevelTileDetail } from "../types"
 import { UIControl } from "../ui/uiControl"
 import { UILabel } from "../ui/uiLabel"
 import { Panel } from "../ui/panel"
-import { Animation } from "../animation"
 import { allowedUserInputCharacters } from "../text"
 import { LevelMapDetail } from "../maps/types"
-
-const buttonArea = mapToTiles([
-  '|                                                                        |',
-  '|                                                                        |',
-  '|                                                                        |',
-  '|                                                                        |',
-  '|                                                                        |',
-  '|                                                                        |',
-  '|                                                                        |',
-  '__________________________________________________________________________'
-])
 
 export abstract class BaseLevel {
   public numberOfLemmings: u8
@@ -62,9 +49,6 @@ export abstract class BaseLevel {
     this.numberOfLemmings = lemmingsToSpawn
     this.numberOfLemmingsForSuccess = numberOfLemmingsForSucces
     this.isMetaScreen = isMetaScreen
-    if (!this.isMetaScreen) {
-      this.renderControlBorders()
-    }
   }
   
   public getLemmingSavedPercent(): u8 {
@@ -122,35 +106,6 @@ export abstract class BaseLevel {
     }
     
     return null
-  }
-
-  private fillMap(x: u16, y: u16): LevelTileDetail {
-    let map: LevelTileDetail = []
-    for (let i: u16 = 0; i < y; i++) { 
-      map.push([])
-      for (let j: u16 = 0; j < x; j++) {
-        map[i].push(new TileDetail(' ', '#000000', new Animation([])))
-      }
-    }
-    return map
-  }
-
-  protected renderControlBorders(): void {
-    let maxY: u16 = VISIBLE_Y + CONTROLS_Y + BOUNDARIES_Y
-    let maxX: u16 = VISIBLE_X + BOUNDARIES_X
-    
-    let map = this.fillMap(maxX, maxY)
-    const delta = map.length - buttonArea.length
-  
-    if (!this.isMetaScreen) {
-      for (let buttonAreaRow = 0; buttonAreaRow < buttonArea.length; buttonAreaRow++) {
-        for (let buttonAreaColumn = 0; buttonAreaColumn < buttonArea[buttonAreaRow].length; buttonAreaColumn++) {
-          map[delta + buttonAreaRow][buttonAreaColumn] = buttonArea[buttonAreaRow][buttonAreaColumn].clone()
-        }
-      }
-    }
-    
-    this.render(map, false, false)
   }
 
   protected renderControls(isDirty: boolean): void {

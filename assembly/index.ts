@@ -46,7 +46,7 @@ export function loadLevel(newLevel: BaseLevel): void {
   currentLevel = newLevel
   const height = currentLevel.map.length
   const width = height > 0 ? currentLevel.map[0].length : 0
-  setupClientForLevel(width, height + CONTROLS_Y + BOUNDARIES_Y)
+  setupClientForLevel(width, height, i32(VISIBLE_X + BOUNDARIES_X), i32(VISIBLE_Y + BOUNDARIES_Y - 1))
 }
 
 export function runLevel(): void {
@@ -84,7 +84,7 @@ export function start(): boolean {
 
 export declare function keyPressListener(shouldListen: boolean): void
 export declare function messageResponse(instruction: string, name: string, content: string): void
-declare function setupClientForLevel(mapWidth: u32, mapHeight: i32): void;
+declare function setupClientForLevel(mapWidth: i32, mapHeight: i32, visibleWidth: i32, visibleHeight: i32): void;
 
 export function keyUp(character: string): void {
   if (allowedUserInputCharacters.includes(character)) {

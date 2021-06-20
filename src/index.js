@@ -50,7 +50,7 @@ wasmRunner.onmessage = (e) => {
       break
       case setupClientMessage:
         document.querySelector('#loading').classList.add('shown')
-        setupClient(e.data.mapWidth, e.data.mapHeight)
+        setupClient(e.data.mapWidth, e.data.mapHeight, e.data.visibleWidth, e.data.visibleHeight)
       break
       case removeElementMessage:
         const element = document.querySelector('#' + e.data.elementId)
@@ -195,10 +195,12 @@ function measureOneCharacter() {
   return { width, height }
 }
 
-function setupClient(mapWidth, mapHeight) {
+function setupClient(mapWidth, mapHeight, visibleWidth, visibleHeight) {
   const mapContainerWidthPx = mapWidth * dimensions.blockWidthPixels
   const mapContainerHeightPx = mapHeight * dimensions.blockHeightPixels
-  
+
+  const visibleWidthPx = visibleWidth * dimensions.blockWidthPixels
+  const visibleHeightPx = visibleHeight * dimensions.blockHeightPixels
   map = document.createElement('div')
   map.classList.add('top-level-element', 'full-map')
   for (let row = 0; row < mapHeight; row++) {
@@ -210,7 +212,13 @@ function setupClient(mapWidth, mapHeight) {
     }
   }
   
-  let css = ''
+  let css = `
+    #map {
+      width: ${ visibleWidthPx }px !important;
+      height: ${ visibleHeightPx }px !important;
+    }
+  `
+
   for (let row = 0; row < mapHeight; row++) {
     css += '.row_' + row + ' { top: ' + (dimensions.blockHeightPixels * row) + 'px !important; }'
   }
@@ -220,7 +228,6 @@ function setupClient(mapWidth, mapHeight) {
   }
   
   requestAnimationFrame(() => {
-    console.log(document.querySelector('#block-styles'), css.length)
     document.querySelector('#block-styles').innerHTML = css
     document.querySelector('#map').innerHTML = ''
     document.querySelector('#map').appendChild(map)

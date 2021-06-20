@@ -1,6 +1,6 @@
 import { gameState, lemmings } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
-import { getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
+import { getRenderedTextArray, lineBreak, removeMapTile, renderMapTile, renderRelativeElement, renderTextArrayToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
@@ -19,6 +19,21 @@ import { MinerAnimation } from "../actions/miner"
 import { FloaterAnimation } from "../actions/umbrella"
 import { LevelMapDetail } from "../maps/types"
 import { removeItem } from "../vdom/elements"
+import { UPSCALE_MULTIPLIER } from "../upscale"
+
+const buttonAreaArray = [
+  '__________________________________________________________________________',
+  '|                                                                        |',
+  '|                                                                        |',
+  '|                                                                        |',
+  '|                                                                        |',
+  '|                                                                        |',
+  '|                                                                        |',
+  '|                                                                        |',
+  '__________________________________________________________________________'
+]
+
+let buttonArea: string = ''
 
 export class Level extends BaseLevel {
   private canSpawnMore: boolean = true
@@ -51,6 +66,18 @@ export class Level extends BaseLevel {
       this.uiLabels.push(new UILabel(new Vec2(46, this.buttonYCoordinate - 2), 'SAVED: 0%', 'LEMMING_SAVED'))
       this.uiLabels.push(new UILabel(new Vec2(65, this.buttonYCoordinate - 2), '', 'TIMER'))
       this.skillsPanel.items.push(new UIControl(new Vec2(0,0), 'm', () => { gameState.setNukeGift() }))
+
+      buttonArea = ''
+      for (let buttonAreaLineIndex = 0; buttonAreaLineIndex < buttonAreaArray.length; buttonAreaLineIndex++) {
+        const line = buttonAreaArray[buttonAreaLineIndex].split('')
+        let lineText = ''
+        for (let buttonAreaCharacterIndex = 0; buttonAreaCharacterIndex < line.length; buttonAreaCharacterIndex++) {
+          lineText += line[buttonAreaCharacterIndex].repeat(UPSCALE_MULTIPLIER)
+        }
+        lineText += lineBreak
+        buttonArea += lineText.repeat(UPSCALE_MULTIPLIER)
+      }
+      buttonArea = buttonArea.substr(0, buttonArea.length - lineBreak.length)
     }
   }
 
@@ -288,6 +315,10 @@ export class Level extends BaseLevel {
       }
     }
 
+    if (!this.isMetaScreen) {
+      let position = new Vec2(0, i16(VISIBLE_Y + BOUNDARIES_Y - 1))
+      renderRelativeElement(buttonArea, position)
+    }
     this.lastScrollPosition = this.scrollPosition.clone()
   }
 }

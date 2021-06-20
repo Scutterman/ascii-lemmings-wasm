@@ -1,5 +1,4 @@
 import { currentLevel } from "."
-import { Animation } from "./animation"
 import { isBlockerInLocation, Lemming } from "./lemming"
 import { characterToAnimation } from "./maps/types"
 import { Vec2 } from "./position"
@@ -18,9 +17,9 @@ export const TILE_BLOCKER   = 'T'
 // to prevent the map border from being cut off
 export const VISIBLE_X: u8 = 72
 export const BOUNDARIES_X: u8 = 2
-export const VISIBLE_Y: u8 = 36
+export const VISIBLE_Y: u8 = 35
 export const BOUNDARIES_Y: u8 = 2
-export const CONTROLS_Y: u8 = 8
+export const CONTROLS_Y: u8 = 9
 
 export class SurroundingTiles {
   topLeft: string
