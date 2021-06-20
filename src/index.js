@@ -50,8 +50,9 @@ wasmRunner.onmessage = (e) => {
       break
       case setupClientMessage:
         document.querySelector('#loading').classList.add('shown')
-        setupClient(e.data.mapWidth, e.data.mapHeight, e.data.visibleWidth, e.data.visibleHeight)
+        setupClient(e.data.mapWidth, e.data.mapHeight, e.data.visibleWidth, e.data.visibleHeight, e.data.buttonAreaHtml)
       break
+      // TODO:: Has this instruction been removed from the game?
       case removeElementMessage:
         const element = document.querySelector('#' + e.data.elementId)
         if (element) { element.remove() }
@@ -83,8 +84,13 @@ wasmRunner.onmessage = (e) => {
           })
         }
       default:
-        gameArea.innerHTML = e.data
-        document.querySelector('#loading').classList.remove('shown')
+        requestAnimationFrame(() => {
+          while (gameArea.firstChild) {
+            gameArea.removeChild(gameArea.lastChild);
+          }
+          gameArea.innerHTML = e.data
+          document.querySelector('#loading').classList.remove('shown')
+        })
       break
     }
     return
@@ -195,7 +201,7 @@ function measureOneCharacter() {
   return { width, height }
 }
 
-function setupClient(mapWidth, mapHeight, visibleWidth, visibleHeight) {
+function setupClient(mapWidth, mapHeight, visibleWidth, visibleHeight, buttonAreaHtml) {
   const mapContainerWidthPx = mapWidth * dimensions.blockWidthPixels
   const mapContainerHeightPx = mapHeight * dimensions.blockHeightPixels
 
@@ -231,6 +237,7 @@ function setupClient(mapWidth, mapHeight, visibleWidth, visibleHeight) {
     document.querySelector('#block-styles').innerHTML = css
     document.querySelector('#map').innerHTML = ''
     document.querySelector('#map').appendChild(map)
+    document.querySelector('#buttonArea').innerHTML = buttonAreaHtml
     
     document.querySelector('#map-dimensions').innerHTML = `
       .full-map {

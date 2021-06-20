@@ -1,8 +1,9 @@
 importScripts("assemblyscript-loader.js")
 const importObject = {
   index: {
-    setupClientForLevel(mapWidth, mapHeight, visibleWidth, visibleHeight) {
-      postMessage({ instruction: 'setupclientforlevel', mapWidth, mapHeight, visibleWidth, visibleHeight })
+    setupClientForLevel(mapWidth, mapHeight, visibleWidth, visibleHeight, buttonAreaHtmlPtr) {
+      const buttonAreaHtml = loadedModule.exports.__getString(buttonAreaHtmlPtr)
+      postMessage({ instruction: 'setupclientforlevel', mapWidth, mapHeight, visibleWidth, visibleHeight, buttonAreaHtml })
     },
     log(msgPtr) {
       console.log(loadedModule.exports.__getString(msgPtr))

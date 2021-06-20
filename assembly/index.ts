@@ -13,6 +13,8 @@ import { allowedUserInputCharacters } from './text'
 import { Parser } from './maps/types'
 import { Editor } from './levels/editor'
 import { ITEM_SET_BACKGROUND, ITEM_SET_MAP, ITEM_SET_RELATIVE, resetItems } from './vdom/elements'
+import { constructRelativeElement, lineBreak } from './loop'
+import { Vec2 } from './position'
 
 export const gameState = new GameState()
 export let currentLevel: BaseLevel
@@ -21,6 +23,37 @@ export let lemmings: Lemming[] = []
 export { triggerEventLoop, setCharacterDimensions, setScreenDimensions, updateMouseCoordinates, registerMouseClick } from './loop'
 
 const useAutoPlayer: boolean = false
+
+const buttonArea = generateButtonArea()
+
+function generateButtonArea(): string {
+  const buttonAreaArray = [
+    '__________________________________________________________________________',
+    '|                                                                        |',
+    '|                                                                        |',
+    '|                                                                        |',
+    '|                                                                        |',
+    '|                                                                        |',
+    '|                                                                        |',
+    '|                                                                        |',
+    '__________________________________________________________________________'
+  ]
+
+  let buttonArea: string = ''
+
+  buttonArea = ''
+  for (let buttonAreaLineIndex = 0; buttonAreaLineIndex < buttonAreaArray.length; buttonAreaLineIndex++) {
+    const line = buttonAreaArray[buttonAreaLineIndex].split('')
+    let lineText = ''
+    for (let buttonAreaCharacterIndex = 0; buttonAreaCharacterIndex < line.length; buttonAreaCharacterIndex++) {
+      lineText += line[buttonAreaCharacterIndex].repeat(UPSCALE_MULTIPLIER)
+    }
+    lineText += lineBreak
+    buttonArea += lineText.repeat(UPSCALE_MULTIPLIER)
+  }
+  buttonArea = buttonArea.substr(0, buttonArea.length - lineBreak.length)
+  return buttonArea
+}
 
 export function loadLevelFromString(level: string): void {
   if (currentLevel instanceof Editor) {
@@ -49,12 +82,15 @@ export function loadLevel(newLevel: BaseLevel): void {
 
   const visibleWidth = i32(VISIBLE_X + BOUNDARIES_X)
   let visibleHeight = VISIBLE_Y + BOUNDARIES_Y
+  let buttonAreaHtml = ''
   if (currentLevel.isMetaScreen) {
     visibleHeight += CONTROLS_Y // Meta screen map is full height - including what's usually control area
   } else {
     visibleHeight -= 1 // Only one boundary (top) is included in the map, the other boundary is added by the control area
+    const position = new Vec2(0, i16(VISIBLE_Y + BOUNDARIES_Y - 1))
+    buttonAreaHtml = constructRelativeElement(buttonArea, position).html
   }
-  setupClientForLevel(width, height, visibleWidth, i32(visibleHeight))
+  setupClientForLevel(width, height, visibleWidth, i32(visibleHeight), buttonAreaHtml)
 }
 
 export function runLevel(): void {
@@ -92,7 +128,7 @@ export function start(): boolean {
 
 export declare function keyPressListener(shouldListen: boolean): void
 export declare function messageResponse(instruction: string, name: string, content: string): void
-declare function setupClientForLevel(mapWidth: i32, mapHeight: i32, visibleWidth: i32, visibleHeight: i32): void;
+declare function setupClientForLevel(mapWidth: i32, mapHeight: i32, visibleWidth: i32, visibleHeight: i32, buttonAreaHtml: string): void;
 
 export function keyUp(character: string): void {
   if (allowedUserInputCharacters.includes(character)) {
