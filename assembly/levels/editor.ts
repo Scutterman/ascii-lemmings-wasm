@@ -154,7 +154,7 @@ export class Editor extends MetaScreen {
     
     if (this.selectedBlockX >= 0 && this.selectedBlockY >= 0) {
       removeItem(this.selectedBlockId)
-      this.selectedBlockId =  renderBoxAroundBlock(i16(this.selectedBlockX), i16(this.selectedBlockY))
+      this.selectedBlockId =  renderBoxAroundBlock(i16(this.selectedBlockX) - this.scrollPosition.x, i16(this.selectedBlockY) - this.scrollPosition.y)
     }
   }
 
