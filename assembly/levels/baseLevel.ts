@@ -20,6 +20,7 @@ export abstract class BaseLevel {
   public scrollPosition: Vec2 = new Vec2(0,0)
   protected lastScrollPosition: Vec2 = new Vec2(0,0)
   protected firstRender: boolean = true
+  public canScroll: boolean = true
 
   public abstract processLemmingSelect(mouseTileX: i32, mouseTileY: i32, processLemmingClick: boolean): boolean
   public abstract updateLemmings(): void

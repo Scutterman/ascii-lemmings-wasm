@@ -7,6 +7,7 @@ export class MetaScreen extends Level {
 
   constructor(tag: string) {
     super(tag, 'meta', 0, 0, load(), true)
+    this.canScroll = false
   }
   
   public renderLevel(): void {

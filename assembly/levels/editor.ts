@@ -1,12 +1,10 @@
-import { currentLevel, messageResponse } from ".."
-import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, TILE_AIR, TILE_GROUND, VISIBLE_X, VISIBLE_Y } from "../map"
+import { currentLevel, gameState, messageResponse } from ".."
+import { TILE_AIR, TILE_GROUND } from "../map"
 import { LevelMapDetail } from "../maps/types"
 import { Vec2 } from "../position"
 import { Panel } from "../ui/panel"
 import { UIControl } from "../ui/uiControl"
 import { MetaScreen } from "./metascreen"
-import { TileDetail } from '../types'
-import { Animation } from "../animation"
 import { renderBoxAroundBlock } from "../loop"
 import { removeItem } from "../vdom/elements"
 
@@ -22,7 +20,6 @@ export class Editor extends MetaScreen {
 
   constructor() {
     super('EDITOR')
-
     this.uiPanels.push(this.actionPanel)
     this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Load", () => {
       messageResponse('load', '', '')
@@ -135,17 +132,10 @@ export class Editor extends MetaScreen {
   public mapSwapped(map: LevelMapDetail): void {
     this.metaMap = map
     const tileDetail = this.metaMap.toTileDetail()
-    let maxY: i32 = VISIBLE_Y + CONTROLS_Y + BOUNDARIES_Y
-    let maxX: i32 = VISIBLE_X + BOUNDARIES_X
-    for (let row = tileDetail.length; row < maxY; row++) {
-      tileDetail.push([])
-      for (let col = 0; col < maxX; col++) {
-        tileDetail[row].push(new TileDetail(' ', '#000000', new Animation([])))
-      }
-    }
     this.map = tileDetail
 
     this.showOptionsAfterLoad()
+    this.levelLoaded = true
     this.firstRender = true
     this.renderGameSection = true
     this.mapRendered = false
@@ -153,8 +143,15 @@ export class Editor extends MetaScreen {
 
   private selectedBlockId: string = ''
   public renderLevel(): void {
+    if (this.firstRender && this.levelLoaded) {
+      this.scrollPosition = new Vec2(0,0)
+      this.canScroll = true
+      gameState.mouseTileX = 1
+      gameState.mouseTileY = 1
+    }
+    
     super.renderLevel()
-
+    
     if (this.selectedBlockX >= 0 && this.selectedBlockY >= 0) {
       removeItem(this.selectedBlockId)
       this.selectedBlockId =  renderBoxAroundBlock(i16(this.selectedBlockX), i16(this.selectedBlockY))
