@@ -57,9 +57,12 @@ function generateButtonArea(): string {
 
 export function loadLevelFromString(level: string): void {
   if (currentLevel instanceof Editor) {
+    gameState.levelState = LevelState.Preparing
+    gameState.shouldRun = false
     const editor = (currentLevel as Editor)
     const map = new Parser().parseGeneratedMap(level)
     editor.mapSwapped(map)
+    _setupClientForLevel(true)
   }
 }
 
@@ -77,13 +80,17 @@ export function loadLevel(newLevel: BaseLevel): void {
   
   newLevel.skillSelected(LemmingGift.None)
   currentLevel = newLevel
+  _setupClientForLevel()
+}
+
+function _setupClientForLevel(isEditor: boolean = false): void {
   const height = currentLevel.map.length
   const width = height > 0 ? currentLevel.map[0].length : 0
 
   const visibleWidth = i32(VISIBLE_X + BOUNDARIES_X)
   let visibleHeight = VISIBLE_Y + BOUNDARIES_Y
   let buttonAreaHtml = ''
-  if (currentLevel.isMetaScreen) {
+  if (currentLevel.isMetaScreen && !isEditor) {
     visibleHeight += CONTROLS_Y // Meta screen map is full height - including what's usually control area
   } else {
     visibleHeight -= 1 // Only one boundary (top) is included in the map, the other boundary is added by the control area

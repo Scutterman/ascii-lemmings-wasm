@@ -146,6 +146,7 @@ export class Editor extends MetaScreen {
     this.map = tileDetail
 
     this.showOptionsAfterLoad()
+    this.firstRender = true
     this.renderGameSection = true
     this.mapRendered = false
   }
