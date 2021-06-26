@@ -51,4 +51,12 @@ export class Panel {
       nextLabelPosition.x += sizes[i].x + 3
     }
   }
+
+  public empty(): void {
+    for (let i = 0; i < this.items.length; i++) {
+      removeItem(this.items[i].elementId)
+    }
+
+    this.items = []
+  }
 }

@@ -30,7 +30,7 @@ export class Editor extends MetaScreen {
   }
 
   private showOptionsAfterLoad(): void {
-    this.actionPanel.items = []
+    this.actionPanel.empty()
     this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Save", () => {
       messageResponse('save', 'foobar.json', '{ "hello": "world" }')
     }))
@@ -60,7 +60,7 @@ export class Editor extends MetaScreen {
 
   public setBlockAnimation(animationName: string): void {
     animationName = animationName.replace('ANIMATION_LIST_ITEM_KEY_', '')
-    this.animationListItemKeys.items = []
+    this.animationListItemKeys.empty()
 
     if (animationName == 'Cancel') {
       return
@@ -83,7 +83,7 @@ export class Editor extends MetaScreen {
  
   public setTileOption(tile: string): void {
     tile = tile.replace('TILE_OPTION_', '')
-    this.tileOptions.items = []
+    this.tileOptions.empty()
 
     if (tile == 'Cancel') {
       return
