@@ -44,7 +44,7 @@ export class LevelMapDetail {
     let detail = new TileDetail(tile, '#000000', new Animation([]))
     switch(true) {
       case tile == TILE_BOUNDARY:
-        detail.animation = characterToAnimation('-')
+        detail.animation = characterToAnimation('_')
       break;
       case tile == TILE_SIDE:
         detail.animation = characterToAnimation('|')
