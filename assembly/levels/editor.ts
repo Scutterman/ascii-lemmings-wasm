@@ -122,7 +122,10 @@ export class Editor extends MetaScreen {
   }
 
   public showAnimationPanel(): void {
-    const animationListItemKeys = ['None', 'ground', 'grass', 'Cancel']
+    const animationListItemKeys = this.metaMap.animationList.keys()
+    animationListItemKeys.push('None')
+    animationListItemKeys.push('Cancel')
+    
     for (let i = 0; i < animationListItemKeys.length; i++) {
       this.animationListItemKeys.items.push(new UIControl(new Vec2(0,0), animationListItemKeys[i], tag => {
         if (typeof tag != 'undefined') {
