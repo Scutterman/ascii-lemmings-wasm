@@ -25,6 +25,8 @@ export class Editor extends MetaScreen {
       messageResponse('load', '', '')
     }))
 
+    this.tileOptions.setBackgroundColour('#ffffff')
+    this.animationListItemKeys.setBackgroundColour('#ffffff')
     this.uiPanels.push(this.tileOptions)
     this.uiPanels.push(this.animationListItemKeys)
   }

@@ -204,7 +204,13 @@ export function renderBoxAroundBlock(blockX: i16, blockY: i16): string {
 
 export function renderUiLabel(element: UILabel): void {
   removeItem(element.elementId)
-  const info = renderTextArrayToScreen(element.getTextForRender(false), element.getPosition(), element instanceof UIControl)
+  const info = renderTextArrayToScreen(
+    element.getTextForRender(false),
+    element.getPosition(),
+    element instanceof UIControl,
+    '#000000',
+    element.getBackgroundColour()
+  )
 
   element.elementId = info.id
   element.setPosition(info.dimensions.position)
@@ -265,9 +271,9 @@ class RenderedTextArray {
   constructor (public id: string, public dimensions: Rect) {}
 }
 
-export function renderTextArrayToScreen(text: string[], position: Vec2, border: boolean = true, colour: string = '#000000'): RenderedTextArray {
+export function renderTextArrayToScreen(text: string[], position: Vec2, border: boolean = true, colour: string = '#000000', backgroundColour: string = '#ffffff00'): RenderedTextArray {
   const labelDimensions = getTextDimensions(text, position)
-  const id = renderRelativeElement(text.join(lineBreak), labelDimensions.position, border, colour)
+  const id = renderRelativeElement(text.join(lineBreak), labelDimensions.position, border, colour, backgroundColour)
   return new RenderedTextArray(id, labelDimensions)
 }
 

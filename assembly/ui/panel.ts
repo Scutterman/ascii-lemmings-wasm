@@ -47,7 +47,7 @@ export class Panel extends UIITem {
 
     for (let i = 0; i < texts.length; i++) {
       removeItem(this.items[panelItemIndexes[i]].elementId)
-      const id = renderRelativeElement(texts[i].join(lineBreak), nextLabelPosition, borders[i])
+      const id = renderRelativeElement(texts[i].join(lineBreak), nextLabelPosition, borders[i], '#000000', this.getBackgroundColour())
       this.items[panelItemIndexes[i]].elementId = id
       this.items[panelItemIndexes[i]].setPosition(nextLabelPosition.clone())
       this.items[panelItemIndexes[i]].setSize(sizes[i])
