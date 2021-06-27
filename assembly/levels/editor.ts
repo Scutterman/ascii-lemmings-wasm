@@ -7,6 +7,7 @@ import { UIControl } from "../ui/uiControl"
 import { MetaScreen } from "./metascreen"
 import { renderBoxAroundBlock } from "../loop"
 import { removeItem } from "../vdom/elements"
+import { UILabel } from "../ui/uiLabel"
 
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
@@ -26,29 +27,13 @@ export class Editor extends MetaScreen {
     }))
 
     this.tileOptions.setBackgroundColour('#ffffff')
-    this.animationListItemKeys.setBackgroundColour('#ffffff')
     this.uiPanels.push(this.tileOptions)
-    this.uiPanels.push(this.animationListItemKeys)
   }
 
   private showOptionsAfterLoad(): void {
     this.actionPanel.empty()
     this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Save", () => {
       messageResponse('save', 'foobar.json', '{ "hello": "world" }')
-    }))
-
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Tile", () => {
-      if (currentLevel instanceof Editor) {
-        const editor = currentLevel as Editor
-        editor.showTilePanel()
-      }
-    }))
-
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Animation", () => {
-      if (currentLevel instanceof Editor) {
-        const editor = currentLevel as Editor
-        editor.showAnimationPanel()
-      }
     }))
   }
 
@@ -59,13 +44,13 @@ export class Editor extends MetaScreen {
       this.selectedBlockKey = x.toString() + ',' + y.toString()
       this.selectedBlockX = x
       this.selectedBlockY = y
+      this.showTilePanel()
     }
   }
 
   public setBlockAnimation(animationName: string): void {
     animationName = animationName.replace('ANIMATION_LIST_ITEM_KEY_', '')
-    this.animationListItemKeys.empty()
-
+    
     if (animationName == 'Cancel') {
       return
     } else if (animationName != 'None') {
@@ -87,8 +72,7 @@ export class Editor extends MetaScreen {
  
   public setTileOption(tile: string): void {
     tile = tile.replace('TILE_OPTION_', '')
-    this.tileOptions.empty()
-
+    
     if (tile == 'Cancel') {
       return
     } else  {
@@ -113,6 +97,8 @@ export class Editor extends MetaScreen {
  
   public showTilePanel(): void {
     const tileOptions = [TILE_AIR, TILE_GROUND, TILE_BRICK, TILE_EXIT, 'Cancel']
+    this.tileOptions.items.push(new UILabel(new Vec2(0,0), 'Tile:'))
+    this.tileOptions.addLinebreak()
 
     for (let i = 0; i < tileOptions.length; i++) {
       this.tileOptions.items.push(new UIControl(new Vec2(0,0), tileOptions[i], tag => {
@@ -121,20 +107,32 @@ export class Editor extends MetaScreen {
         }
       }, 'TILE_OPTION_' + tileOptions[i]))
     }
-  }
 
-  public showAnimationPanel(): void {
+    this.tileOptions.addLinebreak()
+    this.tileOptions.items.push(new UILabel(new Vec2(0,0), 'Animation:'))
+    this.tileOptions.addLinebreak()
+
     const animationListItemKeys = this.metaMap.animationList.keys()
     animationListItemKeys.push('None')
     animationListItemKeys.push('Cancel')
     
     for (let i = 0; i < animationListItemKeys.length; i++) {
-      this.animationListItemKeys.items.push(new UIControl(new Vec2(0,0), animationListItemKeys[i], tag => {
+      this.tileOptions.items.push(new UIControl(new Vec2(0,0), animationListItemKeys[i], tag => {
         if (typeof tag != 'undefined') {
           (currentLevel as Editor).setBlockAnimation(tag)
         }
       }, 'ANIMATION_LIST_ITEM_KEY_' + animationListItemKeys[i]))
+
     }
+
+    this.tileOptions.addLinebreak()
+    this.tileOptions.addLinebreak()
+    this.tileOptions.items.push(new UIControl(new Vec2(0,0), 'Done', () => {
+      (currentLevel as Editor).tileOptions.empty()
+    }))
+  }
+
+  public showAnimationPanel(): void {
   }
 
   public mapSwapped(map: LevelMapDetail): void {
