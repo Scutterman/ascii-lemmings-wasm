@@ -13,18 +13,18 @@ export function getCharacterRender(character: string): string[] {
   return renderedCharacter
 }
 
-export const allowedUserInputCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 :_'.split('')
+export const allowedUserInputCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 :_-'.split('')
 
 const exceptionalCharacterWidths = new Map<string, u8>()
 exceptionalCharacterWidths.set('Q', 8)
 exceptionalCharacterWidths.set('∞', 11)
 const font: string[] = [ //                                                                                                                                                                                                                                                                                            Apost-        Question
-//                                                                                                                                                                                                                                                              SPACE  COLON Percent FSlash BSlash  Infinity    Period rophie        Mark   Bang                 
-  '  A    BB       CCC  DDD    EEEEE  FFFFF   GGGG  H   H  IIIII  JJJJJ  K   K  L      M   M  N   N   OOO   PPPP     Q     RRRR    SSS   TTTTT  U   U  V   V  W   W  X   X  Y   Y  ZZZZZ   000     1     222   3333      4   55555   666   77777   888    999           :::   %%  %      /  \\\\                        \'\'    ' + '???     !!    ',
-  ' AAA   B B     C     D  D   E      F      G      H   H    I      J    K KK   L      MM MM  NN  N  O   O  P   P  Q   Q   R   R  S        T    U   U  V   V  W   W   X X    Y Y      Z   0   0   11    2   2      3    44   5      6         7   8   8  9   9          :::      %      //   \\\\     ∞∞∞ ∞∞∞           \'\'    ' + '   ?    !!    ',
-  'A   A  BBBB   C      D   D  EEEEE  FFFFF  G  GG  HHHHH    I      J    KK     L      M M M  N N N  O   O  PPPP   Q Q Q   RRRR    SS      T    U   U   V V   W W W    X      Y      Z    0 0 0    1       2    333    4 4    555   6666     7     888    9999                  %      //     \\\\   ∞   ∞   ∞                ' +   ' ??     !!    ',
-  'AAAAA  B   B   C     D  D   E      F      G   G  H   H    I      J    K KK   L      M   M  N  NN  O   O  P      Q  QQ   R R       S     T    UU UU   V V   WW WW   X X     Y     Z     0   0    1     22        3  44444      5  6   6   7     8   8      9          :::    %      //       \\\\   ∞∞∞ ∞∞∞   ..            ' +   ' ?            ',
-  'A   A  BBBB     CCC  DDD    EEEEE  F       GGGG  H   H  IIIII  JJ     K   K  LLLLL  M   M  N   N   OOO   P        Q  Q  R   R  SSS      T     UUU     V    W   W  X   X    Y    ZZZZZ   000   11111  22222  3333      4   5555    666   7       888    999           :::   %  %%  //         \\\\            ..            ' +   '???     !!    ',
+//                                                                                                                                                                                                                                                              SPACE  COLON Percent FSlash BSlash  Infinity    Period rophie        Mark   Bang              
+  '  A    BB       CCC  DDD    EEEEE  FFFFF   GGGG  H   H  IIIII  JJJJJ  K   K  L      M   M  N   N   OOO   PPPP     Q     RRRR    SSS   TTTTT  U   U  V   V  W   W  X   X  Y   Y  ZZZZZ   000     1     222   3333      4   55555   666   77777   888    999           :::   %%  %      /  \\\\                        \'\'    ' + '???     !!         ',
+  ' AAA   B B     C     D  D   E      F      G      H   H    I      J    K KK   L      MM MM  NN  N  O   O  P   P  Q   Q   R   R  S        T    U   U  V   V  W   W   X X    Y Y      Z   0   0   11    2   2      3    44   5      6         7   8   8  9   9          :::      %      //   \\\\     ∞∞∞ ∞∞∞           \'\'    ' + '   ?    !!     --- ',
+  'A   A  BBBB   C      D   D  EEEEE  FFFFF  G  GG  HHHHH    I      J    KK     L      M M M  N N N  O   O  PPPP   Q Q Q   RRRR    SS      T    U   U   V V   W W W    X      Y      Z    0 0 0    1       2    333    4 4    555   6666     7     888    9999                  %      //     \\\\   ∞   ∞   ∞                ' +   ' ??     !!     --- ',
+  'AAAAA  B   B   C     D  D   E      F      G   G  H   H    I      J    K KK   L      M   M  N  NN  O   O  P      Q  QQ   R R       S     T    UU UU   V V   WW WW   X X     Y     Z     0   0    1     22        3  44444      5  6   6   7     8   8      9          :::    %      //       \\\\   ∞∞∞ ∞∞∞   ..            ' +   ' ?                 ',
+  'A   A  BBBB     CCC  DDD    EEEEE  F       GGGG  H   H  IIIII  JJ     K   K  LLLLL  M   M  N   N   OOO   P        Q  Q  R   R  SSS      T     UUU     V    W   W  X   X    Y    ZZZZZ   000   11111  22222  3333      4   5555    666   7       888    999           :::   %  %%  //         \\\\            ..            ' +   '???     !!         ',
 ]
 
 const characterLocationMap = new Map<string, u16>()
@@ -74,3 +74,4 @@ characterLocationMap.set('.',299)
 characterLocationMap.set('\'',306)
 characterLocationMap.set('?',313)
 characterLocationMap.set('!',320)
+characterLocationMap.set('-',327)

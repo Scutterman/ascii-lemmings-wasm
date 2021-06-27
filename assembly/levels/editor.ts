@@ -1,5 +1,5 @@
 import { currentLevel, gameState, messageResponse } from ".."
-import { TILE_AIR, TILE_GROUND } from "../map"
+import { TILE_AIR, TILE_BRICK, TILE_EXIT, TILE_GROUND } from "../map"
 import { LevelMapDetail } from "../maps/types"
 import { Vec2 } from "../position"
 import { Panel } from "../ui/panel"
@@ -110,7 +110,8 @@ export class Editor extends MetaScreen {
   }
  
   public showTilePanel(): void {
-    const tileOptions = [TILE_AIR, TILE_GROUND, 'Cancel']
+    const tileOptions = [TILE_AIR, TILE_GROUND, TILE_BRICK, TILE_EXIT, 'Cancel']
+
     for (let i = 0; i < tileOptions.length; i++) {
       this.tileOptions.items.push(new UIControl(new Vec2(0,0), tileOptions[i], tag => {
         if (typeof tag != 'undefined') {
