@@ -4,11 +4,11 @@ import { UILabel } from "./uiLabel";
 
 export class UIControl extends UILabel {
   constructor(
-    positionOnScreen: Vec2,
+    position: Vec2,
     text: string,
     private action: UIAction,
     tag: string = ''
-  ) { super(positionOnScreen, text, tag) }
+  ) { super(position, text, tag) }
 
   public clicked(): void { this.action(this.tag) }
 }

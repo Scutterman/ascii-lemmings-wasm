@@ -7,11 +7,11 @@ import { UIControl } from "./uiControl";
 
 export class LemmingActionControl extends UIControl {
   constructor(
-    positionOnScreen: Vec2,
+    position: Vec2,
     private gift: LemmingGift,
     private animation: Animation
   ) {
-    super(positionOnScreen, '', () => {}, 'GIFT_COUNTER_' + gift.toString())
+    super(position, '', () => {}, 'GIFT_COUNTER_' + gift.toString())
   }
 
   /** start overrides */

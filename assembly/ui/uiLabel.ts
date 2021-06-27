@@ -1,19 +1,22 @@
 import { renderUiLabel, getRenderedTextArray } from "../loop";
 import { Vec2 } from "../position";
 import { LevelTileDetail } from "../types";
+import { UIITem } from "./uiItem";
 
-export class UILabel {
+export class UILabel extends UIITem {
   public elementId: string = ''
   protected hasMouseFocus: boolean = false
   private size: Vec2 = new Vec2(0,0)
   constructor(
-    protected positionOnScreen: Vec2,
+    position: Vec2,
     protected text: string,
     protected tag: string = ''
-  ) { }
+  ) {
+    super(position)
+  }
 
-  public getPosition(): Vec2 { return this.positionOnScreen.clone() }
-  public setPosition(postion: Vec2): void { this.positionOnScreen = postion.clone() }
+  public getPosition(): Vec2 { return this.position.clone() }
+  public setPosition(postion: Vec2): void { this.position = postion.clone() }
   public getSize(): Vec2 { return this.size.clone() }
   public setSize(size: Vec2): void { this.size = size.clone() }
   public getText(): string { return this.text }

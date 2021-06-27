@@ -5,9 +5,12 @@ import { UIControl } from "./uiControl"
 import { UILabel } from './uiLabel'
 import { getSizeFromRenderedTextArray, lineBreak } from '../loop'
 import { removeItem } from "../vdom/elements"
+import { UIITem } from "./uiItem"
 
-export class Panel {
-  constructor(public position: Vec2, public items: UILabel[] = []) {}
+export class Panel extends UIITem {
+  constructor(position: Vec2, public items: UILabel[] = []) {
+    super(position)
+  }
 
   public render(isDirty: boolean): void {
     if (this.items.length == 0) { return }
