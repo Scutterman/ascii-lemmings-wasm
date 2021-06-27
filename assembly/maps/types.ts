@@ -74,7 +74,13 @@ export class LevelMapDetail {
           if (_detail != null) {
             detail = _detail
           }
-        } else if (this.defaultAnimations.has(tile)) {
+        } else {
+          if (!this.defaultAnimations.has(tile)) {
+            if (!this.animationList.has(tile)) {
+              this.animationList.set(tile, new SingleCharacterAnimation(tile, '#000000'))
+            }
+            this.defaultAnimations.set(tile, tile)
+          }
           const _detail = this.getDetailFromAnimationLabel(tile, this.defaultAnimations.get(tile))
           if (_detail != null) {
             detail = _detail
