@@ -7,6 +7,16 @@ import { getSizeFromRenderedTextArray, lineBreak } from '../loop'
 import { removeItem } from "../vdom/elements"
 import { UIITem } from "./uiItem"
 
+const PANEL_ITEM_SPACING: i16 = 3
+
+class PanelRow {
+  public texts: string[][] = []
+  public sizes: Vec2[] = []
+  public panelRowSize: Vec2 = new Vec2(0,0)
+  public borders: boolean[] = []
+  public panelRowItemIndexes: i32[] = []
+}
+
 export class Panel extends UIITem {
   constructor(position: Vec2, public items: UILabel[] = []) {
     super(position)
@@ -16,24 +26,42 @@ export class Panel extends UIITem {
     if (this.items.length == 0) { return }
 
     const nextLabelPosition = this.position.clone()
-    this.items[0].setPosition(this.position)
     
-    const texts: string[][] = []
-    const sizes: Vec2[] = []
-    const panelSize: Vec2 = new Vec2(0,0)
-    const borders: boolean[] = []
-    const panelItemIndexes: i32[] = []
-    
+    const rows: PanelRow[] = [new PanelRow()]
+    let panelRowIndex = 0
     for (let i = 0; i < this.items.length; i++) {
       const text = this.items[i].getTextForRender(isDirty)
       const size = getSizeFromRenderedTextArray(text)
-      texts.push(text)
-      sizes.push(size)
-      borders.push(this.items[i] instanceof UIControl)
-      panelItemIndexes.push(i)
-      panelSize.x += size.x
-      panelSize.y = i16(Math.max(panelSize.y, size.y))
+      let x = rows[panelRowIndex].panelRowSize.x + size.x + PANEL_ITEM_SPACING
+      const isEndOfRow = x > i16(VISIBLE_X)
+      const isLastItem = i == this.items.length - 1
+      if (isEndOfRow) {
+        // Do not add spacing to last item
+        rows[panelRowIndex].panelRowSize.x -= PANEL_ITEM_SPACING
+        rows.push(new PanelRow())
+        panelRowIndex++
+        x = size.x + PANEL_ITEM_SPACING
+      } else if (isLastItem) {
+        // Do not add spacing to last item
+        x -= PANEL_ITEM_SPACING
+      }
+      
+      rows[panelRowIndex].panelRowSize.x = x
+      rows[panelRowIndex].panelRowSize.y = i16(Math.max(rows[panelRowIndex].panelRowSize.y, size.y))
+      
+      rows[panelRowIndex].texts.push(text)
+      rows[panelRowIndex].sizes.push(size)
+      rows[panelRowIndex].borders.push(this.items[i] instanceof UIControl)
+      rows[panelRowIndex].panelRowItemIndexes.push(i)
     }
+    
+    const panelSize = new Vec2(0,0)
+    for (panelRowIndex = 0; panelRowIndex < rows.length; panelRowIndex++) {
+      panelSize.y = rows[panelRowIndex].panelRowSize.y
+      panelSize.x = i16(Math.max(panelSize.x, rows[panelRowIndex].panelRowSize.x))
+    }
+
+    panelSize.y += PANEL_ITEM_SPACING * (i16(rows.length) - 1)
 
     if (nextLabelPosition.x == -1) {
       const mapLengthInBlocks = i16(VISIBLE_X + BOUNDARIES_X)
@@ -45,13 +73,23 @@ export class Panel extends UIITem {
       nextLabelPosition.y = i16(f32(mapHeightInBlocks - panelSize.y) / 2)
     }
 
-    for (let i = 0; i < texts.length; i++) {
-      removeItem(this.items[panelItemIndexes[i]].elementId)
-      const id = renderRelativeElement(texts[i].join(lineBreak), nextLabelPosition, borders[i], '#000000', this.getBackgroundColour())
-      this.items[panelItemIndexes[i]].elementId = id
-      this.items[panelItemIndexes[i]].setPosition(nextLabelPosition.clone())
-      this.items[panelItemIndexes[i]].setSize(sizes[i])
-      nextLabelPosition.x += sizes[i].x + 3
+    const intiialLabelPosition = nextLabelPosition.clone()
+    this.items[0].setPosition(intiialLabelPosition)
+
+    for (panelRowIndex = 0; panelRowIndex < rows.length; panelRowIndex++) {
+      const row = rows[panelRowIndex]
+      for (let rowItem = 0; rowItem < row.panelRowItemIndexes.length; rowItem++) {
+        const itemIndex = row.panelRowItemIndexes[rowItem]
+        removeItem(this.items[itemIndex].elementId)
+        const id = renderRelativeElement(row.texts[rowItem].join(lineBreak), nextLabelPosition, row.borders[rowItem], '#000000', this.getBackgroundColour())
+        this.items[itemIndex].elementId = id
+        this.items[itemIndex].setPosition(nextLabelPosition.clone())
+        this.items[itemIndex].setSize(row.sizes[rowItem])
+
+        nextLabelPosition.x += row.sizes[rowItem].x + PANEL_ITEM_SPACING
+      }
+      nextLabelPosition.x = intiialLabelPosition.x
+      nextLabelPosition.y += row.panelRowSize.y + PANEL_ITEM_SPACING
     }
   }
 
