@@ -14,8 +14,8 @@ export class Editor extends MetaScreen {
   private animationListItemKeys: Panel = new Panel(new Vec2(-1,-1))
   private tileOptions: Panel = new Panel(new Vec2(-1,-1))
   private selectedBlockKey: string = ''
-  private selectedBlockX: i32 = -1
-  private selectedBlockY: i32 = -1
+  private selectedBlockX: i16 = -1
+  private selectedBlockY: i16 = -1
   private metaMap: LevelMapDetail = new LevelMapDetail([])
 
   constructor() {
@@ -53,10 +53,12 @@ export class Editor extends MetaScreen {
   }
 
   public mapSquareClicked(mouseTileX: i32, mouseTileY: i32): void {
-    if (mouseTileY >= 0 && mouseTileY < this.metaMap.tiles.length && mouseTileX >= 0 && mouseTileY < this.metaMap.tiles[mouseTileY].length) {
-      this.selectedBlockKey = mouseTileX.toString() + ',' + mouseTileY.toString()
-      this.selectedBlockX = mouseTileX
-      this.selectedBlockY = mouseTileY
+    const x = i16(mouseTileX) + this.scrollPosition.x
+    const y = i16(mouseTileY) + this.scrollPosition.y
+    if (y >= 0 && y < this.metaMap.tiles.length && x >= 0 && x < this.metaMap.tiles[y].length) {
+      this.selectedBlockKey = x.toString() + ',' + y.toString()
+      this.selectedBlockX = x
+      this.selectedBlockY = y
     }
   }
 
