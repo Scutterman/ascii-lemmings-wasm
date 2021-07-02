@@ -1,3 +1,4 @@
+import { log } from "..";
 import { getRenderedTextArray, renderTextArrayToScreen } from "../loop";
 import { Vec2 } from "../position";
 import { LevelTileDetail } from "../types";
@@ -25,8 +26,14 @@ export class UILabel extends UIITem {
   public setSize(size: Vec2): void { this.size = size.clone() }
   public getText(): string { return this.text }
   public getTag(): string { return this.tag }
-  public updateText(text: string): void { this.text = text }
-  public setFocus(hasFocus: boolean): void { this.hasMouseFocus = hasFocus }
+  public updateText(text: string): void {
+    this.text = text
+    this.hasChangedState = true
+  }
+  public setFocus(hasFocus: boolean): void {
+    this.hasMouseFocus = hasFocus
+    this.hasChangedState = true
+  }
 
   public isInBounds(x: i32, y: i32): boolean {
     const pos = this.getPosition()
