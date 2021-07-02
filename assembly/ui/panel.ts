@@ -19,8 +19,8 @@ class PanelRow {
 }
 
 export class Panel extends UIITem {
-  constructor(position: Vec2, private items: UILabel[] = []) {
-    super(position)
+  constructor(position: Vec2, private items: UILabel[] = [], tag: string = '') {
+    super(position, tag)
   }
 
   public addLinebreak(): void {

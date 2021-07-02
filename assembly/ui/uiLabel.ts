@@ -1,4 +1,3 @@
-import { log } from "..";
 import { getRenderedTextArray, renderTextArrayToScreen } from "../loop";
 import { Vec2 } from "../position";
 import { LevelTileDetail } from "../types";
@@ -12,9 +11,9 @@ export class UILabel extends UIITem {
   constructor(
     position: Vec2,
     protected text: string,
-    protected tag: string = ''
+    tag: string = ''
   ) {
-    super(position)
+    super(position, tag)
   }
 
   public getPosition(): Vec2 { return this.position.clone() }
@@ -25,7 +24,7 @@ export class UILabel extends UIITem {
   public getSize(): Vec2 { return this.size.clone() }
   public setSize(size: Vec2): void { this.size = size.clone() }
   public getText(): string { return this.text }
-  public getTag(): string { return this.tag }
+  
   public updateText(text: string): void {
     this.text = text
     this.hasChangedState = true

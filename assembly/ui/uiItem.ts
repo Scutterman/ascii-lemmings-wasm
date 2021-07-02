@@ -7,7 +7,9 @@ export class UIITem {
   protected showing: boolean = true
   protected hasChangedState: boolean = true
 
-  constructor(public position: Vec2) {}
+  constructor(public position: Vec2, protected tag: string = '') {}
+  
+  public getTag(): string { return this.tag }
 
   public setBackgroundColour(newColour: string): void {
     this.backgroundColour = newColour
