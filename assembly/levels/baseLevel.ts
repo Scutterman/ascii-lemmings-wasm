@@ -98,12 +98,8 @@ export abstract class BaseLevel {
     }
     
     for (let i = 0; i < this.uiPanels.length; i++) {
-      const panel = this.uiPanels[i]
-      for (let j = 0; j < panel.items.length; j++) {
-        if (panel.items[j].getTag() == tag) {
-          return panel.items[j]
-        }
-      }
+      const item = this.uiPanels[i].getUIByTag(tag)
+      if (item != null) { return item }
     }
     
     return null

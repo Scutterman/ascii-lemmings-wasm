@@ -19,17 +19,35 @@ class PanelRow {
 }
 
 export class Panel extends UIITem {
-  constructor(position: Vec2, public items: UILabel[] = []) {
+  constructor(position: Vec2, private items: UILabel[] = []) {
     super(position)
   }
 
   public addLinebreak(): void {
     this.items.push(new UILabel(new Vec2(0,0), '', TAG_PANEL_LINE_BREAk))
+    this.hasChangedState = true
   }
 
-  public render(isDirty: boolean): void {
-    if (!this.isShowing() || this.items.length == 0) { return }
+  public addItem(item: UILabel): void {
+    this.items.push(item)
+    this.hasChangedState = true
+  }
+
+  public getItems(): UILabel[] { return this.items }
+  
+  public getUIByTag(tag: string): UILabel | null {
+    for (let j = 0; j < this.items.length; j++) {
+      if (this.items[j].getTag() == tag) {
+        return this.items[j]
+      }
+    }
     
+    return null
+  }
+  
+  public render(isDirty: boolean): void {
+    if (!this.hasChangedState || this.items.length == 0) { return }
+
     const nextLabelPosition = this.position.clone()
     
     const rows: PanelRow[] = [new PanelRow()]
@@ -37,6 +55,11 @@ export class Panel extends UIITem {
     let hasItemsShowing = false
     for (let i = 0; i < this.items.length; i++) {
       if (!this.items[i].isShowing()) { continue }
+      
+      removeItem(this.items[i].elementId)
+      
+      if (!this.isShowing()) { continue }
+      
       hasItemsShowing = true
 
       const text = this.items[i].getTextForRender(isDirty)
@@ -99,7 +122,6 @@ export class Panel extends UIITem {
       const row = rows[panelRowIndex]
       for (let rowItem = 0; rowItem < row.panelRowItemIndexes.length; rowItem++) {
         const itemIndex = row.panelRowItemIndexes[rowItem]
-        removeItem(this.items[itemIndex].elementId)
         const id = renderRelativeElement(row.texts[rowItem].join(lineBreak), nextLabelPosition, row.borders[rowItem], '#000000', this.getBackgroundColour())
         this.items[itemIndex].elementId = id
         this.items[itemIndex].setPosition(nextLabelPosition.clone())
@@ -110,6 +132,8 @@ export class Panel extends UIITem {
       nextLabelPosition.x = intiialLabelPosition.x
       nextLabelPosition.y += row.panelRowSize.y + PANEL_ITEM_SPACING
     }
+
+    this.hasChangedState = false
   }
 
   public empty(): void {
@@ -118,5 +142,6 @@ export class Panel extends UIITem {
     }
 
     this.items = []
+    this.hasChangedState = true
   }
 }

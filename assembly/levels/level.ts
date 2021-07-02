@@ -51,7 +51,7 @@ export class Level extends BaseLevel {
       this.uiLabels.push(new UILabel(new Vec2(32, this.buttonYCoordinate - 2), 'OUT: 0', 'LEMMING_OUT'))
       this.uiLabels.push(new UILabel(new Vec2(46, this.buttonYCoordinate - 2), 'SAVED: 0%', 'LEMMING_SAVED'))
       this.uiLabels.push(new UILabel(new Vec2(65, this.buttonYCoordinate - 2), '', 'TIMER'))
-      this.skillsPanel.items.push(new UIControl(new Vec2(0,0), 'm', () => { gameState.setNukeGift() }))
+      this.skillsPanel.addItem(new UIControl(new Vec2(0,0), 'm', () => { gameState.setNukeGift() }))
     }
   }
 
@@ -102,7 +102,7 @@ export class Level extends BaseLevel {
   }
 
   public addSkillToPanel(skillAnimation: Animation, gift: LemmingGift): void {
-    this.skillsPanel.items.push(new LemmingActionControl(new Vec2(0, 0), gift, skillAnimation))
+    this.skillsPanel.addItem(new LemmingActionControl(new Vec2(0, 0), gift, skillAnimation))
   }
 
   public updateSkillQuantity(gift: LemmingGift, newText: string): void {

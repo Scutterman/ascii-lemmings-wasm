@@ -24,7 +24,7 @@ export class Editor extends MetaScreen {
     this.populateTilePanel()
     
     this.uiPanels.push(this.actionPanel)
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Load", () => {
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Load", () => {
       messageResponse('load', '', '')
     }))
 
@@ -34,7 +34,7 @@ export class Editor extends MetaScreen {
 
   private showOptionsAfterLoad(): void {
     this.actionPanel.empty()
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Save", () => {
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
       messageResponse('save', 'foobar.json', '{ "hello": "world" }')
     }))
   }
@@ -103,11 +103,11 @@ export class Editor extends MetaScreen {
   
   private populateTilePanel(): void {
     const tileOptions = [TILE_AIR, TILE_GROUND, TILE_BRICK, TILE_EXIT, 'Cancel']
-    this.tileOptions.items.push(new UILabel(new Vec2(0,0), 'Tile:'))
+    this.tileOptions.addItem(new UILabel(new Vec2(0,0), 'Tile:'))
     this.tileOptions.addLinebreak()
 
     for (let i = 0; i < tileOptions.length; i++) {
-      this.tileOptions.items.push(new UIControl(new Vec2(0,0), tileOptions[i], tag => {
+      this.tileOptions.addItem(new UIControl(new Vec2(0,0), tileOptions[i], tag => {
         if (typeof tag != 'undefined') {
           (currentLevel as Editor).setTileOption(tag)
         }
@@ -115,7 +115,7 @@ export class Editor extends MetaScreen {
     }
 
     this.tileOptions.addLinebreak()
-    this.tileOptions.items.push(new UILabel(new Vec2(0,0), 'Animation:'))
+    this.tileOptions.addItem(new UILabel(new Vec2(0,0), 'Animation:'))
     this.tileOptions.addLinebreak()
 
     const animationListItemKeys = this.metaMap.animationList.keys()
@@ -123,7 +123,7 @@ export class Editor extends MetaScreen {
     animationListItemKeys.push('Cancel')
     
     for (let i = 0; i < animationListItemKeys.length; i++) {
-      this.tileOptions.items.push(new UIControl(new Vec2(0,0), animationListItemKeys[i], tag => {
+      this.tileOptions.addItem(new UIControl(new Vec2(0,0), animationListItemKeys[i], tag => {
         if (typeof tag != 'undefined') {
           (currentLevel as Editor).setBlockAnimation(tag)
         }
@@ -133,7 +133,7 @@ export class Editor extends MetaScreen {
 
     this.tileOptions.addLinebreak()
     this.tileOptions.addLinebreak()
-    this.tileOptions.items.push(new UIControl(new Vec2(0,0), 'Done', () => {
+    this.tileOptions.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
       (currentLevel as Editor).tileOptions.hide()
     }))
   }

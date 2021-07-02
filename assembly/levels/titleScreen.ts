@@ -11,13 +11,13 @@ export class TitleScreen extends MetaScreen {
     super('TITLE')
 
     this.uiPanels.push(this.actionPanel)
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Start", () => {
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Start", () => {
       const levelFactory = LEVEL_DIFFICULTY_CODES.get(Difficulty.Fun).get('CAJJLDLBCS')
       const level = levelFactory()
       loadLevel(level)
     }))
 
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Code", () => {
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Code", () => {
       const level = new LevelCodeEntry()
       loadLevel(level)
     }))

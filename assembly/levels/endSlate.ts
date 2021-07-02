@@ -18,10 +18,10 @@ export class EndSlate extends MetaScreen {
     super('END')
     this.uiPanels.push(this.controlsPanel)
 
-    this.controlsPanel.items.push(new UIControl(new Vec2(0, 0), "Restart", () => {
+    this.controlsPanel.addItem(new UIControl(new Vec2(0, 0), "Restart", () => {
       gameState.restartLastLevel()
     }))
-    this.controlsPanel.items.push(new UIControl(new Vec2(0, 0), "Continue", () => {}))
+    this.controlsPanel.addItem(new UIControl(new Vec2(0, 0), "Continue", () => {}))
 
     this.uiLabels.push(new UILabel(new Vec2(-1, 10), 'All lemmings accounted for'))
     this.uiLabels.push(new UILabel(new Vec2(-1, 14), 'You needed ' + needed))

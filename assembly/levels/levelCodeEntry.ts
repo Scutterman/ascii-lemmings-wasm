@@ -21,18 +21,18 @@ export class LevelCodeEntry extends MetaScreen {
     this.uiLabels.push(new UILabel(new Vec2(-1, 20), '', 'LEVEL_CODE'))
     this.uiPanels.push(this.actionPanel)
     
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Back", () => {
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Back", () => {
       doBeforeLeaving()
       const level = new TitleScreen()
       loadLevel(level)
     }))
 
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Clear", () => {
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Clear", () => {
       resetText()
       updateLabel('LEVEL_CODE_MESSAGE', '')
     }))
 
-    this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Go", () => {
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Go", () => {
       let levelCode = gameState.userEnteredText.toUpperCase()
 
       const shouldEditLevel = levelCode.startsWith('EDIT:')

@@ -84,8 +84,9 @@ function processControlClicks(clickProcessed: boolean): boolean {
 
   for (let i = 0; i < currentLevel.uiPanels.length; i++) {
     const panel = currentLevel.uiPanels[i]
-    for (let j = 0; j < panel.items.length; j++) {
-      clickProcessed = processLabelEvents(panel.items[j], clickProcessed)
+    const items = panel.getItems()
+    for (let j = 0; j < items.length; j++) {
+      clickProcessed = processLabelEvents(items[j], clickProcessed)
     }
   }
 
