@@ -21,14 +21,13 @@ export class Editor extends MetaScreen {
   constructor() {
     super('EDITOR')
 
-    this.populateTilePanel()
-    
     this.uiPanels.push(this.actionPanel)
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Load", () => {
       messageResponse('load', '', '')
     }))
 
     this.tileOptions.setBackgroundColour('#ffffff')
+    this.tileOptions.hide()
     this.uiPanels.push(this.tileOptions)
   }
 
@@ -101,7 +100,8 @@ export class Editor extends MetaScreen {
     this.tileOptions.show()
   }
   
-  private populateTilePanel(): void {
+  private populatePanels(): void {
+    this.tileOptions.empty()
     const tileOptions = [TILE_AIR, TILE_GROUND, TILE_BRICK, TILE_EXIT, 'Cancel']
     this.tileOptions.addItem(new UILabel(new Vec2(0,0), 'Tile:'))
     this.tileOptions.addLinebreak()
@@ -146,6 +146,7 @@ export class Editor extends MetaScreen {
     const tileDetail = this.metaMap.toTileDetail()
     this.map = tileDetail
 
+    this.populatePanels()
     this.showOptionsAfterLoad()
     this.levelLoaded = true
     this.firstRender = true
