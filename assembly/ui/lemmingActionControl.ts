@@ -43,4 +43,9 @@ export class LemmingActionControl extends UIControl {
     }
     return labelText
   }
+
+  public render(): void {
+    this.hasChangedState = this.hasChangedState || this.hasMouseFocus
+    super.render()
+  }
 }
