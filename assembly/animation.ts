@@ -11,6 +11,10 @@ export class Animation {
     this.currentFrameIndex = 0
   }
 
+  public getNumberOfFrames(): u8 {
+    return u8(this.frames.length)
+  }
+
   public getNextFrame(progressFrame: boolean): AnimationFrame {
     if (this.frames.length == 0) { return [] }
     const frame = this.frames[this.currentFrameIndex]
