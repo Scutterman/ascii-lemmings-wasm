@@ -41,12 +41,12 @@ export class Panel extends UIITem {
         return this.items[j]
       }
     }
-    
+
     return null
   }
   
   public render(isDirty: boolean): void {
-    if (!this.hasChangedState || this.items.length == 0) { return }
+    if (this.items.length == 0) { return }
 
     const nextLabelPosition = this.position.clone()
     
@@ -54,7 +54,7 @@ export class Panel extends UIITem {
     let panelRowIndex = 0
     let hasItemsShowing = false
     for (let i = 0; i < this.items.length; i++) {
-      if (!this.items[i].isShowing()) { continue }
+      if (!this.items[i].isShowing() || !this.items[i].requiresRender()) { continue }
       
       removeItem(this.items[i].elementId)
       
