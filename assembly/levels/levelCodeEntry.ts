@@ -74,7 +74,7 @@ export class LevelCodeEntry extends MetaScreen {
     const label = this.getUIByTag('LEVEL_CODE')
     if (label != null) {
       label.updateText(gameState.userEnteredText)
-      label.setPosition(new Vec2(-1, label.getPosition().y)) // force centre of label to be recalculated
+      label.setPosition(new Vec2(-1, label.getPosition().y), true) // force centre of label to be recalculated
     }
     super.renderLevel()
   }

@@ -17,7 +17,10 @@ export class UILabel extends UIITem {
   }
 
   public getPosition(): Vec2 { return this.position.clone() }
-  public setPosition(postion: Vec2): void { this.position = postion.clone() }
+  public setPosition(postion: Vec2, requiresRerender: boolean = false): void {
+    this.position = postion.clone()
+    this.hasChangedState = this.hasChangedState || requiresRerender
+  }
   public getSize(): Vec2 { return this.size.clone() }
   public setSize(size: Vec2): void { this.size = size.clone() }
   public getText(): string { return this.text }
