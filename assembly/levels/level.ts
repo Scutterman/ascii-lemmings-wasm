@@ -1,6 +1,6 @@
 import { gameState, lemmings } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
-import { getRenderedTextArray, lineBreak, removeMapTile, renderMapTile, renderRelativeElement, renderTextArrayToScreen } from "../loop"
+import { getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
@@ -19,7 +19,6 @@ import { MinerAnimation } from "../actions/miner"
 import { FloaterAnimation } from "../actions/umbrella"
 import { LevelMapDetail } from "../maps/types"
 import { removeItem } from "../vdom/elements"
-import { UPSCALE_MULTIPLIER } from "../upscale"
 
 export class Level extends BaseLevel {
   private canSpawnMore: boolean = true
@@ -275,15 +274,7 @@ export class Level extends BaseLevel {
           continue
         }
         
-        const text: string[] = []
-        const frame = map[row][col].animation.getNextFrame(this.isDirty)
-        for (let frameRow = 0; frameRow < frame.length; frameRow++) {
-          if (frameRow >= text.length) { text.push('') }
-          for (let frameCol = 0; frameCol < frame[frameRow].length; frameCol++) {
-            text[frameRow] += frame[frameRow][frameCol]
-          }
-        }
-        
+        const text = map[row][col].animation.getNextFrameAsText(this.isDirty)
         map[row][col].elementId = renderMapTile(text, new Vec2(col, row), map[row][col].colour)
         map[row][col].isDirty = false
       }

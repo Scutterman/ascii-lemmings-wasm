@@ -26,6 +26,19 @@ export class Animation {
     return frame
   }
 
+  public getNextFrameAsText(progressFrame: boolean): string[] {
+    const text: string[] = []
+    const frame = this.getNextFrame(progressFrame)
+    for (let frameRow = 0; frameRow < frame.length; frameRow++) {
+      if (frameRow >= text.length) { text.push('') }
+      for (let frameCol = 0; frameCol < frame[frameRow].length; frameCol++) {
+        text[frameRow] += frame[frameRow][frameCol]
+      }
+    }
+
+    return text
+  }
+
   public hasNextFrame(): boolean {
     return this.frames.length > 1
   }
