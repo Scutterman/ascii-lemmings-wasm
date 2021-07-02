@@ -12,7 +12,6 @@ import { UILabel } from "../ui/uiLabel"
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
   private levelLoaded: boolean = false
-  private animationListItemKeys: Panel = new Panel(new Vec2(-1,-1))
   private tileOptions: Panel = new Panel(new Vec2(-1,-1))
   private selectedBlockKey: string = ''
   private selectedBlockX: i16 = -1
@@ -21,6 +20,9 @@ export class Editor extends MetaScreen {
 
   constructor() {
     super('EDITOR')
+
+    this.populateTilePanel()
+    
     this.uiPanels.push(this.actionPanel)
     this.actionPanel.items.push(new UIControl(new Vec2(0, 0), "Load", () => {
       messageResponse('load', '', '')
@@ -96,6 +98,10 @@ export class Editor extends MetaScreen {
   }
  
   public showTilePanel(): void {
+    this.tileOptions.show()
+  }
+  
+  private populateTilePanel(): void {
     const tileOptions = [TILE_AIR, TILE_GROUND, TILE_BRICK, TILE_EXIT, 'Cancel']
     this.tileOptions.items.push(new UILabel(new Vec2(0,0), 'Tile:'))
     this.tileOptions.addLinebreak()
@@ -128,7 +134,7 @@ export class Editor extends MetaScreen {
     this.tileOptions.addLinebreak()
     this.tileOptions.addLinebreak()
     this.tileOptions.items.push(new UIControl(new Vec2(0,0), 'Done', () => {
-      (currentLevel as Editor).tileOptions.empty()
+      (currentLevel as Editor).tileOptions.hide()
     }))
   }
 

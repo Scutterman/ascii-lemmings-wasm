@@ -28,13 +28,17 @@ export class Panel extends UIITem {
   }
 
   public render(isDirty: boolean): void {
-    if (this.items.length == 0) { return }
-
+    if (!this.isShowing() || this.items.length == 0) { return }
+    
     const nextLabelPosition = this.position.clone()
     
     const rows: PanelRow[] = [new PanelRow()]
     let panelRowIndex = 0
+    let hasItemsShowing = false
     for (let i = 0; i < this.items.length; i++) {
+      if (!this.items[i].isShowing()) { continue }
+      hasItemsShowing = true
+
       const text = this.items[i].getTextForRender(isDirty)
       const size = getSizeFromRenderedTextArray(text)
       
@@ -67,6 +71,8 @@ export class Panel extends UIITem {
       rows[panelRowIndex].borders.push(this.items[i] instanceof UIControl)
       rows[panelRowIndex].panelRowItemIndexes.push(i)
     }
+
+    if (!hasItemsShowing) { return }
     
     const panelSize = new Vec2(0,0)
     for (panelRowIndex = 0; panelRowIndex < rows.length; panelRowIndex++) {

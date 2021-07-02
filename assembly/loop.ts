@@ -203,6 +203,8 @@ export function renderBoxAroundBlock(blockX: i16, blockY: i16): string {
 }
 
 export function renderUiLabel(element: UILabel): void {
+  if (!element.isShowing()) { return }
+  
   removeItem(element.elementId)
   const info = renderTextArrayToScreen(
     element.getTextForRender(false),

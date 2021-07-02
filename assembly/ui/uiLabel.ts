@@ -51,6 +51,8 @@ export class UILabel extends UIITem {
   }
 
   public render(): void {
-    renderUiLabel(this)
+    if (this.isShowing()) {
+      renderUiLabel(this)
+    }
   }
 }
