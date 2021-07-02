@@ -52,7 +52,7 @@ export class Panel extends UIITem {
     
     const rows: PanelRow[] = [new PanelRow()]
     let panelRowIndex = 0
-    let hasItemsShowing = false
+    let hasItemsShowing = this.hasChangedState
     for (let i = 0; i < this.items.length; i++) {
       if (!this.items[i].isShowing() || !this.items[i].requiresRender()) { continue }
       
@@ -60,7 +60,7 @@ export class Panel extends UIITem {
       
       if (!this.isShowing()) { continue }
       
-      hasItemsShowing = hasItemsShowing || this.items[i].requiresRender()
+      hasItemsShowing = true
 
       const text = this.items[i].getTextForRender(isDirty)
       const size = getSizeFromRenderedTextArray(text)
