@@ -60,7 +60,7 @@ export class Panel extends UIITem {
       
       if (!this.isShowing()) { continue }
       
-      hasItemsShowing = this.hasChangedState
+      hasItemsShowing = hasItemsShowing || this.items[i].requiresRender()
 
       const text = this.items[i].getTextForRender(isDirty)
       const size = getSizeFromRenderedTextArray(text)
