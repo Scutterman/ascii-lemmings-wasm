@@ -202,23 +202,6 @@ export function renderBoxAroundBlock(blockX: i16, blockY: i16): string {
   return renderRelativeElement('<span class="box"></span>', new Vec2(blockX, blockY))
 }
 
-export function renderUiLabel(element: UILabel): void {
-  if (!element.isShowing()) { return }
-  
-  removeItem(element.elementId)
-  const info = renderTextArrayToScreen(
-    element.getTextForRender(false),
-    element.getPosition(),
-    element instanceof UIControl,
-    '#000000',
-    element.getBackgroundColour()
-  )
-
-  element.elementId = info.id
-  element.setPosition(info.dimensions.position)
-  element.setSize(info.dimensions.size)
-}
-
 export function getRenderedTextArray(textToRender: string, text: string[] = []): string[] {
   const elementTextCharacters = textToRender.split('')
   

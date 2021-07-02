@@ -1,10 +1,11 @@
-import { renderUiLabel, getRenderedTextArray } from "../loop";
+import { getRenderedTextArray, renderTextArrayToScreen } from "../loop";
 import { Vec2 } from "../position";
 import { LevelTileDetail } from "../types";
+import { removeItem } from "../vdom/elements";
+import { UIControl } from "./uiControl";
 import { UIITem } from "./uiItem";
 
 export class UILabel extends UIITem {
-  public elementId: string = ''
   protected hasMouseFocus: boolean = false
   private size: Vec2 = new Vec2(0,0)
   constructor(
@@ -51,8 +52,24 @@ export class UILabel extends UIITem {
   }
 
   public render(): void {
-    if (this.isShowing()) {
-      renderUiLabel(this)
-    }
+    if (!this.hasChangedState || !this.showing) { return }
+
+    removeItem(this.elementId)
+    this.renderUiLabel()
+    this.hasChangedState = false
+  }
+
+  private renderUiLabel(): void {
+    const info = renderTextArrayToScreen(
+      this.getTextForRender(false),
+      this.getPosition(),
+      this instanceof UIControl,
+      '#000000',
+      this.getBackgroundColour()
+    )
+  
+    this.elementId = info.id
+    this.setPosition(info.dimensions.position)
+    this.setSize(info.dimensions.size)
   }
 }
