@@ -44,7 +44,7 @@ export class Panel extends UIITem {
 
     return null
   }
-  
+
   public render(isDirty: boolean): void {
     if (this.items.length == 0) { return }
 
@@ -122,7 +122,7 @@ export class Panel extends UIITem {
       const row = rows[panelRowIndex]
       for (let rowItem = 0; rowItem < row.panelRowItemIndexes.length; rowItem++) {
         const itemIndex = row.panelRowItemIndexes[rowItem]
-        const id = renderRelativeElement(row.texts[rowItem].join(lineBreak), nextLabelPosition, row.borders[rowItem], '#000000', this.getBackgroundColour())
+        const id = renderRelativeElement(row.texts[rowItem].join(lineBreak), nextLabelPosition, row.borders[rowItem], this.items[itemIndex].getColour(), this.getBackgroundColour())
         this.items[itemIndex].elementId = id
         this.items[itemIndex].setPosition(nextLabelPosition.clone())
         this.items[itemIndex].setSize(row.sizes[rowItem])

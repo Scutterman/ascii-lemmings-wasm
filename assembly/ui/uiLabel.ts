@@ -73,7 +73,7 @@ export class UILabel extends UIITem {
       this.getTextForRender(false),
       this.getPosition(),
       this instanceof UIControl,
-      '#000000',
+      this.getColour(),
       this.getBackgroundColour()
     )
   
