@@ -5,7 +5,7 @@ export class UIITem {
   public elementId: string = ''
   private backgroundColour: string = '#ffffff00'
   protected showing: boolean = true
-  protected hasChangedState: boolean = false
+  protected hasChangedState: boolean = true
 
   constructor(public position: Vec2) {}
 
