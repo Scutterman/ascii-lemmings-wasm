@@ -130,7 +130,7 @@ export class Panel extends UIITem {
 
   public render(isDirty: boolean, parentShowing: boolean = true): void {
     if (this.items.length == 0) { return }
-    
+
     if (this.requiresPrerender) {
       this.preRender(isDirty, parentShowing, this.position.clone())
     }

@@ -43,7 +43,7 @@ export class PanelContainer extends UIITem {
     for (let i = 0; i < this.items.length; i++) {
       this.items[i].position = nextPosition.clone()
       const wrapOverridePosition = new Vec2(this.position.x, nextPosition.y + rowMaxY + PANEL_ITEM_SPACING)
-      this.items[i].preRender(isDirty, this.isShowing(), wrapOverridePosition)
+      this.items[i].preRender(isDirty, this.isShowing(), wrapOverridePosition, true)
       const size = this.items[i].getSize()
       
       if (this.items[i].position.x == wrapOverridePosition.x && this.items[i].position.y == wrapOverridePosition.y) {
