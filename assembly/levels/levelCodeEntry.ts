@@ -8,6 +8,7 @@ import { MetaScreen } from "./metascreen"
 import { TitleScreen } from "./titleScreen"
 import { isEditingMap } from '../imports'
 import { Editor } from "./editor"
+import { Animations } from "./animations"
 
 export class LevelCodeEntry extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, -1))
@@ -35,12 +36,15 @@ export class LevelCodeEntry extends MetaScreen {
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Go", () => {
       let levelCode = gameState.userEnteredText.toUpperCase()
 
-      const shouldEditLevel = levelCode.startsWith('EDIT:')
-      if (shouldEditLevel) {
-        levelCode = levelCode.replace('EDIT:', '')
+      if (levelCode == 'EDIT:') {
         // TODO:: when exiting the edit screen this needs to be reset
         isEditingMap(1)
         const level = new Editor()
+        doBeforeLeaving()
+        loadLevel(level)
+        return
+      } else if (levelCode == 'ANIM:') {
+        const level = new Animations()
         doBeforeLeaving()
         loadLevel(level)
         return

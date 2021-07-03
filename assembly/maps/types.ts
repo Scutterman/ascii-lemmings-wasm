@@ -93,10 +93,20 @@ export class LevelMapDetail {
   }
 }
 
-abstract class AnimationListItem {
+export abstract class AnimationListItem {
   constructor(private colour: string) {}
   public getColour(): string { return this.colour }
   public abstract getAnimation(): Animation
+}
+
+export class StandardAnimation extends AnimationListItem {
+  constructor(private animation: Animation, colour: string) {
+    super(colour)
+  }
+  
+  public getAnimation(): Animation {
+    return this.animation
+  }
 }
 
 export class SingleCharacterAnimation extends AnimationListItem {

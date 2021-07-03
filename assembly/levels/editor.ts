@@ -8,14 +8,11 @@ import { MetaScreen } from "./metascreen"
 import { renderBoxAroundBlock } from "../loop"
 import { removeItem } from "../vdom/elements"
 import { UILabel } from "../ui/uiLabel"
-import { UiAnimationFrame } from "../ui/uiAnimationFrame"
 
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
   private levelLoaded: boolean = false
   private tileOptions: Panel = new Panel(new Vec2(-1,-1))
-  private animations: Panel = new Panel(new Vec2(-1,-1), [], 'ANIMATIONS')
-  private animationEditor: Panel = new Panel(new Vec2(-1,-1))
   private selectedBlockKey: string = ''
   private selectedBlockX: i16 = -1
   private selectedBlockY: i16 = -1
@@ -32,23 +29,12 @@ export class Editor extends MetaScreen {
     this.tileOptions.setBackgroundColour('#ffffff')
     this.tileOptions.hide()
     this.uiPanels.push(this.tileOptions)
-
-    this.animations.setBackgroundColour('#ffffff')
-    this.animationEditor.setBackgroundColour('goldenrod')
-    this.animations.hide()
-    this.animationEditor.hide()
-    this.uiPanels.push(this.animations)
-    this.uiPanels.push(this.animationEditor)
   }
 
   private showOptionsAfterLoad(): void {
     this.actionPanel.empty()
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
       messageResponse('save', 'foobar.json', '{ "hello": "world" }')
-    }))
-
-    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "animations", () => {
-      (currentLevel as Editor).animations.show()
     }))
   }
 
@@ -85,29 +71,6 @@ export class Editor extends MetaScreen {
     this.mapRendered = false
   }
  
-  public editAnimation(animationName: string): void {
-    animationName = animationName.replace('ANIMATION_ITEM_', '')
-    
-    if (!this.metaMap.animationList.has(animationName)) {
-      return
-    }
-
-    this.animations.hide()
-    this.animationEditor.empty()
-    const animationItem = this.metaMap.animationList.get(animationName)
-    const animation = animationItem.getAnimation()
-    const colour = animationItem.getColour()
-
-    for (let i: u8 = 0; i < animation.getNumberOfFrames(); i++) {
-      const text = animation.getNextFrameAsText(true)
-      const ui = new UiAnimationFrame(new Vec2(0,0), text)
-      ui.setColour(colour)
-      this.animationEditor.addItem(ui)
-    }
-
-    this.animationEditor.show()
-  }
- 
   public setTileOption(tile: string): void {
     tile = tile.replace('TILE_OPTION_', '')
     
@@ -139,7 +102,6 @@ export class Editor extends MetaScreen {
   
   private populatePanels(): void {
     this.tileOptions.empty()
-    this.animations.empty()
     
     const tileOptions = [TILE_AIR, TILE_GROUND, TILE_BRICK, TILE_EXIT, 'Cancel']
     this.tileOptions.addItem(new UILabel(new Vec2(0,0), 'Tile:'))
@@ -167,17 +129,6 @@ export class Editor extends MetaScreen {
           (currentLevel as Editor).setBlockAnimation(tag)
         }
       }, 'ANIMATION_LIST_ITEM_KEY_' + animationListItemKeys[i]))
-
-      if (animationListItemKeys[i] == 'None' || animationListItemKeys[i] == 'Cancel') {
-        continue
-      }
-      
-      this.animations.addItem(new UIControl(new Vec2(0,0), animationListItemKeys[i], tag => {
-        if (typeof tag != 'undefined') {
-          (currentLevel as Editor).editAnimation(tag)
-        }
-      }, 'ANIMATION_ITEM_' + animationListItemKeys[i]))
-
     }
 
     this.tileOptions.addLinebreak()
@@ -185,9 +136,6 @@ export class Editor extends MetaScreen {
     this.tileOptions.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
       (currentLevel as Editor).tileOptions.hide()
     }))
-  }
-
-  public showAnimationPanel(): void {
   }
 
   public mapSwapped(map: LevelMapDetail): void {
