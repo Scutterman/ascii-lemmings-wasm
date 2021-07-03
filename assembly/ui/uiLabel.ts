@@ -7,7 +7,7 @@ import { UIITem } from "./uiItem";
 
 export class UILabel extends UIITem {
   protected hasMouseFocus: boolean = false
-  private size: Vec2 = new Vec2(0,0)
+  
   constructor(
     position: Vec2,
     protected text: string,
@@ -21,8 +21,7 @@ export class UILabel extends UIITem {
     this.position = postion.clone()
     this.hasChangedState = this.hasChangedState || requiresRerender
   }
-  public getSize(): Vec2 { return this.size.clone() }
-  public setSize(size: Vec2): void { this.size = size.clone() }
+
   public getText(): string { return this.text }
   
   public updateText(text: string): void {
