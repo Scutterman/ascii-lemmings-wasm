@@ -7,7 +7,7 @@ import { getSizeFromRenderedTextArray, lineBreak } from '../loop'
 import { removeItem } from "../vdom/elements"
 import { UIITem } from "./uiItem"
 
-const PANEL_ITEM_SPACING: i16 = 3
+export const PANEL_ITEM_SPACING: i16 = 3
 const TAG_PANEL_LINE_BREAk: string = 'TAG_PANEL_LINE_BREAk'
 
 class PanelRow {
@@ -22,7 +22,7 @@ export class Panel extends UIITem {
   private rows: PanelRow[] = []
   private requiresPrerender: boolean = true
 
-  constructor(position: Vec2, private items: UILabel[] = [], tag: string = '') {
+  constructor(position: Vec2, private items: UILabel[] = [], private panelSpacing: i16 = PANEL_ITEM_SPACING, tag: string = '') {
     super(position, tag)
   }
 
@@ -68,7 +68,7 @@ export class Panel extends UIITem {
       const text = this.items[i].getTextForRender(isDirty)
       const size = getSizeFromRenderedTextArray(text)
       
-      let x = this.rows[panelRowIndex].panelRowSize.x + size.x + PANEL_ITEM_SPACING
+      let x = this.rows[panelRowIndex].panelRowSize.x + size.x + this.panelSpacing
       let xx = this.position.x + x
       
       const itemOverflowsPanel = xx > i16(VISIBLE_X)
@@ -91,17 +91,17 @@ export class Panel extends UIITem {
 
         if (shouldMoveToNewRow) {
           // Do not add spacing to last item
-          this.rows[panelRowIndex].panelRowSize.x -= PANEL_ITEM_SPACING
+          this.rows[panelRowIndex].panelRowSize.x -= this.panelSpacing
           this.rows.push(new PanelRow())
           panelRowIndex++
           if (isLinebreak) {
             continue
           } else {
-            x = size.x + PANEL_ITEM_SPACING
+            x = size.x + this.panelSpacing
           }
         } else if (isLastItem) {
           // Do not add spacing to last item
-          x -= PANEL_ITEM_SPACING
+          x -= this.panelSpacing
         }
       }
       
@@ -122,7 +122,7 @@ export class Panel extends UIITem {
       panelSize.x = i16(Math.max(panelSize.x, this.rows[panelRowIndex].panelRowSize.x))
     }
 
-    panelSize.y += PANEL_ITEM_SPACING * (i16(this.rows.length) - 1)
+    panelSize.y += this.panelSpacing * (i16(this.rows.length) - 1)
 
     this.setSize(panelSize.clone())
     this.requiresPrerender = false
@@ -159,10 +159,10 @@ export class Panel extends UIITem {
         this.items[itemIndex].setPosition(nextLabelPosition.clone())
         this.items[itemIndex].setSize(row.sizes[rowItem])
 
-        nextLabelPosition.x += row.sizes[rowItem].x + PANEL_ITEM_SPACING
+        nextLabelPosition.x += row.sizes[rowItem].x + this.panelSpacing
       }
       nextLabelPosition.x = intiialLabelPosition.x
-      nextLabelPosition.y += row.panelRowSize.y + PANEL_ITEM_SPACING
+      nextLabelPosition.y += row.panelRowSize.y + this.panelSpacing
     }
 
     this.hasChangedState = false

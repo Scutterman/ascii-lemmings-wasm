@@ -14,7 +14,7 @@ export class UiAnimationFrame extends Panel {
     private frameNumber: i16,
     tag: string = ''
   ) {
-    super(position, [], tag)
+    super(position, [], 0, tag)
     this.setupButtons()
   }
   

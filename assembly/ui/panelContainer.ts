@@ -1,9 +1,8 @@
 import { Vec2 } from "../position"
 import { UILabel } from './uiLabel'
 import { UIITem } from "./uiItem"
-import { Panel } from "./panel"
+import { Panel, PANEL_ITEM_SPACING } from "./panel"
 
-const PANEL_ITEM_SPACING: i16 = 3
 const TAG_PANEL_LINE_BREAk: string = 'TAG_PANEL_LINE_BREAk'
 
 export class PanelContainer extends UIITem {
@@ -12,7 +11,7 @@ export class PanelContainer extends UIITem {
   }
 
   public addLinebreak(): void {
-    this.items.push(new Panel(new Vec2(0,0), [], TAG_PANEL_LINE_BREAk))
+    this.items.push(new Panel(new Vec2(0,0), [], PANEL_ITEM_SPACING, TAG_PANEL_LINE_BREAk))
     this.hasChangedState = true
   }
 
