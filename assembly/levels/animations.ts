@@ -5,11 +5,12 @@ import { UIControl } from "../ui/uiControl"
 import { MetaScreen } from "./metascreen"
 import { UiAnimationFrame } from "../ui/uiAnimationFrame"
 import { animationItems } from "../maps/mapAnimations"
+import { PanelContainer } from "../ui/panelContainer"
 
 export class Animations extends MetaScreen {
   private animationsList: Panel = new Panel(new Vec2(2, 2))
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
-  private animationEditor: Panel = new Panel(new Vec2(-1,-1))
+  private animationEditor: PanelContainer = new PanelContainer(new Vec2(2, 5))
   private selectedBlockX: i16 = -1
   private selectedBlockY: i16 = -1
   
@@ -31,11 +32,9 @@ export class Animations extends MetaScreen {
           (currentLevel as Animations).editAnimation(tag)
         }
       }, 'ANIMATION_ITEM_' + animationListItemKeys[i]))
-
     }
 
     this.animationEditor.hide()
-    this.uiPanels.push(this.animationEditor)
   }
 
   public editAnimation(animationName: string): void {
@@ -54,21 +53,22 @@ export class Animations extends MetaScreen {
       const text = animation.getNextFrameAsText(true)
       const ui = new UiAnimationFrame(new Vec2(0,0), text)
       ui.setColour(colour)
-      this.animationEditor.addItem(ui)
+      //this.animationEditor.addItem(ui)
     }
 
     this.animationEditor.addLinebreak()
     this.animationEditor.addLinebreak()
-    this.animationEditor.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
-      ;(currentLevel as Animations).animationEditor.hide()
-      ;(currentLevel as Animations).animationsList.show()
-    }))
+    // this.animationEditor.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
+    //   ;(currentLevel as Animations).animationEditor.hide()
+    //   ;(currentLevel as Animations).animationsList.show()
+    // }))
     
     this.animationsList.hide()
     this.animationEditor.show()
   }
  
   public renderLevel(): void {
+    this.animationEditor.render(true)
     super.renderLevel()
   }
 
