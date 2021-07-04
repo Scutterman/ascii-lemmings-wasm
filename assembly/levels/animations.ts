@@ -1,9 +1,9 @@
-import { currentLevel, messageResponse } from ".."
+import { currentLevel, gameState, keyPressListener, messageResponse, resetText } from ".."
 import { Vec2 } from "../position"
 import { Panel } from "../ui/panel"
 import { UIControl } from "../ui/uiControl"
 import { MetaScreen } from "./metascreen"
-import { UiAnimationFrame } from "../ui/uiAnimationFrame"
+import { getLastFrame, reset, UiAnimationFrame } from "../ui/uiAnimationFrame"
 import { animationItems } from "../maps/mapAnimations"
 import { PanelContainer } from "../ui/panelContainer"
 
@@ -16,7 +16,11 @@ export class Animations extends MetaScreen {
   
   constructor() {
     super('EDITOR')
-    
+
+    // TODO:: Reset these before leaving
+    keyPressListener(true)
+    resetText()
+
     this.uiPanels.push(this.animationsList)
 
     this.uiPanels.push(this.actionPanel)
@@ -34,6 +38,7 @@ export class Animations extends MetaScreen {
       }, 'ANIMATION_ITEM_' + animationListItemKeys[i]))
     }
 
+    reset()
     this.animationEditor.hide()
   }
 
@@ -58,16 +63,38 @@ export class Animations extends MetaScreen {
 
     this.animationEditor.addLinebreak()
     this.animationEditor.addLinebreak()
-    // this.animationEditor.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
-    //   ;(currentLevel as Animations).animationEditor.hide()
-    //   ;(currentLevel as Animations).animationsList.show()
-    // }))
+    const pnl = new Panel(new Vec2(0,0))
+    pnl.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
+      reset()
+      ;(currentLevel as Animations).animationEditor.hide()
+      ;(currentLevel as Animations).animationsList.show()
+    }))
+    this.animationEditor.addItem(pnl)
     
     this.animationsList.hide()
     this.animationEditor.show()
   }
+
+  private handleTextEntry(): void {
+    const text = gameState.userEnteredText
+    if (text.length > 0) {
+      resetText()
+      const editorShowing = this.animationEditor.isShowing()
+      const lastClickedFrame = getLastFrame()
+      const items = this.animationEditor.getItems()
+      if (editorShowing && lastClickedFrame > -1 && lastClickedFrame < items.length) {
+        const item = (items[lastClickedFrame] as UiAnimationFrame)
+        if (item.canSetNewCharacter()) {
+          const lastEnteredCharacter = text.substr(text.length - 2, 1)
+          item.setNewCharacter(lastEnteredCharacter)
+        }
+      }
+
+    }
+  }
  
   public renderLevel(): void {
+    this.handleTextEntry()
     this.animationEditor.render(true)
     super.renderLevel()
   }
