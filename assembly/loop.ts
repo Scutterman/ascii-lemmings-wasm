@@ -90,6 +90,18 @@ function processControlClicks(clickProcessed: boolean): boolean {
     }
   }
 
+  for (let containerIndex = 0; containerIndex < currentLevel.uiPanelContainers.length; containerIndex++) {
+    const container = currentLevel.uiPanelContainers[containerIndex]
+    const panels = container.getItems()
+    for (let panelIndex = 0; panelIndex < panels.length; panelIndex++) {
+      const panel = panels[panelIndex]
+      const items = panel.getItems()
+      for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
+        clickProcessed = processLabelEvents(items[itemIndex], clickProcessed)
+      }
+    }
+  }
+
   return clickProcessed
 }
 

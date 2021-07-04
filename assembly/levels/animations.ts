@@ -15,7 +15,7 @@ export class Animations extends MetaScreen {
   private selectedBlockY: i16 = -1
   
   constructor() {
-    super('EDITOR')
+    super('ANIMATION_EDITOR')
 
     // TODO:: Reset these before leaving
     keyPressListener(true)
@@ -40,6 +40,7 @@ export class Animations extends MetaScreen {
 
     reset()
     this.animationEditor.hide()
+    this.uiPanelContainers.push(this.animationEditor)
   }
 
   public editAnimation(animationName: string): void {
@@ -95,7 +96,6 @@ export class Animations extends MetaScreen {
  
   public renderLevel(): void {
     this.handleTextEntry()
-    this.animationEditor.render(true)
     super.renderLevel()
   }
 

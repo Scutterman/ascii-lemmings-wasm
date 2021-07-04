@@ -5,6 +5,7 @@ import { UILabel } from "../ui/uiLabel"
 import { Panel } from "../ui/panel"
 import { allowedUserInputCharacters } from "../text"
 import { LevelMapDetail } from "../maps/types"
+import { PanelContainer } from "../ui/panelContainer"
 
 export abstract class BaseLevel {
   public numberOfLemmings: u8
@@ -15,6 +16,7 @@ export abstract class BaseLevel {
   public uiControls: UIControl[] = []
   public uiLabels: UILabel[] = []
   public uiPanels: Panel[] = []
+  public uiPanelContainers: PanelContainer[] = []
   public isMetaScreen: boolean
   public hasEnded: boolean = false
   public scrollPosition: Vec2 = new Vec2(0,0)
@@ -116,6 +118,10 @@ export abstract class BaseLevel {
 
     for (let i = 0; i < this.uiPanels.length; i++) {
       this.uiPanels[i].render(isDirty)
+    }
+
+    for (let i = 0; i < this.uiPanelContainers.length; i++) {
+      this.uiPanelContainers[i].render(isDirty)
     }
   }
 }
