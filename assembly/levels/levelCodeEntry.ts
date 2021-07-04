@@ -39,13 +39,13 @@ export class LevelCodeEntry extends MetaScreen {
       if (levelCode == 'EDIT:') {
         // TODO:: when exiting the edit screen this needs to be reset
         isEditingMap(1)
-        const level = new Editor()
         doBeforeLeaving()
+        const level = new Editor()
         loadLevel(level)
         return
       } else if (levelCode == 'ANIM:') {
-        const level = new Animations()
         doBeforeLeaving()
+        const level = new Animations()
         loadLevel(level)
         return
       }
