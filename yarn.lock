@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@assemblyscript/loader/-/loader-0.18.15.tgz#9c3c6c15ad51a522b619b6faf34e3d0c7ba894ed"
   integrity sha512-kUWC6tBJQiI38vFT6L9M2zlzJ3/Wgh8JZEIMekgkhXjLkDTMWcmOZX085RsOx5c9BdwrqMwaj/iMIpCbid214g==
 
-assemblyscript@^0.19.2:
-  version "0.19.2"
-  resolved "https://registry.yarnpkg.com/assemblyscript/-/assemblyscript-0.19.2.tgz#952e185d170d5da3ee3a5314734f6244c3619488"
-  integrity sha512-0ETRv6oSOhqgPmf23KrD+111QL685IxY/k3UHlC7NzGK2VAi+3Em1U2E06zCPnb45tjUD86wBANlDJDGEZisBg==
+assemblyscript@^0.19.5:
+  version "0.19.5"
+  resolved "https://registry.yarnpkg.com/assemblyscript/-/assemblyscript-0.19.5.tgz#12f5976c41f6b866dd0d1aad5275dcd358a5d82f"
+  integrity sha512-mAx7gcwjJI5OSu2RcOlugHFNxKt/rtWn3vyp46cN1+uXb7YSS//rgO044+KKwfxnGvoWj0ClsU0dNt5eWoXF7A==
   dependencies:
     binaryen "101.0.0-nightly.20210604"
     long "^4.0.0"

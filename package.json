@@ -12,7 +12,7 @@
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
-    "assemblyscript": "^0.19.2",
+    "assemblyscript": "^0.19.5",
     "http-server": "^0.12.3"
   },
   "scripts": {
