@@ -3,8 +3,18 @@ import { AnimationFrame } from "../types";
 import { Panel } from "./panel";
 import { UIControl } from "./uiControl";
 
-export let lastClickedFrame: i16 = -1
-export const lastClickedPosition: Vec2 = new Vec2(-1, -1)
+let lastClickedFrame: i16 = -1
+const lastClickedPosition: Vec2 = new Vec2(-1, -1)
+
+export function reset(): void {
+  lastClickedFrame = -1
+  lastClickedPosition.x = -1
+  lastClickedPosition.y = -1
+}
+
+export function getLastFrame(): i16 {
+  return lastClickedFrame
+}
 
 export class UiAnimationFrame extends Panel {
 
