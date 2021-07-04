@@ -50,10 +50,10 @@ export class Animations extends MetaScreen {
     const colour = animationItem.getColour()
     
     for (let i: u8 = 0; i < animation.getNumberOfFrames(); i++) {
-      const text = animation.getNextFrameAsText(true)
-      const ui = new UiAnimationFrame(new Vec2(0,0), text)
+      const frame = animation.getNextFrame(true)
+      const ui = new UiAnimationFrame(new Vec2(0,0), frame, i16(i))
       ui.setColour(colour)
-      //this.animationEditor.addItem(ui)
+      this.animationEditor.addItem(ui)
     }
 
     this.animationEditor.addLinebreak()
