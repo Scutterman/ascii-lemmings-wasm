@@ -28,7 +28,6 @@ export class Animations extends MetaScreen {
       messageResponse('save', 'animations.json', '{ "hello": "world" }')
     }))
 
-    
     const animationListItemKeys = animationItems.keys()
     for (let i = 0; i < animationListItemKeys.length; i++) {
       this.animationsList.addItem(new UIControl(new Vec2(0,0), animationListItemKeys[i], tag => {
@@ -65,11 +64,18 @@ export class Animations extends MetaScreen {
     this.animationEditor.addLinebreak()
     this.animationEditor.addLinebreak()
     const pnl = new Panel(new Vec2(0,0))
+
+    // TODO:: This panel should be in control area not a part of animationEditor
+    pnl.addItem(new UIControl(new Vec2(0,0), 'Add', () => {
+      
+    }))
+
     pnl.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
       reset()
       ;(currentLevel as Animations).animationEditor.hide()
       ;(currentLevel as Animations).animationsList.show()
     }))
+    
     this.animationEditor.addItem(pnl)
     
     this.animationsList.hide()
