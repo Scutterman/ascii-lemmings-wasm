@@ -24,7 +24,7 @@ export class UiAnimationFrame extends Panel {
     private frameNumber: i16,
     tag: string = ''
   ) {
-    super(position, [], 0, tag)
+    super(position, [], 1, tag)
     this.setupButtons()
   }
   
@@ -57,10 +57,11 @@ export class UiAnimationFrame extends Panel {
   
   public setNewCharacter(newcharacter: string): void {
     if (this.canSetNewCharacter()) {
+      const frame = lastClickedFrame
       const row = lastClickedPosition.y
       const col = lastClickedPosition.x
       this.animationFrame[row][col] = newcharacter
-      const button = this.getUIByTag(row.toString() + '_' + col.toString())
+      const button = this.getUIByTag(frame.toString() + '_' + row.toString() + '_' + col.toString())
       if (button != null) {
         button.updateText(newcharacter)
       }
