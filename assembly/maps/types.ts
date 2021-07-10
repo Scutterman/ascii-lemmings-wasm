@@ -3,8 +3,13 @@ import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
 import { LevelMap, LevelTileDetail, TileDetail } from "../types";
 
 export function characterToAnimation(character: string): Animation {
-  const line = [character, character, character, character]
-  return new Animation([[line, line, line, line]])
+  const frame = [
+    [character, character, character, character],
+    [character, character, character, character],
+    [character, character, character, character],
+    [character, character, character, character]
+  ]
+  return new Animation([frame])
 }
 
 export class LevelMapDetail {
@@ -110,12 +115,14 @@ export class StandardAnimation extends AnimationListItem {
 }
 
 export class SingleCharacterAnimation extends AnimationListItem {
+  private animation: Animation
   constructor(private character: string, colour: string) {
     super(colour)
+    this.animation = characterToAnimation(this.character)
   }
   
   public getAnimation(): Animation {
-    return characterToAnimation(this.character)
+    return this.animation
   }
 }
 
