@@ -6,12 +6,14 @@ import { MetaScreen } from "./metascreen"
 import { getLastFrame, reset, UiAnimationFrame } from "../ui/uiAnimationFrame"
 import { animationItems } from "../maps/mapAnimations"
 import { PanelContainer } from "../ui/panelContainer"
+import { SingleCharacterAnimation } from "../maps/types"
 
 export class Animations extends MetaScreen {
   private animationsList: Panel = new Panel(new Vec2(2, 2))
   private subActionPanel: Panel = new Panel(new Vec2(-1, 38))
   private actionPanel: Panel = new Panel(new Vec2(-1, 40))
   private animationEditor: PanelContainer = new PanelContainer(new Vec2(2, 5), [], 1)
+  private displayedAnimation: string | null = null
   
   constructor() {
     super('ANIMATION_EDITOR')
@@ -22,6 +24,18 @@ export class Animations extends MetaScreen {
 
     this.uiPanels.push(this.animationsList)
 
+    this.subActionPanel.hide()
+    
+    this.subActionPanel.addItem(new UIControl(new Vec2(0,0), 'Add', () => {
+      (currentLevel as Animations).addAnimationFrame()
+    }))
+
+    this.subActionPanel.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
+      (currentLevel as Animations).closeAnimationWindow()
+    }))
+    
+    this.uiPanels.push(this.subActionPanel)
+    
     this.uiPanels.push(this.actionPanel)
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
       messageResponse('save', 'animations.json', '{ "hello": "world" }')
@@ -47,7 +61,7 @@ export class Animations extends MetaScreen {
     if (!animationItems.has(animationName)) {
       return
     }
-    
+
     this.animationEditor.empty()
     const animationItem = animationItems.get(animationName)
     const animation = animationItem.getAnimation()
@@ -62,23 +76,31 @@ export class Animations extends MetaScreen {
 
     this.animationEditor.addLinebreak()
     this.animationEditor.addLinebreak()
-    const pnl = new Panel(new Vec2(0,0))
 
-    // TODO:: This panel should be in control area not a part of animationEditor
-    pnl.addItem(new UIControl(new Vec2(0,0), 'Add', () => {
-      
-    }))
-
-    pnl.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
-      reset()
-      ;(currentLevel as Animations).animationEditor.hide()
-      ;(currentLevel as Animations).animationsList.show()
-    }))
-    
-    this.animationEditor.addItem(pnl)
+    this.displayedAnimation = animationName
     
     this.animationsList.hide()
     this.animationEditor.show()
+    this.subActionPanel.show()
+  }
+
+  private addAnimationFrame(): void {
+    const animationName = this.displayedAnimation
+    if (animationName == null || !animationItems.has(animationName as string)) {
+      return
+    }
+    
+    const frame = new SingleCharacterAnimation(' ', '#000000').getAnimation().getNextFrame(false)
+    const ui = new UiAnimationFrame(new Vec2(0,0), frame, i16(this.animationEditor.getItems().length))
+    ui.setColour('#000000')
+    this.animationEditor.addItem(ui)
+  }
+  
+  private closeAnimationWindow(): void {
+    reset()
+    this.displayedAnimation = null
+    this.animationEditor.hide()
+    this.animationsList.show()
   }
 
   private handleTextEntry(): void {
@@ -98,7 +120,7 @@ export class Animations extends MetaScreen {
 
     }
   }
- 
+
   public renderLevel(): void {
     this.handleTextEntry()
     super.renderLevel()
