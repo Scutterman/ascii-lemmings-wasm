@@ -40,6 +40,13 @@ export class PanelContainer extends UIITem {
     let rowMaxY: i16 = 0
     
     for (let i = 0; i < this.items.length; i++) {
+      if (this.items[i].getTag() == TAG_PANEL_LINE_BREAk) {
+        nextPosition.y += rowMaxY + this.panelItemSpacing
+        rowMaxY = 0
+        nextPosition.x = this.position.x
+        continue
+      }
+      
       this.items[i].position = nextPosition.clone()
       const wrapOverridePosition = new Vec2(this.position.x, nextPosition.y + rowMaxY + this.panelItemSpacing)
       this.items[i].preRender(isDirty, this.isShowing(), wrapOverridePosition, true)
