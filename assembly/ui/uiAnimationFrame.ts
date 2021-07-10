@@ -57,7 +57,7 @@ export class UiAnimationFrame extends Panel {
   
   public setNewCharacter(newcharacter: string): void {
     if (this.canSetNewCharacter()) {
-      const frame = lastClickedFrame
+      const frame = this.frameNumber
       const row = lastClickedPosition.y
       const col = lastClickedPosition.x
       this.animationFrame[row][col] = newcharacter

@@ -47,6 +47,10 @@ export class Animation {
     return this.frames.length > 1
   }
 
+  public addFrame(frame: AnimationFrame): void {
+    this.frames.push(frame)
+  }
+
   public clone(): Animation {
     return new Animation(this.frames)
   }

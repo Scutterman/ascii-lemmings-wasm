@@ -67,7 +67,8 @@ export class Animations extends MetaScreen {
     const animation = animationItem.getAnimation()
     const colour = animationItem.getColour()
     
-    for (let i: u8 = 0; i < animation.getNumberOfFrames(); i++) {
+    const numberOfFrames = animation.getNumberOfFrames()
+    for (let i: u8 = 0; i < numberOfFrames; i++) {
       const frame = animation.getNextFrame(true)
       const ui = new UiAnimationFrame(new Vec2(0,0), frame, i16(i))
       ui.setColour(colour)
@@ -88,6 +89,7 @@ export class Animations extends MetaScreen {
     }
     
     const frame = new SingleCharacterAnimation(' ', '#000000').getAnimation().getNextFrame(false)
+    animationItems.get(animationName as string).getAnimation().addFrame(frame)
     const ui = new UiAnimationFrame(new Vec2(0,0), frame, i16(this.animationEditor.getItems().length))
     ui.setColour('#000000')
     this.animationEditor.addItem(ui)
@@ -114,7 +116,6 @@ export class Animations extends MetaScreen {
           item.setNewCharacter(lastEnteredCharacter)
         }
       }
-
     }
   }
 
