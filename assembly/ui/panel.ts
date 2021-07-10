@@ -118,7 +118,7 @@ export class Panel extends UIITem {
     
     const panelSize = new Vec2(0,0)
     for (panelRowIndex = 0; panelRowIndex < this.rows.length; panelRowIndex++) {
-      panelSize.y = this.rows[panelRowIndex].panelRowSize.y
+      panelSize.y += this.rows[panelRowIndex].panelRowSize.y
       panelSize.x = i16(Math.max(panelSize.x, this.rows[panelRowIndex].panelRowSize.x))
     }
 
