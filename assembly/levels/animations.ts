@@ -9,10 +9,9 @@ import { PanelContainer } from "../ui/panelContainer"
 
 export class Animations extends MetaScreen {
   private animationsList: Panel = new Panel(new Vec2(2, 2))
-  private actionPanel: Panel = new Panel(new Vec2(-1, 38))
-  private animationEditor: PanelContainer = new PanelContainer(new Vec2(2, 5))
-  private selectedBlockX: i16 = -1
-  private selectedBlockY: i16 = -1
+  private subActionPanel: Panel = new Panel(new Vec2(-1, 38))
+  private actionPanel: Panel = new Panel(new Vec2(-1, 40))
+  private animationEditor: PanelContainer = new PanelContainer(new Vec2(2, 5), [], 1)
   
   constructor() {
     super('ANIMATION_EDITOR')

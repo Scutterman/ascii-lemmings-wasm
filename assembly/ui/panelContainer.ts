@@ -6,12 +6,12 @@ import { Panel, PANEL_ITEM_SPACING } from "./panel"
 const TAG_PANEL_LINE_BREAk: string = 'TAG_PANEL_LINE_BREAk'
 
 export class PanelContainer extends UIITem {
-  constructor(position: Vec2, private items: Panel[] = [], tag: string = '') {
+  constructor(position: Vec2, private items: Panel[] = [], private panelItemSpacing: i16 = PANEL_ITEM_SPACING, tag: string = '') {
     super(position, tag)
   }
 
   public addLinebreak(): void {
-    this.items.push(new Panel(new Vec2(0,0), [], PANEL_ITEM_SPACING, TAG_PANEL_LINE_BREAk))
+    this.items.push(new Panel(new Vec2(0,0), [], this.panelItemSpacing, TAG_PANEL_LINE_BREAk))
     this.hasChangedState = true
   }
 
@@ -41,7 +41,7 @@ export class PanelContainer extends UIITem {
     
     for (let i = 0; i < this.items.length; i++) {
       this.items[i].position = nextPosition.clone()
-      const wrapOverridePosition = new Vec2(this.position.x, nextPosition.y + rowMaxY + PANEL_ITEM_SPACING)
+      const wrapOverridePosition = new Vec2(this.position.x, nextPosition.y + rowMaxY + this.panelItemSpacing)
       this.items[i].preRender(isDirty, this.isShowing(), wrapOverridePosition, true)
       const size = this.items[i].getSize()
       
@@ -51,7 +51,7 @@ export class PanelContainer extends UIITem {
         rowMaxY = 0
       }
       
-      nextPosition.x += size.x
+      nextPosition.x += size.x + this.panelItemSpacing
       rowMaxY = i16(Math.max(rowMaxY, size.y))
       this.items[i].render(isDirty, this.isShowing())
     }
