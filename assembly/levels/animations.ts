@@ -12,7 +12,7 @@ export class Animations extends MetaScreen {
   private animationsList: Panel = new Panel(new Vec2(2, 2))
   private subActionPanel: Panel = new Panel(new Vec2(-1, 38))
   private actionPanel: Panel = new Panel(new Vec2(-1, 40))
-  private animationEditor: PanelContainer = new PanelContainer(new Vec2(2, 5), [], 1)
+  private animationEditor: PanelContainer = new PanelContainer(new Vec2(2, 5))
   private displayedAnimation: string | null = null
   
   constructor() {
