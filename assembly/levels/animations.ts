@@ -74,9 +74,6 @@ export class Animations extends MetaScreen {
       this.animationEditor.addItem(ui)
     }
 
-    this.animationEditor.addLinebreak()
-    this.animationEditor.addLinebreak()
-
     this.displayedAnimation = animationName
     
     this.animationsList.hide()
