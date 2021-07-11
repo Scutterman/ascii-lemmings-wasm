@@ -198,12 +198,6 @@ declare function onEventLoopComplete(timeTakenToComplete: i32): void;
 let relativeItemId = 1
 export const lineBreak = '<br />'
 
-function getPositionInPixels(blockPosition: Vec2): Vec2 {
-  const x = i16(f32(blockPosition.x) * gameState.characterWidth * f32(UPSCALE_MULTIPLIER))
-  const y = i16(f32(blockPosition.y) * gameState.characterHeight * f32(UPSCALE_MULTIPLIER))
-  return new Vec2(x, y)
-}
-
 let cursorId = ''
 function renderCursor(): void {
   const clippedCursorPosition = getClippedCursorPosition()
@@ -213,6 +207,23 @@ function renderCursor(): void {
 
 export function renderBoxAroundBlock(blockX: i16, blockY: i16): string {
   return renderRelativeElement('<span class="box"></span>', new Vec2(blockX, blockY))
+}
+
+export function renderBoxWithoutText(position: Vec2, size: Vec2, backgroundColour: string = '#ffffff00'): string {
+  const width = (gameState.characterWidth * f32(size.x) * f32(UPSCALE_MULTIPLIER)).toString()
+  const height = (gameState.characterHeight * f32(size.y) * f32(UPSCALE_MULTIPLIER)).toString()
+
+  const elementId = getElementId()
+  const html = '<span' +
+    ' id="' + elementId + '"' +
+    ' class="block row_' + position.y.toString() + ' col_' + position.x.toString() + '"' +
+    ' style="' +
+      ' background-color: ' + backgroundColour + ';' +
+      'width: ' + width + 'px !important; height: ' + height + 'px !important;' +
+    ' "' +
+    '></span>'
+  setItem(elementId, html)
+  return elementId
 }
 
 export function getRenderedTextArray(textToRender: string, text: string[] = []): string[] {
@@ -279,12 +290,17 @@ class RelativeElement {
   constructor(public html: string, public id: string) {}
 }
 
+function getElementId(): string {
+  const id = 'RELATIVE_' + relativeItemId.toString()
+  relativeItemId++
+  return id
+}
+
 export function constructRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000', backgroundColour: string = '#ffffff00'): RelativeElement {
   const borderStyles = border ? 'box-shadow: inset 0 0 1px #000000;' : ''
-  const elementId = 'RELATIVE_' + relativeItemId.toString()
+  const elementId = getElementId()
   const elementIdHtml = 'id="' + elementId + '"'
-  relativeItemId++
-
+  
   const html = '<span ' +
     elementIdHtml +
     ' class="block row_' + blockPosition.y.toString() + ' col_' + blockPosition.x.toString() + '"' +
