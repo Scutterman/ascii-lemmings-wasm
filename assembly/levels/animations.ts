@@ -7,6 +7,7 @@ import { getLastFrame, reset, UiAnimationFrame } from "../ui/uiAnimationFrame"
 import { animationItems } from "../maps/mapAnimations"
 import { PanelContainer } from "../ui/panelContainer"
 import { SingleCharacterAnimation } from "../maps/types"
+import { UILabel } from "../ui/uiLabel"
 
 export class Animations extends MetaScreen {
   private animationsList: Panel = new Panel(new Vec2(2, 2))
@@ -14,6 +15,10 @@ export class Animations extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 40))
   private animationEditor: PanelContainer = new PanelContainer(new Vec2(2, 5))
   private displayedAnimation: string | null = null
+
+  private newNameLabel: UILabel = new UILabel(new Vec2(-1, -1), '', 'NEW_NAME')
+  private newNameCreateButton: UIControl
+  private newNamePanel: Panel = new Panel(new Vec2(-1,-1))
   private newButton: UIControl
   
   constructor() {
@@ -22,7 +27,11 @@ export class Animations extends MetaScreen {
     // TODO:: Reset these before leaving
     keyPressListener(true)
     resetText()
-
+    
+    this.newNameCreateButton = new UIControl(new Vec2(-1, -1), 'Create', () => {
+      (currentLevel as Animations).addAnimationByName()
+    })
+    
     this.uiPanels.push(this.animationsList)
 
     this.subActionPanel.hide()
@@ -51,6 +60,16 @@ export class Animations extends MetaScreen {
       this.addToAnimationList(animationListItemKeys[i])
     }
 
+    this.uiPanels.push(this.newNamePanel)
+    this.newNamePanel.hide()
+    this.newNamePanel.setBackgroundColour('#ffffff')
+    this.newNamePanel.addItem(this.newNameLabel)
+    this.newNamePanel.addLinebreak()
+    this.newNamePanel.addItem(this.newNameCreateButton)
+    this.newNamePanel.addItem(new UIControl(new Vec2(-1, -1), 'Cancel', () => {
+      (currentLevel as Animations).newNamePanel.hide()
+    }))
+
     reset()
     this.animationEditor.hide()
     this.uiPanelContainers.push(this.animationEditor)
@@ -65,19 +84,22 @@ export class Animations extends MetaScreen {
   }
 
   private addAnimation(): void {
-    this.newButton.setBackgroundColour('#ffffff00')
-    const animationName = 'foo'
-    this.addAnimationByName(animationName)
+    resetText()
+    this.newNameCreateButton.setBackgroundColour('#ffffff00')
+    this.newNameLabel.updateText('')
+    this.newNamePanel.show()
   }
   
-  private addAnimationByName(animationName: string): void {
-    if (animationItems.has(animationName)) {
-      this.newButton.setBackgroundColour('#cf4a4a')
+  private addAnimationByName(): void {
+    const animationName = this.newNameLabel.getText()
+    if (animationName.length == 0 || animationItems.has(animationName)) {
+      this.newNameCreateButton.setBackgroundColour('#cf4a4a')
       return
     }
-    
+
     animationItems.set(animationName, new SingleCharacterAnimation(' ', '#000000'))
     this.addToAnimationList(animationName)
+    this.newNamePanel.hide()
   }
 
   public editAnimation(animationName: string): void {
@@ -131,11 +153,18 @@ export class Animations extends MetaScreen {
   private handleTextEntry(): void {
     const text = gameState.userEnteredText
     if (text.length > 0) {
-      resetText()
+      const newNameshowing = this.newNamePanel.isShowing()
       const editorShowing = this.animationEditor.isShowing()
       const lastClickedFrame = getLastFrame()
       const items = this.animationEditor.getItems()
-      if (editorShowing && lastClickedFrame > -1 && lastClickedFrame < items.length) {
+      if (newNameshowing) {
+        if (text != this.newNameLabel.getText()) {
+          this.newNameLabel.updateText(text)
+          this.newNameCreateButton.setBackgroundColour('#ffffff00')
+        }
+      }
+      else if (editorShowing && lastClickedFrame > -1 && lastClickedFrame < items.length) {
+        resetText()
         const item = (items[lastClickedFrame] as UiAnimationFrame)
         if (item.canSetNewCharacter()) {
           const lastEnteredCharacter = text.substr(text.length - 2, 1)
