@@ -1,4 +1,4 @@
-import { renderRelativeElement } from "../loop"
+import { renderBoxWithoutText, renderRelativeElement } from "../loop"
 import { VISIBLE_X, BOUNDARIES_X, VISIBLE_Y, BOUNDARIES_Y, CONTROLS_Y } from "../map"
 import { Vec2 } from "../position"
 import { UIControl } from "./uiControl"
@@ -21,6 +21,7 @@ class PanelRow {
 export class Panel extends UIITem {
   private rows: PanelRow[] = []
   private requiresPrerender: boolean = true
+  public backgroundElementId: string = ''
 
   constructor(position: Vec2, private items: UILabel[] = [], private panelSpacing: i16 = PANEL_ITEM_SPACING, tag: string = '') {
     super(position, tag)
@@ -150,11 +151,19 @@ export class Panel extends UIITem {
     const intiialLabelPosition = nextLabelPosition.clone()
     this.items[0].setPosition(intiialLabelPosition)
 
+    removeItem(this.backgroundElementId)
+    const bg = this.getBackgroundColour()
+    if (bg != '#ffffff00') {
+      this.backgroundElementId = renderBoxWithoutText(intiialLabelPosition.clone(), this.getSize(), bg)
+    } else {
+      this.backgroundElementId = ''
+    }
+
     for (let panelRowIndex = 0; panelRowIndex < this.rows.length; panelRowIndex++) {
       const row = this.rows[panelRowIndex]
       for (let rowItem = 0; rowItem < row.panelRowItemIndexes.length; rowItem++) {
         const itemIndex = row.panelRowItemIndexes[rowItem]
-        const id = renderRelativeElement(row.texts[rowItem].join(lineBreak), nextLabelPosition, row.borders[rowItem], this.items[itemIndex].getColour(), this.getBackgroundColour())
+        const id = renderRelativeElement(row.texts[rowItem].join(lineBreak), nextLabelPosition, row.borders[rowItem], this.items[itemIndex].getColour(), this.items[itemIndex].getBackgroundColour())
         this.items[itemIndex].elementId = id
         this.items[itemIndex].setPosition(nextLabelPosition.clone())
         this.items[itemIndex].setSize(row.sizes[rowItem])
