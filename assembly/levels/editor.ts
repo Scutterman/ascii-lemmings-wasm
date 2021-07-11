@@ -1,5 +1,5 @@
 import { currentLevel, gameState, messageResponse } from ".."
-import { TILE_AIR, TILE_BRICK, TILE_EXIT, TILE_GROUND } from "../map"
+import { TILE_AIR, TILE_BOUNDARY, TILE_BRICK, TILE_EXIT, TILE_GROUND, TILE_SIDE } from "../map"
 import { LevelMapDetail } from "../maps/types"
 import { Vec2 } from "../position"
 import { Panel } from "../ui/panel"
@@ -8,6 +8,7 @@ import { MetaScreen } from "./metascreen"
 import { renderBoxAroundBlock } from "../loop"
 import { removeItem } from "../vdom/elements"
 import { UILabel } from "../ui/uiLabel"
+import { TileDetail } from "../types"
 
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
@@ -31,8 +32,54 @@ export class Editor extends MetaScreen {
     this.uiPanels.push(this.tileOptions)
   }
 
+  private addRow(): void {
+    const cols = this.metaMap.tiles.length == 0 ? 1 : this.metaMap.tiles[0].length
+    this.metaMap.tiles.push(TILE_SIDE + TILE_BRICK.repeat(cols - 2) + TILE_SIDE)
+    
+    const row: TileDetail[] = []
+    for (let col = 0; col < cols; col++) {
+      const tile = col == 0 || col == cols - 1 ? TILE_SIDE : TILE_BRICK
+      row.push(this.metaMap.detailFromTile(tile, this.metaMap.tiles.length - 1, col))
+    }
+    this.map.push(row)
+    this.renderGameSection = true
+    this.mapRendered = false
+  }
+
+  private addColumn(): void {
+    const rows = this.metaMap.tiles.length
+    for (let row = 0; row < rows; row++) {
+      const tile = row == 0 ? TILE_BOUNDARY : TILE_BRICK
+      const metaMapRow = this.metaMap.tiles[row]
+      
+      const lastCharacter = metaMapRow.substr(metaMapRow.length - 2)
+      this.metaMap.tiles[row] = metaMapRow.substr(0, metaMapRow.length - 2) + tile + lastCharacter
+
+      const col = this.map[row].length - 1
+      const last = this.map[row][col]
+      const detail = this.metaMap.detailFromTile(tile, row, col)
+      // if (tile == TILE_AIR) {
+      //   detail.needsRemoval = true
+      // }
+      detail.isDirty = true
+      last.isDirty = true
+
+      this.map[row][col] = detail
+      this.map[row].push(last)
+    }
+
+    this.renderGameSection = true
+    this.mapRendered = false
+  }
+
   private showOptionsAfterLoad(): void {
     this.actionPanel.empty()
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Add Row", () => {
+      (currentLevel as Editor).addRow()
+    }))
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Add Col", () => {
+      (currentLevel as Editor).addColumn()
+    }))
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
       messageResponse('save', 'foobar.json', '{ "hello": "world" }')
     }))
