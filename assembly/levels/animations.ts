@@ -14,6 +14,7 @@ export class Animations extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 40))
   private animationEditor: PanelContainer = new PanelContainer(new Vec2(2, 5))
   private displayedAnimation: string | null = null
+  private newButton: UIControl
   
   constructor() {
     super('ANIMATION_EDITOR')
@@ -37,22 +38,46 @@ export class Animations extends MetaScreen {
     this.uiPanels.push(this.subActionPanel)
     
     this.uiPanels.push(this.actionPanel)
+    this.newButton = new UIControl(new Vec2(0, 0), "New", () => {
+      (currentLevel as Animations).addAnimation()
+    })
+    this.actionPanel.addItem(this.newButton)
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
       messageResponse('save', 'animations.json', '{ "hello": "world" }')
     }))
 
     const animationListItemKeys = animationItems.keys()
     for (let i = 0; i < animationListItemKeys.length; i++) {
-      this.animationsList.addItem(new UIControl(new Vec2(0,0), animationListItemKeys[i], tag => {
-        if (typeof tag != 'undefined') {
-          (currentLevel as Animations).editAnimation(tag)
-        }
-      }, 'ANIMATION_ITEM_' + animationListItemKeys[i]))
+      this.addToAnimationList(animationListItemKeys[i])
     }
 
     reset()
     this.animationEditor.hide()
     this.uiPanelContainers.push(this.animationEditor)
+  }
+
+  private addToAnimationList(animationName: string): void {
+    this.animationsList.addItem(new UIControl(new Vec2(0,0), animationName, tag => {
+      if (typeof tag != 'undefined') {
+        (currentLevel as Animations).editAnimation(tag)
+      }
+    }, 'ANIMATION_ITEM_' + animationName))
+  }
+
+  private addAnimation(): void {
+    this.newButton.setBackgroundColour('#ffffff00')
+    const animationName = 'foo'
+    this.addAnimationByName(animationName)
+  }
+  
+  private addAnimationByName(animationName: string): void {
+    if (animationItems.has(animationName)) {
+      this.newButton.setBackgroundColour('#cf4a4a')
+      return
+    }
+    
+    animationItems.set(animationName, new SingleCharacterAnimation(' ', '#000000'))
+    this.addToAnimationList(animationName)
   }
 
   public editAnimation(animationName: string): void {
@@ -99,6 +124,7 @@ export class Animations extends MetaScreen {
     reset()
     this.displayedAnimation = null
     this.animationEditor.hide()
+    this.subActionPanel.hide()
     this.animationsList.show()
   }
 
