@@ -59,8 +59,8 @@ export class Editor extends MetaScreen {
       const tile = row == 0 ? TILE_BOUNDARY : TILE_AIR
       const metaMapRow = this.metaMap.tiles[row]
       
-      const lastCharacter = metaMapRow.substr(metaMapRow.length - 2)
-      this.metaMap.tiles[row] = metaMapRow.substr(0, metaMapRow.length - 2) + tile + lastCharacter
+      const lastCharacter = metaMapRow.substr(metaMapRow.length - 1)
+      this.metaMap.tiles[row] = metaMapRow.substr(0, metaMapRow.length - 1) + tile + lastCharacter
 
       const col = this.map[row].length - 1
       const last = this.map[row][col]
