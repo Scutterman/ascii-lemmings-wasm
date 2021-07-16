@@ -36,16 +36,16 @@ export class Editor extends MetaScreen {
 
   private addRow(): void {
     const cols = this.metaMap.tiles.length == 0 ? 1 : this.metaMap.tiles[0].length
-    this.metaMap.tiles.push(TILE_SIDE + TILE_BRICK.repeat(cols - 2) + TILE_SIDE)
+    this.metaMap.tiles.push(TILE_SIDE + TILE_AIR.repeat(cols - 2) + TILE_SIDE)
     
     const row: TileDetail[] = []
     for (let col = 0; col < cols; col++) {
-      const tile = col == 0 || col == cols - 1 ? TILE_SIDE : TILE_BRICK
+      const tile = col == 0 || col == cols - 1 ? TILE_SIDE : TILE_AIR
       const detail = this.metaMap.detailFromTile(tile, this.metaMap.tiles.length - 1, col)
       detail.isDirty = true
-      // if (tile == TILE_AIR) {
-      //   detail.needsRemoval = true
-      // }
+      if (tile == TILE_AIR) {
+        detail.needsRemoval = true
+      }
       row.push(detail)
     }
     this.map.push(row)
@@ -56,7 +56,7 @@ export class Editor extends MetaScreen {
   private addColumn(): void {
     const rows = this.metaMap.tiles.length
     for (let row = 0; row < rows; row++) {
-      const tile = row == 0 ? TILE_BOUNDARY : TILE_BRICK
+      const tile = row == 0 ? TILE_BOUNDARY : TILE_AIR
       const metaMapRow = this.metaMap.tiles[row]
       
       const lastCharacter = metaMapRow.substr(metaMapRow.length - 2)
@@ -65,9 +65,9 @@ export class Editor extends MetaScreen {
       const col = this.map[row].length - 1
       const last = this.map[row][col]
       const detail = this.metaMap.detailFromTile(tile, row, col)
-      // if (tile == TILE_AIR) {
-      //   detail.needsRemoval = true
-      // }
+      if (tile == TILE_AIR) {
+        detail.needsRemoval = true
+      }
       detail.isDirty = true
       last.isDirty = true
 
