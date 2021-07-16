@@ -1,4 +1,4 @@
-import { currentLevel, gameState, messageResponse } from ".."
+import { currentLevel, gameState, log, messageResponse } from ".."
 import { TILE_AIR, TILE_BOUNDARY, TILE_BRICK, TILE_EXIT, TILE_GROUND, TILE_SIDE } from "../map"
 import { LevelMapDetail } from "../maps/types"
 import { Vec2 } from "../position"
@@ -62,17 +62,20 @@ export class Editor extends MetaScreen {
       const lastCharacter = metaMapRow.substr(metaMapRow.length - 1)
       this.metaMap.tiles[row] = metaMapRow.substr(0, metaMapRow.length - 1) + tile + lastCharacter
 
-      const col = this.map[row].length - 1
-      const last = this.map[row][col]
-      const detail = this.metaMap.detailFromTile(tile, row, col)
+      const last = this.map[row].pop().clone()
+      const detail = this.metaMap.detailFromTile(tile, row, this.map.length)
+      detail.elementId = last.elementId
+      detail.isDirty = true
+      
       if (tile == TILE_AIR) {
         detail.needsRemoval = true
       }
-      detail.isDirty = true
-      last.isDirty = true
-
-      this.map[row][col] = detail
-      this.map[row].push(last)
+      
+      this.map[row].push(detail)
+      
+      const newLast = this.metaMap.detailFromTile(last.tile, row, this.map[row].length)
+      newLast.isDirty = true
+      this.map[row].push(newLast)
     }
 
     addBlocks(u8(0), u8(this.map.length), u8(this.map[0].length - 1), u8(this.map[0].length))
