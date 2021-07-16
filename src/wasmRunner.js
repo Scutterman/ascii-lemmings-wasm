@@ -23,7 +23,6 @@ const importObject = {
     },
     editor: {
         addBlocks(startRow, endRow, startCol, endCol) {
-            console.log('adding blocks wasm', startRow, endRow, startCol, endCol)
             postMessage({ instruction: 'addBlocks', startRow, startCol, endRow, endCol })
         }
     },
@@ -83,7 +82,6 @@ onmessage = function(e) {
             const string = loadedModule.exports.__newString(e.data.character)
             loadedModule.instance.exports.keyUp(string)
         } else if (e.data.instruction === 'setpause') {
-            console.log('setting isPaused to ', e.data.pauseState)
             isPaused = e.data.pauseState
         } else if (e.data.instruction === 'loadlevel') {
             const level = loadedModule.exports.__newString(e.data.content)

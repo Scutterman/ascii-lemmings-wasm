@@ -239,7 +239,6 @@ function setupClient(mapWidth, mapHeight, visibleWidth, visibleHeight, buttonAre
  * @param {boolean} reset 
  */
 function setupBlocks(startRow, endRow, startCol, endCol, css = '', reset = false) {
-    console.log('adding blocks js', startRow, endRow, startCol, endCol, css, reset)
     map.remove()
     for (let row = startRow; row < endRow; row++) {
         css += '.row_' + row + ' { top: ' + (dimensions.blockHeightPixels * row) + 'px !important; }'
@@ -287,8 +286,6 @@ function setupBlocks(startRow, endRow, startCol, endCol, css = '', reset = false
         document.querySelector('#map').appendChild(map)
         wasmRunner.postMessage({ instruction: 'blocksAdded' })
     }
-
-    console.log('setting up blocks complete')
 }
 
 /**
