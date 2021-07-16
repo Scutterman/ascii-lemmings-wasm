@@ -133,6 +133,12 @@ export function start(): boolean {
   return true
 }
 
+export function blocksAdded(): void {
+  if (currentLevel instanceof Editor) {
+    (currentLevel as Editor).blocksAdded()
+  }
+}
+
 export declare function keyPressListener(shouldListen: boolean): void
 export declare function messageResponse(instruction: string, name: string, content: string): void
 declare function setupClientForLevel(mapWidth: i32, mapHeight: i32, visibleWidth: i32, visibleHeight: i32, buttonAreaHtml: string): void;

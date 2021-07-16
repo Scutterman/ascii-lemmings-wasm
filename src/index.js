@@ -53,6 +53,11 @@ wasmRunner.onmessage = (e) => {
                 setupClient(e.data.mapWidth, e.data.mapHeight, e.data.visibleWidth, e.data.visibleHeight, e.data.buttonAreaHtml)
                 break
                 // TODO:: Has this instruction been removed from the game?
+            case 'addBlocks':
+                requestAnimationFrame(() => {
+                    setupBlocks(e.data.startRow, e.data.endRow, e.data.startCol, e.data.endCol)
+                })
+                break
             case removeElementMessage:
                 const element = document.querySelector('#' + e.data.elementId)
                 if (element) { element.remove() }
@@ -208,14 +213,6 @@ function setupClient(mapWidth, mapHeight, visibleWidth, visibleHeight, buttonAre
     const visibleHeightPx = visibleHeight * dimensions.blockHeightPixels
     map = document.createElement('div')
     map.classList.add('top-level-element', 'full-map')
-    for (let row = 0; row < mapHeight; row++) {
-        for (let col = 0; col < mapWidth; col++) {
-            const element = document.createElement('div')
-            element.setAttribute('id', 'block_' + row + '_' + col)
-            element.classList.add('block', 'row_' + row, 'col_' + col)
-            map.appendChild(element)
-        }
-    }
 
     let css = `
     #map {
@@ -224,28 +221,59 @@ function setupClient(mapWidth, mapHeight, visibleWidth, visibleHeight, buttonAre
     }
   `
 
-    for (let row = 0; row < mapHeight; row++) {
+    requestAnimationFrame(() => {
+        document.querySelector('#buttonArea').innerHTML = buttonAreaHtml
+        document.querySelector('#map-dimensions').innerHTML = `
+          .full-map {
+            width: ${ mapContainerWidthPx }px !important;
+            height: ${ mapContainerHeightPx }px !important;
+          }
+        `
+        setupBlocks(0, mapHeight, 0, mapWidth, css, true)
+    })
+
+}
+
+/**
+ * set up a blocks for the level
+ * Must be called inside `requestAnimationFrame`
+ * @param {number} startRow 
+ * @param {number} endRow 
+ * @param {number} startCol 
+ * @param {number} endCol 
+ * @param {string} css 
+ * @param {boolean} reset 
+ */
+function setupBlocks(startRow, endRow, startCol, endCol, css = '', reset = false) {
+    console.log('adding blocks js', startRow, endRow, startCol, endCol, css, reset)
+    map.remove()
+    for (let row = startRow; row < endRow; row++) {
         css += '.row_' + row + ' { top: ' + (dimensions.blockHeightPixels * row) + 'px !important; }'
+        for (let col = startCol; col < endCol; col++) {
+            const element = document.createElement('div')
+            element.setAttribute('id', 'block_' + row + '_' + col)
+            element.classList.add('block', 'row_' + row, 'col_' + col)
+            map.appendChild(element)
+        }
     }
 
-    for (let col = 0; col < mapWidth; col++) {
+    for (let col = startCol; col < endCol; col++) {
         css += '.col_' + col + ' { left: ' + (dimensions.blockWidthPixels * col) + 'px !important; }'
     }
 
-    requestAnimationFrame(() => {
-        document.querySelector('#block-styles').innerHTML = css
+
+    if (reset) {
         document.querySelector('#map').innerHTML = ''
         document.querySelector('#map').appendChild(map)
-        document.querySelector('#buttonArea').innerHTML = buttonAreaHtml
-
-        document.querySelector('#map-dimensions').innerHTML = `
-      .full-map {
-        width: ${ mapContainerWidthPx }px !important;
-        height: ${ mapContainerHeightPx }px !important;
-      }
-    `
+        document.querySelector('#block-styles').innerHTML = css
         wasmRunner.postMessage({ instruction: 'runlevel' })
-    })
+    } else {
+        document.querySelector('#block-styles').innerHTML += css
+        document.querySelector('#map').appendChild(map)
+        wasmRunner.postMessage({ instruction: 'blocksAdded' })
+      }
+
+    console.log('setting up blocks complete')
 }
 
 /**

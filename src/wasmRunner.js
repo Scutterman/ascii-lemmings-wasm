@@ -21,6 +21,12 @@ const importObject = {
             })
         }
     },
+    editor: {
+        addBlocks(startRow, endRow, startCol, endCol) {
+            console.log('adding blocks wasm', startRow, endRow, startCol, endCol)
+            postMessage({ instruction: 'addBlocks', startRow, startCol, endRow, endCol })
+        }
+    },
     loop: {
         // removeElement(msgPtr) {
         //   const elementId = loadedModule.exports.__getString(msgPtr)
@@ -84,6 +90,8 @@ onmessage = function(e) {
             loadedModule.instance.exports.loadLevelFromString(level)
         } else if (e.data.instruction === 'runlevel') {
             loadedModule.instance.exports.runLevel()
+        } else if (e.data.instruction === 'blocksAdded') {
+            loadedModule.instance.exports.blocksAdded()
         } else {
             if (e.data.mouseX != null && e.data.mouseY != null) {
                 loadedModule.instance.exports.updateMouseCoordinates(e.data.mouseX, e.data.mouseY)

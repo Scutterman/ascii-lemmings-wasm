@@ -10,6 +10,8 @@ import { removeItem } from "../vdom/elements"
 import { UILabel } from "../ui/uiLabel"
 import { TileDetail } from "../types"
 
+declare function addBlocks(startRow: u8, endRow: u8, startCol: u8, endCol: u8): void
+
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
   private levelLoaded: boolean = false
@@ -42,6 +44,9 @@ export class Editor extends MetaScreen {
       row.push(this.metaMap.detailFromTile(tile, this.metaMap.tiles.length - 1, col))
     }
     this.map.push(row)
+    
+    addBlocks(u8(this.map.length - 1), u8(this.map.length), u8(0), u8(cols))
+    
     this.renderGameSection = true
     this.mapRendered = false
   }
@@ -67,6 +72,8 @@ export class Editor extends MetaScreen {
       this.map[row][col] = detail
       this.map[row].push(last)
     }
+
+    addBlocks(u8(0), u8(this.map.length), u8(this.map[0].length - 1), u8(this.map[0].length))
 
     this.renderGameSection = true
     this.mapRendered = false
@@ -213,6 +220,11 @@ export class Editor extends MetaScreen {
       removeItem(this.selectedBlockId)
       this.selectedBlockId =  renderBoxAroundBlock(i16(this.selectedBlockX) - this.scrollPosition.x, i16(this.selectedBlockY) - this.scrollPosition.y)
     }
+  }
+
+  public blocksAdded(): void {
+    this.renderGameSection = true
+    this.mapRendered = false
   }
 
   public clone(): Editor {
