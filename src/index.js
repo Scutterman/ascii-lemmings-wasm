@@ -72,6 +72,8 @@ wasmRunner.onmessage = (e) => {
                         const $element = document.querySelector('#' + key)
                         if ($element != null) {
                             $element.innerHTML = e.data.contents[index]
+                        } else {
+                            console.log('couldn\'t find key', key)
                         }
                     })
                 })
@@ -167,6 +169,7 @@ function setScreenSize(screenSize) {
     dimensions.scrollY = 0
     dimensions.blockWidthPixels = screenSize.width / screenSize.blockWidth
     dimensions.blockHeightPixels = screenSize.height / screenSize.blockHeight
+    dimensions.mapWidth = dimensions.mapHeight = 0
 
     const style = document.createElement('style')
     style.setAttribute('type', 'text/css')
@@ -206,29 +209,20 @@ function measureOneCharacter() {
 }
 
 function setupClient(mapWidth, mapHeight, visibleWidth, visibleHeight, buttonAreaHtml) {
-    const mapContainerWidthPx = mapWidth * dimensions.blockWidthPixels
-    const mapContainerHeightPx = mapHeight * dimensions.blockHeightPixels
-
     const visibleWidthPx = visibleWidth * dimensions.blockWidthPixels
     const visibleHeightPx = visibleHeight * dimensions.blockHeightPixels
     map = document.createElement('div')
     map.classList.add('top-level-element', 'full-map')
 
     let css = `
-    #map {
-      width: ${ visibleWidthPx }px !important;
-      height: ${ visibleHeightPx }px !important;
-    }
-  `
+        #map {
+            width: ${ visibleWidthPx }px !important;
+            height: ${ visibleHeightPx }px !important;
+        }
+    `
 
     requestAnimationFrame(() => {
         document.querySelector('#buttonArea').innerHTML = buttonAreaHtml
-        document.querySelector('#map-dimensions').innerHTML = `
-          .full-map {
-            width: ${ mapContainerWidthPx }px !important;
-            height: ${ mapContainerHeightPx }px !important;
-          }
-        `
         setupBlocks(0, mapHeight, 0, mapWidth, css, true)
     })
 
@@ -261,6 +255,27 @@ function setupBlocks(startRow, endRow, startCol, endCol, css = '', reset = false
         css += '.col_' + col + ' { left: ' + (dimensions.blockWidthPixels * col) + 'px !important; }'
     }
 
+    let dimensionsChange = false
+    if (endCol > dimensions.mapWidth) {
+        dimensions.mapWidth = endCol
+        dimensionsChange = true
+    }
+
+    if (endRow > dimensions.mapHeight) {
+        dimensions.mapHeight = endRow
+        dimensionsChange = true
+    }
+
+    if (dimensionsChange) {
+        const mapContainerWidthPx = dimensions.mapWidth * dimensions.blockWidthPixels
+        const mapContainerHeightPx = dimensions.mapHeight * dimensions.blockHeightPixels
+        document.querySelector('#map-dimensions').innerHTML = `
+            .full-map {
+            width: ${ mapContainerWidthPx }px !important;
+            height: ${ mapContainerHeightPx }px !important;
+            }
+        `
+    }
 
     if (reset) {
         document.querySelector('#map').innerHTML = ''
@@ -271,7 +286,7 @@ function setupBlocks(startRow, endRow, startCol, endCol, css = '', reset = false
         document.querySelector('#block-styles').innerHTML += css
         document.querySelector('#map').appendChild(map)
         wasmRunner.postMessage({ instruction: 'blocksAdded' })
-      }
+    }
 
     console.log('setting up blocks complete')
 }
