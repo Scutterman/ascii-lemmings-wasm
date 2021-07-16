@@ -12,7 +12,7 @@ export class MetaScreen extends Level {
   
   public renderLevel(): void {
     if (!this.mapRendered) {
-      this.render(this.map, this.renderGameSection, true)
+      this.render(this.map, this.renderGameSection, false)
       this.mapRendered = true
       this.renderGameSection = false
     }

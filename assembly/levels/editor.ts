@@ -41,14 +41,16 @@ export class Editor extends MetaScreen {
     const row: TileDetail[] = []
     for (let col = 0; col < cols; col++) {
       const tile = col == 0 || col == cols - 1 ? TILE_SIDE : TILE_BRICK
-      row.push(this.metaMap.detailFromTile(tile, this.metaMap.tiles.length - 1, col))
+      const detail = this.metaMap.detailFromTile(tile, this.metaMap.tiles.length - 1, col)
+      detail.isDirty = true
+      // if (tile == TILE_AIR) {
+      //   detail.needsRemoval = true
+      // }
+      row.push(detail)
     }
     this.map.push(row)
     
     addBlocks(u8(this.map.length - 1), u8(this.map.length), u8(0), u8(cols))
-    
-    this.renderGameSection = true
-    this.mapRendered = false
   }
 
   private addColumn(): void {
@@ -74,9 +76,6 @@ export class Editor extends MetaScreen {
     }
 
     addBlocks(u8(0), u8(this.map.length), u8(this.map[0].length - 1), u8(this.map[0].length))
-
-    this.renderGameSection = true
-    this.mapRendered = false
   }
 
   private showOptionsAfterLoad(): void {
@@ -213,7 +212,7 @@ export class Editor extends MetaScreen {
       gameState.mouseTileX = 1
       gameState.mouseTileY = 1
     }
-    
+
     super.renderLevel()
     
     if (this.selectedBlockX >= 0 && this.selectedBlockY >= 0) {
@@ -223,7 +222,6 @@ export class Editor extends MetaScreen {
   }
 
   public blocksAdded(): void {
-    this.renderGameSection = true
     this.mapRendered = false
   }
 
