@@ -129,8 +129,14 @@ export class SingleCharacterAnimation extends AnimationListItem {
 export class Parser {
   private lmd: LevelMapDetail = new LevelMapDetail([])
   private processingMapSection: boolean = false
+
+  private reset(): void {
+    this.lmd = new LevelMapDetail([])
+    this.processingMapSection = false
+  }
   
   public parseGeneratedMap(generatedMap: string): LevelMapDetail {
+    this.reset()
     const mapLines = generatedMap.replaceAll('\r\n', '\n').split('\n')
     for (let i = 0; i < mapLines.length; i++) {
       const line = mapLines[i].trim()
