@@ -1,14 +1,12 @@
-import { Parser } from 'assemblyscript';
 import { Transform } from 'assemblyscript/cli/transform'
 import { Parser as MapParser } from './parser'
 
 export class GenerateMapTransform extends Transform {
   private mapParser: MapParser = new MapParser()
-  private parser: Parser
   private difficultyLevels: string[] = ['fun', 'tricky', 'taxing', 'mayhem']
 
-  public afterParse(parser: Parser): void {
-    this.parser = parser
+  constructor() {
+    super()
     this.log('Beginning map transform')
     this.processDifficulties()
     this.log('Ending map transform')
@@ -40,7 +38,7 @@ export class GenerateMapTransform extends Transform {
             continue
           }
 
-          const result = this.mapParser.parseGeneratedMap(map, difficulty, u8(parseInt(parts[0])), parts[1], 3, 1)
+          const result = this.mapParser.parseGeneratedMap(map, difficulty, u8(parseInt(parts[0])), parts[1], 4, 1)
           this.log('got result ' + result.length.toString())
           const name = `assembly/generatedLevels/${ difficulty }_${ parts[0] }_${ parts[1] }`
           this.writeFile(
@@ -48,9 +46,6 @@ export class GenerateMapTransform extends Transform {
             result,
             this.baseDir
           )
-          
-          this.parser.parseFile(result, './' + name + '.ts', false)
-          // this.parser.backlog.push(name)
         }
       }
     } else {
