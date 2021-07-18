@@ -1,6 +1,7 @@
 import { Animation } from "../animation";
 import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
 import { LevelMap, LevelTileDetail, TileDetail } from "../types";
+import { animationItems } from "./mapAnimations";
 
 export function characterToAnimation(character: string): Animation {
   const frame = [
@@ -14,7 +15,6 @@ export function characterToAnimation(character: string): Animation {
 
 export class LevelMapDetail {
   constructor(public tiles: LevelMap) {}
-  animationList: Map<string, AnimationListItem> = new Map()
   defaultAnimations: Map<string, string> = new Map()
   customAnimations: Map<string, string> = new Map()
 
@@ -23,8 +23,8 @@ export class LevelMapDetail {
   }
 
   private getDetailFromAnimationLabel(tile: string, animationLabel: string): TileDetail | null {
-    if (this.animationList.has(animationLabel)) {
-      const animation = this.animationList.get(animationLabel)
+    if (animationItems.has(animationLabel)) {
+      const animation = animationItems.get(animationLabel)
       return new TileDetail(tile, animation.getColour(), animation.getAnimation())
     }
 
@@ -81,8 +81,8 @@ export class LevelMapDetail {
           }
         } else {
           if (!this.defaultAnimations.has(tile)) {
-            if (!this.animationList.has(tile)) {
-              this.animationList.set(tile, new SingleCharacterAnimation(tile, '#000000'))
+            if (!animationItems.has(tile)) {
+              animationItems.set(tile, new SingleCharacterAnimation(tile, '#000000'))
             }
             this.defaultAnimations.set(tile, tile)
           }
@@ -159,9 +159,9 @@ export class Parser {
         case instructions[1] == 'MAP_END':
           this.processingMapSection = false
         break
-        case instructions[1] == 'ANIMATION_LIST':
-          this.addCharacterAnimation(instructions)
-        break
+        // case instructions[1] == 'ANIMATION_LIST':
+        //   this.addCharacterAnimation(instructions)
+        // break
         case instructions[1] == 'DEFAULT_ANIMATIONS':
           this.addDefaultAnimation(instructions)
         break
@@ -197,7 +197,7 @@ export class Parser {
       case type == 'SINGLE':
         const character = data[1]
         const colour = data[2]
-        this.lmd.animationList.set(key, new SingleCharacterAnimation(character, colour))
+        animationItems.set(key, new SingleCharacterAnimation(character, colour))
     }
   }
 

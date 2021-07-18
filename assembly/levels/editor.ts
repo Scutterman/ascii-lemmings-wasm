@@ -9,6 +9,7 @@ import { renderBoxAroundBlock } from "../loop"
 import { removeItem } from "../vdom/elements"
 import { UILabel } from "../ui/uiLabel"
 import { TileDetail } from "../types"
+import { animationItems } from "../maps/mapAnimations"
 
 declare function addBlocks(startRow: u8, endRow: u8, startCol: u8, endCol: u8): void
 
@@ -175,7 +176,7 @@ export class Editor extends MetaScreen {
     this.tileOptions.addItem(new UILabel(new Vec2(0,0), 'Animation:'))
     this.tileOptions.addLinebreak()
 
-    const animationListItemKeys = this.metaMap.animationList.keys()
+    const animationListItemKeys = animationItems.keys()
     animationListItemKeys.push('None')
     animationListItemKeys.push('Cancel')
     

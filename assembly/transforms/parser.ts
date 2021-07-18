@@ -53,8 +53,8 @@ export class Parser {
         case instructions[1] == 'MAP_END':
           this.processingMapSection = false
         break
-        case instructions[1] == 'ANIMATION_LIST':
-          this.addCharacterAnimation(instructions)
+        // case instructions[1] == 'ANIMATION_LIST':
+        //   this.addCharacterAnimation(instructions)
         break
         case instructions[1] == 'DEFAULT_ANIMATIONS':
           this.addDefaultAnimation(instructions)
@@ -109,7 +109,7 @@ export class Parser {
       case type == 'SINGLE':
         const character = data[1]
         const colour = data[2]
-        this.lmd += 'mapDetail.animationList.set("' + key + '", new SingleCharacterAnimation("' + character + '", "' + colour + '"))\n'
+        this.lmd += 'animationItems.set("' + key + '", new SingleCharacterAnimation("' + character + '", "' + colour + '"))\n'
     }
   }
 

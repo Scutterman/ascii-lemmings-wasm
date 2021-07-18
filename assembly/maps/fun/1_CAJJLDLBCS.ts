@@ -60,11 +60,6 @@ const lm: LevelMap = [
 
 export function load(): LevelMapDetail {
   const lmd = new LevelMapDetail(lm)
-    //EDITORHINT::ANIMATION_LIST::SINGLE::ground,G,#825116
-    lmd.animationList.set('ground', new SingleCharacterAnimation('G', '#825116'))
-    //EDITORHINT::ANIMATION_LIST::SINGLE::grass,',#00FF00
-    lmd.animationList.set('grass', new SingleCharacterAnimation('\'', '#00FF00'))
-    
     //EDITORHINT::DEFAULT_ANIMATIONS::G,ground
     lmd.defaultAnimations.set('G', 'ground')
 

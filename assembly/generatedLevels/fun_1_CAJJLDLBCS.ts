@@ -70,8 +70,6 @@ mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
-mapDetail.animationList.set("ground", new SingleCharacterAnimation("G", "#825116"))
-mapDetail.animationList.set("grass", new SingleCharacterAnimation("'", "#00FF00"))
 mapDetail.defaultAnimations.set("G", "ground")
 mapDetail.customAnimations.set("10,17", "grass")
 mapDetail.customAnimations.set("11,17", "grass")
