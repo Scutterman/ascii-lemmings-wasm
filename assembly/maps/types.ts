@@ -1,6 +1,6 @@
 import { Animation } from "../animation";
 import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
-import { LevelMap, LevelTileDetail, TileDetail } from "../types";
+import { LevelMap, LevelTileDetail, TileDetail, shallowCopyWasmMap } from "../types";
 import { animationItems } from "./mapAnimations";
 
 export function characterToAnimation(character: string): Animation {
@@ -19,7 +19,10 @@ export class LevelMapDetail {
   customAnimations: Map<string, string> = new Map()
 
   public clone(): LevelMapDetail {
-    return new LevelMapDetail(this.tiles)
+    const lmd = new LevelMapDetail(this.tiles)
+    lmd.defaultAnimations = shallowCopyWasmMap(this.defaultAnimations)
+    lmd.customAnimations = shallowCopyWasmMap(this.customAnimations)
+    return lmd
   }
 
   private getDetailFromAnimationLabel(tile: string, animationLabel: string): TileDetail | null {
