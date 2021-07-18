@@ -1,5 +1,6 @@
 import { Transform } from 'assemblyscript/cli/transform'
 import { Parser as MapParser } from './parser'
+import { readdirSync } from 'fs'
 
 export class GenerateMapTransform extends Transform {
   private mapParser: MapParser = new MapParser()
@@ -19,26 +20,28 @@ export class GenerateMapTransform extends Transform {
   }
   
   private processDifficulty(difficulty: string): void {
-    let files = this.listFiles('assembly/maps/' + difficulty, this.baseDir)
+    let files = readdirSync('./assembly/maps/' + difficulty)
     if (files == null) { files = [] }
+    this.log(files.join('\n'))
+    files = files.filter(file => file.endsWith('.map'))
     
     this.log('Processing map directory ' + difficulty)
     
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         this.log('found file ' + i.toString() + ': "' + files[i] + '"')
-        const map = this.readFile('assembly/maps/fun/1_CAJJLDLBCS.ts', this.baseDir)
+        const map = this.readFile(`assembly/maps/${ difficulty }/${ files[i] }`, this.baseDir)
         if (map == null) {
           this.log('Could not read map ' + difficulty + '/' + files[i])
         } else {
           this.log('read map, contains ' + map.length.toString() + ' characters')
-          const parts = files[i].substr(0, files[i].length - 3).split('_')
+          const parts = files[i].substr(0, files[i].length - 4).split('_')
           if (parts.length < 2) {
             this.log('Could not split file name into number and code')
             continue
           }
 
-          const result = this.mapParser.parseGeneratedMap(map, difficulty, u8(parseInt(parts[0])), parts[1], 4, 1)
+          const result = this.mapParser.parseGeneratedMap(map, difficulty, parseInt(parts[0]), parts[1], 4, 1)
           this.log('got result ' + result.length.toString())
           const name = `assembly/generatedLevels/${ difficulty }_${ parts[0] }_${ parts[1] }`
           this.writeFile(

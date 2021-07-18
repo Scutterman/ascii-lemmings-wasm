@@ -25,6 +25,31 @@ export class LevelMapDetail {
     return lmd
   }
 
+  public export(): string {
+    let exportString = ''
+
+    exportString += '//EDITORHINT::MAP_START\n'
+    for (let row = 0; row < this.tiles.length; row++) {
+      exportString += this.tiles[row] + '\n'
+    }
+
+    exportString += '//EDITORHINT::DEFAULT_ANIMATIONS\n'
+    exportString += this.exportMap(this.defaultAnimations)
+    exportString += '//EDITORHINT::CUSTOM_ANIMATIONS\n'
+    exportString += this.exportMap(this.customAnimations)
+    return exportString
+  }
+
+  private exportMap(inMap: Map<string, string>): string {
+    let exportString = ''
+    const keys = inMap.keys()
+    for (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {
+      exportString += keys[keyIndex] + ',' + inMap.get(keys[keyIndex]) + '\n'
+    }
+
+    return exportString
+  }
+
   private getDetailFromAnimationLabel(tile: string, animationLabel: string): TileDetail | null {
     if (animationItems.has(animationLabel)) {
       const animation = animationItems.get(animationLabel)

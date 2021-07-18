@@ -1,11 +1,20 @@
 
+enum MapSection {
+  None,
+  Map,
+  DefaultAnimation,
+  CustomAnimation
+}
+
 export class Parser {
   private imports = ''
   private levelShell: string = ''
   private lmd: string = 'const mapDetail = new LevelMapDetail([])\n'
   private processingMapSection: boolean = false
+  private currentSection: MapSection = MapSection.None
 
   private reset(): void {
+    this.currentSection = MapSection.None
     this.levelShell = ''
     this.imports = ''
     this.addImport('../types', ['LemmingGift'])
@@ -29,38 +38,52 @@ export class Parser {
     this.imports += importStatement + '\n'
   }
   
-  public parseGeneratedMap(generatedMap: string, difficulty: string, levelNumber: u16, levelCode: string, toSpawn: u8, forSuccess: u8): string {
+  public parseGeneratedMap(generatedMap: string, difficulty: string, levelNumber: number, levelCode: string, toSpawn: number, forSuccess: number): string {
     this.reset()
     const mapLines = generatedMap.replaceAll('\r\n', '\n').split('\n')
     for (let i = 0; i < mapLines.length; i++) {
       const line = mapLines[i].trim()
-      if (!line.startsWith('//')) {
-        if (this.processingMapSection) {
-          this.addMapLine(line)
-        }
+
+      if (line.length === 0) {
         continue
       }
-  
-      const instructions = line.substr(2).split('::')
-      if (instructions[0] != 'EDITORHINT') {
+
+      if (line.startsWith('//')) {
+        const instructions = line.substr(2).split('::')
+
+        if (instructions.length !== 2) {
+          continue
+        }
+
+        if (instructions[0] != 'EDITORHINT') {
+          continue
+        }
+        
+        switch (true) {
+          case instructions[1] == 'MAP_START':
+            this.currentSection = MapSection.Map
+          break
+          case instructions[1] == 'DEFAULT_ANIMATIONS':
+            this.currentSection = MapSection.DefaultAnimation
+          break
+          case instructions[1] == 'CUSTOM_ANIMATIONS':
+            this.currentSection = MapSection.CustomAnimation
+          break
+        }
+
         continue
       }
       
       switch (true) {
-        case instructions[1] == 'MAP_START':
-          this.processingMapSection = true
+        case this.currentSection == MapSection.Map:
+          this.addMapLine(line)
         break
-        case instructions[1] == 'MAP_END':
-          this.processingMapSection = false
+        case this.currentSection == MapSection.DefaultAnimation:
+          this.addDefaultAnimation(line)
         break
-        // case instructions[1] == 'ANIMATION_LIST':
-        //   this.addCharacterAnimation(instructions)
-        break
-        case instructions[1] == 'DEFAULT_ANIMATIONS':
-          this.addDefaultAnimation(instructions)
-        break
-        case instructions[1] == 'CUSTOM_ANIMATIONS':
-          this.addCustomAnimation(instructions)
+        case this.currentSection == MapSection.CustomAnimation:
+          this.currentSection = MapSection.CustomAnimation
+          this.addCustomAnimation(line)
         break
       }
     }
@@ -87,17 +110,6 @@ export class Parser {
   }
   
   private addMapLine(generatedMapLine: string): void {
-    // Remove opening quote
-    generatedMapLine = generatedMapLine.substr(1)
-  
-    // Remove comma if present
-    if (generatedMapLine.endsWith(',')) {
-      generatedMapLine = generatedMapLine.substr(0, generatedMapLine.length - 1)
-    }
-  
-    // Remove closing quote
-    generatedMapLine = generatedMapLine.substr(0, generatedMapLine.length - 1)
-  
     this.lmd += 'mapDetail.tiles.push("' + generatedMapLine + '")\n'
   }
   
@@ -113,15 +125,15 @@ export class Parser {
     }
   }
 
-  private addDefaultAnimation(instructions: string[]): void {
-    const data = instructions[2].split(',')
+  private addDefaultAnimation(instruction: string): void {
+    const data = instruction.split(',')
     const character = data[0]
     const animationListKey = data[1]
     this.lmd += 'mapDetail.defaultAnimations.set("' + character + '", "' + animationListKey + '")\n'
   }
   
-  private addCustomAnimation(instructions: string[]): void {
-    const data = instructions[2].split(',')
+  private addCustomAnimation(instruction: string): void {
+    const data = instruction.split(',')
     const x = data[0]
     const y = data[1]
     const animationListKey = data[2]

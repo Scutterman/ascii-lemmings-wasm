@@ -1,4 +1,4 @@
-import { currentLevel, gameState, log, messageResponse } from ".."
+import { currentLevel, gameState, messageResponse } from ".."
 import { TILE_AIR, TILE_BOUNDARY, TILE_BRICK, TILE_EXIT, TILE_GROUND, TILE_SIDE } from "../map"
 import { LevelMapDetail } from "../maps/types"
 import { Vec2 } from "../position"
@@ -91,7 +91,7 @@ export class Editor extends MetaScreen {
       (currentLevel as Editor).addColumn()
     }))
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
-      messageResponse('save', 'foobar.json', '{ "hello": "world" }')
+      messageResponse('save', 'foobar.map', (currentLevel as Editor).metaMap.export())
     }))
   }
 
