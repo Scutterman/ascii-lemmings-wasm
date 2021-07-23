@@ -91,6 +91,7 @@ export class Editor extends MetaScreen {
       (currentLevel as Editor).addColumn()
     }))
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
+      // TODO:: add in //EDITORHINT::MAP_METADATA with name line
       messageResponse('save', 'foobar.map', (currentLevel as Editor).metaMap.export())
     }))
   }

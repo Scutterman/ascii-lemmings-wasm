@@ -1,31 +1,49 @@
 
 enum MapSection {
   None,
+  Metadata,
   Map,
   DefaultAnimation,
   CustomAnimation
+}
+
+class LevelMetadata {
+  constructor (
+    public name: string,
+    public number: number,
+    public code: string,
+    public difficulty: string
+  ) {}
 }
 
 export class Parser {
   private imports = ''
   private levelShell: string = ''
   private lmd: string = 'const mapDetail = new LevelMapDetail([])\n'
-  private processingMapSection: boolean = false
   private currentSection: MapSection = MapSection.None
 
+  // --- level selection
+  private levelByCode: string = ''
+  private levelByCodeImports: string = ''
+  private availableLevels: Map<string, Map<number, LevelMetadata>> = new Map<string, Map<number, LevelMetadata>>()
+  
   private reset(): void {
     this.currentSection = MapSection.None
     this.levelShell = ''
     this.imports = ''
-    this.addImport('../types', ['LemmingGift'])
-    this.addImport('../maps/types', ['LevelMapDetail', 'SingleCharacterAnimation'])
-    this.addImport('../levels/level', ['Level'])
+    this.imports += this.getImport('../types', ['LemmingGift'])
+    this.imports += this.getImport('../maps/types', ['LevelMapDetail', 'SingleCharacterAnimation'])
+    this.imports += this.getImport('../levels/level', ['Level'])
 
-    this.lmd = 'const mapDetail = new LevelMapDetail([])\n'
-    this.processingMapSection = false
+    this.lmd = 'const mapDetail = new LevelMapDetail([])\n'  
   }
 
-  private addImport(path: string, items: string[]): void {
+  private addLevelSelectStatement(levelName: string, code: string): void {
+    this.levelByCodeImports += this.getImport('./' + levelName, ['Level_' + levelName])
+    this.levelByCode += 'else if (code == "' + code + '") { return new Level_' + levelName + '() }\n'
+  }
+
+  private getImport(path: string, items: string[]): string {
     if (items.length === 0) { return }
 
     let importStatement = 'import { '
@@ -34,8 +52,8 @@ export class Parser {
     }
 
     importStatement = importStatement.substr(0, importStatement.length - 2)
-    importStatement += ' } from "' + path + '"'
-    this.imports += importStatement + '\n'
+    importStatement += ' } from "' + path + '"\n'
+    return importStatement
   }
   
   public parseGeneratedMap(generatedMap: string, difficulty: string, levelNumber: number, levelCode: string, toSpawn: number, forSuccess: number): string {
@@ -60,6 +78,9 @@ export class Parser {
         }
         
         switch (true) {
+          case instructions[1] == 'MAP_METADATA':
+            this.currentSection = MapSection.Metadata
+          break
           case instructions[1] == 'MAP_START':
             this.currentSection = MapSection.Map
           break
@@ -75,6 +96,9 @@ export class Parser {
       }
       
       switch (true) {
+        case this.currentSection == MapSection.Metadata:
+          this.addAvailableLevel(new LevelMetadata(line, levelNumber, levelCode, difficulty))
+        break
         case this.currentSection == MapSection.Map:
           this.addMapLine(line)
         break
@@ -89,6 +113,8 @@ export class Parser {
     }
 
     const tag = `${ difficulty }_${ levelNumber.toString() }_${ levelCode }`
+    this.addLevelSelectStatement(tag, levelCode)
+
     this.levelShell = `
       export class Level_${ tag } extends Level {\n
         constructor() {
@@ -107,6 +133,14 @@ export class Parser {
     `
     
     return this.imports + this.levelShell + this.lmd
+  }
+
+  private addAvailableLevel(meta: LevelMetadata): void {
+    if (!this.availableLevels.has(meta.difficulty)) {
+      this.availableLevels.set(meta.difficulty, new Map<number, LevelMetadata>())
+    }
+
+    this.availableLevels.get(meta.difficulty).set(meta.number, meta)
   }
   
   private addMapLine(generatedMapLine: string): void {
@@ -139,5 +173,53 @@ export class Parser {
     const animationListKey = data[2]
     const key = x + ',' + y
     this.lmd += 'mapDetail.customAnimations.set("' + key + '", "' + animationListKey + '")\n'
+  }
+
+  public generateLevelSelectFile(): string {
+    return this.levelByCodeImports +
+      this.getImport('../levels/baseLevel', ['BaseLevel']) +
+      'export function getLevelByCode(code: string): BaseLevel | null {\n' +
+      ' if (false) { return null }\n' +
+      this.levelByCode +
+      'else { return null }' +
+      '}\n'
+  }
+
+  public generateAvailableLevelFile(): string {
+    let fileContents = '' +
+      'class LevelMetadata {\n' +
+      '  constructor (\n' +
+      '    public name: string,\n' +
+      '    public number: number,\n' +
+      '    public code: string,\n' +
+      '    public difficulty: string\n' +
+      '  ) {}\n' +
+      '}\n'
+
+      let functionContents = '' +
+        'export function getAvailableLevels(difficulty: string): LevelMetadata[] | null {\n' +
+        ' if (false) { return null }\n'
+      
+      const difficulties = Array.from(this.availableLevels.keys())
+
+      for (const difficulty of difficulties) {
+        const levels = this.availableLevels.get(difficulty)
+        const levelNumbers = Array.from(levels.keys())
+        levelNumbers.sort()
+        
+        functionContents += 'else if (difficulty == "' + difficulty + '") { return availableLevels_' + difficulty + ' }\n'
+        
+        fileContents += 'const availableLevels_' + difficulty + ': LevelMetadata[] = []\n'
+        for (const levelNumber of levelNumbers) {
+          const level = levels.get(levelNumber)
+          fileContents += 'availableLevels_' + difficulty + '.push(new LevelMetadata("' + level.name + '",' + level.number + ',"' + level.code + '","' + level.difficulty + '"))\n'
+        }
+      }
+
+      functionContents += '' +
+        'else { return null }' +
+        '}\n'
+      
+      return fileContents + functionContents
   }
 }

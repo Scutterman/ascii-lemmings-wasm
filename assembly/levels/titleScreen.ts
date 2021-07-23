@@ -1,10 +1,11 @@
-import { loadLevel, Difficulty, LEVEL_DIFFICULTY_CODES } from "../index"
+import { loadLevel } from "../index"
 import { Vec2 } from "../position"
 import { Panel } from "../ui/panel"
 import { UIControl } from "../ui/uiControl"
 import { LevelCodeEntry } from "./levelCodeEntry"
 import { MetaScreen } from "./metascreen"
-import { Level_fun_1_CAJJLDLBCS } from '../generatedLevels/fun_1_CAJJLDLBCS'
+import { getAvailableLevels } from '../generatedLevels/available'
+import { getLevelByCode } from "../generatedLevels/select"
 
 export class TitleScreen extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, -1))
@@ -12,12 +13,26 @@ export class TitleScreen extends MetaScreen {
     super('TITLE')
 
     this.uiPanels.push(this.actionPanel)
-    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Start", () => {
-      // const levelFactory = LEVEL_DIFFICULTY_CODES.get(Difficulty.Fun).get('CAJJLDLBCS')
-      // const level = levelFactory()
-      const level = new Level_fun_1_CAJJLDLBCS()
-      loadLevel(level)
+    
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Fun", () => {
+      loadFirstLevel('fun')
     }))
+
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Tricky X", () => {
+      loadFirstLevel('tricky')
+    }))
+
+    this.actionPanel.addLinebreak()
+
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Taxing X", () => {
+      loadFirstLevel('taxing')
+    }))
+
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Mayhem X", () => {
+      loadFirstLevel('mayhem')
+    }))
+
+    this.actionPanel.addLinebreak()
 
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Code", () => {
       const level = new LevelCodeEntry()
@@ -28,4 +43,18 @@ export class TitleScreen extends MetaScreen {
   public clone(): TitleScreen {
     return new TitleScreen()
   }
+}
+
+const loadFirstLevel = (difficulty: string): boolean => {
+  const levels = getAvailableLevels(difficulty)
+  if (levels != null && levels.length > 0) {
+    const levelDetail = levels[0]
+    const level = getLevelByCode(levelDetail.code)
+    if (level != null) {
+      loadLevel(level)
+      return true
+    }
+  }
+
+  return false
 }

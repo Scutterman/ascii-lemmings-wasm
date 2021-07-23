@@ -10,6 +10,8 @@ export class GenerateMapTransform extends Transform {
     super()
     this.log('Beginning map transform')
     this.processDifficulties()
+    this.processLevelSelect()
+    this.processAvailableLevels()
     this.log('Ending map transform')
   }
 
@@ -54,6 +56,26 @@ export class GenerateMapTransform extends Transform {
     } else {
       this.log('Found no files')
     }
+  }
+
+  private processLevelSelect(): void {
+    const levelSelect = this.mapParser.generateLevelSelectFile()
+    const name = 'select'
+    this.writeFile(
+      'assembly/generatedLevels/' + name + '.ts',
+      levelSelect,
+      this.baseDir
+    )
+  }
+
+  private processAvailableLevels(): void {
+    const availableLevels = this.mapParser.generateAvailableLevelFile()
+    const name = 'available'
+    this.writeFile(
+      'assembly/generatedLevels/' + name + '.ts',
+      availableLevels,
+      this.baseDir
+    )
   }
 }
 
