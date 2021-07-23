@@ -1,6 +1,7 @@
 import { Transform } from 'assemblyscript/cli/transform'
 import { Parser as MapParser } from './parser'
 import { readdirSync } from 'fs'
+import { AnimationParser } from './animationParser'
 
 export class GenerateMapTransform extends Transform {
   private mapParser: MapParser = new MapParser()
@@ -9,10 +10,26 @@ export class GenerateMapTransform extends Transform {
   constructor() {
     super()
     this.log('Beginning map transform')
+    this.processAnimations()
     this.processDifficulties()
     this.processLevelSelect()
     this.processAvailableLevels()
     this.log('Ending map transform')
+  }
+
+  private processAnimations(): void {
+    const fileContent = this.readFile(`assembly/maps/global.animation`, this.baseDir)
+    if (fileContent == null) {
+      this.log('Could not read animation file')
+    } else {
+      const animationContent = new AnimationParser().parseAnimationsFile(fileContent)
+      const name = 'animationItems'
+      this.writeFile(
+        'assembly/generatedLevels/' + name + '.ts',
+        animationContent,
+        this.baseDir
+      )
+    }
   }
 
   private processDifficulties(): void {

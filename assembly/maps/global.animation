@@ -1,0 +1,13 @@
+//EDITORHINT::ANIMATION::exit
+//EDITORHINT::FRAME
+^  ^
+#/\#
+/  \
+|  |
+//EDITORHINT::FRAME
+w  w
+#/\#
+/  \
+|  |
+//EDITORHINT::ANIMATION_SINGLE::grass::'::#00FF00
+//EDITORHINT::ANIMATION_SINGLE::ground::G::#825116

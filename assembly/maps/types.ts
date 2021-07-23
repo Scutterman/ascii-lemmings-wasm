@@ -1,7 +1,7 @@
 import { Animation } from "../animation";
 import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
 import { LevelMap, LevelTileDetail, TileDetail, shallowCopyWasmMap } from "../types";
-import { animationItems } from "./mapAnimations";
+import { animationItems } from "../generatedLevels/animationItems";
 
 export function characterToAnimation(character: string): Animation {
   const frame = [

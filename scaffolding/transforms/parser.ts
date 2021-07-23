@@ -1,3 +1,4 @@
+import { ParserBase } from "./parserBase"
 
 enum MapSection {
   None,
@@ -16,7 +17,7 @@ class LevelMetadata {
   ) {}
 }
 
-export class Parser {
+export class Parser extends ParserBase {
   private imports = ''
   private levelShell: string = ''
   private lmd: string = 'const mapDetail = new LevelMapDetail([])\n'
@@ -43,19 +44,6 @@ export class Parser {
     this.levelByCode += 'else if (code == "' + code + '") { return new Level_' + levelName + '() }\n'
   }
 
-  private getImport(path: string, items: string[]): string {
-    if (items.length === 0) { return }
-
-    let importStatement = 'import { '
-    for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
-      importStatement += items[itemIndex] + ', '
-    }
-
-    importStatement = importStatement.substr(0, importStatement.length - 2)
-    importStatement += ' } from "' + path + '"\n'
-    return importStatement
-  }
-  
   public parseGeneratedMap(generatedMap: string, difficulty: string, levelNumber: number, levelCode: string, toSpawn: number, forSuccess: number): string {
     this.reset()
     const mapLines = generatedMap.replaceAll('\r\n', '\n').split('\n')
@@ -147,18 +135,6 @@ export class Parser {
     this.lmd += 'mapDetail.tiles.push("' + generatedMapLine + '")\n'
   }
   
-  private addCharacterAnimation(instructions: string[]): void {
-    const type = instructions[2]
-    const data = instructions[3].split(',')
-    const key = data[0]
-    switch (true) {
-      case type == 'SINGLE':
-        const character = data[1]
-        const colour = data[2]
-        this.lmd += 'animationItems.set("' + key + '", new SingleCharacterAnimation("' + character + '", "' + colour + '"))\n'
-    }
-  }
-
   private addDefaultAnimation(instruction: string): void {
     const data = instruction.split(',')
     const character = data[0]

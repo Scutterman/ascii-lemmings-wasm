@@ -9,7 +9,7 @@ import { renderBoxAroundBlock } from "../loop"
 import { removeItem } from "../vdom/elements"
 import { UILabel } from "../ui/uiLabel"
 import { TileDetail } from "../types"
-import { animationItems } from "../maps/mapAnimations"
+import { animationItems } from "../generatedLevels/animationItems"
 
 declare function addBlocks(startRow: u8, endRow: u8, startCol: u8, endCol: u8): void
 
@@ -92,6 +92,7 @@ export class Editor extends MetaScreen {
     }))
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
       // TODO:: add in //EDITORHINT::MAP_METADATA with name line
+      // TODO:: add in per-level skills
       messageResponse('save', 'foobar.map', (currentLevel as Editor).metaMap.export())
     }))
   }
