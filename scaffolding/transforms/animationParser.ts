@@ -1,4 +1,5 @@
 import { ParserBase } from "./parserBase"
+import { allowedUserInputCharacters } from "../../assembly/text"
 
 enum AnimationSection {
   None,
@@ -8,6 +9,8 @@ enum AnimationSection {
 }
 
 export class AnimationParser extends ParserBase {
+  private static readonly colourRegex: RegExp = new RegExp(/^\#[0-9a-fA-F]+$/)
+  private static readonly nameRegex: RegExp = new RegExp(/^[a-zA-Z0-9_]+$/)
   private imports = ''
   private animations: string = ''
   private animationItems: string = ''
@@ -28,6 +31,10 @@ export class AnimationParser extends ParserBase {
   public parseAnimationsFile(animationsContent: string): string {
     this.reset()
     const animationLines = animationsContent.replaceAll('\r\n', '\n').split('\n')
+
+    console.log(AnimationParser.colourRegex.test('#f00barbuzz'))
+    console.log(AnimationParser.colourRegex.test('asdf#f00barbuzz'))
+    console.log(AnimationParser.colourRegex.test('asdf#f00'))
     
     for (let i = 0; i < animationLines.length; i++) {
       const line = animationLines[i].trim()
@@ -103,6 +110,9 @@ export class AnimationParser extends ParserBase {
     const name = instructions[2]
     const character = instructions[3]
     const colour = instructions[4]
+
+    if (!allowedUserInputCharacters.includes(character)) { return }
+
     this.addAnimationItem(name, colour, 'SingleCharacterAnimation', '"' + character + '"')
   }
 
@@ -116,13 +126,17 @@ export class AnimationParser extends ParserBase {
     if (instructions.length >= 4) {
       colour = instructions[3]
     }
-
+    
     const name = instructions[2]
     this.addAnimationItem(name, colour, 'StandardAnimation', name + 'Animation')
     this.startAnimation(name)
   }
 
   private addAnimationItem(name: string, colour: string, type: string, value: string): void {
+    if (!AnimationParser.nameRegex.test(name) || !AnimationParser.colourRegex.test(colour)) {
+      return
+    }
+    
     this.animationItems += 'const ' + name + ' = new ' + type + '(' + value + ', "' + colour + '")\n'
     this.animationItems += 'animationItems.set("' + name + '", ' + name + ')\n'
   }
@@ -141,6 +155,9 @@ export class AnimationParser extends ParserBase {
   }
 
   private startAnimation(name: string): void {
+    if (!AnimationParser.nameRegex.test(name)) {
+      return
+    }
     this.animations += 'const ' + name + 'Animation = new Animation([\n'
     this.inAnimation = true
   }
@@ -166,6 +183,7 @@ export class AnimationParser extends ParserBase {
     this.animations += '['
     const lineCharacters = line.split('')
     for (let char of lineCharacters) {
+      if (!allowedUserInputCharacters.includes(char)) { continue }
       if (char == '\\') { char += '\\' }
       this.animations += '"' + char + '"' + ','
     }
