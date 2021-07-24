@@ -139,6 +139,44 @@ export abstract class AnimationListItem {
   constructor(private colour: string) {}
   public getColour(): string { return this.colour }
   public abstract getAnimation(): Animation
+  
+  public export(name: string): string {
+    
+    const animation = this.getAnimation().clone()
+    if (isSingleCharacterAnimation(animation)) {
+      return '//EDITORHINT::ANIMATION_SINGLE::' + name + '::' + animation.getNextFrame(false)[0][0] + '::' + this.getColour() + '\n'
+    }
+    
+    animation.reset()
+    const numberOfFrames = animation.getNumberOfFrames()
+    let exportedAnimation: string = '//EDITORHINT::ANIMATION::' + name + '\n'
+    for (let frameIndex = u8(0); frameIndex < numberOfFrames; frameIndex++) {
+      const frame = animation.getNextFrame(true)
+      exportedAnimation += '//EDITORHINT::FRAME\n'
+      for (let rowIndex = 0; rowIndex < frame.length; rowIndex++) {
+        exportedAnimation += frame[rowIndex].join('') + '\n'
+      }
+    }
+    return exportedAnimation
+  }
+}
+
+function isSingleCharacterAnimation(animation: Animation): boolean {
+  const numberOfFrames = animation.getNumberOfFrames()
+  if (numberOfFrames != 1) { return false }
+  
+  const frame = animation.getNextFrame(false)
+
+  if (frame.length == 0 || frame[0].length == 0) { return false }
+  
+  for (let rowIndex = 0; rowIndex < frame.length; rowIndex++) {
+    const row = frame[rowIndex]
+    for (let columnIndex = 1; columnIndex < row.length; columnIndex++) {
+      if (row[columnIndex] != row[columnIndex - 1]) { return false }
+    }
+  }
+
+  return true
 }
 
 export class StandardAnimation extends AnimationListItem {

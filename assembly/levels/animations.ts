@@ -8,6 +8,7 @@ import { animationItems } from "../generatedLevels/animationItems"
 import { PanelContainer } from "../ui/panelContainer"
 import { SingleCharacterAnimation } from "../maps/types"
 import { UILabel } from "../ui/uiLabel"
+import { isEditingMap } from "../imports"
 
 export class Animations extends MetaScreen {
   private animationsList: Panel = new Panel(new Vec2(2, 2))
@@ -27,6 +28,7 @@ export class Animations extends MetaScreen {
     // TODO:: Reset these before leaving
     keyPressListener(true)
     resetText()
+    isEditingMap(1)
     
     this.newNameCreateButton = new UIControl(new Vec2(-1, -1), 'Create', () => {
       (currentLevel as Animations).addAnimationByName()
@@ -52,7 +54,13 @@ export class Animations extends MetaScreen {
     })
     this.actionPanel.addItem(this.newButton)
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
-      messageResponse('save', 'animations.json', '{ "hello": "world" }')
+      let exportedAnimations = ''
+      let animationKeys = animationItems.keys()
+      for (let i = 0; i < animationKeys.length; i++) {
+        const name = animationKeys[i]
+        exportedAnimations += animationItems.get(name).export(name)
+      }
+      messageResponse('save', 'global.animation', exportedAnimations)
     }))
 
     const animationListItemKeys = animationItems.keys()
