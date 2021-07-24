@@ -1,6 +1,7 @@
 {
   "include": [
-    "./**/*.ts"
+    "./**/*.ts",
+    "../assembly/maps/mapParserBase.ts"
   ],
   "compilerOptions": {
     "types": ["@types/node"]

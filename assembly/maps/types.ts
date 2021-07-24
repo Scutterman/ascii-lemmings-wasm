@@ -2,6 +2,7 @@ import { Animation } from "../animation";
 import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
 import { LevelMap, LevelTileDetail, TileDetail, shallowCopyWasmMap } from "../types";
 import { animationItems } from "../generatedLevels/animationItems";
+import { LevelMetadata, MapParserBase } from "./mapParserBase";
 
 export function characterToAnimation(character: string): Animation {
   const frame = [
@@ -14,12 +15,12 @@ export function characterToAnimation(character: string): Animation {
 }
 
 export class LevelMapDetail {
-  constructor(public tiles: LevelMap) {}
+  constructor(public tiles: LevelMap, public name: string = '') {}
   defaultAnimations: Map<string, string> = new Map()
   customAnimations: Map<string, string> = new Map()
 
   public clone(): LevelMapDetail {
-    const lmd = new LevelMapDetail(this.tiles)
+    const lmd = new LevelMapDetail(this.tiles, this.name)
     lmd.defaultAnimations = shallowCopyWasmMap(this.defaultAnimations)
     lmd.customAnimations = shallowCopyWasmMap(this.customAnimations)
     return lmd
@@ -154,94 +155,31 @@ export class SingleCharacterAnimation extends AnimationListItem {
   }
 }
 
-export class Parser {
+export class Parser extends MapParserBase {
   private lmd: LevelMapDetail = new LevelMapDetail([])
-  private processingMapSection: boolean = false
-
-  private reset(): void {
+  
+  protected reset(): void {
     this.lmd = new LevelMapDetail([])
-    this.processingMapSection = false
   }
-  
   public parseGeneratedMap(generatedMap: string): LevelMapDetail {
-    this.reset()
-    const mapLines = generatedMap.replaceAll('\r\n', '\n').split('\n')
-    for (let i = 0; i < mapLines.length; i++) {
-      const line = mapLines[i].trim()
-      if (!line.startsWith('//')) {
-        if (this.processingMapSection) {
-          this.addMapLine(line)
-        }
-        continue
-      }
-  
-      const instructions = line.substr(2).split('::')
-      if (instructions[0] != 'EDITORHINT') {
-        continue
-      }
-      
-      switch (true) {
-        case instructions[1] == 'MAP_START':
-          this.processingMapSection = true
-        break
-        case instructions[1] == 'MAP_END':
-          this.processingMapSection = false
-        break
-        // case instructions[1] == 'ANIMATION_LIST':
-        //   this.addCharacterAnimation(instructions)
-        // break
-        case instructions[1] == 'DEFAULT_ANIMATIONS':
-          this.addDefaultAnimation(instructions)
-        break
-        case instructions[1] == 'CUSTOM_ANIMATIONS':
-          this.addCustomAnimation(instructions)
-        break
-      }
-    }
-
+    // TODO:: Remove hardcoded difficulty, level number, and level code
+    super.parseMap(generatedMap, 'fun', 1, 'FOOBARBAZBAT')
     return this.lmd
   }
   
-  private addMapLine(generatedMapLine: string): void {
-    // Remove opening quote
-    generatedMapLine = generatedMapLine.substr(1)
+  protected addAvailableLevel(meta: LevelMetadata): void {
+    this.lmd.name = meta.name
+  }
   
-    // Remove comma if present
-    if (generatedMapLine.endsWith(',')) {
-      generatedMapLine = generatedMapLine.substr(0, generatedMapLine.length - 1)
-    }
-  
-    // Remove closing quote
-    generatedMapLine = generatedMapLine.substr(0, generatedMapLine.length - 1)
-  
+  protected addMapLine(generatedMapLine: string): void {
     this.lmd.tiles.push(generatedMapLine)
   }
   
-  private addCharacterAnimation(instructions: string[]): void {
-    const type = instructions[2]
-    const data = instructions[3].split(',')
-    const key = data[0]
-    switch (true) {
-      case type == 'SINGLE':
-        const character = data[1]
-        const colour = data[2]
-        animationItems.set(key, new SingleCharacterAnimation(character, colour))
-    }
-  }
-
-  private addDefaultAnimation(instructions: string[]): void {
-    const data = instructions[2].split(',')
-    const character = data[0]
-    const animationListKey = data[1]
+  protected addDefaultAnimation(character: string, animationListKey: string): void {
     this.lmd.defaultAnimations.set(character, animationListKey)
   }
   
-  private addCustomAnimation(instructions: string[]): void {
-    const data = instructions[2].split(',')
-    const x = data[0]
-    const y = data[1]
-    const animationListKey = data[2]
-    const key = x + ',' + y
+  protected addCustomAnimation(key: string, animationListKey: string): void {
     this.lmd.customAnimations.set(key, animationListKey)
   }
 }

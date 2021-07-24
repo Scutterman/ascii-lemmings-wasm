@@ -1,104 +1,34 @@
-import { ParserBase } from "./parserBase"
+import { getImport } from "./parserHelper"
+import { MapParserBase, LevelMetadata } from '../../assembly/maps/mapParserBase'
 
-enum MapSection {
-  None,
-  Metadata,
-  Map,
-  DefaultAnimation,
-  CustomAnimation
-}
-
-class LevelMetadata {
-  constructor (
-    public name: string,
-    public number: number,
-    public code: string,
-    public difficulty: string
-  ) {}
-}
-
-export class Parser extends ParserBase {
+export class Parser extends MapParserBase {
   private imports = ''
   private levelShell: string = ''
   private lmd: string = 'const mapDetail = new LevelMapDetail([])\n'
-  private currentSection: MapSection = MapSection.None
-
+  
   // --- level selection
   private levelByCode: string = ''
   private levelByCodeImports: string = ''
   private availableLevels: Map<string, Map<number, LevelMetadata>> = new Map<string, Map<number, LevelMetadata>>()
   
-  private reset(): void {
-    this.currentSection = MapSection.None
+  protected reset(): void {
+    super.reset()
     this.levelShell = ''
     this.imports = ''
-    this.imports += this.getImport('../types', ['LemmingGift'])
-    this.imports += this.getImport('../maps/types', ['LevelMapDetail', 'SingleCharacterAnimation'])
-    this.imports += this.getImport('../levels/level', ['Level'])
+    this.imports += getImport('../types', ['LemmingGift'])
+    this.imports += getImport('../maps/types', ['LevelMapDetail', 'SingleCharacterAnimation'])
+    this.imports += getImport('../levels/level', ['Level'])
 
     this.lmd = 'const mapDetail = new LevelMapDetail([])\n'  
   }
 
   private addLevelSelectStatement(levelName: string, code: string): void {
-    this.levelByCodeImports += this.getImport('./' + levelName, ['Level_' + levelName])
+    this.levelByCodeImports += getImport('./' + levelName, ['Level_' + levelName])
     this.levelByCode += 'else if (code == "' + code + '") { return new Level_' + levelName + '() }\n'
   }
 
   public parseGeneratedMap(generatedMap: string, difficulty: string, levelNumber: number, levelCode: string, toSpawn: number, forSuccess: number): string {
-    this.reset()
-    const mapLines = generatedMap.replaceAll('\r\n', '\n').split('\n')
-    for (let i = 0; i < mapLines.length; i++) {
-      const line = mapLines[i].trim()
-
-      if (line.length === 0) {
-        continue
-      }
-
-      if (line.startsWith('//')) {
-        const instructions = line.substr(2).split('::')
-
-        if (instructions.length !== 2) {
-          continue
-        }
-
-        if (instructions[0] != 'EDITORHINT') {
-          continue
-        }
-        
-        switch (true) {
-          case instructions[1] == 'MAP_METADATA':
-            this.currentSection = MapSection.Metadata
-          break
-          case instructions[1] == 'MAP_START':
-            this.currentSection = MapSection.Map
-          break
-          case instructions[1] == 'DEFAULT_ANIMATIONS':
-            this.currentSection = MapSection.DefaultAnimation
-          break
-          case instructions[1] == 'CUSTOM_ANIMATIONS':
-            this.currentSection = MapSection.CustomAnimation
-          break
-        }
-
-        continue
-      }
-      
-      switch (true) {
-        case this.currentSection == MapSection.Metadata:
-          this.addAvailableLevel(new LevelMetadata(line, levelNumber, levelCode, difficulty))
-        break
-        case this.currentSection == MapSection.Map:
-          this.addMapLine(line)
-        break
-        case this.currentSection == MapSection.DefaultAnimation:
-          this.addDefaultAnimation(line)
-        break
-        case this.currentSection == MapSection.CustomAnimation:
-          this.currentSection = MapSection.CustomAnimation
-          this.addCustomAnimation(line)
-        break
-      }
-    }
+    super.parseMap(generatedMap, difficulty, levelNumber, levelCode)
 
     const tag = `${ difficulty }_${ levelNumber.toString() }_${ levelCode }`
     this.addLevelSelectStatement(tag, levelCode)
@@ -123,7 +53,7 @@ export class Parser extends ParserBase {
     return this.imports + this.levelShell + this.lmd
   }
 
-  private addAvailableLevel(meta: LevelMetadata): void {
+  protected addAvailableLevel(meta: LevelMetadata): void {
     if (!this.availableLevels.has(meta.difficulty)) {
       this.availableLevels.set(meta.difficulty, new Map<number, LevelMetadata>())
     }
@@ -131,29 +61,21 @@ export class Parser extends ParserBase {
     this.availableLevels.get(meta.difficulty).set(meta.number, meta)
   }
   
-  private addMapLine(generatedMapLine: string): void {
+  protected addMapLine(generatedMapLine: string): void {
     this.lmd += 'mapDetail.tiles.push("' + generatedMapLine + '")\n'
   }
   
-  private addDefaultAnimation(instruction: string): void {
-    const data = instruction.split(',')
-    const character = data[0]
-    const animationListKey = data[1]
+  protected addDefaultAnimation(character: string, animationListKey: string): void {
     this.lmd += 'mapDetail.defaultAnimations.set("' + character + '", "' + animationListKey + '")\n'
   }
   
-  private addCustomAnimation(instruction: string): void {
-    const data = instruction.split(',')
-    const x = data[0]
-    const y = data[1]
-    const animationListKey = data[2]
-    const key = x + ',' + y
+  protected addCustomAnimation(key: string, animationListKey: string): void {
     this.lmd += 'mapDetail.customAnimations.set("' + key + '", "' + animationListKey + '")\n'
   }
 
   public generateLevelSelectFile(): string {
     return this.levelByCodeImports +
-      this.getImport('../levels/baseLevel', ['BaseLevel']) +
+      getImport('../levels/baseLevel', ['BaseLevel']) +
       'export function getLevelByCode(code: string): BaseLevel | null {\n' +
       ' if (false) { return null }\n' +
       this.levelByCode +

@@ -1,5 +1,5 @@
-import { ParserBase } from "./parserBase"
 import { allowedUserInputCharacters } from "../../assembly/text"
+import { getImport } from "./parserHelper"
 
 enum AnimationSection {
   None,
@@ -8,7 +8,7 @@ enum AnimationSection {
   Frame
 }
 
-export class AnimationParser extends ParserBase {
+export class AnimationParser {
   private static readonly colourRegex: RegExp = new RegExp(/^\#[0-9a-fA-F]+$/)
   private static readonly nameRegex: RegExp = new RegExp(/^[a-zA-Z0-9_]+$/)
   private imports = ''
@@ -24,18 +24,14 @@ export class AnimationParser extends ParserBase {
     this.animationItems = ''
     this.inAnimation = false
     this.imports = ''
-    this.imports += this.getImport('../animation', ['Animation'])
-    this.imports += this.getImport('../maps/types', ['AnimationListItem', 'SingleCharacterAnimation', 'StandardAnimation'])
+    this.imports += getImport('../animation', ['Animation'])
+    this.imports += getImport('../maps/types', ['AnimationListItem', 'SingleCharacterAnimation', 'StandardAnimation'])
   }
 
   public parseAnimationsFile(animationsContent: string): string {
     this.reset()
     const animationLines = animationsContent.replaceAll('\r\n', '\n').split('\n')
 
-    console.log(AnimationParser.colourRegex.test('#f00barbuzz'))
-    console.log(AnimationParser.colourRegex.test('asdf#f00barbuzz'))
-    console.log(AnimationParser.colourRegex.test('asdf#f00'))
-    
     for (let i = 0; i < animationLines.length; i++) {
       const line = animationLines[i].trim()
 
