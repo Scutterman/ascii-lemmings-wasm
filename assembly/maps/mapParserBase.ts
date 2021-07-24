@@ -13,12 +13,15 @@ export class LevelMetadata {
     public code: string,
     public difficulty: string
   ) {}
+
+  public clone(): LevelMetadata { return new LevelMetadata(this.name, this.number, this.code, this.difficulty) }
 }
 
 export abstract class MapParserBase {
   private currentSection: MapSection = MapSection.None
+  protected meta: LevelMetadata = new LevelMetadata('', 0, '', '')
 
-  public parseMap(generatedMap: string, difficulty: string, levelNumber: number, levelCode: string): void {
+  public parseMap(generatedMap: string): void {
     this.reset()
     const mapLines = generatedMap.replaceAll('\r\n', '\n').split('\n')
     for (let i = 0; i < mapLines.length; i++) {
@@ -37,6 +40,10 @@ export abstract class MapParserBase {
 
         if (instructions[0] != 'EDITORHINT') {
           continue
+        }
+
+        if (this.currentSection == MapSection.Metadata) {
+          this.addAvailableLevel(this.meta)
         }
         
         switch (true) {
@@ -59,7 +66,18 @@ export abstract class MapParserBase {
       
       switch (true) {
         case this.currentSection == MapSection.Metadata:
-          this.addAvailableLevel(new LevelMetadata(line, levelNumber, levelCode, difficulty))
+          const metaDetails = line.split('::')
+          if (metaDetails.length < 2) {
+            continue
+          } else if (metaDetails[0] == 'NAME') {
+            this.meta.name = metaDetails[1]
+          } else if (metaDetails[0] == 'NUMBER') {
+            this.meta.number = parseInt(metaDetails[1])
+          } else if (metaDetails[0] == 'CODE') {
+            this.meta.code = metaDetails[1]
+          } else if (metaDetails[0] == 'DIFFICULTY') {
+            this.meta.difficulty = metaDetails[1]
+          }
         break
         case this.currentSection == MapSection.Map:
           this.addMapLine(line)
@@ -85,7 +103,9 @@ export abstract class MapParserBase {
 
   protected reset(): void {
     this.currentSection = MapSection.None
+    this.meta = new LevelMetadata('', 0, '', '')
   }
+  
   protected abstract addAvailableLevel(meta: LevelMetadata): void
   protected abstract addMapLine(generatedMapLine: string): void
   protected abstract addDefaultAnimation(character: string, animationListKey: string): void

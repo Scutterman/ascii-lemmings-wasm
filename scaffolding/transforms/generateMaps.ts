@@ -64,7 +64,7 @@ export class GenerateMapTransform extends Transform {
           const code = parts[1]
 
           console.log('parsing map', difficulty, number, code)
-          const result = this.mapParser.parseGeneratedMap(map, difficulty, number, code, 4, 1)
+          const result = this.mapParser.parseGeneratedMap(map, 4, 1)
           this.log('got result ' + result.length.toString())
           const name = `assembly/generatedLevels/${ difficulty }_${ parts[0] }_${ parts[1] }`
           this.writeFile(

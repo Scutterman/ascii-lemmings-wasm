@@ -1,6 +1,7 @@
 import { LemmingGift } from "../types"
 import { LevelMapDetail, SingleCharacterAnimation } from "../maps/types"
 import { Level } from "../levels/level"
+import { LevelMetadata } from "../maps/mapParserBase"
 
       export class Level_fun_1_CAJJLDLBCS extends Level {
 
@@ -18,6 +19,7 @@ import { Level } from "../levels/level"
         }
       }
     const mapDetail = new LevelMapDetail([])
+mapDetail.meta = new LevelMetadata("Just dig!",1, "CAJJLDLBCS", "fun")
 mapDetail.tiles.push("__________________________________________________________________________________________________")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG           GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")

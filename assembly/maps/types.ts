@@ -15,12 +15,15 @@ export function characterToAnimation(character: string): Animation {
 }
 
 export class LevelMapDetail {
-  constructor(public tiles: LevelMap, public name: string = '') {}
+  public meta: LevelMetadata = new LevelMetadata('', 1, '', '')
+
+  constructor(public tiles: LevelMap) {}
   defaultAnimations: Map<string, string> = new Map()
   customAnimations: Map<string, string> = new Map()
 
   public clone(): LevelMapDetail {
-    const lmd = new LevelMapDetail(this.tiles, this.name)
+    const lmd = new LevelMapDetail(this.tiles)
+    lmd.meta = this.meta.clone()
     lmd.defaultAnimations = shallowCopyWasmMap(this.defaultAnimations)
     lmd.customAnimations = shallowCopyWasmMap(this.customAnimations)
     return lmd
@@ -29,6 +32,11 @@ export class LevelMapDetail {
   public export(): string {
     let exportString = ''
 
+    exportString += '//EDITORHINT::MAP_METADATA\n'
+    exportString += 'NAME::' + this.meta.name + '\n'
+    exportString += 'NUMBER::' + this.meta.number.toString() + '\n'
+    exportString += 'CODE::' + this.meta.code + '\n'
+    exportString += 'DIFFICULTY::' + this.meta.difficulty + '\n'
     exportString += '//EDITORHINT::MAP_START\n'
     for (let row = 0; row < this.tiles.length; row++) {
       exportString += this.tiles[row] + '\n'
@@ -162,13 +170,12 @@ export class Parser extends MapParserBase {
     this.lmd = new LevelMapDetail([])
   }
   public parseGeneratedMap(generatedMap: string): LevelMapDetail {
-    // TODO:: Remove hardcoded difficulty, level number, and level code
-    super.parseMap(generatedMap, 'fun', 1, 'FOOBARBAZBAT')
+    super.parseMap(generatedMap)
     return this.lmd
   }
   
   protected addAvailableLevel(meta: LevelMetadata): void {
-    this.lmd.name = meta.name
+    this.lmd.meta = meta
   }
   
   protected addMapLine(generatedMapLine: string): void {

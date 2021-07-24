@@ -18,6 +18,7 @@ export class Parser extends MapParserBase {
     this.imports += getImport('../types', ['LemmingGift'])
     this.imports += getImport('../maps/types', ['LevelMapDetail', 'SingleCharacterAnimation'])
     this.imports += getImport('../levels/level', ['Level'])
+    this.imports += getImport('../maps/mapParserBase', ['LevelMetadata'])
 
     this.lmd = 'const mapDetail = new LevelMapDetail([])\n'  
   }
@@ -27,16 +28,16 @@ export class Parser extends MapParserBase {
     this.levelByCode += 'else if (code == "' + code + '") { return new Level_' + levelName + '() }\n'
   }
 
-  public parseGeneratedMap(generatedMap: string, difficulty: string, levelNumber: number, levelCode: string, toSpawn: number, forSuccess: number): string {
-    super.parseMap(generatedMap, difficulty, levelNumber, levelCode)
+  public parseGeneratedMap(generatedMap: string, toSpawn: number, forSuccess: number): string {
+    super.parseMap(generatedMap)
 
-    const tag = `${ difficulty }_${ levelNumber.toString() }_${ levelCode }`
-    this.addLevelSelectStatement(tag, levelCode)
+    const tag = `${ this.meta.difficulty }_${ this.meta.number.toString() }_${ this.meta.code }`
+    this.addLevelSelectStatement(tag, this.meta.code)
 
     this.levelShell = `
       export class Level_${ tag } extends Level {\n
         constructor() {
-          super('${ tag }', '${ difficulty }', ${ toSpawn.toString() }, ${ forSuccess.toString() }, mapDetail)
+          super('${ tag }', '${ this.meta.difficulty }', ${ toSpawn.toString() }, ${ forSuccess.toString() }, mapDetail)
       
           this.setSkillQuantity(LemmingGift.Shovel, u8.MAX_VALUE)
           this.setSkillQuantity(LemmingGift.Block, 10)
@@ -59,6 +60,8 @@ export class Parser extends MapParserBase {
     }
 
     this.availableLevels.get(meta.difficulty).set(meta.number, meta)
+
+    this.lmd += 'mapDetail.meta = new LevelMetadata("' + meta.name + '",' + meta.number.toString() + ', "' + meta.code + '", "' + meta.difficulty + '")\n'
   }
   
   protected addMapLine(generatedMapLine: string): void {
