@@ -1,4 +1,4 @@
-import { currentLevel, gameState, messageResponse } from ".."
+import { currentLevel, gameState, keyPressListener, messageResponse, resetText } from ".."
 import { TILE_AIR, TILE_BOUNDARY, TILE_BRICK, TILE_EXIT, TILE_GROUND, TILE_SIDE } from "../map"
 import { LevelMapDetail } from "../maps/types"
 import { Vec2 } from "../position"
@@ -10,8 +10,16 @@ import { removeItem } from "../vdom/elements"
 import { UILabel } from "../ui/uiLabel"
 import { TileDetail } from "../types"
 import { animationItems } from "../generatedLevels/animationItems"
+import { LevelMetadata } from "../maps/mapParserBase"
+import { LabelledButton } from "../ui/labelledButton"
 
 declare function addBlocks(startRow: u8, endRow: u8, startCol: u8, endCol: u8): void
+
+class EasyLabelledButton extends LabelledButton {
+  constructor(labelText: string, tag?: string) {
+    super(new Vec2(0,0), labelText, () => {}, tag)
+  }
+}
 
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
@@ -21,11 +29,23 @@ export class Editor extends MetaScreen {
   private selectedBlockX: i16 = -1
   private selectedBlockY: i16 = -1
   private metaMap: LevelMapDetail = new LevelMapDetail([])
+  private newLevelPanel: Panel = new Panel(new Vec2(-1,-1))
+  private canAcceptTextTags: string[] = ['META_DIFFICULTY', 'META_NAME', 'META_CODE']
+  private canAcceptNumberTags: string[] = [
+    'META_NUMBER', 'META_SPAWN', 'META_SUCCESS',
+    'SKILL_CLIMB', 'SKILL_FLOAT', 'SKILL_BOMB', 'SKILL_BLOCK',
+    'SKILL_BUILD', 'SKILL_BASH', 'SKILL_MINE', 'SKILL_DIG'
+  ]
 
   constructor() {
     super('EDITOR')
-    
+
     this.uiPanels.push(this.actionPanel)
+    
+    this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "New", () => {
+      (currentLevel as Editor).newMap()
+    }))
+
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Load", () => {
       messageResponse('load', '', '')
     }))
@@ -33,6 +53,33 @@ export class Editor extends MetaScreen {
     this.tileOptions.setBackgroundColour('#ffffff')
     this.tileOptions.hide()
     this.uiPanels.push(this.tileOptions)
+
+    this.uiPanels.push(this.newLevelPanel)
+    this.newLevelPanel.hide()
+    this.newLevelPanel.addItem(new EasyLabelledButton('Difficulty', 'META_DIFFICULTY'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Number', 'META_NUMBER'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Name', 'META_NAME'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Code', 'META_CODE'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Spawn', 'META_SPAWN'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Success', 'META_SUCCESS'))
+    this.newLevelPanel.addLinebreak()
+    this.newLevelPanel.addItem(new EasyLabelledButton('Climbers', 'SKILL_CLIMB'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Floaters', 'SKILL_FLOAT'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Bombers', 'SKILL_BOMB'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Blockers', 'SKILL_BLOCK'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Builders', 'SKILL_BUILD'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Bashers', 'SKILL_BASH'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Miners', 'SKILL_MINE'))
+    this.newLevelPanel.addItem(new EasyLabelledButton('Diggers', 'SKILL_DIG'))
+    this.newLevelPanel.addLinebreak()
+    this.newLevelPanel.addItem(new UIControl(new Vec2(0,0), 'Create', () => {
+      (currentLevel as Editor).createMap()
+    }))
+    
+    // TODO:: Reset these before leaving
+    keyPressListener(true)
+    resetText()
+    
   }
 
   private addRow(): void {
@@ -91,9 +138,12 @@ export class Editor extends MetaScreen {
       (currentLevel as Editor).addColumn()
     }))
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
-      // TODO:: add in //EDITORHINT::MAP_METADATA with name line
       // TODO:: add in per-level skills
-      messageResponse('save', 'foobar.map', (currentLevel as Editor).metaMap.export())
+      const lvl = currentLevel as Editor
+      const levelName = lvl.metaMap.meta.difficulty + '_' +
+        lvl.metaMap.meta.number.toString() + '_' +
+        lvl.metaMap.meta.code + '.map'
+      messageResponse('save',  levelName, lvl.metaMap.export())
     }))
   }
 
@@ -215,6 +265,7 @@ export class Editor extends MetaScreen {
 
   private selectedBlockId: string = ''
   public renderLevel(): void {
+    this.handleTextEntry()
     if (this.firstRender && this.levelLoaded) {
       this.scrollPosition = new Vec2(0,0)
       this.canScroll = true
@@ -232,6 +283,77 @@ export class Editor extends MetaScreen {
 
   public blocksAdded(): void {
     this.mapRendered = false
+  }
+
+  private newMap(): void {
+    this.newLevelPanel.show()
+  }
+
+  private createMap(): void {
+    const difficulty = this.getLabelValueByTag('META_DIFFICULTY')
+    const name = this.getLabelValueByTag('META_NAME')
+    const code = this.getLabelValueByTag('META_CODE')
+    const number = this.getLabelNumberValueByTag('META_NUMBER')
+
+    // TODO:: Add these items to meta
+    const spawn = this.getLabelNumberValueByTag('META_SPAWN')
+    const success = this.getLabelNumberValueByTag('META_SUCCESS')
+    const climb = this.getSkillValue('SKILL_CLIMB')
+    const float = this.getSkillValue('SKILL_FLOAT')
+    const bomb = this.getSkillValue('SKILL_BOMB')
+    const block = this.getSkillValue('SKILL_BLOCK')
+    const build = this.getSkillValue('SKILL_BUILD')
+    const bash = this.getSkillValue('SKILL_BASH')
+    const mine = this.getSkillValue('SKILL_MINE')
+    const dig = this.getSkillValue('SKILL_DIG')
+
+    const metaMap = new LevelMapDetail([])
+    metaMap.meta = new LevelMetadata(name, number, code, difficulty)
+    this.mapSwapped(metaMap)
+    this.newLevelPanel.hide()
+  }
+
+  private getSkillValue(tag: string): u8 {
+    const value = this.getLabelValueByTag(tag)
+    if (value == '-') { return u8.MAX_VALUE}
+    else { return U8.parseInt(value) }
+  }
+
+  private handleTextEntry(): void {
+    const text = gameState.userEnteredText
+    if (text.length == 0) {
+      return
+    }
+
+    const _focused = gameState.focusedUiControl
+    if (_focused == null || !(_focused instanceof LabelledButton)) {
+       return
+    }
+
+    const focused = _focused as LabelledButton
+    const tag = focused.getTag()
+    if (tag.length == 0) {
+      return
+    }
+
+    let existingText = focused.getControlText()
+    
+    if (this.canAcceptTextTags.includes(tag)) {
+      focused.setControlText(existingText + text)
+      resetText()
+    } else if (this.canAcceptNumberTags.includes(tag)) {
+      if (existingText == '∞') { existingText = '' }
+      
+      if (text == '-') {
+        focused.setControlText('∞')
+      } else {
+        existingText = U8.parseInt(existingText + text, 10).toString(10)
+        // existingText = existingText.substr(0, existingText.indexOf('.'))
+        focused.setControlText(existingText)
+      }
+
+      resetText()
+    }
   }
 
   public clone(): Editor {
