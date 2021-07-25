@@ -97,7 +97,7 @@ export class Editor extends MetaScreen {
     }))
   }
 
-  public mapSquareClicked(mouseTileX: i32, mouseTileY: i32): void {
+  public mapSquareClicked(mouseTileX: i32, mouseTileY: i32): boolean {
     const x = i16(mouseTileX) + this.scrollPosition.x
     const y = i16(mouseTileY) + this.scrollPosition.y
     if (y >= 0 && y < this.metaMap.tiles.length && x >= 0 && x < this.metaMap.tiles[y].length) {
@@ -105,7 +105,10 @@ export class Editor extends MetaScreen {
       this.selectedBlockX = x
       this.selectedBlockY = y
       this.showTilePanel()
+      return true
     }
+
+    return false
   }
 
   public setBlockAnimation(animationName: string): void {

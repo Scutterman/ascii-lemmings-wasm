@@ -64,12 +64,16 @@ function processInputs(): void {
     }
   }
 
+  if (!clickProcessed) {
+    gameState.focusedUiControl = null
+  }
+  
   if (currentLevel instanceof Editor) {
     if (!clickProcessed) {
-      (currentLevel as Editor).mapSquareClicked(gameState.mouseTileX, gameState.mouseTileY)
+      clickProcessed = (currentLevel as Editor).mapSquareClicked(gameState.mouseTileX, gameState.mouseTileY)
     }
   } else {
-    currentLevel.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
+    clickProcessed = currentLevel.processLemmingSelect(gameState.mouseTileX, gameState.mouseTileY, processLemmingClick)
   }
 }
 
@@ -109,7 +113,9 @@ function processLabelEvents(label: UILabel, clickProcessed: boolean): boolean {
   const hasFocus = label.isInBounds(gameState.mouseTileX, gameState.mouseTileY)
   label.setFocus(hasFocus)
   if (!clickProcessed && hasFocus && label instanceof UIControl) {
-    (label as UIControl).clicked()
+    const ctrl = label as UIControl
+    gameState.focusedUiControl = ctrl
+    ctrl.clicked()
     clickProcessed = true
   }
   

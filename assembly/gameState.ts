@@ -3,6 +3,7 @@ import { AutoPlayer } from "./autoplayer"
 import { BaseLevel } from "./levels/baseLevel"
 import { DefaultLevel } from "./levels/defaultLevel"
 import { LemmingGift, LevelState } from "./types"
+import { UIControl } from "./ui/uiControl"
 
 export const baseMillisecondsPerGameLoop: u16 = 1000 as u16
 export const fastForwardMultiplier: u8 = 2 as u8
@@ -33,6 +34,8 @@ export class GameState {
   public framesSinceLastLemming: u16 = u16.MAX_VALUE
   public framesBetweenLemmingSpawns: u16 = 4
   public selectedGift: LemmingGift = LemmingGift.None
+
+  public focusedUiControl: UIControl | null = null
 
   public userEnteredText: string = ''
 
