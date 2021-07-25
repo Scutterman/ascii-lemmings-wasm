@@ -4,8 +4,8 @@ import { UIAction } from "../types";
 import { UIControl } from "./uiControl";
 
 export class LabelledButton extends UIControl {
-  protected controlText: string[] = []
-  
+  protected controlText: string = ''
+
   constructor(
     position: Vec2,
     labelText: string,
@@ -15,22 +15,31 @@ export class LabelledButton extends UIControl {
     super(position, labelText, action, tag)
   }
 
+  public setControlText(value: string): void {
+    this.controlText = value
+  }
+
+  public getControlText(): string {
+    return this.controlText
+  }
+
   public getTextForRender(isDirty: boolean): string[] {
     const labelText = getRenderedTextArray(this.getText())
+    const controlText = getRenderedTextArray(this.controlText)
     const maxLabelWidth: i32 = labelText.length > 0 ? labelText[0].length : 0
-    const maxControlTextWidth: i32 = this.controlText.length > 0 ? this.controlText[0].length : 0
+    const maxControlTextWidth: i32 = this.controlText.length > 0 ? controlText[0].length : 0
     
     // Ensure both elements are centred in the control
     if (maxControlTextWidth < maxLabelWidth) {
       const padding = ' '.repeat(i32(Math.floor(maxLabelWidth - maxControlTextWidth) / 2))
-      for (let row = 0; row < this.controlText.length; row++) { this.controlText[row] = padding + this.controlText[row] + padding }
+      for (let row = 0; row < this.controlText.length; row++) { controlText[row] = padding + controlText[row] + padding }
     } else if (maxLabelWidth < maxControlTextWidth) {
       const padding = ' '.repeat(i32(Math.floor(maxControlTextWidth - maxLabelWidth) / 2))
       for (let row = 0; row < labelText.length; row++) { labelText[row] = padding + labelText[row] + padding }
     }
 
     for (let row = 0; row < this.controlText.length; row++) {
-      labelText.push(this.controlText[row])
+      labelText.push(controlText[row])
     }
     return labelText
   }

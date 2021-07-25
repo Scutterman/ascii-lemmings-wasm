@@ -1,6 +1,5 @@
 import { gameState } from "..";
 import { Animation } from "../animation";
-import { getRenderedTextArray } from "../loop";
 import { Vec2 } from "../position";
 import { LemmingGift } from "../types";
 import { LabelledButton } from "./labelledButton";
@@ -24,7 +23,7 @@ export class LemmingActionControl extends LabelledButton {
     }
 
     const shouldProgressAnimation = isDirty && this.hasMouseFocus
-    this.controlText = getRenderedTextArray(this.animation.getNextFrame(shouldProgressAnimation)[0][0])
+    this.controlText = this.animation.getNextFrame(shouldProgressAnimation)[0][0]
     
     return super.getTextForRender(shouldProgressAnimation)
   }
