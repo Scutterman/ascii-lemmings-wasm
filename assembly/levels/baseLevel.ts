@@ -36,7 +36,7 @@ export abstract class BaseLevel {
   public abstract canUseSkill(skill: LemmingGift): boolean
   public abstract skillUsed(skill: LemmingGift): void
   public abstract skillSelected(skill: LemmingGift): void
-  
+
   protected tag: string = ''
   public map: LevelTileDetail
 
@@ -79,6 +79,24 @@ export abstract class BaseLevel {
     const label = this.getUIByTag(tag)
     if (label != null) {
       label.updateText(newText)
+    }
+  }
+
+  public getLabelValueByTag(tag: string, defaultValue: string = ''): string {
+    const label = this.getUIByTag(tag)
+    if (label != null) {
+      return label.getText()
+    } else {
+      return defaultValue
+    }
+  }
+
+  public getLabelNumberValueByTag(tag: string, defaultValue: u8 = 0): u8 {
+    const label = this.getUIByTag(tag)
+    if (label != null) {
+      return u8(parseInt(label.getText()))
+    } else {
+      return defaultValue
     }
   }
 
