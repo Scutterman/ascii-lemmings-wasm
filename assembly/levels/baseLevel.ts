@@ -94,7 +94,7 @@ export abstract class BaseLevel {
   public getLabelNumberValueByTag(tag: string, defaultValue: u8 = 0): u8 {
     const label = this.getUIByTag(tag)
     if (label != null) {
-      return u8(parseInt(label.getText()))
+      return U8.parseInt(label.getText())
     } else {
       return defaultValue
     }
