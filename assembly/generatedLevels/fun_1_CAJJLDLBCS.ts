@@ -8,14 +8,14 @@ import { LevelMetadata } from "../maps/mapParserBase"
         constructor() {
           super('fun_1_CAJJLDLBCS', 'fun', 10, 1, mapDetail)
       
-          this.setSkillQuantity(LemmingGift.Shovel, u8.MAX_VALUE)
-          this.setSkillQuantity(LemmingGift.Block, 10)
-          this.setSkillQuantity(LemmingGift.Bomb, 10)
-          this.setSkillQuantity(LemmingGift.BrickSack, u8.MAX_VALUE)
           this.setSkillQuantity(LemmingGift.ClimbingBoots, 10)
-          this.setSkillQuantity(LemmingGift.Hammer, 10)
-          this.setSkillQuantity(LemmingGift.Pickaxe, 10)
-          this.setSkillQuantity(LemmingGift.Umbrella, 10)
+this.setSkillQuantity(LemmingGift.Umbrella, 10)
+this.setSkillQuantity(LemmingGift.Bomb, 10)
+this.setSkillQuantity(LemmingGift.Block, 10)
+this.setSkillQuantity(LemmingGift.BrickSack, 255)
+this.setSkillQuantity(LemmingGift.Hammer, 10)
+this.setSkillQuantity(LemmingGift.Pickaxe, 10)
+this.setSkillQuantity(LemmingGift.Shovel, 255)
         }
       }
     const mapDetail = new LevelMapDetail([])

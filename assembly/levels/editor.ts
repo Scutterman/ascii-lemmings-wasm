@@ -309,6 +309,14 @@ export class Editor extends MetaScreen {
 
     const metaMap = new LevelMapDetail([])
     metaMap.meta = new LevelMetadata(name, number, code, difficulty, spawn, success)
+    metaMap.meta.skills.set('ClimbingBoots', climb)
+    metaMap.meta.skills.set('Umbrella', float)
+    metaMap.meta.skills.set('Bomb', bomb)
+    metaMap.meta.skills.set('Block', block)
+    metaMap.meta.skills.set('BrickSack', build)
+    metaMap.meta.skills.set('Hammer', bash)
+    metaMap.meta.skills.set('Pickaxe', mine)
+    metaMap.meta.skills.set('Shovel', dig)
     this.mapSwapped(metaMap)
     this.newLevelPanel.hide()
   }

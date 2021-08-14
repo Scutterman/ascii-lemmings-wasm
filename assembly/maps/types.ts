@@ -1,6 +1,6 @@
 import { Animation } from "../animation";
 import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
-import { LevelMap, LevelTileDetail, TileDetail, shallowCopyWasmMap } from "../types";
+import { LevelMap, LevelTileDetail, TileDetail, shallowCopyWasmMap, LemmingGift } from "../types";
 import { animationItems } from "../generatedLevels/animationItems";
 import { LevelMetadata, MapParserBase } from "./mapParserBase";
 
@@ -39,6 +39,14 @@ export class LevelMapDetail {
     exportString += 'DIFFICULTY::' + this.meta.difficulty + '\n'
     exportString += 'TOSPAWN::' + this.meta.numberOfLemmings.toString() + '\n'
     exportString += 'SUCCESS::' + this.meta.numberOfLemmingsForSuccess.toString() + '\n'
+    exportString += 'SKILL::ClimbingBoots::' + this.meta.skills.get('ClimbingBoots').toString()
+    exportString += 'SKILL::Umbrella::' + this.meta.skills.get('Umbrella').toString()
+    exportString += 'SKILL::Bomb::' + this.meta.skills.get('Bomb').toString()
+    exportString += 'SKILL::Block::' + this.meta.skills.get('Block').toString()
+    exportString += 'SKILL::BrickSack::' + this.meta.skills.get('BrickSack').toString()
+    exportString += 'SKILL::Hammer::' + this.meta.skills.get('Hammer').toString()
+    exportString += 'SKILL::Pickaxe::' + this.meta.skills.get('Pickaxe').toString()
+    exportString += 'SKILL::Shovel::' + this.meta.skills.get('Shovel').toString()
     exportString += '//EDITORHINT::MAP_START\n'
     for (let row = 0; row < this.tiles.length; row++) {
       exportString += this.tiles[row] + '\n'

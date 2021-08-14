@@ -38,19 +38,20 @@ export class Parser extends MapParserBase {
     const tag = `${ this.meta.difficulty }_${ this.meta.number.toString() }_${ this.meta.code }`
     this.addLevelSelectStatement(tag, this.meta.code)
 
+    let skillValues: string[] = []
+    const keys = Array.from(this.meta.skills.keys())
+    for (const keyIndex in keys) {
+      const key = keys[keyIndex]
+      const value = this.meta.skills.get(key)
+      skillValues.push(`this.setSkillQuantity(LemmingGift.${ key }, ${ value.toString() })`)
+    }
+
     this.levelShell = `
       export class Level_${ tag } extends Level {\n
         constructor() {
           super('${ tag }', '${ this.meta.difficulty }', ${ this.meta.numberOfLemmings.toString() }, ${ this.meta.numberOfLemmingsForSuccess.toString() }, mapDetail)
       
-          this.setSkillQuantity(LemmingGift.Shovel, u8.MAX_VALUE)
-          this.setSkillQuantity(LemmingGift.Block, 10)
-          this.setSkillQuantity(LemmingGift.Bomb, 10)
-          this.setSkillQuantity(LemmingGift.BrickSack, u8.MAX_VALUE)
-          this.setSkillQuantity(LemmingGift.ClimbingBoots, 10)
-          this.setSkillQuantity(LemmingGift.Hammer, 10)
-          this.setSkillQuantity(LemmingGift.Pickaxe, 10)
-          this.setSkillQuantity(LemmingGift.Umbrella, 10)
+          ${ skillValues.join('\n') }
         }
       }
     `

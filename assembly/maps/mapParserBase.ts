@@ -1,3 +1,5 @@
+import { shallowCopyWasmMap } from "../types"
+
 enum MapSection {
   None,
   Metadata,
@@ -7,6 +9,8 @@ enum MapSection {
 }
 
 export class LevelMetadata {
+  public skills: Map<string, u8> = new Map()
+  
   constructor (
     public name: string,
     public number: number,
@@ -16,17 +20,24 @@ export class LevelMetadata {
     public numberOfLemmingsForSuccess: u8
   ) {}
 
-  public clone(): LevelMetadata { return new LevelMetadata(
-    this.name,
-    this.number,
-    this.code,
-    this.difficulty,
-    this.numberOfLemmings,
-    this.numberOfLemmingsForSuccess
-    ) }
+  public clone(): LevelMetadata { 
+    const lmd = new LevelMetadata(
+      this.name,
+      this.number,
+      this.code,
+      this.difficulty,
+      this.numberOfLemmings,
+      this.numberOfLemmingsForSuccess
+    )
+
+    lmd.skills = shallowCopyWasmMap(this.skills)
+
+    return lmd
+  }
 }
 
 export abstract class MapParserBase {
+  protected readonly INFINTE_SKILL_VALUE: u8 = u8.MAX_VALUE
   private currentSection: MapSection = MapSection.None
   protected meta: LevelMetadata = new LevelMetadata('', 0, '', '', 0, 0)
 
@@ -90,6 +101,9 @@ export abstract class MapParserBase {
             this.meta.numberOfLemmings = this.int(metaDetails[1])
           } else if (metaDetails[0] == 'SUCCESS') {
             this.meta.numberOfLemmingsForSuccess = this.int(metaDetails[1])
+          } else if (metaDetails[0] == 'SKILL') {
+            const skillValue = metaDetails[2] == 'INFINITY' ? this.INFINTE_SKILL_VALUE : this.int(metaDetails[2])
+            this.meta.skills.set(metaDetails[1], skillValue)
           }
         break
         case this.currentSection == MapSection.Map:
