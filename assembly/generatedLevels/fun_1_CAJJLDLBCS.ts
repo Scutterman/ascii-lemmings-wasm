@@ -6,7 +6,7 @@ import { LevelMetadata } from "../maps/mapParserBase"
       export class Level_fun_1_CAJJLDLBCS extends Level {
 
         constructor() {
-          super('fun_1_CAJJLDLBCS', 'fun', 4, 1, mapDetail)
+          super('fun_1_CAJJLDLBCS', 'fun', 10, 1, mapDetail)
       
           this.setSkillQuantity(LemmingGift.Shovel, u8.MAX_VALUE)
           this.setSkillQuantity(LemmingGift.Block, 10)
@@ -19,7 +19,7 @@ import { LevelMetadata } from "../maps/mapParserBase"
         }
       }
     const mapDetail = new LevelMapDetail([])
-mapDetail.meta = new LevelMetadata("Just dig!",1, "CAJJLDLBCS", "fun")
+mapDetail.meta = new LevelMetadata("Just dig!",1, "CAJJLDLBCS", "fun", 10, 1)
 mapDetail.tiles.push("__________________________________________________________________________________________________")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG           GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")

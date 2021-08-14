@@ -11,15 +11,24 @@ export class LevelMetadata {
     public name: string,
     public number: number,
     public code: string,
-    public difficulty: string
+    public difficulty: string,
+    public numberOfLemmings: u8,
+    public numberOfLemmingsForSuccess: u8
   ) {}
 
-  public clone(): LevelMetadata { return new LevelMetadata(this.name, this.number, this.code, this.difficulty) }
+  public clone(): LevelMetadata { return new LevelMetadata(
+    this.name,
+    this.number,
+    this.code,
+    this.difficulty,
+    this.numberOfLemmings,
+    this.numberOfLemmingsForSuccess
+    ) }
 }
 
 export abstract class MapParserBase {
   private currentSection: MapSection = MapSection.None
-  protected meta: LevelMetadata = new LevelMetadata('', 0, '', '')
+  protected meta: LevelMetadata = new LevelMetadata('', 0, '', '', 0, 0)
 
   public parseMap(generatedMap: string): void {
     this.reset()
@@ -77,6 +86,10 @@ export abstract class MapParserBase {
             this.meta.code = metaDetails[1]
           } else if (metaDetails[0] == 'DIFFICULTY') {
             this.meta.difficulty = metaDetails[1]
+          } else if (metaDetails[0] == 'TOSPAWN') {
+            this.meta.numberOfLemmings = this.int(metaDetails[1])
+          } else if (metaDetails[0] == 'SUCCESS') {
+            this.meta.numberOfLemmingsForSuccess = this.int(metaDetails[1])
           }
         break
         case this.currentSection == MapSection.Map:
@@ -101,9 +114,13 @@ export abstract class MapParserBase {
     }
   }
 
+  protected int(value: string): u8 {
+    return U8.parseInt(value)
+  }
+
   protected reset(): void {
     this.currentSection = MapSection.None
-    this.meta = new LevelMetadata('', 0, '', '')
+    this.meta = new LevelMetadata('', 0, '', '', 0, 0)
   }
   
   protected abstract addAvailableLevel(meta: LevelMetadata): void

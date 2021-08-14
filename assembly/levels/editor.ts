@@ -308,7 +308,7 @@ export class Editor extends MetaScreen {
     const dig = this.getSkillValue('SKILL_DIG')
 
     const metaMap = new LevelMapDetail([])
-    metaMap.meta = new LevelMetadata(name, number, code, difficulty)
+    metaMap.meta = new LevelMetadata(name, number, code, difficulty, spawn, success)
     this.mapSwapped(metaMap)
     this.newLevelPanel.hide()
   }

@@ -11,6 +11,10 @@ export class Parser extends MapParserBase {
   private levelByCodeImports: string = ''
   private availableLevels: Map<string, Map<number, LevelMetadata>> = new Map<string, Map<number, LevelMetadata>>()
   
+  protected int(value: string): number {
+    return parseInt(value, 10)
+  }
+
   protected reset(): void {
     super.reset()
     this.levelShell = ''
@@ -28,7 +32,7 @@ export class Parser extends MapParserBase {
     this.levelByCode += 'else if (code == "' + code + '") { return new Level_' + levelName + '() }\n'
   }
 
-  public parseGeneratedMap(generatedMap: string, toSpawn: number, forSuccess: number): string {
+  public parseGeneratedMap(generatedMap: string): string {
     super.parseMap(generatedMap)
 
     const tag = `${ this.meta.difficulty }_${ this.meta.number.toString() }_${ this.meta.code }`
@@ -37,7 +41,7 @@ export class Parser extends MapParserBase {
     this.levelShell = `
       export class Level_${ tag } extends Level {\n
         constructor() {
-          super('${ tag }', '${ this.meta.difficulty }', ${ toSpawn.toString() }, ${ forSuccess.toString() }, mapDetail)
+          super('${ tag }', '${ this.meta.difficulty }', ${ this.meta.numberOfLemmings.toString() }, ${ this.meta.numberOfLemmingsForSuccess.toString() }, mapDetail)
       
           this.setSkillQuantity(LemmingGift.Shovel, u8.MAX_VALUE)
           this.setSkillQuantity(LemmingGift.Block, 10)
@@ -61,7 +65,7 @@ export class Parser extends MapParserBase {
 
     this.availableLevels.get(meta.difficulty).set(meta.number, meta)
 
-    this.lmd += 'mapDetail.meta = new LevelMetadata("' + meta.name + '",' + meta.number.toString() + ', "' + meta.code + '", "' + meta.difficulty + '")\n'
+    this.lmd += 'mapDetail.meta = new LevelMetadata("' + meta.name + '",' + meta.number.toString() + ', "' + meta.code + '", "' + meta.difficulty + '", ' + meta.numberOfLemmings.toString() + ', ' + meta.numberOfLemmingsForSuccess.toString() + ')\n'
   }
   
   protected addMapLine(generatedMapLine: string): void {

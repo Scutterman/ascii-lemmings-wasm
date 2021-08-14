@@ -15,7 +15,7 @@ export function characterToAnimation(character: string): Animation {
 }
 
 export class LevelMapDetail {
-  public meta: LevelMetadata = new LevelMetadata('', 1, '', '')
+  public meta: LevelMetadata = new LevelMetadata('', 1, '', '', 0, 0)
 
   constructor(public tiles: LevelMap) {}
   defaultAnimations: Map<string, string> = new Map()
@@ -37,6 +37,8 @@ export class LevelMapDetail {
     exportString += 'NUMBER::' + this.meta.number.toString() + '\n'
     exportString += 'CODE::' + this.meta.code + '\n'
     exportString += 'DIFFICULTY::' + this.meta.difficulty + '\n'
+    exportString += 'TOSPAWN::' + this.meta.numberOfLemmings.toString() + '\n'
+    exportString += 'SUCCESS::' + this.meta.numberOfLemmingsForSuccess.toString() + '\n'
     exportString += '//EDITORHINT::MAP_START\n'
     for (let row = 0; row < this.tiles.length; row++) {
       exportString += this.tiles[row] + '\n'
