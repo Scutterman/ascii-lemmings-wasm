@@ -295,7 +295,6 @@ export class Editor extends MetaScreen {
     const code = this.getLabelValueByTag('META_CODE')
     const number = this.getLabelNumberValueByTag('META_NUMBER')
 
-    // TODO:: Add these items to meta
     const spawn = this.getLabelNumberValueByTag('META_SPAWN')
     const success = this.getLabelNumberValueByTag('META_SUCCESS')
     const climb = this.getSkillValue('SKILL_CLIMB')

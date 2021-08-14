@@ -1,7 +1,7 @@
 import { gameState, lemmings } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
 import { getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
-import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
+import { LemmingGift, lemmingGiftLabel, LevelTileDetail, shallowCopyWasmMap } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
@@ -230,7 +230,16 @@ export class Level extends BaseLevel {
 
   public clone(): BaseLevel {
     const newMap = this._map.clone()
-    return new Level(this.tag, this.difficulty, this.numberOfLemmings, this.numberOfLemmingsForSuccess, newMap, this.isMetaScreen, this.buttonYCoordinate)
+    const level = new Level(this.tag, this.difficulty, this.numberOfLemmings, this.numberOfLemmingsForSuccess, newMap, this.isMetaScreen, this.buttonYCoordinate)
+    level.setSkillQuantity(LemmingGift.ClimbingBoots, this.skills.get(LemmingGift.ClimbingBoots))
+    level.setSkillQuantity(LemmingGift.Umbrella, this.skills.get(LemmingGift.Umbrella))
+    level.setSkillQuantity(LemmingGift.Bomb, this.skills.get(LemmingGift.Bomb))
+    level.setSkillQuantity(LemmingGift.Block, this.skills.get(LemmingGift.Block))
+    level.setSkillQuantity(LemmingGift.BrickSack, this.skills.get(LemmingGift.BrickSack))
+    level.setSkillQuantity(LemmingGift.Hammer, this.skills.get(LemmingGift.Hammer))
+    level.setSkillQuantity(LemmingGift.Pickaxe, this.skills.get(LemmingGift.Pickaxe))
+    level.setSkillQuantity(LemmingGift.Shovel, this.skills.get(LemmingGift.Shovel))
+    return level
   }
   
   protected render(map: LevelTileDetail, isRenderingGameSection: boolean = false, resetAll: boolean = false): void {
