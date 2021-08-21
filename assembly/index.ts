@@ -8,7 +8,6 @@ import { TitleScreen } from './levels/titleScreen'
 import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from './map'
 import { LemmingGift, LevelState } from './types'
 import { UPSCALE_MULTIPLIER } from './upscale'
-// import { Level1 } from "./levels/one"
 import { allowedUserInputCharacters } from './text'
 import { Parser } from './maps/types'
 import { Editor } from './levels/editor'
@@ -168,21 +167,3 @@ export function getBlockHeight(): f32 {
 }
 
 export declare function log(text: string): void
-
-// TODO:: I wanted all of this in another file, but the compile fails if I do
-// https://github.com/Scutterman/ascii-lemmings-wasm/issues/51
-// export enum Difficulty {
-//   Fun,
-//   Tricky,
-//   Taxing,
-//   Mayhem
-// }
-
-// type LevelFactory = () => BaseLevel
-// type LevelCodes = Map<string, LevelFactory>
-// type LevelDifficultyCodes = Map<Difficulty, LevelCodes>
-
-// export const LEVEL_DIFFICULTY_CODES: LevelDifficultyCodes = new Map<Difficulty, LevelCodes>()
-// const funLevels = new Map<string, LevelFactory>()
-// LEVEL_DIFFICULTY_CODES.set(Difficulty.Fun, funLevels)
-// funLevels.set('CAJJLDLBCS', () => new Level1())
