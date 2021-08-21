@@ -1,4 +1,4 @@
-import { currentLevel, gameState, keyPressListener, messageResponse, resetText } from ".."
+import { currentLevel, gameState, keyPressListener, log, messageResponse, resetText } from ".."
 import { TILE_AIR, TILE_BOUNDARY, TILE_BRICK, TILE_EXIT, TILE_GROUND, TILE_SIDE } from "../map"
 import { LevelMapDetail } from "../maps/types"
 import { Vec2 } from "../position"
@@ -132,14 +132,16 @@ export class Editor extends MetaScreen {
   private showOptionsAfterLoad(): void {
     this.actionPanel.empty()
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Add Row", () => {
-      (currentLevel as Editor).addRow()
+      log('Add Row')
+      ;(currentLevel as Editor).addRow()
     }))
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Add Col", () => {
-      (currentLevel as Editor).addColumn()
+      log('Add Col')
+      ;(currentLevel as Editor).addColumn()
     }))
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
-      // TODO:: add in per-level skills
-      const lvl = currentLevel as Editor
+      log('Add Save')
+      ;const lvl = currentLevel as Editor
       const levelName = lvl.metaMap.meta.difficulty + '_' +
         lvl.metaMap.meta.number.toString() + '_' +
         lvl.metaMap.meta.code + '.map'
