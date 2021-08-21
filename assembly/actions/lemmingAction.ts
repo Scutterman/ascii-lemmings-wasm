@@ -12,7 +12,10 @@ export abstract class LemmingAction {
   }
 
   abstract update(lemming: Lemming, surroundingTiles: SurroundingTiles): void
-  public abstract label(): string
+  public label(): string {
+    idof<Climb>()
+    return ''
+  }
   
   protected isFalling(surroundingTiles: SurroundingTiles): boolean {
     return surroundingTiles.bottomCentre == TILE_AIR
