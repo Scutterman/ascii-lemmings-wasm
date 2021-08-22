@@ -323,6 +323,7 @@ export class Editor extends MetaScreen {
     metaMap.meta.skills.set('Pickaxe', mine)
     metaMap.meta.skills.set('Shovel', dig)
     this.mapSwapped(metaMap)
+    _setupClientForLevel(true)
     this.newLevelPanel.hide()
   }
 

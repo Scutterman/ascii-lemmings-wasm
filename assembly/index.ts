@@ -82,6 +82,7 @@ export function loadLevel(newLevel: BaseLevel): void {
   _setupClientForLevel()
 }
 
+export function _setupClientForLevel(isEditor: boolean = false): void {
   const height = currentLevel.map.length + BOUNDARIES_Y + CONTROLS_Y
   const width = height > 0 ? currentLevel.map[0].length : 0
 
