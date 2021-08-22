@@ -1,3 +1,4 @@
+import { currentLevel, gameState, keyPressListener, messageResponse, resetText, _setupClientForLevel } from ".."
 import { BOUNDARIES_X, TILE_AIR, TILE_BOUNDARY, TILE_BRICK, TILE_EXIT, TILE_GROUND, TILE_SIDE, VISIBLE_X, VISIBLE_Y } from "../map"
 import { LevelMapDetail } from "../maps/types"
 import { Vec2 } from "../position"
@@ -78,7 +79,6 @@ export class Editor extends MetaScreen {
     // TODO:: Reset these before leaving
     keyPressListener(true)
     resetText()
-    
   }
 
   private addRow(): void {
@@ -131,15 +131,12 @@ export class Editor extends MetaScreen {
   private showOptionsAfterLoad(): void {
     this.actionPanel.empty()
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Add Row", () => {
-      log('Add Row')
       ;(currentLevel as Editor).addRow()
     }))
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Add Col", () => {
-      log('Add Col')
       ;(currentLevel as Editor).addColumn()
     }))
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
-      log('Add Save')
       ;const lvl = currentLevel as Editor
       const levelName = lvl.metaMap.meta.difficulty + '_' +
         lvl.metaMap.meta.number.toString() + '_' +
