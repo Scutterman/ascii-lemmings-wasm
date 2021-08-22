@@ -1,5 +1,4 @@
-import { currentLevel, gameState, keyPressListener, log, messageResponse, resetText } from ".."
-import { TILE_AIR, TILE_BOUNDARY, TILE_BRICK, TILE_EXIT, TILE_GROUND, TILE_SIDE } from "../map"
+import { BOUNDARIES_X, TILE_AIR, TILE_BOUNDARY, TILE_BRICK, TILE_EXIT, TILE_GROUND, TILE_SIDE, VISIBLE_X, VISIBLE_Y } from "../map"
 import { LevelMapDetail } from "../maps/types"
 import { Vec2 } from "../position"
 import { Panel } from "../ui/panel"
@@ -8,7 +7,7 @@ import { MetaScreen } from "./metascreen"
 import { renderBoxAroundBlock } from "../loop"
 import { removeItem } from "../vdom/elements"
 import { UILabel } from "../ui/uiLabel"
-import { TileDetail } from "../types"
+import { LevelMap, TileDetail } from "../types"
 import { animationItems } from "../generatedLevels/animationItems"
 import { LevelMetadata } from "../maps/mapParserBase"
 import { LabelledButton } from "../ui/labelledButton"
@@ -308,7 +307,12 @@ export class Editor extends MetaScreen {
     const mine = this.getSkillValue('SKILL_MINE')
     const dig = this.getSkillValue('SKILL_DIG')
 
-    const metaMap = new LevelMapDetail([])
+    const border = TILE_BOUNDARY.repeat(VISIBLE_X + BOUNDARIES_X)
+    const air = TILE_SIDE + TILE_AIR.repeat(VISIBLE_X) + TILE_SIDE
+    const map: LevelMap = [border]
+    for (let i: u8 = 0; i < VISIBLE_Y; i++) { map.push(air) }
+
+    const metaMap = new LevelMapDetail(map)
     metaMap.meta = new LevelMetadata(name, number, code, difficulty, spawn, success)
     metaMap.meta.skills.set('ClimbingBoots', climb)
     metaMap.meta.skills.set('Umbrella', float)
