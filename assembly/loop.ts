@@ -155,7 +155,7 @@ function eventLoop(): void {
 }
 
 function handleScroll(): void {
-  if (!currentLevel.canScroll) { return }
+  if (!currentLevel.canScroll || currentLevel.map.length === 0) { return }
   // TODO:: beware off-by-one bugs that are triggered by boundaries
   // TODO:: Notify level that scroll has happened so the render function knows to re-render
   if (gameState.mouseTileX < 0 && currentLevel.scrollPosition.x > 0) {
