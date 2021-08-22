@@ -12,7 +12,7 @@ import { compileItems, compileMapChanges, ITEM_SET_BACKGROUND, ITEM_SET_MAP, rem
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 60) as i64
 
 function isCursorInBounds(checkGameArea: boolean): boolean {
-  if (currentLevel.isMetaScreen) {
+  if (currentLevel.isMetaScreen && !(currentLevel instanceof Editor)) {
     return (
       gameState.mouseTileY >= 0 &&
       gameState.mouseTileY < currentLevel.map.length &&
