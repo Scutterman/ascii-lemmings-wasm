@@ -66,7 +66,7 @@ export class Parser extends MapParserBase {
 
     this.availableLevels.get(meta.difficulty).set(meta.number, meta)
 
-    this.lmd += 'mapDetail.meta = new LevelMetadata("' + meta.name + '",' + meta.number.toString() + ', "' + meta.code + '", "' + meta.difficulty + '", ' + meta.numberOfLemmings.toString() + ', ' + meta.numberOfLemmingsForSuccess.toString() + ')\n'
+    this.lmd += 'mapDetail.meta = new LevelMetadata("' + meta.name + '",' + meta.number.toString() + ', "' + meta.code + '", "' + meta.difficulty + '", "' + meta.textureGroup + '", ' + meta.numberOfLemmings.toString() + ', ' + meta.numberOfLemmingsForSuccess.toString() + ')\n'
   }
   
   protected addMapLine(generatedMapLine: string): void {

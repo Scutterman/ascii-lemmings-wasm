@@ -327,7 +327,7 @@ export class Editor extends MetaScreen {
     for (let i: u8 = 0; i < VISIBLE_Y; i++) { map.push(air) }
 
     const metaMap = new LevelMapDetail(map)
-    metaMap.meta = new LevelMetadata(name, number, code, difficulty, spawn, success)
+    metaMap.meta = new LevelMetadata(name, number, code, difficulty, this.newLevelTextureGroup.getText(), spawn, success)
     metaMap.meta.skills.set('ClimbingBoots', climb)
     metaMap.meta.skills.set('Umbrella', float)
     metaMap.meta.skills.set('Bomb', bomb)

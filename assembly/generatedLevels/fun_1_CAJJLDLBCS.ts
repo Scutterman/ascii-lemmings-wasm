@@ -19,7 +19,7 @@ this.setSkillQuantity(LemmingGift.Shovel, 255)
         }
       }
     const mapDetail = new LevelMapDetail([])
-mapDetail.meta = new LevelMetadata("Just dig!",1, "CAJJLDLBCS", "fun", 10, 1)
+mapDetail.meta = new LevelMetadata("Just dig!",1, "CAJJLDLBCS", "fun", "grassland", 10, 1)
 mapDetail.tiles.push("__________________________________________________________________________________________________")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG           GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")

@@ -16,6 +16,7 @@ export class LevelMetadata {
     public number: number,
     public code: string,
     public difficulty: string,
+    public textureGroup: string,
     public numberOfLemmings: u8,
     public numberOfLemmingsForSuccess: u8
   ) {}
@@ -26,6 +27,7 @@ export class LevelMetadata {
       this.number,
       this.code,
       this.difficulty,
+      this.textureGroup,
       this.numberOfLemmings,
       this.numberOfLemmingsForSuccess
     )
@@ -39,7 +41,7 @@ export class LevelMetadata {
 export abstract class MapParserBase {
   protected readonly INFINTE_SKILL_VALUE: u8 = u8.MAX_VALUE
   private currentSection: MapSection = MapSection.None
-  protected meta: LevelMetadata = new LevelMetadata('', 0, '', '', 0, 0)
+  protected meta: LevelMetadata = new LevelMetadata('', 0, '', '', '', 0, 0)
 
   public parseMap(generatedMap: string): void {
     this.reset()
@@ -97,6 +99,8 @@ export abstract class MapParserBase {
             this.meta.code = metaDetails[1]
           } else if (metaDetails[0] == 'DIFFICULTY') {
             this.meta.difficulty = metaDetails[1]
+          } else if (metaDetails[0] == 'TEXTURE_GROUP') {
+            this.meta.textureGroup = metaDetails[1]
           } else if (metaDetails[0] == 'TOSPAWN') {
             this.meta.numberOfLemmings = this.int(metaDetails[1])
           } else if (metaDetails[0] == 'SUCCESS') {
@@ -134,7 +138,7 @@ export abstract class MapParserBase {
 
   protected reset(): void {
     this.currentSection = MapSection.None
-    this.meta = new LevelMetadata('', 0, '', '', 0, 0)
+    this.meta = new LevelMetadata('', 0, '', '', '', 0, 0)
   }
   
   protected abstract addAvailableLevel(meta: LevelMetadata): void
