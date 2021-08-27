@@ -9,5 +9,5 @@ w  w
 #/\#
 /  \
 |  |
-//EDITORHINT::ANIMATION_SINGLE::grass::'::#00FF00
-//EDITORHINT::ANIMATION_SINGLE::ground::G::#825116
+//EDITORHINT::ANIMATION_SINGLE::grassland_grass::'::#00FF00
+//EDITORHINT::ANIMATION_SINGLE::grassland_ground::G::#825116

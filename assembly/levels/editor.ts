@@ -30,6 +30,7 @@ export class Editor extends MetaScreen {
   private selectedBlockY: i16 = -1
   private metaMap: LevelMapDetail = new LevelMapDetail([])
   private newLevelPanel: Panel = new Panel(new Vec2(-1,-1))
+  private newLevelTextureGroup: UILabel = new UILabel(new Vec2(-1, -1), '', 'NEW_LEVEL_TEXTURE_GROUP')
   private canAcceptTextTags: string[] = ['META_DIFFICULTY', 'META_NAME', 'META_CODE']
   private canAcceptNumberTags: string[] = [
     'META_NUMBER', 'META_SPAWN', 'META_SUCCESS',
@@ -71,6 +72,22 @@ export class Editor extends MetaScreen {
     this.newLevelPanel.addItem(new EasyLabelledButton('Bashers', 'SKILL_BASH'))
     this.newLevelPanel.addItem(new EasyLabelledButton('Miners', 'SKILL_MINE'))
     this.newLevelPanel.addItem(new EasyLabelledButton('Diggers', 'SKILL_DIG'))
+    this.newLevelPanel.addLinebreak()
+    
+    this.newLevelPanel.addItem(new UILabel(new Vec2(-1, -1), 'Default Textures:'))
+    this.newLevelPanel.addItem(this.newLevelTextureGroup)
+    this.newLevelPanel.addLinebreak()
+
+    const textureGroups = this.getTextureGroups()
+    for (let i = 0; i < textureGroups.length; i++) {
+      this.newLevelPanel.addItem(new UIControl(new Vec2(0,0), textureGroups[i], tag => {
+        if (tag == null) { return }
+        const button = (currentLevel as Editor).getUIByTag(tag)
+        if (button == null) { return }
+        currentLevel.updateLabel('NEW_LEVEL_TEXTURE_GROUP', button.getText())
+      }, 'texture_group_' + textureGroups[i]))
+    }
+
     this.newLevelPanel.addLinebreak()
     this.newLevelPanel.addItem(new UIControl(new Vec2(0,0), 'Create', () => {
       (currentLevel as Editor).createMap()
@@ -369,5 +386,14 @@ export class Editor extends MetaScreen {
 
   public clone(): Editor {
     return new Editor()
+  }
+
+  private getTextureGroups(): string[] {
+    return animationItems
+      .keys()
+      .filter(animationName => animationName.includes('_'))
+      .map<string>(animationName => animationName.split('_')[0])
+      .reduce<Set<string>>((previous, current) => previous.add(current), new Set<string>())
+      .values()
   }
 }
