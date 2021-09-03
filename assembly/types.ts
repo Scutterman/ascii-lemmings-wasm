@@ -1,16 +1,5 @@
 import { Animation } from "./animation"
 
-export function shallowCopyWasmMap <K, V>(inMap: Map<K,V>): Map<K,V> {
-  const outMap: Map<K,V> = new Map()
-  const keys = inMap.keys()
-  for (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {
-    const key = keys[keyIndex]
-    const value = inMap.get(key)
-    outMap.set(key, value)
-  }
-  return outMap
-}
-
 export enum LemmingGift {
   None = 0,
   ClimbingBoots = 1,

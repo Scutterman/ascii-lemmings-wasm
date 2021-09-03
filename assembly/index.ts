@@ -8,8 +8,7 @@ import { TitleScreen } from './levels/titleScreen'
 import { BOUNDARIES_X, BOUNDARIES_Y, CONTROLS_Y, VISIBLE_X, VISIBLE_Y } from './map'
 import { LemmingGift, LevelState } from './types'
 import { UPSCALE_MULTIPLIER } from './upscale'
-import { allowedUserInputCharacters } from './text'
-import { Parser } from './maps/types'
+import { allowedUserInputCharacters } from '../shared/src/wasm-safe'
 import { Editor } from './levels/editor'
 import { ITEM_SET_BACKGROUND, ITEM_SET_MAP, ITEM_SET_RELATIVE, resetItems } from './vdom/elements'
 import { constructRelativeElement, lineBreak } from './loop'
@@ -24,6 +23,9 @@ export { triggerEventLoop, setCharacterDimensions, setScreenDimensions, updateMo
 const useAutoPlayer: boolean = false
 
 const buttonArea = generateButtonArea()
+
+const map = new Map<string, string>()
+map.keys()
 
 function generateButtonArea(): string {
   const buttonAreaArray = [
@@ -55,6 +57,8 @@ function generateButtonArea(): string {
 }
 
 export function loadLevelFromString(level: string): void {
+  return
+  /*
   if (currentLevel instanceof Editor) {
     gameState.levelState = LevelState.Preparing
     gameState.shouldRun = false
@@ -63,6 +67,7 @@ export function loadLevelFromString(level: string): void {
     editor.mapSwapped(map)
     _setupClientForLevel(true)
   }
+  */
 }
 
 export function loadLevel(newLevel: BaseLevel): void {

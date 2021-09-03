@@ -1,0 +1,15 @@
+{
+  "extends": "assemblyscript/std/assembly.json",
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "lib": ["ES5"],
+    "target": "ES5",
+    "declaration": true,
+    "declarationDir": "lib",
+    "outDir": "lib",
+    "downlevelIteration": false
+  }
+}

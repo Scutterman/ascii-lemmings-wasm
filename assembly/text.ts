@@ -13,8 +13,6 @@ export function getCharacterRender(character: string): string[] {
   return renderedCharacter
 }
 
-export const allowedUserInputCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 :_-\'^#\\/|'.split('')
-
 const exceptionalCharacterWidths = new Map<string, u8>()
 exceptionalCharacterWidths.set('Q', 8)
 exceptionalCharacterWidths.set('∞', 11)

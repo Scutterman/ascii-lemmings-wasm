@@ -3,7 +3,7 @@ import { LemmingGift, LevelTileDetail } from "../types"
 import { UIControl } from "../ui/uiControl"
 import { UILabel } from "../ui/uiLabel"
 import { Panel } from "../ui/panel"
-import { allowedUserInputCharacters } from "../text"
+import { allowedUserInputCharacters } from "../../shared/src/wasm-safe"
 import { LevelMapDetail } from "../maps/types"
 import { PanelContainer } from "../ui/panelContainer"
 

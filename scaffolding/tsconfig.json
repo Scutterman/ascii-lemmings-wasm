@@ -1,9 +1,13 @@
 {
   "include": [
-    "./**/*.ts",
-    "../assembly/maps/mapParserBase.ts"
+    "./**/*.ts"
   ],
   "compilerOptions": {
-    "types": ["@types/node"]
+    "baseUrl": ".",
+    "lib": ["ES2021"],
+    "types": [
+      "@types/node",
+      "./@types/scaffolding"
+    ]
   }
 }

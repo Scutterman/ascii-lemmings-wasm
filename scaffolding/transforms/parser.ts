@@ -1,5 +1,5 @@
 import { getImport } from "./parserHelper"
-import { MapParserBase, LevelMetadata } from '../../assembly/maps/mapParserBase'
+import { MapParserBase, LevelMetadata } from '../../shared/src'
 
 export class Parser extends MapParserBase {
   private imports = ''
@@ -22,7 +22,7 @@ export class Parser extends MapParserBase {
     this.imports += getImport('../types', ['LemmingGift'])
     this.imports += getImport('../maps/types', ['LevelMapDetail', 'SingleCharacterAnimation'])
     this.imports += getImport('../levels/level', ['Level'])
-    this.imports += getImport('../maps/mapParserBase', ['LevelMetadata'])
+    this.imports += getImport('../../shared/src/wasm-safe', ['LevelMetadata'])
 
     this.lmd = 'const mapDetail = new LevelMapDetail([])\n'  
   }
@@ -32,8 +32,8 @@ export class Parser extends MapParserBase {
     this.levelByCode += 'else if (code == "' + code + '") { return new Level_' + levelName + '() }\n'
   }
 
-  public parseGeneratedMap(generatedMap: string): string {
-    super.parseMap(generatedMap)
+  public parseGeneratedMap(generatedMap: string, singleCharacterAnimations: Map<string, string>): string {
+    super.parseMap(generatedMap, singleCharacterAnimations)
 
     const tag = `${ this.meta.difficulty }_${ this.meta.number.toString() }_${ this.meta.code }`
     this.addLevelSelectStatement(tag, this.meta.code)
@@ -74,6 +74,7 @@ export class Parser extends MapParserBase {
   }
   
   protected addDefaultAnimation(character: string, animationListKey: string): void {
+    console.log('adding default animation', character, animationListKey)
     this.lmd += 'mapDetail.defaultAnimations.set("' + character + '", "' + animationListKey + '")\n'
   }
   

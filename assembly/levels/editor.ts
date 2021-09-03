@@ -10,7 +10,7 @@ import { removeItem } from "../vdom/elements"
 import { UILabel } from "../ui/uiLabel"
 import { LevelMap, TileDetail } from "../types"
 import { animationItems } from "../generatedLevels/animationItems"
-import { LevelMetadata } from "../maps/mapParserBase"
+import { LevelMetadata } from "../../shared/src/wasm-safe"
 import { LabelledButton } from "../ui/labelledButton"
 
 declare function addBlocks(startRow: u8, endRow: u8, startCol: u8, endCol: u8): void

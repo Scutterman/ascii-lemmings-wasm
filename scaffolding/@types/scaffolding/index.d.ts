@@ -1,0 +1,1 @@
+declare type u8 = number

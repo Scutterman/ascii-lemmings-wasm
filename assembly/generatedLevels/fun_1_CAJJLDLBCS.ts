@@ -1,7 +1,7 @@
 import { LemmingGift } from "../types"
 import { LevelMapDetail, SingleCharacterAnimation } from "../maps/types"
 import { Level } from "../levels/level"
-import { LevelMetadata } from "../maps/mapParserBase"
+import { LevelMetadata } from "../../shared/src/wasm-safe"
 
       export class Level_fun_1_CAJJLDLBCS extends Level {
 
@@ -72,7 +72,6 @@ mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
-mapDetail.defaultAnimations.set("G", "grassland_ground")
 mapDetail.customAnimations.set("10,17", "grassland_grass")
 mapDetail.customAnimations.set("11,17", "grassland_grass")
 mapDetail.customAnimations.set("12,17", "grassland_grass")
@@ -171,3 +170,5 @@ mapDetail.customAnimations.set("62,30", "grassland_grass")
 mapDetail.customAnimations.set("63,30", "grassland_grass")
 mapDetail.customAnimations.set("64,30", "grassland_grass")
 mapDetail.customAnimations.set("65,30", "grassland_grass")
+mapDetail.defaultAnimations.set("'", "grassland_grass")
+mapDetail.defaultAnimations.set("G", "grassland_ground")

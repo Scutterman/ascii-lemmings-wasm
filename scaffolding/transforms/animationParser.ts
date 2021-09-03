@@ -1,4 +1,4 @@
-import { allowedUserInputCharacters } from "../../assembly/text"
+import { allowedUserInputCharacters } from "../../shared/src/wasm-safe"
 import { getImport } from "./parserHelper"
 
 enum AnimationSection {
@@ -17,6 +17,11 @@ export class AnimationParser {
   private inAnimation: boolean = false
   private inFrame: boolean = false
   private currentSection: AnimationSection = AnimationSection.None
+  private singleCharacterAnimations: Map<string, string> = new Map<string, string>()
+
+  public getSingelCharacterAnimation(): Map<string, string> {
+    return this.singleCharacterAnimations
+  }
 
   private reset(): void {
     this.currentSection = AnimationSection.None
@@ -24,13 +29,14 @@ export class AnimationParser {
     this.animationItems = ''
     this.inAnimation = false
     this.imports = ''
+    this.singleCharacterAnimations = new Map<string, string>()
     this.imports += getImport('../animation', ['Animation'])
     this.imports += getImport('../maps/types', ['AnimationListItem', 'SingleCharacterAnimation', 'StandardAnimation'])
   }
 
   public parseAnimationsFile(animationsContent: string): string {
     this.reset()
-    const animationLines = animationsContent.replaceAll('\r\n', '\n').split('\n')
+    const animationLines = animationsContent.replace(/\r\n/g, '\n').split('\n')
 
     for (let i = 0; i < animationLines.length; i++) {
       const line = animationLines[i].trim()
@@ -109,6 +115,7 @@ export class AnimationParser {
 
     if (!allowedUserInputCharacters.includes(character)) { return }
 
+    this.singleCharacterAnimations.set(name, character)
     this.addAnimationItem(name, colour, 'SingleCharacterAnimation', '"' + character + '"')
   }
 

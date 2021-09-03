@@ -1,7 +1,7 @@
 import { gameState, lemmings } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
 import { getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
-import { LemmingGift, lemmingGiftLabel, LevelTileDetail, shallowCopyWasmMap } from "../types"
+import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"

@@ -1,8 +1,8 @@
 import { Animation } from "../animation";
 import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
-import { LevelMap, LevelTileDetail, TileDetail, shallowCopyWasmMap, LemmingGift } from "../types";
+import { LevelMap, LevelTileDetail, TileDetail } from "../types";
 import { animationItems } from "../generatedLevels/animationItems";
-import { LevelMetadata, MapParserBase } from "./mapParserBase";
+import { LevelMetadata } from "../../shared/src/wasm-safe"
 
 export function characterToAnimation(character: string): Animation {
   const frame = [
@@ -21,9 +21,25 @@ export class LevelMapDetail {
   defaultAnimations: Map<string, string> = new Map()
   customAnimations: Map<string, string> = new Map()
 
+  private cloneMetadata(): LevelMetadata { 
+    const lmd = new LevelMetadata(
+      this.meta.name,
+      this.meta.number,
+      this.meta.code,
+      this.meta.difficulty,
+      this.meta.textureGroup,
+      this.meta.numberOfLemmings,
+      this.meta.numberOfLemmingsForSuccess
+    )
+
+    lmd.skills = shallowCopyWasmMap(this.meta.skills)
+
+    return lmd
+  }
+
   public clone(): LevelMapDetail {
     const lmd = new LevelMapDetail(this.tiles)
-    lmd.meta = this.meta.clone()
+    lmd.meta = this.cloneMetadata()
     lmd.defaultAnimations = shallowCopyWasmMap(this.defaultAnimations)
     lmd.customAnimations = shallowCopyWasmMap(this.customAnimations)
     return lmd
@@ -210,17 +226,49 @@ export class SingleCharacterAnimation extends AnimationListItem {
   public getAnimation(): Animation {
     return this.animation
   }
+
+  public getCharacter(): string {
+    return this.character
+  }
 }
 
+function shallowCopyWasmMap <K, V>(inMap: Map<K,V>): Map<K,V> {
+  const outMap: Map<K,V> = new Map()
+  const keys = inMap.keys()
+  
+  for (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {
+    const key = keys[keyIndex]
+    const value = inMap.get(key)
+    outMap.set(key, value)
+  }
+  return outMap
+}
+
+/*
 export class Parser extends MapParserBase {
   private lmd: LevelMapDetail = new LevelMapDetail([])
   
   protected reset(): void {
     this.lmd = new LevelMapDetail([])
   }
+
   public parseGeneratedMap(generatedMap: string): LevelMapDetail {
-    super.parseMap(generatedMap)
+    super.parseMap(generatedMap, this.getSingleCharacterAnimations())
     return this.lmd
+  }
+
+  private getSingleCharacterAnimations(): Map<string, string> {
+    const out = new Map<string, string>()
+    const keys = animationItems.keys()
+    for (let i = 0; i < keys.length; i++) {
+      const animationName = keys[i]
+      const animation = animationItems.get(animationName)
+      if (animation instanceof SingleCharacterAnimation) {
+        out.set(animationName, (animation as SingleCharacterAnimation).getCharacter())
+      }
+    }
+
+    return out
   }
   
   protected addAvailableLevel(meta: LevelMetadata): void {
@@ -239,3 +287,4 @@ export class Parser extends MapParserBase {
     this.lmd.customAnimations.set(key, animationListKey)
   }
 }
+*/

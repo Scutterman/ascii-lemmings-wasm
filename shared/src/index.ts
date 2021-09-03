@@ -1,4 +1,5 @@
-import { shallowCopyWasmMap } from "../types"
+import { LevelMetadata } from "./wasm-safe"
+export * from "./wasm-safe"
 
 enum MapSection {
   None,
@@ -8,44 +9,16 @@ enum MapSection {
   CustomAnimation
 }
 
-export class LevelMetadata {
-  public skills: Map<string, u8> = new Map()
-  
-  constructor (
-    public name: string,
-    public number: number,
-    public code: string,
-    public difficulty: string,
-    public textureGroup: string,
-    public numberOfLemmings: u8,
-    public numberOfLemmingsForSuccess: u8
-  ) {}
-
-  public clone(): LevelMetadata { 
-    const lmd = new LevelMetadata(
-      this.name,
-      this.number,
-      this.code,
-      this.difficulty,
-      this.textureGroup,
-      this.numberOfLemmings,
-      this.numberOfLemmingsForSuccess
-    )
-
-    lmd.skills = shallowCopyWasmMap(this.skills)
-
-    return lmd
-  }
-}
-
 export abstract class MapParserBase {
-  protected readonly INFINTE_SKILL_VALUE: u8 = u8.MAX_VALUE
+  protected readonly INFINTE_SKILL_VALUE: number = 255
   private currentSection: MapSection = MapSection.None
   protected meta: LevelMetadata = new LevelMetadata('', 0, '', '', '', 0, 0)
 
-  public parseMap(generatedMap: string): void {
+  public parseMap(generatedMap: string, singleCharacterAnimations: Map<string, string>): void {
     this.reset()
-    const mapLines = generatedMap.replaceAll('\r\n', '\n').split('\n')
+    generatedMap.replace(/\r\n/g, '\n')
+    
+    const mapLines = generatedMap.split('\n')
     for (let i = 0; i < mapLines.length; i++) {
       const line = mapLines[i].trim()
 
@@ -114,10 +87,7 @@ export abstract class MapParserBase {
           this.addMapLine(line)
         break
         case this.currentSection == MapSection.DefaultAnimation:
-          const defaultAnimationInfo = line.split(',')
-          const character = defaultAnimationInfo[0]
-          const defaultAnimationListKey = defaultAnimationInfo[1]
-          this.addDefaultAnimation(character, defaultAnimationListKey)
+          // This section left intentionally blank
         break
         case this.currentSection == MapSection.CustomAnimation:
           this.currentSection = MapSection.CustomAnimation
@@ -130,10 +100,21 @@ export abstract class MapParserBase {
         break
       }
     }
+
+    const textureGroup = this.meta.textureGroup
+    const defaultAnimationKeys = singleCharacterAnimations.keys()
+    let result = defaultAnimationKeys.next()
+    while(!result.done) {
+      const animationName = result.value
+      if (animationName.startsWith(textureGroup)) {
+        this.addDefaultAnimation(singleCharacterAnimations.get(animationName), animationName)
+      }
+      result = defaultAnimationKeys.next()
+    }
   }
 
-  protected int(value: string): u8 {
-    return U8.parseInt(value)
+  protected int(value: string): number {
+    return parseInt(value)
   }
 
   protected reset(): void {

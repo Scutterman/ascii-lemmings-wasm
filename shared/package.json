@@ -1,0 +1,14 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "types": "lib",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "assemblyscript": "^0.19.11",
+    "typescript": "^4.4.2"
+  }
+}
