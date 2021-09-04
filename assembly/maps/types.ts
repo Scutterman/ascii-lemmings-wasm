@@ -65,7 +65,7 @@ export class LevelMapDetail {
     exportString += 'SKILL::Hammer::' + this.meta.skills.get('Hammer').toString() + '\n'
     exportString += 'SKILL::Pickaxe::' + this.meta.skills.get('Pickaxe').toString() + '\n'
     exportString += 'SKILL::Shovel::' + this.meta.skills.get('Shovel').toString() + '\n'
-    exportString += '//EDITORHINT::MAP_START\n' + '\n'
+    exportString += '//EDITORHINT::MAP_START\n'
     for (let row = 0; row < this.tiles.length; row++) {
       exportString += this.tiles[row] + '\n'
     }
