@@ -9,7 +9,7 @@ enum AnimationSection {
 }
 
 export class AnimationParser {
-  private static readonly allowedColours: string[] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('')
+  private static readonly allowedColours: string[] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#'.split('')
   private static readonly allowedNames: string[] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_'.split('')
   private imports = ''
   private animations: string = ''
@@ -36,8 +36,8 @@ export class AnimationParser {
 
   public parseAnimationsFile(animationsContent: string): string {
     this.reset()
-    const animationLines = animationsContent.replaceAll('\r\n', '\n').split('\n')
-
+    const animationLines: string[] = animationsContent.replaceAll('\r\n', '\n').split('\n')
+    
     for (let i = 0; i < animationLines.length; i++) {
       const line = animationLines[i].trim()
 

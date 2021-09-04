@@ -107,12 +107,12 @@ export class Parser extends MapParserBase {
         'export function getAvailableLevels(difficulty: string): LevelMetadata[] | null {\n' +
         ' if (false) { return null }\n'
       
-      const difficulties = this.availableLevels.keys()
+      const difficulties = Array.from(this.availableLevels.keys())
 
       for (let i = 0; i < difficulties.length; i++) {
         const difficulty = difficulties[i]
         const levels = this.availableLevels.get(difficulty)
-        const levelNumbers = levels.keys()
+        const levelNumbers = Array.from(levels.keys())
         levelNumbers.sort()
         
         functionContents += 'else if (difficulty == "' + difficulty + '") { return availableLevels_' + difficulty + ' }\n'
