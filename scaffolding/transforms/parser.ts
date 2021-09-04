@@ -39,7 +39,7 @@ export class Parser extends MapParserBase {
     this.addLevelSelectStatement(tag, this.meta.code)
 
     let skillValues: string[] = []
-    const keys = this.meta.skills.keys()
+    const keys = Array.from(this.meta.skills.keys())
     for (const keyIndex in keys) {
       const key = keys[keyIndex]
       const value = this.meta.skills.get(key)
@@ -130,5 +130,9 @@ export class Parser extends MapParserBase {
         '}\n'
       
       return fileContents + functionContents
+  }
+  
+  protected getMapKeys(map: Map<string, string>): string[] {
+    return Array.from(map.keys())
   }
 }

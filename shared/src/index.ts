@@ -102,7 +102,7 @@ export abstract class MapParserBase {
     }
 
     const textureGroup = this.meta.textureGroup
-    const defaultAnimationKeys = singleCharacterAnimations.keys()
+    const defaultAnimationKeys = this.getMapKeys(singleCharacterAnimations)
     for (var i = 0; i < defaultAnimationKeys.length; i++) {
       const animationName = defaultAnimationKeys[i]
       if (animationName.startsWith(textureGroup)) {
@@ -124,4 +124,5 @@ export abstract class MapParserBase {
   protected abstract addMapLine(generatedMapLine: string): void
   protected abstract addDefaultAnimation(character: string, animationListKey: string): void
   protected abstract addCustomAnimation(key: string, animationListKey: string): void
+  protected abstract getMapKeys(map: Map<string, string>): string[]
 }

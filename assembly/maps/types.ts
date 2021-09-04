@@ -286,4 +286,8 @@ export class Parser extends MapParserBase {
   protected addCustomAnimation(key: string, animationListKey: string): void {
     this.lmd.customAnimations.set(key, animationListKey)
   }
+
+  protected getMapKeys(map: Map<string, string>): string[] {
+    return map.keys()
+  }
 }
