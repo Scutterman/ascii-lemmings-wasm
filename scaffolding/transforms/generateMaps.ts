@@ -1,7 +1,7 @@
 import { Parser as MapParser } from './parser'
 import { AnimationParser } from './animationParser'
-import { Transform } from 'assemblyscript/cli/transform'
-import { readdirSync } from 'fs'
+import { Transform } from '../../../assemblyscript/cli/transform'
+import '../../../assemblyscript/std/portable'
 
 class GenerateMapTransform extends Transform {
   private mapParser: MapParser = new MapParser()
@@ -36,12 +36,12 @@ class GenerateMapTransform extends Transform {
   }
   
   private processDifficulty(difficulty: string): void {
-    let files = readdirSync('./assembly/maps/' + difficulty)
+    let files = this.listFiles('assembly/maps/' + difficulty, this.baseDir)
     
     if (files == null) { this.log('Files null'); files = [] }
     this.log('found files: ' + files.length.toString() + ' in ./assembly/maps/' + difficulty)
     this.log(files.join('\n'))
-    files = files.filter(file => file.endsWith('.map'))
+    files = files.filter(file => file.endsWith('.ts'))
     
     this.log('Processing map directory ' + difficulty)
     
