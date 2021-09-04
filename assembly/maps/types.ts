@@ -3,6 +3,7 @@ import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
 import { LevelMap, LevelTileDetail, TileDetail } from "../types";
 import { animationItems } from "../generatedLevels/animationItems";
 import { LevelMetadata } from "../../shared/src/wasm-safe"
+import { MapParserBase } from "../../shared/src/index"
 
 export function characterToAnimation(character: string): Animation {
   const frame = [
@@ -244,7 +245,6 @@ function shallowCopyWasmMap <K, V>(inMap: Map<K,V>): Map<K,V> {
   return outMap
 }
 
-/*
 export class Parser extends MapParserBase {
   private lmd: LevelMapDetail = new LevelMapDetail([])
   
@@ -287,4 +287,3 @@ export class Parser extends MapParserBase {
     this.lmd.customAnimations.set(key, animationListKey)
   }
 }
-*/

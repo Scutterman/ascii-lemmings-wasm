@@ -13,6 +13,7 @@ import { Editor } from './levels/editor'
 import { ITEM_SET_BACKGROUND, ITEM_SET_MAP, ITEM_SET_RELATIVE, resetItems } from './vdom/elements'
 import { constructRelativeElement, lineBreak } from './loop'
 import { Vec2 } from './position'
+import { Parser } from './maps/types'
 
 export const gameState = new GameState()
 export let currentLevel: BaseLevel
@@ -57,8 +58,6 @@ function generateButtonArea(): string {
 }
 
 export function loadLevelFromString(level: string): void {
-  return
-  /*
   if (currentLevel instanceof Editor) {
     gameState.levelState = LevelState.Preparing
     gameState.shouldRun = false
@@ -67,7 +66,6 @@ export function loadLevelFromString(level: string): void {
     editor.mapSwapped(map)
     _setupClientForLevel(true)
   }
-  */
 }
 
 export function loadLevel(newLevel: BaseLevel): void {
