@@ -67,7 +67,7 @@ export abstract class MapParserBase {
           } else if (metaDetails[0] == 'NAME') {
             this.meta.name = metaDetails[1]
           } else if (metaDetails[0] == 'NUMBER') {
-            this.meta.number = parseInt(metaDetails[1])
+            this.meta.number = this.int(metaDetails[1])
           } else if (metaDetails[0] == 'CODE') {
             this.meta.code = metaDetails[1]
           } else if (metaDetails[0] == 'DIFFICULTY') {
@@ -79,7 +79,7 @@ export abstract class MapParserBase {
           } else if (metaDetails[0] == 'SUCCESS') {
             this.meta.numberOfLemmingsForSuccess = this.int(metaDetails[1])
           } else if (metaDetails[0] == 'SKILL') {
-            const skillValue = metaDetails[2] == 'INFINITY' ? this.INFINTE_SKILL_VALUE : this.int(metaDetails[2])
+            const skillValue: u8 = metaDetails[2] == 'INFINITY' ? u8.MAX_VALUE : this.int(metaDetails[2])
             this.meta.skills.set(metaDetails[1], skillValue)
           }
         break
@@ -105,14 +105,11 @@ export abstract class MapParserBase {
     const defaultAnimationKeys = this.getMapKeys(singleCharacterAnimations)
     for (var i = 0; i < defaultAnimationKeys.length; i++) {
       const animationName = defaultAnimationKeys[i]
-      if (animationName.startsWith(textureGroup)) {
-        this.addDefaultAnimation(singleCharacterAnimations.get(animationName), animationName)
+      const animation = singleCharacterAnimations.get(animationName)
+      if (animationName.startsWith(textureGroup) && animation != null) {
+        this.addDefaultAnimation(animation, animationName)
       }
     }
-  }
-
-  protected int(value: string): number {
-    return parseInt(value)
   }
 
   protected reset(): void {
@@ -125,4 +122,5 @@ export abstract class MapParserBase {
   protected abstract addDefaultAnimation(character: string, animationListKey: string): void
   protected abstract addCustomAnimation(key: string, animationListKey: string): void
   protected abstract getMapKeys(map: Map<string, string>): string[]
+  protected abstract int(value: string): u8
 }

@@ -1,16 +1,16 @@
 export const allowedUserInputCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 :_-\'^#\\/|'.split('')
 
 export class LevelMetadata {
-  public skills: Map<string, number> = new Map()
+  public skills: Map<string, u8> = new Map()
   
   constructor (
     public name: string,
-    public number: number,
+    public number: u8,
     public code: string,
     public difficulty: string,
     public textureGroup: string,
-    public numberOfLemmings: number,
-    public numberOfLemmingsForSuccess: number
+    public numberOfLemmings: u8,
+    public numberOfLemmingsForSuccess: u8
   ) {}
 }
 

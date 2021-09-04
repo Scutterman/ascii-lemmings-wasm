@@ -12,7 +12,7 @@ export class Parser extends MapParserBase {
   private availableLevels: Map<string, Map<number, LevelMetadata>> = new Map<string, Map<number, LevelMetadata>>()
   
   protected int(value: string): number {
-    return parseInt(value, 10)
+    return parseInt(value, 10) & 0xff
   }
 
   protected reset(): void {
@@ -42,7 +42,8 @@ export class Parser extends MapParserBase {
     const keys = Array.from(this.meta.skills.keys())
     for (const keyIndex in keys) {
       const key = keys[keyIndex]
-      const value = this.meta.skills.get(key)
+      let value = this.meta.skills.get(key)
+      if (value == null) { value = 0 }
       skillValues.push(`this.setSkillQuantity(LemmingGift.${ key }, ${ value.toString() })`)
     }
 
@@ -60,11 +61,13 @@ export class Parser extends MapParserBase {
   }
 
   protected addAvailableLevel(meta: LevelMetadata): void {
-    if (!this.availableLevels.has(meta.difficulty)) {
-      this.availableLevels.set(meta.difficulty, new Map<number, LevelMetadata>())
+    let levels = this.availableLevels.get(meta.difficulty)
+    if (levels == null) {
+      levels = new Map<number, LevelMetadata>()
     }
 
-    this.availableLevels.get(meta.difficulty).set(meta.number, meta)
+    levels.set(meta.number, meta)
+    this.availableLevels.set(meta.difficulty, levels)
 
     this.lmd += 'mapDetail.meta = new LevelMetadata("' + meta.name + '",' + meta.number.toString() + ', "' + meta.code + '", "' + meta.difficulty + '", "' + meta.textureGroup + '", ' + meta.numberOfLemmings.toString() + ', ' + meta.numberOfLemmingsForSuccess.toString() + ')\n'
   }
@@ -112,6 +115,7 @@ export class Parser extends MapParserBase {
       for (let i = 0; i < difficulties.length; i++) {
         const difficulty = difficulties[i]
         const levels = this.availableLevels.get(difficulty)
+        if (levels == null) { continue }
         const levelNumbers = Array.from(levels.keys())
         levelNumbers.sort()
         
@@ -121,6 +125,7 @@ export class Parser extends MapParserBase {
         for (let i = 0; i < levelNumbers.length; i++) {
           const levelNumber = levelNumbers[i]
           const level = levels.get(levelNumber)
+          if (level == null) { continue }
           fileContents += 'availableLevels_' + difficulty + '.push(new LevelMetadata("' + level.name + '",' + level.number + ',"' + level.code + '","' + level.difficulty + '"))\n'
         }
       }
