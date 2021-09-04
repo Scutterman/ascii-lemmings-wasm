@@ -53,7 +53,7 @@ class GenerateMapTransform extends Transform {
           this.log('Could not read map ' + difficulty + '/' + files[i])
         } else {
           this.log('read map, contains ' + map.length.toString() + ' characters')
-          const parts = files[i].substr(0, files[i].length - 4).split('_')
+          const parts = files[i].substr(0, files[i].length - 3).split('_')
           if (parts.length < 2) {
             this.log('Could not split file name into number and code')
             continue
