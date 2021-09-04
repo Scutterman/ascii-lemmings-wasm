@@ -27,7 +27,7 @@ mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGG                        GGGGGGGGGGGGGGG
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGG                            GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGG                               GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGGGGG                                    GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
-mapDetail.tiles.push("|GGGGGGGGG                                       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
+mapDetail.tiles.push("|GGGGGGGGG                      G                GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGG                                       GGGGGGGGGGGGGGGGGGG GGGGGGGGGGGGGGGGGGGGGGG GGGG|")
 mapDetail.tiles.push("|GGGGGGGGG                                       GGGGGGGGGGGGGGGGGGG  GGGGGGGGGGGGGGGGGGGGGG  GGG|")
 mapDetail.tiles.push("|GGGGGGGGG                                       GGGGGGGGGGGGGGGGGG    GGGGGGGGGGGGGGGGGGGG    GG|")
