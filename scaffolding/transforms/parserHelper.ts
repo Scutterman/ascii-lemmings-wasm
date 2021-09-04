@@ -1,5 +1,5 @@
 export function getImport(path: string, items: string[]): string {
-  if (items.length === 0) { return }
+  if (items.length === 0) { return '' }
 
   let importStatement = 'import { '
   for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {

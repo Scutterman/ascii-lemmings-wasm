@@ -1,42 +1,44 @@
 import { Parser as MapParser } from './parser'
-import { readdirSync, readFileSync, writeFileSync } from 'fs'
+// import { readdirSync, readFileSync, writeFileSync } from 'fs'
 import { AnimationParser } from './animationParser'
-import { resolve } from 'path'
+// import { resolve } from 'path'
+import { Transform } from 'assemblyscript/cli/transform'
 
-export class GenerateMapTransform {
+class GenerateMapTransform extends Transform {
   private mapParser: MapParser = new MapParser()
   private animationParser: AnimationParser = new AnimationParser()
   private difficultyLevels: string[] = ['fun', 'tricky', 'taxing', 'mayhem']
 
   constructor() {
-    this.log('Beginning map transform')
+    super()
+    console.log('Beginning map transform')
     this.processAnimations()
     this.processDifficulties()
     this.processLevelSelect()
     this.processAvailableLevels()
-    this.log('Ending map transform')
+    console.log('Ending map transform')
   }
 
-  private readFile(path: string): string {
-    return readFileSync(resolve(__dirname, '..', '..', path)).toString('ascii')
-  }
+  // private readFile(path: string): string {
+  //   return readFileSync(resolve(__dirname, '..', '..', path)).toString('ascii')
+  // }
 
-  private writeFile(path: string, content: string | Buffer): void {
-    writeFileSync(resolve(__dirname, '..', '..', path), content)
-  }
+  // private writeFile(path: string, content: string | Buffer): void {
+  //   writeFileSync(resolve(__dirname, '..', '..', path), content)
+  // }
 
-  private log(text: string): void {
-    console.log(text)
-  }
+  // private log(text: string): void {
+  //   console.log(text)
+  // }
 
   private processAnimations(): void {
-    const fileContent = this.readFile('assembly/maps/global.animation')
+    const fileContent = this.readFile('assembly/maps/global.animation', '../')
     if (fileContent == null) {
       this.log('Could not read animation file')
     } else {
       const animationContent = this.animationParser.parseAnimationsFile(fileContent)
       const name = 'animationItems'
-      this.writeFile('assembly/generatedLevels/' + name + '.ts', animationContent)
+      this.writeFile('assembly/generatedLevels/' + name + '.ts', animationContent, '../')
     }
   }
 
@@ -47,7 +49,7 @@ export class GenerateMapTransform {
   }
   
   private processDifficulty(difficulty: string): void {
-    let files = readdirSync('./assembly/maps/' + difficulty)
+    let files = this.listFiles('./assembly/maps/' + difficulty, '../')
     if (files == null) { files = [] }
     this.log(files.join('\n'))
     files = files.filter(file => file.endsWith('.map'))
@@ -57,7 +59,7 @@ export class GenerateMapTransform {
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         this.log('found file ' + i.toString() + ': "' + files[i] + '"')
-        const map = this.readFile(`assembly/maps/${ difficulty }/${ files[i] }`)
+        const map = this.readFile(`assembly/maps/${ difficulty }/${ files[i] }`, '../')
         if (map == null) {
           this.log('Could not read map ' + difficulty + '/' + files[i])
         } else {
@@ -71,11 +73,11 @@ export class GenerateMapTransform {
           const number = parseInt(parts[0])
           const code = parts[1]
 
-          console.log('parsing map', difficulty, number, code)
+          this.log('parsing map ' + difficulty + ' ' + number + ' ' + code)
           const result = this.mapParser.parseGeneratedMap(map, this.animationParser.getSingelCharacterAnimation())
           this.log('got result ' + result.length.toString())
           const name = `assembly/generatedLevels/${ difficulty }_${ parts[0] }_${ parts[1] }`
-          this.writeFile(name + '.ts',result)
+          this.writeFile(name + '.ts',result, '../')
         }
       }
     } else {
@@ -86,14 +88,14 @@ export class GenerateMapTransform {
   private processLevelSelect(): void {
     const levelSelect = this.mapParser.generateLevelSelectFile()
     const name = 'select'
-    this.writeFile('assembly/generatedLevels/' + name + '.ts', levelSelect)
+    this.writeFile('assembly/generatedLevels/' + name + '.ts', levelSelect, '../')
   }
 
   private processAvailableLevels(): void {
     const availableLevels = this.mapParser.generateAvailableLevelFile()
     const name = 'available'
-    this.writeFile('assembly/generatedLevels/' + name + '.ts', availableLevels)
+    this.writeFile('assembly/generatedLevels/' + name + '.ts', availableLevels, '../')
   }
 }
 
-new GenerateMapTransform()
+export = GenerateMapTransform

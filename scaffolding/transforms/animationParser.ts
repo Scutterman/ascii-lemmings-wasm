@@ -1,4 +1,4 @@
-import { allowedUserInputCharacters } from "../../shared/src/wasm-safe"
+import { allowedUserInputCharacters, stringOnlyContainsSafeCharacters } from "../../shared/src/wasm-safe"
 import { getImport } from "./parserHelper"
 
 enum AnimationSection {
@@ -9,8 +9,8 @@ enum AnimationSection {
 }
 
 export class AnimationParser {
-  private static readonly colourRegex: RegExp = new RegExp(/^\#[0-9a-fA-F]+$/)
-  private static readonly nameRegex: RegExp = new RegExp(/^[a-zA-Z0-9_]+$/)
+  private static readonly allowedColours: string[] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('')
+  private static readonly allowedNames: string[] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_'.split('')
   private imports = ''
   private animations: string = ''
   private animationItems: string = ''
@@ -36,7 +36,7 @@ export class AnimationParser {
 
   public parseAnimationsFile(animationsContent: string): string {
     this.reset()
-    const animationLines = animationsContent.replace(/\r\n/g, '\n').split('\n')
+    const animationLines = animationsContent.replaceAll('\r\n', '\n').split('\n')
 
     for (let i = 0; i < animationLines.length; i++) {
       const line = animationLines[i].trim()
@@ -136,7 +136,7 @@ export class AnimationParser {
   }
 
   private addAnimationItem(name: string, colour: string, type: string, value: string): void {
-    if (!AnimationParser.nameRegex.test(name) || !AnimationParser.colourRegex.test(colour)) {
+    if (!stringOnlyContainsSafeCharacters(name, AnimationParser.allowedNames) || !stringOnlyContainsSafeCharacters(colour, AnimationParser.allowedColours)) {
       return
     }
     
@@ -158,7 +158,7 @@ export class AnimationParser {
   }
 
   private startAnimation(name: string): void {
-    if (!AnimationParser.nameRegex.test(name)) {
+    if (!stringOnlyContainsSafeCharacters(name, AnimationParser.allowedNames)) {
       return
     }
     this.animations += 'const ' + name + 'Animation = new Animation([\n'
@@ -185,7 +185,8 @@ export class AnimationParser {
 
     this.animations += '['
     const lineCharacters = line.split('')
-    for (let char of lineCharacters) {
+    for (var i = 0; i < lineCharacters.length; i++) {
+      let char = lineCharacters[i]
       if (!allowedUserInputCharacters.includes(char)) { continue }
       if (char == '\\') { char += '\\' }
       this.animations += '"' + char + '"' + ','

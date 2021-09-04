@@ -16,7 +16,7 @@ export abstract class MapParserBase {
 
   public parseMap(generatedMap: string, singleCharacterAnimations: Map<string, string>): void {
     this.reset()
-    generatedMap.replace(/\r\n/g, '\n')
+    generatedMap.replaceAll('\r\n', '\n')
     
     const mapLines = generatedMap.split('\n')
     for (let i = 0; i < mapLines.length; i++) {
@@ -103,13 +103,11 @@ export abstract class MapParserBase {
 
     const textureGroup = this.meta.textureGroup
     const defaultAnimationKeys = singleCharacterAnimations.keys()
-    let result = defaultAnimationKeys.next()
-    while(!result.done) {
-      const animationName = result.value
+    for (var i = 0; i < defaultAnimationKeys.length; i++) {
+      const animationName = defaultAnimationKeys[i]
       if (animationName.startsWith(textureGroup)) {
         this.addDefaultAnimation(singleCharacterAnimations.get(animationName), animationName)
       }
-      result = defaultAnimationKeys.next()
     }
   }
 

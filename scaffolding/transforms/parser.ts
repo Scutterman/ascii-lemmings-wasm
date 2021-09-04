@@ -39,7 +39,7 @@ export class Parser extends MapParserBase {
     this.addLevelSelectStatement(tag, this.meta.code)
 
     let skillValues: string[] = []
-    const keys = Array.from(this.meta.skills.keys())
+    const keys = this.meta.skills.keys()
     for (const keyIndex in keys) {
       const key = keys[keyIndex]
       const value = this.meta.skills.get(key)
@@ -74,7 +74,7 @@ export class Parser extends MapParserBase {
   }
   
   protected addDefaultAnimation(character: string, animationListKey: string): void {
-    console.log('adding default animation', character, animationListKey)
+    console.log('adding default animation ' + character + ' ' + animationListKey)
     this.lmd += 'mapDetail.defaultAnimations.set("' + character + '", "' + animationListKey + '")\n'
   }
   
@@ -107,17 +107,19 @@ export class Parser extends MapParserBase {
         'export function getAvailableLevels(difficulty: string): LevelMetadata[] | null {\n' +
         ' if (false) { return null }\n'
       
-      const difficulties = Array.from(this.availableLevels.keys())
+      const difficulties = this.availableLevels.keys()
 
-      for (const difficulty of difficulties) {
+      for (let i = 0; i < difficulties.length; i++) {
+        const difficulty = difficulties[i]
         const levels = this.availableLevels.get(difficulty)
-        const levelNumbers = Array.from(levels.keys())
+        const levelNumbers = levels.keys()
         levelNumbers.sort()
         
         functionContents += 'else if (difficulty == "' + difficulty + '") { return availableLevels_' + difficulty + ' }\n'
         
         fileContents += 'const availableLevels_' + difficulty + ': LevelMetadata[] = []\n'
-        for (const levelNumber of levelNumbers) {
+        for (let i = 0; i < levelNumbers.length; i++) {
+          const levelNumber = levelNumbers[i]
           const level = levels.get(levelNumber)
           fileContents += 'availableLevels_' + difficulty + '.push(new LevelMetadata("' + level.name + '",' + level.number + ',"' + level.code + '","' + level.difficulty + '"))\n'
         }

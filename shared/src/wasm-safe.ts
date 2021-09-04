@@ -13,3 +13,14 @@ export class LevelMetadata {
     public numberOfLemmingsForSuccess: number
   ) {}
 }
+
+export const stringOnlyContainsSafeCharacters = (str: string, safeCharacters: string[]): boolean => {
+  const splitString = str.split('')
+  for (let i = 0; i < splitString.length; i++) {
+    if (!safeCharacters.includes(splitString[i])) {
+      return false
+    }
+  }
+
+  return true
+}
