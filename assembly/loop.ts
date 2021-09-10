@@ -88,6 +88,9 @@ function processControlClicks(clickProcessed: boolean): boolean {
 
   for (let i = 0; i < currentLevel.uiPanels.length; i++) {
     const panel = currentLevel.uiPanels[i]
+    if (!panel.isShowing()) {
+      continue
+    }
     const items = panel.getItems()
     for (let j = 0; j < items.length; j++) {
       clickProcessed = processLabelEvents(items[j], clickProcessed)
@@ -110,8 +113,9 @@ function processControlClicks(clickProcessed: boolean): boolean {
 }
 
 function processLabelEvents(label: UILabel, clickProcessed: boolean): boolean {
-  const hasFocus = label.isInBounds(gameState.mouseTileX, gameState.mouseTileY)
+  const hasFocus = label.isShowing() && label.isInBounds(gameState.mouseTileX, gameState.mouseTileY)
   label.setFocus(hasFocus)
+
   if (!clickProcessed && hasFocus && label instanceof UIControl) {
     const ctrl = label as UIControl
     gameState.focusedUiControl = ctrl
