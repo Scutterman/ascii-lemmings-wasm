@@ -39,7 +39,11 @@ export class AnimationParser {
     const animationLines: string[] = animationsContent.replaceAll('\r\n', '\n').split('\n')
     
     for (let i = 0; i < animationLines.length; i++) {
-      const line = animationLines[i].trim()
+      let line = animationLines[i]
+      
+      if (this.currentSection != AnimationSection.Frame) {
+        line = line.trim()
+      }
 
       if (line.length === 0) {
         continue
