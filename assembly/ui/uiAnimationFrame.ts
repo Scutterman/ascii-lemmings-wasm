@@ -2,6 +2,7 @@ import { Vec2 } from "../position";
 import { AnimationFrame } from "../types";
 import { Panel } from "./panel";
 import { UIControl } from "./uiControl";
+import { UILabel } from "./uiLabel";
 
 let lastClickedFrame: i16 = -1
 const lastClickedPosition: Vec2 = new Vec2(-1, -1)
@@ -22,9 +23,11 @@ export class UiAnimationFrame extends Panel {
     position: Vec2,
     private animationFrame: AnimationFrame,
     private frameNumber: i16,
+    colour: string,
     tag: string = ''
   ) {
     super(position, [], 1, tag)
+    this.setColour(colour)
     this.setupButtons()
   }
   
@@ -71,5 +74,10 @@ export class UiAnimationFrame extends Panel {
 
   public getAnimationFrame(): AnimationFrame {
     return this.animationFrame
+  }
+
+  public addItem(item: UILabel): void {
+    item.setColour(this.getColour())
+    super.addItem(item)
   }
 }
