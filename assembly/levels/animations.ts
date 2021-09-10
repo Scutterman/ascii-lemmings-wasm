@@ -7,8 +7,8 @@ import { getLastFrame, reset, UiAnimationFrame } from "../ui/uiAnimationFrame"
 import { animationItems } from "../generatedLevels/animationItems"
 import { PanelContainer } from "../ui/panelContainer"
 import { SingleCharacterAnimation } from "../maps/types"
-import { UILabel } from "../ui/uiLabel"
 import { isEditingMap } from "../imports"
+import { LabelledButton, EasyLabelledButton } from "../ui/labelledButton"
 
 export class Animations extends MetaScreen {
   private animationsList: Panel = new Panel(new Vec2(2, 2))
@@ -16,8 +16,8 @@ export class Animations extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 40))
   private animationEditor: PanelContainer = new PanelContainer(new Vec2(2, 5))
   private displayedAnimation: string | null = null
-
-  private newNameLabel: UILabel = new UILabel(new Vec2(-1, -1), '', 'NEW_NAME')
+  private newNameLabel: LabelledButton = new EasyLabelledButton('Animation Name', 'NEW_NAME')
+  private newColourLabel: LabelledButton = new EasyLabelledButton('Colour', 'NEW_COLOUR')
   private newNameCreateButton: UIControl
   private newNamePanel: Panel = new Panel(new Vec2(-1,-1))
   private newButton: UIControl
@@ -73,6 +73,8 @@ export class Animations extends MetaScreen {
     this.newNamePanel.setBackgroundColour('#ffffff')
     this.newNamePanel.addItem(this.newNameLabel)
     this.newNamePanel.addLinebreak()
+    this.newNamePanel.addItem(this.newColourLabel)
+    this.newNamePanel.addLinebreak()
     this.newNamePanel.addItem(this.newNameCreateButton)
     this.newNamePanel.addItem(new UIControl(new Vec2(-1, -1), 'Cancel', () => {
       (currentLevel as Animations).newNamePanel.hide()
@@ -94,18 +96,23 @@ export class Animations extends MetaScreen {
   private addAnimation(): void {
     resetText()
     this.newNameCreateButton.setBackgroundColour('#ffffff00')
-    this.newNameLabel.updateText('')
+    this.newNameLabel.setControlText('')
     this.newNamePanel.show()
   }
   
   private addAnimationByName(): void {
-    const animationName = this.newNameLabel.getText()
+    const animationName = this.newNameLabel.getControlText()
+    let animationColour = this.newColourLabel.getControlText()
+    if (!this.validateColour(animationColour)) {
+      animationColour = '#000000'
+    }
+    
     if (animationName.length == 0 || animationItems.has(animationName)) {
       this.newNameCreateButton.setBackgroundColour('#cf4a4a')
       return
     }
 
-    animationItems.set(animationName, new SingleCharacterAnimation(' ', '#000000'))
+    animationItems.set(animationName, new SingleCharacterAnimation(' ', animationColour))
     this.addToAnimationList(animationName)
     this.newNamePanel.hide()
   }
@@ -164,10 +171,7 @@ export class Animations extends MetaScreen {
       const lastClickedFrame = getLastFrame()
       const items = this.animationEditor.getItems()
       if (newNameshowing) {
-        if (text != this.newNameLabel.getText()) {
-          this.newNameLabel.updateText(text)
-          this.newNameCreateButton.setBackgroundColour('#ffffff00')
-        }
+        this.handleNewNamescreenTextEntry(text)
       }
       else if (editorShowing && lastClickedFrame > -1 && lastClickedFrame < items.length) {
         resetText()
@@ -178,6 +182,48 @@ export class Animations extends MetaScreen {
         }
       }
     }
+  }
+
+  private handleNewNamescreenTextEntry(text: string): void {
+    const _focused = gameState.focusedUiControl
+    if (_focused == null || !(_focused instanceof LabelledButton)) {
+       return
+    }
+
+    const focused = _focused as LabelledButton
+    const tag = focused.getTag()
+    if (tag.length == 0) {
+      return
+    }
+
+    const existingText = focused.getControlText()
+
+    if (text == existingText) {
+      return
+    }
+      
+    focused.setControlText(existingText + text)
+    resetText()
+
+    if (tag == this.newNameLabel.getTag()) {
+      this.newNameCreateButton.setBackgroundColour('#ffffff00')
+    }
+  }
+
+  private validateColour(colour: string): boolean {
+    if (colour.length != 7 || !colour.startsWith('#')) {
+      return false
+    }
+
+    const colourcharacters = colour.split('')
+    const safeColourcharacters = 'ABCDEFabcdef0123456789'.split('')
+    for (var i = 1; i < colourcharacters.length; i++) {
+      if (!safeColourcharacters.includes(colourcharacters[i])) {
+        return false
+      }
+    }
+
+    return true
   }
 
   public renderLevel(): void {
