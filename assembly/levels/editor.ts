@@ -155,9 +155,7 @@ export class Editor extends MetaScreen {
     }))
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Save", () => {
       ;const lvl = currentLevel as Editor
-      const levelName = lvl.metaMap.meta.difficulty + '_' +
-        lvl.metaMap.meta.number.toString() + '_' +
-        lvl.metaMap.meta.code + '.map'
+      const levelName = lvl.metaMap.meta.number.toString() + '_' + lvl.metaMap.meta.code + '.map'
       messageResponse('save',  levelName, lvl.metaMap.export())
     }))
   }
