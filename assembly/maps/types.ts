@@ -177,7 +177,7 @@ export abstract class AnimationListItem {
     
     animation.reset()
     const numberOfFrames = animation.getNumberOfFrames()
-    let exportedAnimation: string = '//EDITORHINT::ANIMATION::' + name + '\n'
+    let exportedAnimation: string = '//EDITORHINT::ANIMATION::' + name + '::' + this.getColour() + '\n'
     for (let frameIndex = u8(0); frameIndex < numberOfFrames; frameIndex++) {
       const frame = animation.getNextFrame(true)
       exportedAnimation += '//EDITORHINT::FRAME\n'
