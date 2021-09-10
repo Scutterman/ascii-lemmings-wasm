@@ -11,15 +11,9 @@ import { UILabel } from "../ui/uiLabel"
 import { LevelMap, TileDetail } from "../types"
 import { animationItems } from "../generatedLevels/animationItems"
 import { LevelMetadata } from "../../shared/src/wasm-safe"
-import { LabelledButton } from "../ui/labelledButton"
+import { LabelledButton, EasyLabelledButton } from "../ui/labelledButton"
 
 declare function addBlocks(startRow: u8, endRow: u8, startCol: u8, endCol: u8): void
-
-class EasyLabelledButton extends LabelledButton {
-  constructor(labelText: string, tag?: string) {
-    super(new Vec2(0,0), labelText, () => {}, tag)
-  }
-}
 
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))

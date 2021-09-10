@@ -64,3 +64,9 @@ export class LabelledButton extends UIControl {
     super.render()
   }
 }
+
+export class EasyLabelledButton extends LabelledButton {
+  constructor(labelText: string, tag?: string) {
+    super(new Vec2(0,0), labelText, () => {}, tag)
+  }
+}
