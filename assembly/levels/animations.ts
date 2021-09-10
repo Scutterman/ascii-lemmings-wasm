@@ -97,6 +97,7 @@ export class Animations extends MetaScreen {
     resetText()
     this.newNameCreateButton.setBackgroundColour('#ffffff00')
     this.newNameLabel.setControlText('')
+    this.newColourLabel.setControlText('')
     this.newNamePanel.show()
   }
   
