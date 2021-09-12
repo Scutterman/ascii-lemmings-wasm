@@ -36,12 +36,11 @@ class GenerateMapTransform extends Transform {
   }
   
   private processDifficulty(difficulty: string): void {
-    let files = this.listFiles('assembly/maps/' + difficulty, this.baseDir)
+    let files = this.listFiles('assembly/maps/' + difficulty, this.baseDir, /^.*.map$/)
     
     if (files == null) { this.log('Files null'); files = [] }
     this.log('found files: ' + files.length.toString() + ' in ./assembly/maps/' + difficulty)
     this.log(files.join('\n'))
-    files = files.filter(file => file.endsWith('.ts'))
     
     this.log('Processing map directory ' + difficulty)
     
@@ -53,7 +52,7 @@ class GenerateMapTransform extends Transform {
           this.log('Could not read map ' + difficulty + '/' + files[i])
         } else {
           this.log('read map, contains ' + map.length.toString() + ' characters')
-          const parts = files[i].substr(0, files[i].length - 3).split('_')
+          const parts = files[i].substr(0, files[i].length - 4).split('_')
           if (parts.length < 2) {
             this.log('Could not split file name into number and code')
             continue
