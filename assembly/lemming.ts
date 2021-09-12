@@ -82,7 +82,10 @@ export class Lemming {
 
   public setGift(gift: LemmingGift): boolean {
     const level = currentLevel
-    if (gift != LemmingGift.Walk && level.canUseSkill(gift) == false) {
+    if (this.action instanceof Block && gift != LemmingGift.Bomb) {
+      return false
+    }
+    else if (gift != LemmingGift.Walk && level.canUseSkill(gift) == false) {
       return false
     } else {
       level.skillUsed(gift)
