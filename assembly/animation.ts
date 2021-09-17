@@ -24,7 +24,7 @@ export enum BlockSide {
 export class Animation {
   private currentFrameIndex: u8 = 0
   private frames: AnimationFrame[]
-  private canDestroySides: u8 = BlockSide.None
+  private canDestroySides: u32 = BlockSide.None
 
   constructor(frames: AnimationFrame[]) {
     this.frames = frames
