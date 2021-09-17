@@ -73,15 +73,15 @@ export function getPositionInDirection(sourcePosition: Vec2, direction: Directio
   const targetTilePosition = sourcePosition.clone()
   
   if (testDirection(direction, Direction.Up)) {
-    targetTilePosition.y--
+    targetTilePosition.y = targetTilePosition.y - 1
   } else if (testDirection(direction, Direction.Down)) {
-    targetTilePosition.y++
+    targetTilePosition.y = targetTilePosition.y + 1
   }
 
   if (testDirection(direction, Direction.Right)) {
-    targetTilePosition.x++
+    targetTilePosition.x = targetTilePosition.x + 1
   } else if (testDirection(direction, Direction.Left)) {
-    targetTilePosition.x--
+    targetTilePosition.x = targetTilePosition.x - 1
   }
 
   return targetTilePosition

@@ -72,7 +72,7 @@ export class Builder extends LemmingAction {
   }
 
   private canMoveOntoBrickTile(lemming: Lemming): boolean {
-    const tile = getTileInDirection(lemming.position, lemming.facingDirection & Direction.Up)
+    const tile = getTileInDirection(lemming.position, lemming.facingDirection | Direction.Up)
     return tile == TILE_AIR
   }
 }

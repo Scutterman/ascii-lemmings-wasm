@@ -131,7 +131,7 @@ export function start(): boolean {
     const titleScreen = new TitleScreen()
     loadLevel(titleScreen)
   }
-  
+
   return true
 }
 

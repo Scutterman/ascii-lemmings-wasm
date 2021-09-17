@@ -63,10 +63,10 @@ export class Lemming {
       removeTerrainFromDirection(this.position, Direction.Down)
       removeTerrainFromDirection(this.position, Direction.Left)
       removeTerrainFromDirection(this.position, Direction.Right)
-      removeTerrainFromDirection(this.position, Direction.Up & Direction.Left)
-      removeTerrainFromDirection(this.position, Direction.Up & Direction.Right)
-      removeTerrainFromDirection(this.position, Direction.Down & Direction.Left)
-      removeTerrainFromDirection(this.position, Direction.Down & Direction.Right)
+      removeTerrainFromDirection(this.position, Direction.Up | Direction.Left)
+      removeTerrainFromDirection(this.position, Direction.Up | Direction.Right)
+      removeTerrainFromDirection(this.position, Direction.Down | Direction.Left)
+      removeTerrainFromDirection(this.position, Direction.Down | Direction.Right)
       this.removeFromGame()
       return false
     }

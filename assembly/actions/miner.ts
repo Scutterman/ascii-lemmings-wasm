@@ -20,7 +20,7 @@ export class Miner extends LemmingAction {
     } else if (this.canMineNextTile(lemming)) {
       const xDelta: i16 = lemming.facingDirection == Direction.Right ? 1 : -1
       removeTerrain(new Vec2(lemming.position.x, lemming.position.y + 1), Direction.Down)
-      removeTerrain(new Vec2(lemming.position.x + xDelta, lemming.position.y + 1), Direction.Down & lemming.facingDirection)
+      removeTerrain(new Vec2(lemming.position.x + xDelta, lemming.position.y + 1), Direction.Down | lemming.facingDirection)
       lemming.position.x += xDelta
       lemming.position.y ++
     } else {
@@ -33,7 +33,7 @@ export class Miner extends LemmingAction {
   }
 
   private canMineNextTile(lemming: Lemming): boolean {
-    const pos = getPositionInDirection(lemming.position, lemming.facingDirection & Direction.Down)
+    const pos = getPositionInDirection(lemming.position, lemming.facingDirection | Direction.Down)
     const detail = getSurroundingTileDetail(pos)
     return detail != null && terrainIndestructible(detail.animation, lemming.facingDirection) == false
   }
