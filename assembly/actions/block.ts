@@ -1,6 +1,5 @@
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
-import { SurroundingTiles } from "../map";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
@@ -13,8 +12,8 @@ export class Block extends LemmingAction {
     super(new BlockerAnimation())
   }
   
-  update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
-    if (this.isFalling(surroundingTiles)) {
+  update(lemming: Lemming): void {
+    if (this.isFalling(lemming.position)) {
       lemming.action = new Walk()
     }
   }

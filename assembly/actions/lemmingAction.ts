@@ -1,6 +1,7 @@
-import { Animation } from "../animation";
+import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { SurroundingTiles, TILE_AIR } from "../map";
+import { getTileInDirection, TILE_AIR } from "../map";
+import { Vec2 } from "../position";
 import { Climb } from "./climb";
 import { Fall } from "./fall";
 
@@ -11,11 +12,11 @@ export abstract class LemmingAction {
     this.animation = animation
   }
 
-  abstract update(lemming: Lemming, surroundingTiles: SurroundingTiles): void
+  abstract update(lemming: Lemming): void
   public abstract label(): string
   
-  protected isFalling(surroundingTiles: SurroundingTiles): boolean {
-    return surroundingTiles.bottomCentre == TILE_AIR
+  protected isFalling(lemmingPosition: Vec2): boolean {
+    return getTileInDirection(lemmingPosition, Direction.Down) == TILE_AIR
   }
   
   protected handleFalling(lemming: Lemming, changeAction: boolean = true): void {

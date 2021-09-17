@@ -7,8 +7,8 @@ import { Fall } from "./actions/fall";
 import { LemmingAction } from "./actions/lemmingAction";
 import { Miner } from "./actions/miner";
 import { Walk } from "./actions/walk";
-import { Animation } from "./animation";
-import { removeTerrain, SurroundingTiles } from "./map";
+import { Animation, Direction } from "./animation";
+import { removeTerrainFromDirection } from "./map";
 import { Vec2 } from "./position";
 import { LemmingGift } from "./types";
 import { removeItem } from "./vdom/elements";
@@ -20,7 +20,7 @@ export class BomberAnimation extends Animation {
 export class Lemming {
   public elementId: string = ''
 
-  movingRight: boolean = true
+  facingDirection: Direction = Direction.Right
   removed: boolean = false
   exited: boolean = false
   actionTimeLeft: u16 = 0
@@ -33,10 +33,10 @@ export class Lemming {
   private framesUntilExplosion: u16 = 5
   private explosionAnimation: Animation = new BomberAnimation()
 
-  public update(surroundingTiles: SurroundingTiles): void {
+  public update(): void {
     const processUpdate = !this.isExploding || this.updateExplosion()
     if (processUpdate) {
-      this.action.update(this, surroundingTiles)
+      this.action.update(this)
     }
   }
 
@@ -59,14 +59,14 @@ export class Lemming {
       this.framesUntilExplosion--
       return true
     } else {
-      removeTerrain(currentLevel.map, new Vec2(this.position.x - 1, this.position.y -1))
-      removeTerrain(currentLevel.map, new Vec2(this.position.x - 1, this.position.y))
-      removeTerrain(currentLevel.map, new Vec2(this.position.x - 1, this.position.y + 1))
-      removeTerrain(currentLevel.map, new Vec2(this.position.x, this.position.y - 1))
-      removeTerrain(currentLevel.map, new Vec2(this.position.x, this.position.y + 1))
-      removeTerrain(currentLevel.map, new Vec2(this.position.x + 1, this.position.y - 1))
-      removeTerrain(currentLevel.map, new Vec2(this.position.x + 1, this.position.y))
-      removeTerrain(currentLevel.map, new Vec2(this.position.x + 1, this.position.y + 1))
+      removeTerrainFromDirection(this.position, Direction.Up)
+      removeTerrainFromDirection(this.position, Direction.Down)
+      removeTerrainFromDirection(this.position, Direction.Left)
+      removeTerrainFromDirection(this.position, Direction.Right)
+      removeTerrainFromDirection(this.position, Direction.Up & Direction.Left)
+      removeTerrainFromDirection(this.position, Direction.Up & Direction.Right)
+      removeTerrainFromDirection(this.position, Direction.Down & Direction.Left)
+      removeTerrainFromDirection(this.position, Direction.Down & Direction.Right)
       this.removeFromGame()
       return false
     }
@@ -135,6 +135,10 @@ export class Lemming {
         return false
     }
     return true
+  }
+
+  public turnAround(): void {
+    this.facingDirection = this.facingDirection == Direction.Right ? Direction.Left : Direction.Right
   }
 }
 

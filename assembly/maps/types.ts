@@ -1,18 +1,20 @@
-import { Animation } from "../animation";
+import { Animation, BlockSide } from "../animation";
 import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
 import { LevelMap, LevelTileDetail, TileDetail } from "../types";
 import { animationItems } from "../generatedLevels/animationItems";
 import { LevelMetadata } from "../../shared/src/wasm-safe"
 import { MapParserBase } from "../../shared/src/index"
 
-export function characterToAnimation(character: string): Animation {
+export function characterToAnimation(character: string, canDestroyFromDirection: BlockSide = BlockSide.None): Animation {
   const frame = [
     [character, character, character, character],
     [character, character, character, character],
     [character, character, character, character],
     [character, character, character, character]
   ]
-  return new Animation([frame])
+  const animation = new Animation([frame])
+  animation.setCanDestroySides(canDestroyFromDirection)
+  return animation
 }
 
 export class LevelMapDetail {
@@ -112,6 +114,7 @@ export class LevelMapDetail {
 
   public detailFromTile(tile: string, row: i32, col: i32): TileDetail {
     let detail = new TileDetail(tile, '#000000', new Animation([]))
+    
     switch(true) {
       case tile == TILE_BOUNDARY:
         detail.animation = characterToAnimation('_')
@@ -219,9 +222,9 @@ export class StandardAnimation extends AnimationListItem {
 
 export class SingleCharacterAnimation extends AnimationListItem {
   private animation: Animation
-  constructor(private character: string, colour: string) {
+  constructor(private character: string, colour: string, canDestroyFromDirection: BlockSide = BlockSide.None) {
     super(colour)
-    this.animation = characterToAnimation(this.character)
+    this.animation = characterToAnimation(this.character, canDestroyFromDirection)
   }
   
   public getAnimation(): Animation {

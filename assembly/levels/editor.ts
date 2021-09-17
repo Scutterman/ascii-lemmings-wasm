@@ -12,6 +12,7 @@ import { LevelMap, TileDetail } from "../types"
 import { animationItems } from "../generatedLevels/animationItems"
 import { LevelMetadata } from "../../shared/src/wasm-safe"
 import { LabelledButton, EasyLabelledButton } from "../ui/labelledButton"
+import { BlockSide } from "../animation"
 
 declare function addBlocks(startRow: u8, endRow: u8, startCol: u8, endCol: u8): void
 
@@ -170,7 +171,6 @@ export class Editor extends MetaScreen {
 
   public setBlockAnimation(animationName: string): void {
     animationName = animationName.replace('ANIMATION_LIST_ITEM_KEY_', '')
-    
     if (animationName == 'Cancel') {
       return
     } else if (animationName != 'None') {
@@ -202,9 +202,9 @@ export class Editor extends MetaScreen {
       this.metaMap.tiles[this.selectedBlockY] = beginning + tile + end
     }
 
-    const id = this.map[this.selectedBlockY][this.selectedBlockX].elementId
+    const detail = this.map[this.selectedBlockY][this.selectedBlockX]
     const tileDetail = this.metaMap.detailFromTile(tile, this.selectedBlockY, this.selectedBlockX)
-    tileDetail.elementId = id
+    tileDetail.elementId = detail.elementId
     tileDetail.isDirty = true
     if (tile == TILE_AIR) {
       tileDetail.needsRemoval = true

@@ -1,6 +1,5 @@
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
-import { SurroundingTiles } from "../map";
 import { LemmingAction } from "./lemmingAction"
 import { Walk } from "./walk";
 import { BLOCKS_FALLEN_BEFORE_UMBRELLA, Umbrella } from './umbrella'
@@ -16,11 +15,11 @@ export class Fall extends LemmingAction {
     super(new FallerAnimation())
   }
   
-  public update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
-    if (this.isFalling(surroundingTiles)) {
+  update(lemming: Lemming): void {
+    if (this.isFalling(lemming.position)) {
       if (lemming.hasUmbrella && this.blocksFallen >= BLOCKS_FALLEN_BEFORE_UMBRELLA) {
         lemming.action = new Umbrella()
-        lemming.action.update(lemming, surroundingTiles)
+        lemming.action.update(lemming)
       } else {
         this.handleFalling(lemming, false)
         this.blocksFallen++

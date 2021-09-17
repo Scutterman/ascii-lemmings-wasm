@@ -3,7 +3,7 @@ import { BomberAnimation, Lemming } from "../lemming"
 import { getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
 import { BaseLevel } from "./baseLevel"
-import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTiles, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
+import { BOUNDARIES_X, BOUNDARIES_Y, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { BlockerAnimation } from "../actions/block"
@@ -175,7 +175,7 @@ export class Level extends BaseLevel {
     for (let i = 0; i < lemmings.length; i++) {
       if (lemmings[i].removed) { continue }
       
-      lemmings[i].update(getSurroundingTiles(this.map, lemmings[i].position))
+      lemmings[i].update()
       
       if (lemmings[i].exited) {
         this.numberOfLemmingsSaved++

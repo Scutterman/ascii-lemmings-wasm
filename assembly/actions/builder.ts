@@ -1,7 +1,7 @@
 import { currentLevel } from "..";
-import { Animation } from "../animation";
+import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { addBrick, getSurroundingTiles, SurroundingTiles, TILE_AIR } from "../map";
+import { addBrick, getTileInDirection, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
@@ -18,16 +18,15 @@ export class Builder extends LemmingAction {
     super(new BuilderAnimation())
   }
   
-  update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
-    this.updateBuilder(lemming, surroundingTiles)
+  update(lemming: Lemming): void {
   }
   
   public label(): string {
     return 'Builder'
   }
-  
-  private updateBuilder(lemming: Lemming, surroundingTiles: SurroundingTiles, hasTurnedAround: boolean = false): void {
-    if (this.isFalling(surroundingTiles)) {
+
+  private updateBuilder(lemming: Lemming): void {
+    if (this.isFalling(lemming.position)) {
       this.handleFalling(lemming)
       return
     } else if(this.bricksRemaining == 0) {
@@ -35,27 +34,26 @@ export class Builder extends LemmingAction {
       return
     }
     
-    const xDelta: i16 = lemming.movingRight ? 1 : -1
+    const xDelta: i16 = lemming.facingDirection == Direction.Right ? 1 : -1
     
     if (this.moveOntoBrick == false) {
       this.moveOntoBrick = true
-    } else if (this.canMoveOntoBrickTile(lemming, surroundingTiles)) {
+    } else if (this.canMoveOntoBrickTile(lemming)) {
       lemming.position.x += xDelta
       lemming.position.y--
-      surroundingTiles = getSurroundingTiles(currentLevel.map, lemming.position)
-    } else if (this.canBuildTileInOtherDirection(lemming, surroundingTiles)) {
-      lemming.movingRight = !lemming.movingRight
+    } else if (this.canBuildTileInOtherDirection(lemming)) {
+      lemming.turnAround()
       this.moveOntoBrick = false
       return
     } else {
       lemming.action = new Walk()
     }
     
-    if (this.canBuildNextTile(lemming, surroundingTiles)) {
+    if (this.canBuildNextTile(lemming)) {
       addBrick(currentLevel.map, new Vec2(lemming.position.x + xDelta, lemming.position.y))
       this.bricksRemaining--
-    } else if (this.canBuildTileInOtherDirection(lemming, surroundingTiles)) {
-      lemming.movingRight = !lemming.movingRight
+    } else if (this.canBuildTileInOtherDirection(lemming)) {
+      lemming.turnAround()
       this.moveOntoBrick = false
       return
     } else {
@@ -63,18 +61,18 @@ export class Builder extends LemmingAction {
     }
   }
 
-  private canBuildNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
-    const tile: string = lemming.movingRight ? surroundingTiles.right : surroundingTiles.left
+  private canBuildNextTile(lemming: Lemming): boolean {
+    const tile = getTileInDirection(lemming.position, lemming.facingDirection)
     return tile == TILE_AIR
   }
 
-  private canBuildTileInOtherDirection(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
-    const tile: string = lemming.movingRight ? surroundingTiles.left : surroundingTiles.right
+  private canBuildTileInOtherDirection(lemming: Lemming): boolean {
+    const tile = getTileInDirection(lemming.position, lemming.facingDirection)
     return tile == TILE_AIR
   }
 
-  private canMoveOntoBrickTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
-    const tile: string = lemming.movingRight ? surroundingTiles.topRight : surroundingTiles.topLeft
+  private canMoveOntoBrickTile(lemming: Lemming): boolean {
+    const tile = getTileInDirection(lemming.position, lemming.facingDirection & Direction.Up)
     return tile == TILE_AIR
   }
 }

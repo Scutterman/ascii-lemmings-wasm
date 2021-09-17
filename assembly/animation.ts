@@ -1,8 +1,31 @@
+import { testDirection } from "./map"
 import { AnimationFrame } from "./types"
+
+export enum Direction {
+  None = 0,
+  Left = 1,
+  Up = 2,
+  Right = 4,
+  Down = 8,
+  All = 15
+}
+
+// Directions flipped to make damage destruction code easier to understand
+// A lemming walking right will be able to (or not) destroy the left side of a block etc.
+export enum BlockSide {
+  None = Direction.None,
+  Left = Direction.Right,
+  Top = Direction.Down,
+  Right = Direction.Left,
+  Bottom = Direction.Up,
+  All = Direction.All
+}
 
 export class Animation {
   private currentFrameIndex: u8 = 0
   private frames: AnimationFrame[]
+  private canDestroySides: u8 = BlockSide.None
+
   constructor(frames: AnimationFrame[]) {
     this.frames = frames
   }
@@ -51,7 +74,21 @@ export class Animation {
     this.frames.push(frame)
   }
 
+  public setCanDestroySides(canDestroySides: BlockSide): void {
+    this.canDestroySides = canDestroySides
+  }
+
+  public getCanDestroySides(): BlockSide {
+    return this.canDestroySides
+  }
+
+  public canDestroy(damageMovingInDirection: Direction): boolean {
+    return testDirection(this.canDestroySides, damageMovingInDirection)
+  }
+
   public clone(): Animation {
-    return new Animation(this.frames)
+    const animation = new Animation(this.frames)
+    animation.setCanDestroySides(this.canDestroySides)
+    return animation
   }
 }

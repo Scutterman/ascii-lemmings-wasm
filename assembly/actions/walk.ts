@@ -1,6 +1,6 @@
-import { Animation } from "../animation";
+import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { isWalkingDownStairs, SurroundingTiles, TILE_AIR, TILE_BRICK, TILE_EXIT } from "../map";
+import { getTileInDirection, isWalkingDownStairs, TILE_AIR, TILE_BRICK, TILE_EXIT } from "../map";
 import { LemmingAction } from "./lemmingAction"
 
 export class WalkerAnimation extends Animation {
@@ -12,22 +12,22 @@ export class Walk extends LemmingAction {
     super(new WalkerAnimation())
   }
   
-  public update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
-    if (this.isFalling(surroundingTiles)) {
+  update(lemming: Lemming): void {
+    if (this.isFalling(lemming.position)) {
       this.handleFalling(lemming)
-    } else if ((!lemming.movingRight && surroundingTiles.left == TILE_EXIT) || (lemming.movingRight && surroundingTiles.right == TILE_EXIT)) {
+    } else if (getTileInDirection(lemming.position, lemming.facingDirection) == TILE_EXIT) {
       lemming.exited = true
       lemming.removeFromGame()
-    } else if (this.canWalkOnNextTile(lemming, surroundingTiles) == false) {
+    } else if (this.canWalkOnNextTile(lemming) == false) {
       if (lemming.isClimber) {
         this.handleClimbing(lemming)
       } else {
-        lemming.movingRight = !lemming.movingRight
+        lemming.turnAround()
       }
     } else {
-      const tile: string = lemming.movingRight ? surroundingTiles.right : surroundingTiles.left
+      const tile = getTileInDirection(lemming.position, lemming.facingDirection)
       const isStairs = isWalkingDownStairs(lemming)
-      lemming.position.x += lemming.movingRight ? 1 : -1
+      lemming.position.x += lemming.facingDirection ? 1 : -1
       if (tile == TILE_BRICK) {
         lemming.position.y--
       } else if (isStairs) {
@@ -35,18 +35,18 @@ export class Walk extends LemmingAction {
       }
     }
   }
-  
+
   public label(): string {
     return 'Walker'
   }
 
-  private canWalkOnNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
-    const tile: string = lemming.movingRight ? surroundingTiles.right : surroundingTiles.left
-    return tile == TILE_BRICK ? this.canWalkOnBrickTile(lemming, surroundingTiles) : tile == TILE_AIR
+  private canWalkOnNextTile(lemming: Lemming): boolean {
+    const tile = getTileInDirection(lemming.position, lemming.facingDirection)
+    return tile == TILE_BRICK ? this.canWalkOnBrickTile(lemming) : tile == TILE_AIR
   }
 
-  private canWalkOnBrickTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
-    const tile: string = lemming.movingRight ? surroundingTiles.topRight : surroundingTiles.topLeft
+  private canWalkOnBrickTile(lemming: Lemming): boolean {
+    const tile = getTileInDirection(lemming.position, lemming.facingDirection & Direction.Up)
     return tile == TILE_AIR
   }
 }

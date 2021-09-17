@@ -1,8 +1,6 @@
-import { currentLevel } from "..";
-import { Animation } from "../animation";
+import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { removeTerrain, SurroundingTiles, terrainIndestructible, TILE_BOUNDARY } from "../map";
-import { Vec2 } from "../position";
+import { getPositionInDirection, getSurroundingTileDetail, removeTerrainFromDirection, terrainIndestructible } from "../map";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
@@ -15,15 +13,21 @@ export class Digger extends LemmingAction {
     super(new DiggerAnimation())
   }
   
-  update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
-    if (this.isFalling(surroundingTiles)) {
+  update(lemming: Lemming): void {
+    if (this.isFalling(lemming.position)) {
       this.handleFalling(lemming)
-    } else if (terrainIndestructible(surroundingTiles.bottomCentre)) {
+    } else if (!this.canMineDown(lemming)) {
       lemming.action = new Walk()
     } else {
-      removeTerrain(currentLevel.map, new Vec2(lemming.position.x, lemming.position.y + 1))
+      removeTerrainFromDirection(lemming.position, Direction.Down)
       lemming.position.y++
     }
+  }
+
+  private canMineDown(lemming: Lemming): boolean {
+    const pos = getPositionInDirection(lemming.position, Direction.Down)
+    const detail = getSurroundingTileDetail(pos)
+    return detail != null && terrainIndestructible(detail.animation, Direction.Down) == false
   }
   
   public label(): string {

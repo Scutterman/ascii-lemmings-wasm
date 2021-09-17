@@ -1,6 +1,6 @@
-import { Animation } from "../animation";
+import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { SurroundingTiles, TILE_AIR } from "../map";
+import { getTileInDirection, TILE_AIR } from "../map";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
@@ -13,24 +13,22 @@ export class Climb extends LemmingAction {
     super(new ClimberAnimation())
   }
 
-  private hasHitCeiling(surroundingTiles: SurroundingTiles): boolean {
-    return surroundingTiles.topCentre != TILE_AIR
+  private hasHitCeiling(lemming: Lemming): boolean {
+    return getTileInDirection(lemming.position, Direction.Up) != TILE_AIR
   }
   
-  private hasReachedOpening(surroundingTiles: SurroundingTiles, isFacingRight: boolean): boolean {
-    return (
-      (isFacingRight && surroundingTiles.right == TILE_AIR) ||
-      (!isFacingRight && surroundingTiles.left == TILE_AIR)
-    )
+  private hasReachedOpening(lemming: Lemming): boolean {
+    const targetTile = getTileInDirection(lemming.position, lemming.facingDirection)
+    return targetTile == TILE_AIR
   }
 
-  update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
-    if (this.hasReachedOpening(surroundingTiles, lemming.movingRight)) {
-      lemming.position.x += lemming.movingRight ? 1 : -1
+  update(lemming: Lemming): void {
+    if (this.hasReachedOpening(lemming)) {
+      lemming.position.x += lemming.facingDirection == Direction.Right ? 1 : -1
       lemming.action = new Walk()
-    } else if (this.hasHitCeiling(surroundingTiles)) {
-      lemming.movingRight = !lemming.movingRight
-      if (this.isFalling(surroundingTiles)) {
+    } else if (this.hasHitCeiling(lemming)) {
+      lemming.turnAround()
+      if (this.isFalling(lemming.position)) {
         this.handleFalling(lemming)
       }
     } else {

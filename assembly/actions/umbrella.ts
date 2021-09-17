@@ -1,6 +1,5 @@
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
-import { SurroundingTiles } from "../map";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
@@ -17,8 +16,8 @@ export class Umbrella extends LemmingAction {
     super(new FloaterAnimation())
   }
 
-  update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
-    if (!this.isFalling(surroundingTiles)) {
+  update(lemming: Lemming): void {
+    if (!this.isFalling(lemming.position)) {
       lemming.action = new Walk()
     } else if (this.framesSinceFall >= FRAMES_BETWEEN_FALLING) {
       this.framesSinceFall = 0

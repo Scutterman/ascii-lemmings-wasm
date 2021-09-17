@@ -1,4 +1,5 @@
 import { currentLevel } from "."
+import { Animation, BlockSide, Direction } from "./animation"
 import { isBlockerInLocation, Lemming } from "./lemming"
 import { characterToAnimation } from "./maps/types"
 import { Vec2 } from "./position"
@@ -45,17 +46,17 @@ export function mapToTiles(map: LevelMap): LevelTileDetail {
   return arr
 }
 
-export function getSurroundingTiles(map: LevelTileDetail, position: Vec2): SurroundingTiles {
+export function getSurroundingTiles(position: Vec2): SurroundingTiles {
   const surrounding: SurroundingTiles = {
-    topLeft: getSurroundingTile(map, new Vec2(position.x - 1, position.y - 1)),
-    topCentre: getSurroundingTile(map, new Vec2(position.x, position.y - 1)),
-    topRight: getSurroundingTile(map, new Vec2(position.x + 1, position.y - 1)),
-    left: getSurroundingTile(map, new Vec2(position.x - 1, position.y)),
-    centre: getSurroundingTile(map, new Vec2(position.x, position.y)),
-    right: getSurroundingTile(map, new Vec2(position.x + 1, position.y)),
-    bottomLeft: getSurroundingTile(map, new Vec2(position.x - 1, position.y + 1)),
-    bottomCentre: getSurroundingTile(map, new Vec2(position.x, position.y + 1) ),
-    bottomRight: getSurroundingTile(map, new Vec2(position.x + 1, position.y + 1))
+    topLeft: getSurroundingTile(new Vec2(position.x - 1, position.y - 1)),
+    topCentre: getSurroundingTile(new Vec2(position.x, position.y - 1)),
+    topRight: getSurroundingTile(new Vec2(position.x + 1, position.y - 1)),
+    left: getSurroundingTile(new Vec2(position.x - 1, position.y)),
+    centre: getSurroundingTile(new Vec2(position.x, position.y)),
+    right: getSurroundingTile(new Vec2(position.x + 1, position.y)),
+    bottomLeft: getSurroundingTile(new Vec2(position.x - 1, position.y + 1)),
+    bottomCentre: getSurroundingTile(new Vec2(position.x, position.y + 1) ),
+    bottomRight: getSurroundingTile(new Vec2(position.x + 1, position.y + 1))
   }
   return surrounding
 }
@@ -64,33 +65,62 @@ function isOutOfMapBounds(map: LevelTileDetail, location: Vec2): boolean {
   return location.x < 0 || location.y < 0 || location.y >= map.length || location.x >= map[location.y].length
 }
 
-function getSurroundingTile(map: LevelTileDetail, position: Vec2): string {
-  if (isOutOfMapBounds(map, position)) {
+export function getSurroundingTileDetail(position: Vec2): TileDetail | null {
+  return isOutOfMapBounds(currentLevel.map, position) ? null : currentLevel.map[position.y][position.x]
+}
+
+export function getPositionInDirection(sourcePosition: Vec2, direction: Direction): Vec2 {
+  const targetTilePosition = sourcePosition.clone()
+  
+  if (testDirection(direction, Direction.Up)) {
+    targetTilePosition.y--
+  } else if (testDirection(direction, Direction.Down)) {
+    targetTilePosition.y++
+  }
+
+  if (testDirection(direction, Direction.Right)) {
+    targetTilePosition.x++
+  } else if (testDirection(direction, Direction.Left)) {
+    targetTilePosition.x--
+  }
+
+  return targetTilePosition
+}
+
+export function getTileInDirection(sourcePosition: Vec2, direction: Direction): Tile {
+  const targetTilePosition = getPositionInDirection(sourcePosition, direction)
+  return getSurroundingTile(targetTilePosition)
+}
+
+export function getSurroundingTile(position: Vec2): Tile {
+  const detail = getSurroundingTileDetail(position)
+  if (detail == null) {
     return '_'
   }
 
   if (isBlockerInLocation(position)) {
     return 'T'
   } else {
-    return map[position.y][position.x].tile
+    return detail.tile
   }
 }
 
 export function isWalkingDownStairs(lemming: Lemming): boolean {
-  const deltaX: i16 = lemming.movingRight ? 1 : -1
+  const deltaX: i16 = lemming.facingDirection == Direction.Right ? 1 : -1
   const tileBelowPosition: Vec2 = new Vec2(lemming.position.x + deltaX, lemming.position.y + 1)
   const tileTwoBelowPosition: Vec2 = new Vec2(lemming.position.x + deltaX, lemming.position.y + 2)
-  const tileBelow: string = getSurroundingTile(currentLevel.map, tileBelowPosition)
-  const tileTwoBelow: string = getSurroundingTile(currentLevel.map, tileTwoBelowPosition)
+  const tileBelow: string = getSurroundingTile(tileBelowPosition)
+  const tileTwoBelow: string = getSurroundingTile(tileTwoBelowPosition)
   return tileBelow == TILE_AIR && (tileTwoBelow == TILE_BRICK || tileTwoBelow == TILE_GROUND)
 }
 
-export function terrainIndestructible(tile: Tile): boolean {
-  return tile == TILE_AIR || tile == TILE_ENTRANCE || tile == TILE_EXIT || tile == TILE_BOUNDARY || tile == TILE_SIDE || tile == TILE_BLOCKER
+export function terrainIndestructible(animation: Animation, damageMovingInDirection: Direction): boolean {
+  return animation.canDestroy(damageMovingInDirection)
 }
 
-export function removeTerrain(map: LevelTileDetail, location: Vec2): boolean {
-  if (isOutOfMapBounds(map, location) || terrainIndestructible(map[location.y][location.x].tile)) {
+export function removeTerrain(location: Vec2, damageMovingInDirection: Direction): boolean {
+  const map = currentLevel.map
+  if (isOutOfMapBounds(map, location) || terrainIndestructible(map[location.y][location.x].animation, damageMovingInDirection)) {
     return false
   } else {
     map[location.y][location.x].tile = TILE_AIR
@@ -100,12 +130,21 @@ export function removeTerrain(map: LevelTileDetail, location: Vec2): boolean {
   }
 }
 
+export function removeTerrainFromDirection(sourcePosition: Vec2, damageMovingInDirection: Direction): boolean {
+  const targetTilePosition = getPositionInDirection(sourcePosition, damageMovingInDirection)
+  return removeTerrain(targetTilePosition, damageMovingInDirection)
+}
+
+export function testDirection(value: Direction, toTestFor: Direction): boolean {
+  return (value & toTestFor) == toTestFor
+}
+
 export function addBrick(map: LevelTileDetail, location: Vec2): boolean {
   if (isOutOfMapBounds(map, location) || map[location.y][location.x].tile != TILE_AIR) {
     return false
   } else {
     map[location.y][location.x].tile = TILE_BRICK
-    map[location.y][location.x].animation = characterToAnimation(TILE_BRICK)
+    map[location.y][location.x].animation = characterToAnimation(TILE_BRICK, BlockSide.All)
     map[location.y][location.x].isDirty = true
     return true
   }

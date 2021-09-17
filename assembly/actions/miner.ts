@@ -1,7 +1,6 @@
-import { currentLevel } from "..";
-import { Animation } from "../animation";
+import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { removeTerrain, SurroundingTiles, terrainIndestructible } from "../map";
+import { getPositionInDirection, getSurroundingTileDetail, removeTerrain, terrainIndestructible } from "../map";
 import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
@@ -15,13 +14,13 @@ export class Miner extends LemmingAction {
     super(new MinerAnimation())
   }
   
-  update(lemming: Lemming, surroundingTiles: SurroundingTiles): void {
-    if (this.isFalling(surroundingTiles)) {
+  update(lemming: Lemming): void {
+    if (this.isFalling(lemming.position)) {
       this.handleFalling(lemming)
-    } else if (this.canMineNextTile(lemming, surroundingTiles)) {
-      const xDelta: i16 = lemming.movingRight ? 1 : -1
-      removeTerrain(currentLevel.map, new Vec2(lemming.position.x, lemming.position.y + 1))
-      removeTerrain(currentLevel.map, new Vec2(lemming.position.x + xDelta, lemming.position.y + 1))
+    } else if (this.canMineNextTile(lemming)) {
+      const xDelta: i16 = lemming.facingDirection == Direction.Right ? 1 : -1
+      removeTerrain(new Vec2(lemming.position.x, lemming.position.y + 1), Direction.Down)
+      removeTerrain(new Vec2(lemming.position.x + xDelta, lemming.position.y + 1), Direction.Down & lemming.facingDirection)
       lemming.position.x += xDelta
       lemming.position.y ++
     } else {
@@ -33,8 +32,9 @@ export class Miner extends LemmingAction {
     return 'Miner'
   }
 
-  private canMineNextTile(lemming: Lemming, surroundingTiles: SurroundingTiles): boolean {
-    const tile: string = lemming.movingRight ? surroundingTiles.bottomRight : surroundingTiles.bottomLeft
-    return terrainIndestructible(tile) == false
+  private canMineNextTile(lemming: Lemming): boolean {
+    const pos = getPositionInDirection(lemming.position, lemming.facingDirection & Direction.Down)
+    const detail = getSurroundingTileDetail(pos)
+    return detail != null && terrainIndestructible(detail.animation, lemming.facingDirection) == false
   }
 }
