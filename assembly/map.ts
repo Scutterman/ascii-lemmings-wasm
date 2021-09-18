@@ -115,7 +115,7 @@ export function isWalkingDownStairs(lemming: Lemming): boolean {
 }
 
 export function terrainIndestructible(animation: Animation, damageMovingInDirection: Direction): boolean {
-  return animation.canDestroy(damageMovingInDirection)
+  return animation.canDestroy(damageMovingInDirection) == false
 }
 
 export function removeTerrain(location: Vec2, damageMovingInDirection: Direction): boolean {
