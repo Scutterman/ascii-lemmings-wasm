@@ -19,6 +19,7 @@ export class Builder extends LemmingAction {
   }
   
   update(lemming: Lemming): void {
+    this.updateBuilder(lemming)
   }
   
   public label(): string {
