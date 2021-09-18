@@ -68,7 +68,8 @@ export class Builder extends LemmingAction {
   }
 
   private canBuildTileInOtherDirection(lemming: Lemming): boolean {
-    const tile = getTileInDirection(lemming.position, lemming.facingDirection)
+    const theOtherDirection = lemming.facingDirection == Direction.Right ? Direction.Left : Direction.Right
+    const tile = getTileInDirection(lemming.position, theOtherDirection)
     return tile == TILE_AIR
   }
 
