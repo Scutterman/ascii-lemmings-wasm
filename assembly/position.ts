@@ -12,6 +12,8 @@ export class Vec2 {
   }
 
   public clone(): Vec2 { return new Vec2(this.x, this.y) }
+
+  public toString(): string { return this.x.toString() + ',' + this.y.toString() }
 }
 
 export class Rect {
