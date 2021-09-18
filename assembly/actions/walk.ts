@@ -18,7 +18,7 @@ export class Walk extends LemmingAction {
     } else if (getTileInDirection(lemming.position, lemming.facingDirection) == TILE_EXIT) {
       lemming.exited = true
       lemming.removeFromGame()
-    } else if (this.canWalkOnNextTile(lemming) == false) {
+    } else if (!this.canWalkOnNextTile(lemming)) {
       if (lemming.isClimber) {
         this.handleClimbing(lemming)
       } else {
@@ -27,7 +27,7 @@ export class Walk extends LemmingAction {
     } else {
       const tile = getTileInDirection(lemming.position, lemming.facingDirection)
       const isStairs = isWalkingDownStairs(lemming)
-      lemming.position.x += lemming.facingDirection ? 1 : -1
+      lemming.position.x += lemming.facingDirection == Direction.Right ? 1 : -1
       if (tile == TILE_BRICK) {
         lemming.position.y--
       } else if (isStairs) {

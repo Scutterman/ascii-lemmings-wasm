@@ -92,3 +92,13 @@ export class Animation {
     return animation
   }
 }
+
+
+export const debugDirection = (direction: Direction): string => {
+  let output = ''
+  if (testDirection(direction, Direction.Up)) { output += 'Up' }
+  if (testDirection(direction, Direction.Down)) { output += 'Down' }
+  if (testDirection(direction, Direction.Left)) { output += 'Left' }
+  if (testDirection(direction, Direction.Right)) { output += 'Right' }
+  return output
+}
