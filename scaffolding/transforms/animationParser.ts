@@ -109,43 +109,53 @@ export class AnimationParser {
   }
 
   private addCharacterAnimation(instructions: string[]): void {
-    if (instructions.length < 5) {
+    if (instructions.length < 6) {
       return
     }
     
     const name = instructions[2]
     const character = instructions[3]
     const colour = instructions[4]
-
+    
     if (!allowedUserInputCharacters.includes(character)) { return }
-
+    
     this.singleCharacterAnimations.set(name, character)
-    this.addAnimationItem(name, colour, 'SingleCharacterAnimation', '"' + character + '"')
+    this.addAnimationItem(name, colour, 'SingleCharacterAnimation', '"' + character + '"', instructions[5])
   }
 
   private setupNewAnimation(instructions: string[]): void {
-    if (instructions.length < 3) {
+    if (instructions.length < 5) {
       this.inAnimation = false
       return
     }
 
-    let colour = '#000000'
-    if (instructions.length >= 4) {
-      colour = instructions[3]
-    }
-    
     const name = instructions[2]
-    this.addAnimationItem(name, colour, 'StandardAnimation', name + 'Animation')
+    const colour = instructions[3]
+    this.addAnimationItem(name, colour, 'StandardAnimation', name + 'Animation', instructions[4])
     this.startAnimation(name)
   }
 
-  private addAnimationItem(name: string, colour: string, type: string, value: string): void {
+  private addAnimationItem(name: string, colour: string, type: string, value: string, blockSideImport: string): void {
     if (!stringOnlyContainsSafeCharacters(name, AnimationParser.allowedNames) || !stringOnlyContainsSafeCharacters(colour, AnimationParser.allowedColours)) {
       return
     }
     
-    this.animationItems += 'const ' + name + ' = new ' + type + '(' + value + ', "' + colour + '")\n'
+    this.animationItems += 'const ' + name + ' = new ' + type + '(' + value + ', "' + colour + '", ' + this.getCanDestroyValue(blockSideImport) + ')\n'
     this.animationItems += 'animationItems.set("' + name + '", ' + name + ')\n'
+  }
+
+  private getCanDestroyValue(input: string): number {
+    const blockSideImport = input.split('')
+    if (blockSideImport.length != 4) { return 0 }
+
+    let multiplier = 1
+    let total = 0
+    for (let bit = blockSideImport.length - 1; bit >= 0; bit--) {
+      total += blockSideImport[bit] == '1' ? multiplier : 0
+      multiplier *= 2
+    }
+
+    return total
   }
 
   private setupNewFrame(): void {
