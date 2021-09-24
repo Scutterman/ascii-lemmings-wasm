@@ -92,7 +92,7 @@ export class LevelMapDetail {
   private getDetailFromAnimationLabel(tile: string, animationLabel: string): TileDetail | null {
     if (animationItems.has(animationLabel)) {
       const animation = animationItems.get(animationLabel)
-      return new TileDetail(tile, animation.getColour(), animation.getAnimation())
+      return new TileDetail(tile, animation.getColour(), animation.getAnimation().clone())
     }
 
     return null
