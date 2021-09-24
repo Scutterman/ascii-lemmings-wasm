@@ -1,4 +1,4 @@
-//EDITORHINT::ANIMATION::exit::#000000
+//EDITORHINT::ANIMATION::exit::#000000::0000
 //EDITORHINT::FRAME
 ^  ^
 #/\#
@@ -9,5 +9,37 @@ w  w
 #/\#
 /  \
 |  |
-//EDITORHINT::ANIMATION_SINGLE::grassland_grass::'::#00FF00
-//EDITORHINT::ANIMATION_SINGLE::grassland_ground::G::#825116
+//EDITORHINT::ANIMATION::digRight::#000000::0010
+//EDITORHINT::FRAME
+   /
+  / 
+  \ 
+   \
+//EDITORHINT::FRAME
+  / 
+ /  
+ \  
+  \ 
+//EDITORHINT::FRAME
+ /  
+/   
+\   
+ \  
+//EDITORHINT::ANIMATION_SINGLE::grassland_grass::'::#00FF00::1111
+//EDITORHINT::ANIMATION_SINGLE::grassland_ground::G::#825116::1111
+//EDITORHINT::ANIMATION::DIGLEFT::#FF0080::1000
+//EDITORHINT::FRAME
+\   
+ \  
+ /  
+/   
+//EDITORHINT::FRAME
+ \  
+  \ 
+  / 
+ /  
+//EDITORHINT::FRAME
+  \ 
+   \
+   /
+  / 
