@@ -3,10 +3,10 @@ import { AnimationFrame } from "./types"
 
 export enum Direction {
   None = 0,
-  Left = 1,
-  Up = 2,
-  Right = 4,
-  Down = 8,
+  Up = 1,
+  Left = 2,
+  Down = 4,
+  Right = 8,
   All = 15
 }
 
