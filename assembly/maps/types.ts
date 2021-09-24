@@ -1,5 +1,5 @@
 import { Animation, BlockSide } from "../animation";
-import { TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
+import { testBlockSide, TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
 import { LevelMap, LevelTileDetail, TileDetail } from "../types";
 import { animationItems } from "../generatedLevels/animationItems";
 import { LevelMetadata } from "../../shared/src/wasm-safe"
@@ -174,13 +174,21 @@ export abstract class AnimationListItem {
   public export(name: string): string {
     
     const animation = this.getAnimation().clone()
+
+    const canDestroy = animation.getCanDestroySides()
+    let canDestroyExport = ''
+    canDestroyExport += testBlockSide(canDestroy, BlockSide.Left) ? '1' : '0'
+    canDestroyExport += testBlockSide(canDestroy, BlockSide.Top) ? '1' : '0'
+    canDestroyExport += testBlockSide(canDestroy, BlockSide.Right) ? '1' : '0'
+    canDestroyExport += testBlockSide(canDestroy, BlockSide.Bottom) ? '1' : '0'
+
     if (isSingleCharacterAnimation(animation)) {
-      return '//EDITORHINT::ANIMATION_SINGLE::' + name + '::' + animation.getNextFrame(false)[0][0] + '::' + this.getColour() + '\n'
+      return '//EDITORHINT::ANIMATION_SINGLE::' + name + '::' + animation.getNextFrame(false)[0][0] + '::' + this.getColour() + '::' + canDestroyExport + '\n'
     }
     
     animation.reset()
     const numberOfFrames = animation.getNumberOfFrames()
-    let exportedAnimation: string = '//EDITORHINT::ANIMATION::' + name + '::' + this.getColour() + '\n'
+    let exportedAnimation: string = '//EDITORHINT::ANIMATION::' + name + '::' + this.getColour() + '::' + canDestroyExport + '\n'
     for (let frameIndex = u8(0); frameIndex < numberOfFrames; frameIndex++) {
       const frame = animation.getNextFrame(true)
       exportedAnimation += '//EDITORHINT::FRAME\n'
@@ -211,7 +219,8 @@ function isSingleCharacterAnimation(animation: Animation): boolean {
 }
 
 export class StandardAnimation extends AnimationListItem {
-  constructor(private animation: Animation, colour: string) {
+  constructor(private animation: Animation, colour: string, canDestroyFromDirection: BlockSide = BlockSide.None) {
+    animation.setCanDestroySides(canDestroyFromDirection)
     super(colour)
   }
   

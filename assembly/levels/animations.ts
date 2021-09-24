@@ -9,6 +9,9 @@ import { PanelContainer } from "../ui/panelContainer"
 import { SingleCharacterAnimation } from "../maps/types"
 import { isEditingMap } from "../imports"
 import { LabelledButton, EasyLabelledButton } from "../ui/labelledButton"
+import { UILabel } from "../ui/uiLabel"
+import { LabelledCheckbox } from "../ui/labelledCheckbox"
+import { BlockSide } from "../animation"
 
 export class Animations extends MetaScreen {
   private animationsList: Panel = new Panel(new Vec2(2, 2))
@@ -71,9 +74,21 @@ export class Animations extends MetaScreen {
     this.uiPanels.push(this.newNamePanel)
     this.newNamePanel.hide()
     this.newNamePanel.setBackgroundColour('#ffffff')
+    
     this.newNamePanel.addItem(this.newNameLabel)
     this.newNamePanel.addLinebreak()
+    
     this.newNamePanel.addItem(this.newColourLabel)
+    this.newNamePanel.addLinebreak()
+
+    this.newNamePanel.addItem(new UILabel(new Vec2(-1, -1), "Sides that can be destroyed"))
+    this.newNamePanel.addLinebreak()
+
+    this.newNamePanel.addItem(new LabelledCheckbox('Left', 'CAN_DESTROY_LEFT'))
+    this.newNamePanel.addItem(new LabelledCheckbox('Top', 'CAN_DESTROY_TOP'))
+    this.newNamePanel.addItem(new LabelledCheckbox('Right', 'CAN_DESTROY_RIGHT'))
+    this.newNamePanel.addItem(new LabelledCheckbox('Bottom', 'CAN_DESTROY_BOTTOM'))
+
     this.newNamePanel.addLinebreak()
     this.newNamePanel.addItem(this.newNameCreateButton)
     this.newNamePanel.addItem(new UIControl(new Vec2(-1, -1), 'Cancel', () => {
@@ -100,6 +115,15 @@ export class Animations extends MetaScreen {
     this.newColourLabel.setControlText('')
     this.newNamePanel.show()
   }
+
+  private getAdditionalDestructionDirectionIfChecked(tag: string, direction: BlockSide): BlockSide {
+    const checkbox = this.newNamePanel.getUIByTag(tag)
+    if (checkbox != null && checkbox instanceof LabelledCheckbox && (checkbox as LabelledCheckbox).isChecked()) {
+      return direction
+    }
+
+    return BlockSide.None
+  }
   
   private addAnimationByName(): void {
     const animationName = this.newNameLabel.getControlText()
@@ -113,7 +137,12 @@ export class Animations extends MetaScreen {
       return
     }
 
-    animationItems.set(animationName, new SingleCharacterAnimation(' ', animationColour))
+    const destructionDirection = this.getAdditionalDestructionDirectionIfChecked('CAN_DESTROY_LEFT', BlockSide.Left)
+     || this.getAdditionalDestructionDirectionIfChecked('CAN_DESTROY_TOP', BlockSide.Top)
+     || this.getAdditionalDestructionDirectionIfChecked('CAN_DESTROY_RIGHT', BlockSide.Right)
+     || this.getAdditionalDestructionDirectionIfChecked('CAN_DESTROY_BOTTOM', BlockSide.Bottom)
+
+    animationItems.set(animationName, new SingleCharacterAnimation(' ', animationColour, destructionDirection))
     this.addToAnimationList(animationName)
     this.newNamePanel.hide()
   }

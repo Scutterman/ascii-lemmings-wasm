@@ -139,6 +139,10 @@ export function testDirection(value: Direction, toTestFor: Direction): boolean {
   return (value & toTestFor) == toTestFor
 }
 
+export function testBlockSide(value: BlockSide, toTestFor: BlockSide): boolean {
+  return (value & toTestFor) == toTestFor
+}
+
 export function addBrick(map: LevelTileDetail, location: Vec2): boolean {
   if (isOutOfMapBounds(map, location) || map[location.y][location.x].tile != TILE_AIR) {
     return false
