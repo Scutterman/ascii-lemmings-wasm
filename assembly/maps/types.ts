@@ -23,6 +23,7 @@ export class LevelMapDetail {
   constructor(public tiles: LevelMap) {}
   defaultAnimations: Map<string, string> = new Map()
   customAnimations: Map<string, string> = new Map()
+  trapTiles: Map<string, string> = new Map()
 
   private cloneMetadata(): LevelMetadata { 
     const lmd = new LevelMetadata(
@@ -45,6 +46,7 @@ export class LevelMapDetail {
     lmd.meta = this.cloneMetadata()
     lmd.defaultAnimations = shallowCopyWasmMap(this.defaultAnimations)
     lmd.customAnimations = shallowCopyWasmMap(this.customAnimations)
+    lmd.trapTiles = shallowCopyWasmMap(this.trapTiles)
     return lmd
   }
 
@@ -159,8 +161,17 @@ export class LevelMapDetail {
             detail = _detail
           }
         }
+
+        if (this.trapTiles.has(positionString)) {
+          const trapAnimationName = this.trapTiles.get(positionString)
+          if (animationItems.has(trapAnimationName)) {
+            detail.isTrap = true
+            detail.trapAnimation = animationItems.get(trapAnimationName).getAnimation().clone()
+          }
+        }
       break
     }
+
 
     return detail
   }

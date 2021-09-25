@@ -38,7 +38,6 @@ export enum LevelState {
 
 export type AnimationFrame = string[][]
 
-
 export type LevelTiles = string[][]
 export type LevelMap = string[]
 export type Tile = string
@@ -52,7 +51,9 @@ export class TileDetail {
     public animation: Animation,
     public elementId: string = '',
     public needsRemoval: boolean = false,
-    public isDirty: boolean = true
+    public isDirty: boolean = true,
+    public isTrap: boolean = false,
+    public trapAnimation: Animation | null = null
   ) {}
   
   public clone(): TileDetail {
@@ -62,7 +63,9 @@ export class TileDetail {
       this.animation.clone(),
       this.elementId,
       this.needsRemoval,
-      this.isDirty
+      this.isDirty,
+      this.isTrap,
+      this.trapAnimation
     )
   }
 }
