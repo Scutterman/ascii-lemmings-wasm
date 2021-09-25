@@ -116,7 +116,8 @@ export class LevelMapDetail {
 
   public detailFromTile(tile: string, row: i32, col: i32): TileDetail {
     let detail = new TileDetail(tile, '#000000', new Animation([]))
-    
+    const positionString = col.toString() + ',' + row.toString()
+
     switch(true) {
       case tile == TILE_BOUNDARY:
         detail.animation = characterToAnimation('_')
@@ -143,7 +144,6 @@ export class LevelMapDetail {
       case tile == TILE_AIR:
       break
       default:
-        const positionString = col.toString() + ',' + row.toString()
         if (this.customAnimations.has(positionString)) {
           const _detail = this.getDetailFromAnimationLabel(tile, this.customAnimations.get(positionString))
           if (_detail != null) {
@@ -161,17 +161,16 @@ export class LevelMapDetail {
             detail = _detail
           }
         }
-
-        if (this.trapTiles.has(positionString)) {
-          const trapAnimationName = this.trapTiles.get(positionString)
-          if (animationItems.has(trapAnimationName)) {
-            detail.isTrap = true
-            detail.trapAnimation = animationItems.get(trapAnimationName).getAnimation().clone()
-          }
-        }
       break
     }
 
+    if (this.trapTiles.has(positionString)) {
+      const trapAnimationName = this.trapTiles.get(positionString)
+      if (animationItems.has(trapAnimationName)) {
+        detail.isTrap = true
+        detail.trapAnimation = animationItems.get(trapAnimationName).getAnimation().clone()
+      }
+    }
 
     return detail
   }

@@ -53,7 +53,8 @@ export class TileDetail {
     public needsRemoval: boolean = false,
     public isDirty: boolean = true,
     public isTrap: boolean = false,
-    public trapAnimation: Animation | null = null
+    public trapAnimation: Animation | null = null,
+    public isTrapActivated: boolean = false
   ) {}
   
   public clone(): TileDetail {
@@ -65,7 +66,8 @@ export class TileDetail {
       this.needsRemoval,
       this.isDirty,
       this.isTrap,
-      this.trapAnimation
+      this.trapAnimation,
+      this.isTrapActivated
     )
   }
 }
