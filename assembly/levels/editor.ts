@@ -12,7 +12,7 @@ import { LevelMap, TileDetail } from "../types"
 import { animationItems } from "../generatedLevels/animationItems"
 import { LevelMetadata } from "../../shared/src/wasm-safe"
 import { LabelledButton, EasyLabelledButton } from "../ui/labelledButton"
-import { BlockSide } from "../animation"
+import { LabelledCheckbox } from "../ui/labelledCheckbox"
 
 declare function addBlocks(startRow: u8, endRow: u8, startCol: u8, endCol: u8): void
 
@@ -171,12 +171,14 @@ export class Editor extends MetaScreen {
 
   public setBlockAnimation(animationName: string): void {
     animationName = animationName.replace('ANIMATION_LIST_ITEM_KEY_', '')
+    const animationStore = this.isEditingTrapAnimation() ? this.metaMap.trapTiles : this.metaMap.customAnimations
+    
     if (animationName == 'Cancel') {
       return
     } else if (animationName != 'None') {
-      this.metaMap.customAnimations.set(this.selectedBlockKey, animationName)
-    } else if (this.metaMap.customAnimations.has(this.selectedBlockKey)) {
-      this.metaMap.customAnimations.delete(this.selectedBlockKey)
+      animationStore.set(this.selectedBlockKey, animationName)
+    } else if (animationStore.has(this.selectedBlockKey)) {
+      animationStore.delete(this.selectedBlockKey)
     }
 
     const id = this.map[this.selectedBlockY][this.selectedBlockX].elementId
@@ -185,6 +187,8 @@ export class Editor extends MetaScreen {
     tileDetail.elementId = id
     tileDetail.isDirty = true
     this.map[this.selectedBlockY][this.selectedBlockX] = tileDetail
+
+    this.setCurrentlySelectedAnimation()
 
     this.renderGameSection = true
     this.mapRendered = false
@@ -211,11 +215,20 @@ export class Editor extends MetaScreen {
     }
     this.map[this.selectedBlockY][this.selectedBlockX] = tileDetail
 
+    this.setCurrentlySelectedTile()
+
     this.renderGameSection = true
     this.mapRendered = false
   }
  
   public showTilePanel(): void {
+    const checkbox = this.tileOptions.getUIByTag('TILE_OPTIONS_EDITING_TRAP')
+    if (checkbox != null && checkbox instanceof LabelledCheckbox) {
+      (checkbox as LabelledCheckbox).setChecked(false)
+    }
+
+    this.setCurrentlySelectedTile()
+    this.setCurrentlySelectedAnimation()
     this.tileOptions.show()
   }
   
@@ -223,7 +236,8 @@ export class Editor extends MetaScreen {
     this.tileOptions.empty()
     
     const tileOptions = [TILE_AIR, TILE_GROUND, TILE_BRICK, TILE_EXIT, 'Cancel']
-    this.tileOptions.addItem(new UILabel(new Vec2(0,0), 'Tile:'))
+    this.tileOptions.addItem(new UILabel(new Vec2(0,0), 'Tile: '))
+    this.tileOptions.addItem(new UILabel(new Vec2(0,0), '', 'TILE_OPTIONS_CURRENTLY_SELECTED'))
     this.tileOptions.addLinebreak()
 
     for (let i = 0; i < tileOptions.length; i++) {
@@ -235,7 +249,14 @@ export class Editor extends MetaScreen {
     }
 
     this.tileOptions.addLinebreak()
-    this.tileOptions.addItem(new UILabel(new Vec2(0,0), 'Animation:'))
+    this.tileOptions.addItem(new UILabel(new Vec2(0,0), 'Animation: '))
+    this.tileOptions.addItem(new UILabel(new Vec2(0,0), '', 'TILE_OPTIONS_CURRENT_ANIMATION'))
+    this.tileOptions.addLinebreak()
+    
+    this.tileOptions.addItem(new LabelledCheckbox('Trap?', 'TILE_OPTIONS_EDITING_TRAP', tag => {
+      if (tag == null) { return }
+      (currentLevel as Editor).setCurrentlySelectedAnimation()
+    }))
     this.tileOptions.addLinebreak()
 
     const animationListItemKeys = animationItems.keys()
@@ -255,6 +276,27 @@ export class Editor extends MetaScreen {
     this.tileOptions.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
       (currentLevel as Editor).tileOptions.hide()
     }))
+  }
+
+  private setCurrentlySelectedTile(): void {
+    const label = this.tileOptions.getUIByTag('TILE_OPTIONS_CURRENTLY_SELECTED')
+    if (label != null) {
+      label.updateText(this.map[this.selectedBlockY][this.selectedBlockX].tile)
+    }
+  }
+
+  private isEditingTrapAnimation(): boolean {
+    const checkbox = (currentLevel as Editor).tileOptions.getUIByTag('TILE_OPTIONS_EDITING_TRAP')
+    return checkbox != null && checkbox instanceof LabelledCheckbox && (checkbox as LabelledCheckbox).isChecked()
+  }
+
+  private setCurrentlySelectedAnimation(): void {
+    const label = this.tileOptions.getUIByTag('TILE_OPTIONS_CURRENT_ANIMATION')
+    if (label == null) { return }
+
+    const animationStore = this.isEditingTrapAnimation() ? this.metaMap.trapTiles : this.metaMap.customAnimations
+    const animation = animationStore.has(this.selectedBlockKey) ? animationStore.get(this.selectedBlockKey) : 'NONE'
+    label.updateText(animation)
   }
 
   public mapSwapped(map: LevelMapDetail): void {
