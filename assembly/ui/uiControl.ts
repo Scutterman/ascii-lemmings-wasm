@@ -6,7 +6,7 @@ export class UIControl extends UILabel {
   constructor(
     position: Vec2,
     text: string,
-    private action: UIAction,
+    protected action: UIAction,
     tag: string = ''
   ) { super(position, text, tag) }
 
