@@ -1,9 +1,9 @@
-import { gameState, lemmings } from ".."
+import { currentLevel, gameState, lemmings, log } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
 import { getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
 import { BaseLevel } from "./baseLevel"
-import { BOUNDARIES_X, BOUNDARIES_Y, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
+import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTileDetail, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { BlockerAnimation } from "../actions/block"
@@ -183,6 +183,12 @@ export class Level extends BaseLevel {
         this.updateLabel('LEMMING_SAVED', 'Saved: ' + savedPercent.toString() + '%')
       }
 
+      const tile = getSurroundingTileDetail(lemmings[i].position)
+      if (tile != null && tile.isTrap == true) {
+        tile.isTrapActivated = true
+        lemmings[i].removeFromGame()
+      }
+
       if (lemmings[i].removed) {
         this.numberOfLemmingsRemoved++
       }
@@ -269,23 +275,34 @@ export class Level extends BaseLevel {
           continue
         }
 
-        if (map[row][col].animation.hasNextFrame()) {
-          map[row][col].isDirty = true
+        const tileDetail = map[row][col]
+        const animation: Animation = tileDetail.isTrapActivated && tileDetail.trapAnimation != null
+          ? tileDetail.trapAnimation as Animation
+          : tileDetail.animation
+
+        if (animation.hasNextFrame()) {
+          tileDetail.isDirty = true
         }
 
-        if (map[row][col].needsRemoval) {
-          removeMapTile(map[row][col].elementId)
-          map[row][col].needsRemoval = false
+        if (tileDetail.needsRemoval) {
+          removeMapTile(tileDetail.elementId)
+          tileDetail.needsRemoval = false
         }
         
-        if (!resetAll && (map[row][col].tile == TILE_AIR || !map[row][col].isDirty)) {
-          map[row][col].isDirty = false
+        if (tileDetail.isTrapActivated) {
+          tileDetail.isDirty = true
+          if (animation.isLastFrame()) {
+            log('Deactivating trap animation')
+            tileDetail.isTrapActivated = false
+          }
+        } else if (!resetAll && (tileDetail.tile == TILE_AIR || !tileDetail.isDirty)) {
+          tileDetail.isDirty = false
           continue
         }
         
-        const text = map[row][col].animation.getNextFrameAsText(this.isDirty)
-        map[row][col].elementId = renderMapTile(text, new Vec2(col, row), map[row][col].colour)
-        map[row][col].isDirty = false
+        const text = animation.getNextFrameAsText(this.isDirty)
+        tileDetail.elementId = renderMapTile(text, new Vec2(col, row), tileDetail.colour)
+        tileDetail.isDirty = false
       }
     }
 

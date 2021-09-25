@@ -86,6 +86,10 @@ export class Animation {
     return testDirection(this.canDestroySides, damageMovingInDirection)
   }
 
+  public isLastFrame(): boolean {
+    return this.currentFrameIndex == this.frames.length - 1
+  }
+
   public clone(): Animation {
     const animation = new Animation(this.frames)
     animation.setCanDestroySides(this.canDestroySides)
