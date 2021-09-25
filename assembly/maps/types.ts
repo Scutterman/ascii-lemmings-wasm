@@ -78,6 +78,8 @@ export class LevelMapDetail {
     exportString += this.exportMap(this.defaultAnimations)
     exportString += '//EDITORHINT::CUSTOM_ANIMATIONS\n'
     exportString += this.exportMap(this.customAnimations)
+    exportString += '//EDITORHINT::TRAP_TILES\n'
+    exportString += this.exportMap(this.trapTiles)
     return exportString
   }
 
@@ -311,6 +313,10 @@ export class Parser extends MapParserBase {
   
   protected addCustomAnimation(key: string, animationListKey: string): void {
     this.lmd.customAnimations.set(key, animationListKey)
+  }
+
+  protected addTrapTile(key: string, animationListKey: string): void {
+    this.lmd.trapTiles.set(key, animationListKey)
   }
 
   protected getMapKeys(map: Map<string, string>): string[] {

@@ -85,6 +85,10 @@ export class Parser extends MapParserBase {
     this.lmd += 'mapDetail.customAnimations.set("' + key + '", "' + animationListKey + '")\n'
   }
 
+  protected addTrapTile(key: string, animationListKey: string): void {
+    this.lmd += 'mapDetail.trapTiles.set("' + key + '", "' + animationListKey + '")\n'
+  }
+
   public generateLevelSelectFile(): string {
     return this.levelByCodeImports +
       getImport('../levels/baseLevel', ['BaseLevel']) +

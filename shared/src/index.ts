@@ -6,7 +6,8 @@ enum MapSection {
   Metadata,
   Map,
   DefaultAnimation,
-  CustomAnimation
+  CustomAnimation,
+  TrapTiles
 }
 
 export abstract class MapParserBase {
@@ -54,6 +55,9 @@ export abstract class MapParserBase {
           case instructions[1] == 'CUSTOM_ANIMATIONS':
             this.currentSection = MapSection.CustomAnimation
           break
+          case instructions[1] == 'TRAP_TILES':
+            this.currentSection = MapSection.TrapTiles
+          break
         }
 
         continue
@@ -90,13 +94,18 @@ export abstract class MapParserBase {
           // This section left intentionally blank
         break
         case this.currentSection == MapSection.CustomAnimation:
-          this.currentSection = MapSection.CustomAnimation
+        case this.currentSection == MapSection.TrapTiles:
           const customAnimationInfo = line.split(',')
           const x = customAnimationInfo[0]
           const y = customAnimationInfo[1]
           const key = x + ',' + y
           const customAnimationListKey = customAnimationInfo[2]
-          this.addCustomAnimation(key, customAnimationListKey)
+
+          if (this.currentSection == MapSection.CustomAnimation) {
+            this.addCustomAnimation(key, customAnimationListKey)
+          } else {
+            this.addTrapTile(key, customAnimationListKey)
+          }
         break
       }
     }
@@ -121,6 +130,7 @@ export abstract class MapParserBase {
   protected abstract addMapLine(generatedMapLine: string): void
   protected abstract addDefaultAnimation(character: string, animationListKey: string): void
   protected abstract addCustomAnimation(key: string, animationListKey: string): void
+  protected abstract addTrapTile(key: string, animationListKey: string): void
   protected abstract getMapKeys(map: Map<string, string>): string[]
   protected abstract int(value: string): u8
 }
