@@ -289,13 +289,7 @@ export class Level extends BaseLevel {
           tileDetail.needsRemoval = false
         }
         
-        if (tileDetail.isTrapActivated) {
-          tileDetail.isDirty = true
-          if (animation.isLastFrame()) {
-            log('Deactivating trap animation')
-            tileDetail.isTrapActivated = false
-          }
-        } else if (!resetAll && (tileDetail.tile == TILE_AIR || !tileDetail.isDirty)) {
+        if (!resetAll && (!tileDetail.isDirty)) {
           tileDetail.isDirty = false
           continue
         }
@@ -303,6 +297,14 @@ export class Level extends BaseLevel {
         const text = animation.getNextFrameAsText(this.isDirty)
         tileDetail.elementId = renderMapTile(text, new Vec2(col, row), tileDetail.colour)
         tileDetail.isDirty = false
+
+        if (tileDetail.isTrapActivated) {
+          if (animation.isLastFrame()) {
+            log('Deactivating trap animation')
+            tileDetail.isTrapActivated = false
+            tileDetail.isDirty = true
+          }
+        }
       }
     }
 
