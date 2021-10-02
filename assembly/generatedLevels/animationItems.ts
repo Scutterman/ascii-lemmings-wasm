@@ -99,7 +99,7 @@ const TRAP_PISTONAnimation = new Animation([
 ],
 ])
 export const animationItems = new Map<string, AnimationListItem>()
-const exit = new StandardAnimation(exitAnimation, "#0ccf11", 0)
+const exit = new StandardAnimation(exitAnimation, "#00FF00", 0)
 animationItems.set("exit", exit)
 const digRight = new StandardAnimation(digRightAnimation, "#0ccf11", 2)
 animationItems.set("digRight", digRight)
