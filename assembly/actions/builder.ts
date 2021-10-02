@@ -66,17 +66,22 @@ export class Builder extends LemmingAction {
 
   private canBuildNextTile(lemming: Lemming): boolean {
     const tile = getTileInDirection(lemming.position, lemming.facingDirection)
-    return tile == TILE_AIR
+    const tile2 = getTileInDirection(lemming.position, lemming.facingDirection | Direction.Up)
+    return tile == TILE_AIR && tile2 == TILE_AIR
   }
 
   private canBuildTileInOtherDirection(lemming: Lemming): boolean {
     const theOtherDirection = lemming.facingDirection == Direction.Right ? Direction.Left : Direction.Right
     const tile = getTileInDirection(lemming.position, theOtherDirection)
-    return tile == TILE_AIR
+    const tile2 = getTileInDirection(lemming.position, theOtherDirection | Direction.Up)
+    return tile == TILE_AIR && tile2 == TILE_AIR
   }
 
   private canMoveOntoBrickTile(lemming: Lemming): boolean {
-    const tile = getTileInDirection(lemming.position, lemming.facingDirection | Direction.Up)
-    return tile == TILE_AIR
+    const pos = lemming.position
+    const tile = getTileInDirection(pos, lemming.facingDirection | Direction.Up)
+    pos.y -= 2
+    const tile2 = getTileInDirection(pos, lemming.facingDirection)
+    return tile == TILE_AIR && tile2 == TILE_AIR
   }
 }
