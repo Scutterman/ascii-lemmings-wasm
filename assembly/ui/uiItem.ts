@@ -1,10 +1,11 @@
+import { defaultColour } from "../colours";
 import { Vec2 } from "../position";
 import { removeItem } from "../vdom/elements";
 
 export class UIITem {
   public elementId: string = ''
   private backgroundColour: string = '#ffffff00'
-  private colour: string = '#000000'
+  private colour: string = defaultColour
   protected showing: boolean = true
   protected hasChangedState: boolean = true
   private size: Vec2 = new Vec2(0,0)

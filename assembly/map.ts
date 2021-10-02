@@ -1,5 +1,6 @@
 import { currentLevel } from "."
 import { Animation, BlockSide, Direction } from "./animation"
+import { defaultColour } from "./colours"
 import { isBlockerInLocation, Lemming } from "./lemming"
 import { characterToAnimation } from "./maps/types"
 import { Vec2 } from "./position"
@@ -40,7 +41,7 @@ export function mapToTiles(map: LevelMap): LevelTileDetail {
     arr.push([])
     const cols = map[i].split('')
     for (let j = 0; j < cols.length; j++) {
-      arr[i].push(new TileDetail(cols[j], '#000000', characterToAnimation(cols[j]), '', false, true))
+      arr[i].push(new TileDetail(cols[j], defaultColour, characterToAnimation(cols[j]), '', false, true))
     }
   }
   return arr

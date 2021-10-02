@@ -12,6 +12,7 @@ import { LabelledButton, EasyLabelledButton } from "../ui/labelledButton"
 import { UILabel } from "../ui/uiLabel"
 import { LabelledCheckbox } from "../ui/labelledCheckbox"
 import { BlockSide } from "../animation"
+import { defaultColour } from "../colours"
 
 export class Animations extends MetaScreen {
   private animationsList: Panel = new Panel(new Vec2(2, 2))
@@ -129,7 +130,7 @@ export class Animations extends MetaScreen {
     const animationName = this.newNameLabel.getControlText()
     let animationColour = this.newColourLabel.getControlText()
     if (!this.validateColour(animationColour)) {
-      animationColour = '#000000'
+      animationColour = defaultColour
     }
     
     if (animationName.length == 0 || animationItems.has(animationName)) {
@@ -179,9 +180,9 @@ export class Animations extends MetaScreen {
       return
     }
     
-    const frame = new SingleCharacterAnimation(' ', '#000000').getAnimation().getNextFrame(false)
+    const frame = new SingleCharacterAnimation(' ', defaultColour).getAnimation().getNextFrame(false)
     animationItems.get(animationName as string).getAnimation().addFrame(frame)
-    const ui = new UiAnimationFrame(new Vec2(0,0), frame, i16(this.animationEditor.getItems().length), '#000000')
+    const ui = new UiAnimationFrame(new Vec2(0,0), frame, i16(this.animationEditor.getItems().length), defaultColour)
     this.animationEditor.addItem(ui)
   }
   

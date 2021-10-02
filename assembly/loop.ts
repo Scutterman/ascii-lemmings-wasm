@@ -8,6 +8,7 @@ import { Rect, Vec2 } from "./position"
 import { UIControl } from "./ui/uiControl"
 import { Editor } from "./levels/editor"
 import { compileItems, compileMapChanges, ITEM_SET_BACKGROUND, ITEM_SET_MAP, removeItem, resetItems, setItem } from "./vdom/elements"
+import { defaultColour } from "./colours"
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 60) as i64
 
@@ -290,7 +291,7 @@ class RenderedTextArray {
   constructor (public id: string, public dimensions: Rect) {}
 }
 
-export function renderTextArrayToScreen(text: string[], position: Vec2, border: boolean = true, colour: string = '#000000', backgroundColour: string = '#ffffff00'): RenderedTextArray {
+export function renderTextArrayToScreen(text: string[], position: Vec2, border: boolean = true, colour: string = defaultColour, backgroundColour: string = '#ffffff00'): RenderedTextArray {
   const labelDimensions = getTextDimensions(text, position)
   const id = renderRelativeElement(text.join(lineBreak), labelDimensions.position, border, colour, backgroundColour)
   return new RenderedTextArray(id, labelDimensions)
@@ -306,8 +307,8 @@ function getElementId(): string {
   return id
 }
 
-export function constructRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000', backgroundColour: string = '#ffffff00'): RelativeElement {
-  const borderStyles = border ? 'box-shadow: inset 0 0 1px #000000;' : ''
+export function constructRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = defaultColour, backgroundColour: string = '#ffffff00'): RelativeElement {
+  const borderStyles = border ? 'box-shadow: inset 0 0 1px ' + defaultColour + ';' : ''
   const elementId = getElementId()
   const elementIdHtml = 'id="' + elementId + '"'
   
@@ -323,7 +324,7 @@ export function constructRelativeElement(text: string, blockPosition: Vec2, bord
   return new RelativeElement(html, elementId)
 }
 
-export function renderRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000', backgroundColour: string = '#ffffff00'): string {
+export function renderRelativeElement(text: string, blockPosition: Vec2, border: boolean = false, colour: string = defaultColour, backgroundColour: string = '#ffffff00'): string {
   const element = constructRelativeElement(text, blockPosition, border, colour, backgroundColour)
   setItem(element.id, element.html)
   return element.id
@@ -335,9 +336,9 @@ export function removeMapTile(elementId: string): void {
   }
 }
 
-export function renderMapTile(text: string[], blockPosition: Vec2, colour: string = '#000000'): string {
+export function renderMapTile(text: string[], blockPosition: Vec2, colour: string = defaultColour): string {
   let content = text.join(lineBreak)
-  if (colour != '#000000') {
+  if (colour != defaultColour) {
     content = '<span style="color: ' + colour + ';">' + content + '</span>'
   }
 
@@ -346,7 +347,7 @@ export function renderMapTile(text: string[], blockPosition: Vec2, colour: strin
   return elementId
 }
 
-export function renderBackgroundToScreen(text: string, blockPosition: Vec2, border: boolean = false, colour: string = '#000000'): string {
+export function renderBackgroundToScreen(text: string, blockPosition: Vec2, border: boolean = false, colour: string = defaultColour): string {
   const element = constructRelativeElement(text, blockPosition, border, colour)
   setItem(element.id, element.html, ITEM_SET_BACKGROUND)
   return element.id

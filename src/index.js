@@ -187,7 +187,7 @@ function setScreenSize(screenSize) {
     .box {
       display: block;
       width: ${ dimensions.blockWidthPixels }px; height: ${ dimensions.blockHeightPixels }px !important;
-      box-shadow: inset 0 0 2px #000000;
+      box-shadow: inset 0 0 2px #0ccf11;
     }
   `
 

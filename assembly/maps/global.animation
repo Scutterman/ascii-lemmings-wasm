@@ -1,4 +1,4 @@
-//EDITORHINT::ANIMATION::exit::#000000::0000
+//EDITORHINT::ANIMATION::exit::#0ccf11::0000
 //EDITORHINT::FRAME
 ^  ^
 #/\#
@@ -9,7 +9,7 @@ w  w
 #/\#
 /  \
 |  |
-//EDITORHINT::ANIMATION::digRight::#000000::0010
+//EDITORHINT::ANIMATION::digRight::#0ccf11::0010
 //EDITORHINT::FRAME
    /
   / 
@@ -43,7 +43,7 @@ w  w
    \
    /
   / 
-//EDITORHINT::ANIMATION::TRAP_PISTON::#000000::0000
+//EDITORHINT::ANIMATION::TRAP_PISTON::#0ccf11::0000
 //EDITORHINT::FRAME
     
     

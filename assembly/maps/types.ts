@@ -4,6 +4,7 @@ import { LevelMap, LevelTileDetail, TileDetail } from "../types";
 import { animationItems } from "../generatedLevels/animationItems";
 import { LevelMetadata } from "../../shared/src/wasm-safe"
 import { MapParserBase } from "../../shared/src/index"
+import { defaultColour } from "../colours";
 
 export function characterToAnimation(character: string, canDestroyFromDirection: BlockSide = BlockSide.None): Animation {
   const frame = [
@@ -117,7 +118,7 @@ export class LevelMapDetail {
   }
 
   public detailFromTile(tile: string, row: i32, col: i32): TileDetail {
-    let detail = new TileDetail(tile, '#000000', new Animation([]))
+    let detail = new TileDetail(tile, defaultColour, new Animation([]))
     const positionString = col.toString() + ',' + row.toString()
 
     switch(true) {
@@ -154,7 +155,7 @@ export class LevelMapDetail {
         } else {
           if (!this.defaultAnimations.has(tile)) {
             if (!animationItems.has(tile)) {
-              animationItems.set(tile, new SingleCharacterAnimation(tile, '#000000'))
+              animationItems.set(tile, new SingleCharacterAnimation(tile, defaultColour))
             }
             this.defaultAnimations.set(tile, tile)
           }
