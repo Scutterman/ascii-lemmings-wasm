@@ -1,6 +1,6 @@
 import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { getPositionInDirection, getSurroundingTileDetail, removeTerrainFromDirection, terrainIndestructible } from "../map";
+import { getPositionInDirection, getSurroundingTileDetail, getTileDetailInDirection, removeTerrainFromDirection, terrainIndestructible, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
@@ -21,14 +21,20 @@ export class Digger extends LemmingAction {
       lemming.action = new Walk()
     } else {
       removeTerrainFromDirection(lemming.position, Direction.Down)
+      removeTerrainFromDirection(lemming.position, Direction.Down | Direction.Left)
       lemming.position = new Vec2(lemming.position.x, lemming.position.y + 1)
     }
   }
 
   private canMineDown(lemming: Lemming): boolean {
-    const pos = getPositionInDirection(lemming.position, Direction.Down)
-    const detail = getSurroundingTileDetail(pos)
-    return detail != null && terrainIndestructible(detail.animation, Direction.Down) == false
+    const below = getTileDetailInDirection(lemming.position, Direction.Down)
+    const belowLeft = getTileDetailInDirection(lemming.position, Direction.Down | Direction.Left)
+    if (below == null || belowLeft == null || (below.tile == TILE_AIR && belowLeft.tile == TILE_AIR)) {
+      return false
+    }
+    
+    return !terrainIndestructible(below.animation, Direction.Down) &&
+      !terrainIndestructible(belowLeft.animation, Direction.Down)
   }
   
   public label(): string {
