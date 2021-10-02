@@ -16,7 +16,8 @@ export abstract class LemmingAction {
   public abstract label(): string
   
   protected isFalling(lemmingPosition: Vec2): boolean {
-    return getTileInDirection(lemmingPosition, Direction.Down) == TILE_AIR
+    return getTileInDirection(lemmingPosition, Direction.Down) == TILE_AIR &&
+      getTileInDirection(lemmingPosition, Direction.Down | Direction.Left) == TILE_AIR
   }
   
   protected handleFalling(lemming: Lemming, changeAction: boolean = true): void {
