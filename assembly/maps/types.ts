@@ -145,6 +145,7 @@ export class LevelMapDetail {
           ]
         ])
       case tile == TILE_AIR:
+        detail.animation.setCanDestroySides(BlockSide.All)
       break
       default:
         if (this.customAnimations.has(positionString)) {

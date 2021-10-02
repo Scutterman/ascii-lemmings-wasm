@@ -93,6 +93,11 @@ export function getTileInDirection(sourcePosition: Vec2, direction: Direction): 
   return getSurroundingTile(targetTilePosition)
 }
 
+export function getTileDetailInDirection(sourcePosition: Vec2, direction: Direction): TileDetail | null {
+  const position = getPositionInDirection(sourcePosition, direction)
+  return getSurroundingTileDetail(position)
+}
+
 export function getSurroundingTile(position: Vec2): Tile {
   const detail = getSurroundingTileDetail(position)
   if (detail == null) {
@@ -123,6 +128,8 @@ export function removeTerrain(location: Vec2, damageMovingInDirection: Direction
   const map = currentLevel.map
   if (isOutOfMapBounds(map, location) || terrainIndestructible(map[location.y][location.x].animation, damageMovingInDirection)) {
     return false
+  } else if (map[location.y][location.x].tile == TILE_AIR) {
+    return true
   } else {
     map[location.y][location.x].tile = TILE_AIR
     map[location.y][location.x].needsRemoval = true

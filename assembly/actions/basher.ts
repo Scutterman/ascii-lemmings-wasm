@@ -1,6 +1,6 @@
 import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { getPositionInDirection, getSurroundingTileDetail, removeTerrain, terrainIndestructible } from "../map";
+import { getTileDetailInDirection, removeTerrain, terrainIndestructible, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
@@ -17,10 +17,14 @@ export class Basher extends LemmingAction {
   update(lemming: Lemming): void {
     if (this.isFalling(lemming.position)) {
       this.handleFalling(lemming)
-    } else if (this.canMineNextTile(lemming)) {
+    } else if (this.canMineTile(lemming)) {
+
       const xDelta: i16 = lemming.facingDirection == Direction.Right ? 1 : -1
-      removeTerrain(new Vec2(lemming.position.x + xDelta, lemming.position.y), lemming.facingDirection)
-      lemming.position.x += xDelta
+      const pos = lemming.position
+      pos.x += xDelta
+      removeTerrain(new Vec2(pos.x, pos.y), lemming.facingDirection)
+      removeTerrain(new Vec2(pos.x, pos.y - 1), lemming.facingDirection)
+      lemming.position = pos
     } else {
       lemming.action = new Walk()
     }
@@ -30,9 +34,15 @@ export class Basher extends LemmingAction {
     return 'Basher'
   }
 
-  private canMineNextTile(lemming: Lemming): boolean {
-    const pos = getPositionInDirection(lemming.position, lemming.facingDirection)
-    const detail = getSurroundingTileDetail(pos)
-    return detail != null && terrainIndestructible(detail.animation, lemming.facingDirection) == false
+  private canMineTile(lemming: Lemming): boolean {
+    const side = getTileDetailInDirection(lemming.position, lemming.facingDirection)
+    const above = getTileDetailInDirection(lemming.position, lemming.facingDirection | Direction.Up)
+    if (side == null || above == null || (side.tile == TILE_AIR && above.tile == TILE_AIR)) {
+      return false
+    }
+    
+    return !terrainIndestructible(side.animation, lemming.facingDirection)
+      && !terrainIndestructible(above.animation, lemming.facingDirection)
+
   }
 }
