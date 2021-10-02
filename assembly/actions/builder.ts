@@ -40,8 +40,10 @@ export class Builder extends LemmingAction {
     if (this.moveOntoBrick == false) {
       this.moveOntoBrick = true
     } else if (this.canMoveOntoBrickTile(lemming)) {
-      lemming.position.x += xDelta
-      lemming.position.y--
+      const pos = lemming.position
+      pos.x += xDelta
+      pos.y--
+      lemming.position = pos
     } else if (this.canBuildTileInOtherDirection(lemming)) {
       lemming.turnAround()
       this.moveOntoBrick = false

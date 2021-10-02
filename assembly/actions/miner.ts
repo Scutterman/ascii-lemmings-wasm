@@ -19,10 +19,14 @@ export class Miner extends LemmingAction {
       this.handleFalling(lemming)
     } else if (this.canMineNextTile(lemming)) {
       const xDelta: i16 = lemming.facingDirection == Direction.Right ? 1 : -1
-      removeTerrain(new Vec2(lemming.position.x, lemming.position.y + 1), Direction.Down)
-      removeTerrain(new Vec2(lemming.position.x + xDelta, lemming.position.y + 1), Direction.Down | lemming.facingDirection)
-      lemming.position.x += xDelta
-      lemming.position.y ++
+      const pos = lemming.position
+      
+      pos.y++
+      removeTerrain(pos, Direction.Down)
+      pos.x += xDelta
+      removeTerrain(pos, Direction.Down | lemming.facingDirection)
+      
+      lemming.position = pos
     } else {
       lemming.action = new Walk()
     }

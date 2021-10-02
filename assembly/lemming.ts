@@ -25,13 +25,30 @@ export class Lemming {
   exited: boolean = false
   actionTimeLeft: u16 = 0
   action: LemmingAction = new Fall()
-  position: Vec2 = new Vec2(22, 13)
+  _position: Vec2 = new Vec2(22, 13)
   size: Vec2 = new Vec2(0,0)
   hasUmbrella: boolean = false
   isClimber: boolean = false
   private isExploding: boolean = false
   private framesUntilExplosion: u16 = 5
   private explosionAnimation: Animation = new BomberAnimation()
+
+  get position(): Vec2 {
+    // TODO:: When lemmings are 2x2 blocks,
+    // modify the x position returned here
+    // to always represent the forward edge
+    // based on what direction it's facing
+    const pos = this._position.clone()
+    return pos
+  }
+
+  set position(newPosition: Vec2) {
+    // TODO:: When lemmings are 2x2 blocks,
+    // modify the x position set here
+    // to account for the fact that it may be one off
+    // based on what direction it's facing
+    this._position = newPosition
+  }
 
   public update(): void {
     const processUpdate = !this.isExploding || this.updateExplosion()

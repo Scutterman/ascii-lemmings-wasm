@@ -23,7 +23,7 @@ export abstract class LemmingAction {
     if (changeAction) {
       lemming.action = new Fall()
     }
-    lemming.position.y++
+    lemming.position = new Vec2(lemming.position.x, lemming.position.y + 1)
   }
 
   protected handleClimbing(lemming: Lemming): void {

@@ -2,6 +2,7 @@ import { log } from "..";
 import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
 import { getTileInDirection, TILE_AIR } from "../map";
+import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
@@ -28,7 +29,9 @@ export class Climb extends LemmingAction {
 
   update(lemming: Lemming): void {
     if (this.hasReachedOpening(lemming)) {
-      lemming.position.x += lemming.facingDirection == Direction.Right ? 1 : -1
+      const pos = lemming.position
+      pos.x += lemming.facingDirection == Direction.Right ? 1 : -1
+      lemming.position = pos
       lemming.action = new Walk()
     } else if (this.cannotClimbFurther(lemming)) {
       lemming.turnAround()
@@ -36,7 +39,7 @@ export class Climb extends LemmingAction {
         this.handleFalling(lemming)
       }
     } else {
-      lemming.position.y--
+      lemming.position = new Vec2(lemming.position.x, lemming.position.y - 1)
     }
   }
   

@@ -1,6 +1,7 @@
 import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
 import { getPositionInDirection, getSurroundingTileDetail, removeTerrainFromDirection, terrainIndestructible } from "../map";
+import { Vec2 } from "../position";
 import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
@@ -20,7 +21,7 @@ export class Digger extends LemmingAction {
       lemming.action = new Walk()
     } else {
       removeTerrainFromDirection(lemming.position, Direction.Down)
-      lemming.position.y++
+      lemming.position = new Vec2(lemming.position.x, lemming.position.y + 1)
     }
   }
 

@@ -27,12 +27,10 @@ export class Walk extends LemmingAction {
     } else {
       const tile = getTileInDirection(lemming.position, lemming.facingDirection)
       const isStairs = isWalkingDownStairs(lemming)
-      lemming.position.x += lemming.facingDirection == Direction.Right ? 1 : -1
-      if (tile == TILE_BRICK) {
-        lemming.position.y--
-      } else if (isStairs) {
-        lemming.position.y++
-      }
+      const pos = lemming.position
+      pos.x += lemming.facingDirection == Direction.Right ? 1 : -1
+      pos.y += tile == TILE_BRICK ? -1 : isStairs ? 1 : 0
+      lemming.position = pos
     }
   }
 
