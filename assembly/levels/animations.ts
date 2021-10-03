@@ -6,13 +6,14 @@ import { MetaScreen } from "./metascreen"
 import { getLastFrame, reset, UiAnimationFrame } from "../ui/uiAnimationFrame"
 import { animationItems } from "../generatedLevels/animationItems"
 import { PanelContainer } from "../ui/panelContainer"
-import { SingleCharacterAnimation } from "../maps/types"
+import { SingleCharacterAnimation, StandardAnimation } from "../maps/types"
 import { isEditingMap } from "../imports"
 import { LabelledButton, EasyLabelledButton } from "../ui/labelledButton"
 import { UILabel } from "../ui/uiLabel"
 import { LabelledCheckbox } from "../ui/labelledCheckbox"
-import { BlockSide } from "../animation"
+import { Animation, BlockSide } from "../animation"
 import { defaultColour } from "../colours"
+import { AnimationFrame } from "../types"
 
 export class Animations extends MetaScreen {
   private animationsList: Panel = new Panel(new Vec2(2, 2))
@@ -44,6 +45,10 @@ export class Animations extends MetaScreen {
     
     this.subActionPanel.addItem(new UIControl(new Vec2(0,0), 'Add', () => {
       (currentLevel as Animations).addAnimationFrame()
+    }))
+
+    this.subActionPanel.addItem(new UIControl(new Vec2(0,0), 'Lemming', () => {
+      (currentLevel as Animations).addAnimationFrame(true)
     }))
 
     this.subActionPanel.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
@@ -81,6 +86,9 @@ export class Animations extends MetaScreen {
     
     this.newNamePanel.addItem(this.newColourLabel)
     this.newNamePanel.addLinebreak()
+    
+    this.newNamePanel.addItem(new LabelledCheckbox('Is Lemming?', 'ADD_LEMMING_ANIMATION'))
+    this.newNamePanel.addLinebreak()
 
     this.newNamePanel.addItem(new UILabel(new Vec2(-1, -1), "Sides that can be destroyed"))
     this.newNamePanel.addLinebreak()
@@ -117,13 +125,13 @@ export class Animations extends MetaScreen {
     this.newNamePanel.show()
   }
 
-  private getAdditionalDestructionDirectionIfChecked(tag: string, direction: BlockSide): BlockSide {
+  private isChecked(tag: string): boolean {
     const checkbox = this.newNamePanel.getUIByTag(tag)
-    if (checkbox != null && checkbox instanceof LabelledCheckbox && (checkbox as LabelledCheckbox).isChecked()) {
-      return direction
-    }
+    return (checkbox != null && checkbox instanceof LabelledCheckbox && (checkbox as LabelledCheckbox).isChecked())
+  }
 
-    return BlockSide.None
+  private getAdditionalDestructionDirectionIfChecked(tag: string, direction: BlockSide): BlockSide {
+    return this.isChecked(tag) ? direction : BlockSide.None
   }
   
   private addAnimationByName(): void {
@@ -143,7 +151,16 @@ export class Animations extends MetaScreen {
      || this.getAdditionalDestructionDirectionIfChecked('CAN_DESTROY_RIGHT', BlockSide.Right)
      || this.getAdditionalDestructionDirectionIfChecked('CAN_DESTROY_BOTTOM', BlockSide.Bottom)
 
-    animationItems.set(animationName, new SingleCharacterAnimation(' ', animationColour, destructionDirection))
+    
+    if (this.isChecked('ADD_LEMMING_ANIMATION')) {
+      const animation = new Animation([this.getLemmingFrame()])
+      const animationItem = new StandardAnimation(animation, animationColour, destructionDirection)
+      animationItems.set(animationName, animationItem)
+    } else {
+      const animationItem = new SingleCharacterAnimation(' ', animationColour, destructionDirection)
+      animationItems.set(animationName, animationItem)
+    }
+
     this.addToAnimationList(animationName)
     this.newNamePanel.hide()
   }
@@ -174,16 +191,26 @@ export class Animations extends MetaScreen {
     this.subActionPanel.show()
   }
 
-  private addAnimationFrame(): void {
+  private addAnimationFrame(isLemming: boolean = false): void {
     const animationName = this.displayedAnimation
     if (animationName == null || !animationItems.has(animationName as string)) {
       return
     }
     
-    const frame = new SingleCharacterAnimation(' ', defaultColour).getAnimation().getNextFrame(false)
+    const frame = isLemming
+      ? this.getLemmingFrame()
+      : new SingleCharacterAnimation(' ', defaultColour).getAnimation().getNextFrame(false)
     animationItems.get(animationName as string).getAnimation().addFrame(frame)
     const ui = new UiAnimationFrame(new Vec2(0,0), frame, i16(this.animationEditor.getItems().length), defaultColour)
     this.animationEditor.addItem(ui)
+  }
+
+  private getLemmingFrame(): AnimationFrame {
+    const frame: AnimationFrame = []
+    for (let i = 0; i < 8; i++) {
+      frame.push(' '.repeat(8).split(''))
+    }
+    return frame
   }
   
   private closeAnimationWindow(): void {
