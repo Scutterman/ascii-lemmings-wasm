@@ -89,7 +89,7 @@ function processControlClicks(clickProcessed: boolean): boolean {
 
   for (let i = 0; i < currentLevel.uiPanels.length; i++) {
     const panel = currentLevel.uiPanels[i]
-    if (!panel.isShowing()) {
+    if (!panel.isShowing() || panel.isOffscreen()) {
       continue
     }
     const items = panel.getItems()
@@ -103,6 +103,11 @@ function processControlClicks(clickProcessed: boolean): boolean {
     const panels = container.getItems()
     for (let panelIndex = 0; panelIndex < panels.length; panelIndex++) {
       const panel = panels[panelIndex]
+
+      if (!panel.isShowing() || panel.isOffscreen()) {
+        continue
+      }
+
       const items = panel.getItems()
       for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
         clickProcessed = processLabelEvents(items[itemIndex], clickProcessed)

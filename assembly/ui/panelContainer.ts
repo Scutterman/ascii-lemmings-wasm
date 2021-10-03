@@ -8,12 +8,17 @@ const TAG_PANEL_LINE_BREAk: string = 'TAG_PANEL_LINE_BREAk'
 class PanelContainerRow {
   public panels: Panel[] = []
   public size: Vec2 = new Vec2(0,0)
+
+  public markAsOffscreen(): void {
+    for (let i = 0; i < this.panels.length; i++) {
+      this.panels[i].markAsOffscreen()
+    }
+  }
 }
 
 export class PanelContainer extends UIITem {
   private rowScroll: u8 = 0
-  private currentRow: u8 = 0
-
+  
   constructor(position: Vec2, private items: Panel[] = [], private panelItemSpacing: i16 = PANEL_ITEM_SPACING, tag: string = '') {
     super(position, tag)
   }
@@ -92,7 +97,6 @@ export class PanelContainer extends UIITem {
   }
 
   public render(isDirty: boolean): void {
-    this.currentRow = 0
     let yOffset: i16 = 0
     const rows = this.compileItems(isDirty)
     if (rows.length == 0) { return }
@@ -102,6 +106,7 @@ export class PanelContainer extends UIITem {
       
       if (u8(rowIndex) < this.rowScroll) {
         yOffset += row.size.y
+        row.markAsOffscreen()
         continue
       }
       

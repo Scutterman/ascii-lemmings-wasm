@@ -22,6 +22,7 @@ export class Panel extends UIITem {
   private rows: PanelRow[] = []
   private requiresPrerender: boolean = true
   public backgroundElementId: string = ''
+  private offscreen: boolean = false
 
   constructor(position: Vec2, private items: UILabel[] = [], private panelSpacing: i16 = PANEL_ITEM_SPACING, tag: string = '') {
     super(position, tag)
@@ -50,6 +51,7 @@ export class Panel extends UIITem {
   }
 
   public preRender(isDirty: boolean, parentShowing: boolean, wrapOverridePosition: Vec2, deferToParent: boolean = false): void {
+    this.offscreen = false
     this.setSize(new Vec2(0, 0))
 
     if (this.items.length == 0) { return }
@@ -176,6 +178,14 @@ export class Panel extends UIITem {
 
     this.hasChangedState = false
     this.requiresPrerender = true
+  }
+
+  public markAsOffscreen(): void {
+    this.offscreen = true
+  }
+
+  public isOffscreen(): boolean {
+    return this.offscreen
   }
 
   public empty(): void {
