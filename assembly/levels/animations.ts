@@ -29,7 +29,7 @@ export class Animations extends MetaScreen {
   
   constructor() {
     super('ANIMATION_EDITOR')
-
+    
     // TODO:: Reset these before leaving
     keyPressListener(true)
     resetText()
@@ -49,6 +49,14 @@ export class Animations extends MetaScreen {
 
     this.subActionPanel.addItem(new UIControl(new Vec2(0,0), 'Lemming', () => {
       (currentLevel as Animations).addAnimationFrame(true)
+    }))
+
+    this.subActionPanel.addItem(new UIControl(new Vec2(0,0), 'Up', () => {
+      (currentLevel as Animations).animationEditor.scrollUp()
+    }))
+
+    this.subActionPanel.addItem(new UIControl(new Vec2(0,0), 'Down', () => {
+      (currentLevel as Animations).animationEditor.scrollDown()
     }))
 
     this.subActionPanel.addItem(new UIControl(new Vec2(0,0), 'Done', () => {
