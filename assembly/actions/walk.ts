@@ -1,4 +1,5 @@
 import { Animation, Direction } from "../animation";
+import { animationItems } from "../generatedLevels/animationItems";
 import { Lemming } from "../lemming";
 import { getTileInDirection, isWalkingDownStairs, TILE_AIR, TILE_BRICK, TILE_EXIT } from "../map";
 import { Vec2 } from "../position";
@@ -10,9 +11,9 @@ export class WalkerAnimation extends Animation {
 
 export class Walk extends LemmingAction {
   constructor() {
-    super(new WalkerAnimation())
+    super(animationItems.get("WALK").getAnimation().clone())
   }
-  
+
   update(lemming: Lemming): void {
     if (this.isFalling(lemming.position)) {
       this.handleFalling(lemming)

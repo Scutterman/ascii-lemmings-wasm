@@ -19,6 +19,7 @@ import { MinerAnimation } from "../actions/miner"
 import { FloaterAnimation } from "../actions/umbrella"
 import { LevelMapDetail } from "../maps/types"
 import { removeItem } from "../vdom/elements"
+import { Walk } from "../actions/walk"
 
 export class Level extends BaseLevel {
   private canSpawnMore: boolean = true
@@ -219,12 +220,22 @@ export class Level extends BaseLevel {
         position.y > i16(VISIBLE_Y)
       ) { continue }
 
-      const colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
-      
-      const info = renderTextArrayToScreen(getRenderedTextArray(lemming.renderFrame(this.isDirty)), position, false, colour)
+      let colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
+      let text: string[]
+      let positionOffset: i16 = 0
+
+      if (lemming.action instanceof Walk) {
+        text = lemming.renderFrameProper(this.isDirty)
+        positionOffset = 1
+      } else {
+        text = lemming.renderFrame(this.isDirty)
+      }
+
+      position.y -= positionOffset
+      const info = renderTextArrayToScreen(text, position, false, colour)
       lemming.elementId = info.id
       info.dimensions.position.x += this.scrollPosition.x
-      info.dimensions.position.y += this.scrollPosition.y
+      info.dimensions.position.y += this.scrollPosition.y + positionOffset
       lemming.position = info.dimensions.position
       lemming.size = info.dimensions.size
     }

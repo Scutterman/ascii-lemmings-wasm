@@ -6,7 +6,7 @@ import { Climb } from "./climb";
 import { Fall } from "./fall";
 
 export abstract class LemmingAction {
-  private animation: Animation
+  protected animation: Animation
   
   constructor(animation: Animation) {
     this.animation = animation
@@ -31,6 +31,10 @@ export abstract class LemmingAction {
     lemming.action = new Climb()
   }
 
+  getNextAnimationFrameProper(progressFrame: boolean): string[] {
+    return this.animation.getNextFrameAsText(progressFrame)
+  }
+  
   public getNextAnimationFrame(progressFrame: boolean): string {
     const frame = this.animation.getNextFrame(progressFrame)
     return frame[0][0]

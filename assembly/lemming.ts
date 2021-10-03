@@ -8,6 +8,7 @@ import { LemmingAction } from "./actions/lemmingAction";
 import { Miner } from "./actions/miner";
 import { Walk } from "./actions/walk";
 import { Animation, Direction } from "./animation";
+import { getRenderedTextArray } from "./loop";
 import { removeTerrainFromDirection } from "./map";
 import { Vec2 } from "./position";
 import { LemmingGift } from "./types";
@@ -89,11 +90,19 @@ export class Lemming {
     }
   }
 
-  public renderFrame(isDirty: boolean): string {
+  public renderFrame(isDirty: boolean): string[] {
     if (this.isExploding) {
-      return this.explosionAnimation.getNextFrame(isDirty)[0][0]
+      return getRenderedTextArray(this.explosionAnimation.getNextFrame(isDirty)[0][0])
     } else {
-      return this.action.getNextAnimationFrame(isDirty)
+      return getRenderedTextArray(this.action.getNextAnimationFrame(isDirty))
+    }
+  }
+
+  public renderFrameProper(isDirty: boolean): string[] {
+    if (this.isExploding) {
+      return this.renderFrame(isDirty)
+    } else {
+      return this.action.getNextAnimationFrameProper(isDirty)
     }
   }
 
