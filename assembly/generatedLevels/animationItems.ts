@@ -182,6 +182,90 @@ const LEMMING_WALK_FLIPPEDAnimation = new Animation([
 [" ","W","W"," "," ","w"," "," "],
 ],
 ])
+const LEMMING_FALLAnimation = new Animation([
+[
+[" "," "," ","f","F"," "," "," "],
+[" "," ","f","f","F"," "," "," "],
+[" "," ","f","f","f","f"," "," "],
+[" ","F"," ","f","f"," ","F"," "],
+[" "," ","F","f","f","F"," "," "],
+[" "," "," ","F","F"," "," "," "],
+[" ","F"," ","F","f","F"," "," "],
+[" "," ","F","F"," "," ","F"," "],
+],
+[
+[" "," ","F"," ","f"," "," "," "],
+[" "," ","f","f","f"," "," "," "],
+[" "," "," ","f","f","F"," "," "],
+[" "," "," ","f","f"," "," "," "],
+[" ","f","F","F","f","f","F"," "],
+[" "," "," ","f","f"," "," "," "],
+[" "," "," ","F","f","f","F"," "],
+[" ","f","f","F"," "," "," "," "],
+],
+[
+[" "," ","f","f","f"," "," "," "],
+[" "," ","f","f","F","F"," "," "],
+[" "," "," ","f","f"," "," "," "],
+[" "," ","F","f","F","F"," "," "],
+[" ","F"," ","F","F"," ","F"," "],
+[" "," "," ","f","f","F"," "," "],
+[" "," ","F","F"," "," "," "," "],
+[" ","f"," "," "," "," "," "," "],
+],
+[
+[" "," ","f"," ","F"," "," "," "],
+[" "," ","F","F","f"," "," "," "],
+[" "," ","f","f","f","f"," "," "],
+[" "," "," ","f","f"," "," "," "],
+[" ","f","f","f","f","f","F"," "],
+[" "," "," ","f","f"," "," "," "],
+[" "," "," ","f","f"," "," "," "],
+[" ","f","f","F","f","f","f"," "],
+],
+])
+const LEMMING_FALL_FLIPPEDAnimation = new Animation([
+[
+[" "," "," ","F","f"," "," "," "],
+[" "," "," ","F","f","f"," "," "],
+[" "," ","f","f","f","f"," "," "],
+[" ","F"," ","f","f"," ","F"," "],
+[" "," ","F","f","f","F"," "," "],
+[" "," "," ","F","F"," "," "," "],
+[" "," ","F","f","F"," ","F"," "],
+[" ","F"," "," ","F","F"," "," "],
+],
+[
+[" "," "," ","f"," ","F"," "," "],
+[" "," "," ","f","f","f"," "," "],
+[" "," ","F","f","f"," "," "," "],
+[" "," "," ","f","f"," "," "," "],
+[" ","F","f","f","F","F","f"," "],
+[" "," "," ","f","f"," "," "," "],
+[" ","F","f","f","F"," "," "," "],
+[" "," "," "," ","F","f","f"," "],
+],
+[
+[" "," "," ","f","f","f"," "," "],
+[" "," ","F","F","f","f"," "," "],
+[" "," "," ","f","f"," "," "," "],
+[" "," ","F","F","f","F"," "," "],
+[" ","F"," ","F","F"," ","F"," "],
+[" "," ","F","f","f"," "," "," "],
+[" "," "," "," ","F","F"," "," "],
+[" "," "," "," "," "," ","f"," "],
+],
+[
+[" "," "," ","F"," ","f"," "," "],
+[" "," "," ","f","F","F"," "," "],
+[" "," ","f","f","f","f"," "," "],
+[" "," "," ","f","f"," "," "," "],
+[" ","F","f","f","f","f","f"," "],
+[" "," "," ","f","f"," "," "," "],
+[" "," "," ","f","f"," "," "," "],
+[" ","f","f","f","F","f","f"," "],
+],
+])
 export const animationItems = new Map<string, AnimationListItem>()
 const exit = new StandardAnimation(exitAnimation, "#00FF00", 0)
 animationItems.set("exit", exit)
@@ -199,3 +283,7 @@ const LEMMING_WALK = new StandardAnimation(LEMMING_WALKAnimation, "#2866d7", 0)
 animationItems.set("LEMMING_WALK", LEMMING_WALK)
 const LEMMING_WALK_FLIPPED = new StandardAnimation(LEMMING_WALK_FLIPPEDAnimation, "#2866d7", 0)
 animationItems.set("LEMMING_WALK_FLIPPED", LEMMING_WALK_FLIPPED)
+const LEMMING_FALL = new StandardAnimation(LEMMING_FALLAnimation, "#2866d7", 0)
+animationItems.set("LEMMING_FALL", LEMMING_FALL)
+const LEMMING_FALL_FLIPPED = new StandardAnimation(LEMMING_FALL_FLIPPEDAnimation, "#2866d7", 0)
+animationItems.set("LEMMING_FALL_FLIPPED", LEMMING_FALL_FLIPPED)

@@ -1,6 +1,6 @@
 import { Animation } from "../animation";
 import { Lemming } from "../lemming";
-import { LemmingAction } from "./lemmingAction"
+import { LemmingActionPatch } from "./lemmingAction"
 import { Walk } from "./walk";
 import { BLOCKS_FALLEN_BEFORE_UMBRELLA, Umbrella } from './umbrella'
 
@@ -8,11 +8,11 @@ export class FallerAnimation extends Animation {
   constructor() { super([[['Y']], [['T']]]) }
 }
 
-export class Fall extends LemmingAction {
+export class Fall extends LemmingActionPatch {
   private blocksFallen: u8 = 0
 
   constructor() {
-    super(new FallerAnimation())
+    super("LEMMING_FALL")
   }
   
   update(lemming: Lemming): void {
