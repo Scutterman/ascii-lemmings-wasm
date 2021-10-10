@@ -94,18 +94,9 @@ export class Lemming {
     if (this.isExploding) {
       return getRenderedTextArray(this.explosionAnimation.getNextFrame(isDirty)[0][0])
     } else {
-      return getRenderedTextArray(this.action.getNextAnimationFrame(isDirty))
+      return this.action.getNextAnimationFrame(isDirty)
     }
   }
-
-  public renderFrameProper(isDirty: boolean): string[] {
-    if (this.isExploding) {
-      return this.renderFrame(isDirty)
-    } else {
-      return this.action.getNextAnimationFrameProper(isDirty)
-    }
-  }
-
   public setGift(gift: LemmingGift): boolean {
     const level = currentLevel
     if (this.action instanceof Block && gift != LemmingGift.Bomb) {

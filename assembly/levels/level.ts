@@ -220,16 +220,9 @@ export class Level extends BaseLevel {
         position.y > i16(VISIBLE_Y)
       ) { continue }
 
-      let colour = lemming.areYouExploding() ? '#ff0000' : '#2866d7'
-      let text: string[]
-      let positionOffset: i16 = 0
-
-      if (lemming.action instanceof Walk) {
-        text = lemming.renderFrameProper(this.isDirty)
-        positionOffset = 1
-      } else {
-        text = lemming.renderFrame(this.isDirty)
-      }
+      const colour = lemming.areYouExploding() ? '#ff0000' : '#2866d7'
+      const text = lemming.renderFrame(this.isDirty)
+      const positionOffset = lemming.action.getPositionOffset()
 
       position.y -= positionOffset
       const info = renderTextArrayToScreen(text, position, false, colour)

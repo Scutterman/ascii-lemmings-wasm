@@ -1,6 +1,7 @@
 import { Animation, Direction } from "../animation";
 import { animationItems } from "../generatedLevels/animationItems";
 import { Lemming } from "../lemming";
+import { getRenderedTextArray } from "../loop";
 import { getTileInDirection, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
 import { Climb } from "./climb";
@@ -34,13 +35,13 @@ export abstract class LemmingAction {
 
   public turnAround(newDirection: Direction): void { }
 
-  getNextAnimationFrameProper(progressFrame: boolean): string[] {
-    return this.animation.getNextFrameAsText(progressFrame)
-  }
-  
-  public getNextAnimationFrame(progressFrame: boolean): string {
+  public getNextAnimationFrame(progressFrame: boolean): string[] {
     const frame = this.animation.getNextFrame(progressFrame)
-    return frame[0][0]
+    return getRenderedTextArray(frame[0][0])
+  }
+
+  public getPositionOffset(): i16 {
+    return 0
   }
 }
 
@@ -53,5 +54,13 @@ export abstract class LemmingActionPatch extends LemmingAction {
   public turnAround(newDirection: Direction): void {
     const newAnimationName = newDirection == Direction.Right ? this.animationName : this.animationName + '_FLIPPED'
     this.animation = animationItems.get(newAnimationName).getAnimation().clone()
+  }
+
+  public getNextAnimationFrame(progressFrame: boolean): string[] {
+    return this.animation.getNextFrameAsText(progressFrame)
+  }
+
+  public getPositionOffset(): i16 {
+    return 1
   }
 }
