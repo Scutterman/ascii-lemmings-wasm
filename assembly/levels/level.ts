@@ -220,7 +220,7 @@ export class Level extends BaseLevel {
         position.y > i16(VISIBLE_Y)
       ) { continue }
 
-      let colour = lemming.areYouExploding() ? '#ff0000' : '#00ff00'
+      let colour = lemming.areYouExploding() ? '#ff0000' : '#2866d7'
       let text: string[]
       let positionOffset: i16 = 0
 
