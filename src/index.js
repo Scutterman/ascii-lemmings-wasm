@@ -160,7 +160,9 @@ clickTarget.addEventListener('click', function() {
 })
 
 function onKeyUp(e) {
-    wasmRunner.postMessage({ instruction: 'keyup', character: e.key })
+    const { altKey, ctrlKey, shiftKey } = e
+    const modifiers = { altKey, ctrlKey, shiftKey, backspaceKey: e.keyCode === 8 }
+    wasmRunner.postMessage({ instruction: 'keyup', character: e.key, modifiers })
 }
 
 function setScreenSize(screenSize) {

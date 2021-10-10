@@ -80,7 +80,8 @@ onmessage = function(e) {
     if (started) {
         if (e.data.instruction === 'keyup') {
             const string = loadedModule.exports.__newString(e.data.character)
-            loadedModule.instance.exports.keyUp(string)
+            const { altKey, ctrlKey, shiftKey, backspaceKey } = e.data.modifiers
+            loadedModule.instance.exports.keyUp(string, altKey, ctrlKey, shiftKey, backspaceKey)
         } else if (e.data.instruction === 'setpause') {
             isPaused = e.data.pauseState
         } else if (e.data.instruction === 'loadlevel') {

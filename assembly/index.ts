@@ -145,8 +145,12 @@ export declare function keyPressListener(shouldListen: boolean): void
 export declare function messageResponse(instruction: string, name: string, content: string): void
 declare function setupClientForLevel(mapWidth: i32, mapHeight: i32, visibleWidth: i32, visibleHeight: i32, buttonAreaHtml: string): void;
 
-export function keyUp(character: string): void {
-  if (allowedUserInputCharacters.includes(character)) {
+export function keyUp(character: string, _altKey: boolean, _ctrlKey: boolean, _shiftKey: boolean, backspaceKey: boolean): void {
+  if (backspaceKey) {
+    if (gameState.userEnteredText.length > 0) {
+      gameState.userEnteredText = gameState.userEnteredText.substr(0, gameState.userEnteredText.length - 1)
+    }
+  } else if (allowedUserInputCharacters.includes(character)) {
     gameState.userEnteredText += character
   }
 }
