@@ -75,6 +75,7 @@ export class Animations extends MetaScreen {
       let animationKeys = animationItems.keys()
       for (let i = 0; i < animationKeys.length; i++) {
         const name = animationKeys[i]
+        if (name.endsWith('_FLIPPED')) { continue }
         exportedAnimations += animationItems.get(name).export(name)
       }
       messageResponse('save', 'global.animation', exportedAnimations)
@@ -82,6 +83,7 @@ export class Animations extends MetaScreen {
 
     const animationListItemKeys = animationItems.keys()
     for (let i = 0; i < animationListItemKeys.length; i++) {
+      if (animationListItemKeys[i].endsWith('_FLIPPED')) { continue }
       this.addToAnimationList(animationListItemKeys[i])
     }
 
