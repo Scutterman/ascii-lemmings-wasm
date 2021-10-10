@@ -1,4 +1,5 @@
 import { Animation, Direction } from "../animation";
+import { animationItems } from "../generatedLevels/animationItems";
 import { Lemming } from "../lemming";
 import { getTileInDirection, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
@@ -31,6 +32,8 @@ export abstract class LemmingAction {
     lemming.action = new Climb()
   }
 
+  public turnAround(newDirection: Direction): void { }
+
   getNextAnimationFrameProper(progressFrame: boolean): string[] {
     return this.animation.getNextFrameAsText(progressFrame)
   }
@@ -38,5 +41,17 @@ export abstract class LemmingAction {
   public getNextAnimationFrame(progressFrame: boolean): string {
     const frame = this.animation.getNextFrame(progressFrame)
     return frame[0][0]
+  }
+}
+
+export abstract class LemmingActionPatch extends LemmingAction {
+  constructor(private animationName: string) {
+    super(animationItems.get(animationName).getAnimation().clone())
+  }
+
+  
+  public turnAround(newDirection: Direction): void {
+    const newAnimationName = newDirection == Direction.Right ? this.animationName : this.animationName + '_FLIPPED'
+    this.animation = animationItems.get(newAnimationName).getAnimation().clone()
   }
 }

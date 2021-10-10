@@ -165,6 +165,7 @@ export class Lemming {
 
   public turnAround(): void {
     this.facingDirection = this.facingDirection == Direction.Right ? Direction.Left : Direction.Right
+    this.action.turnAround(this.facingDirection)
   }
 }
 
