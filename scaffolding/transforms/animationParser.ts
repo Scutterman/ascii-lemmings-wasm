@@ -14,7 +14,9 @@ export class AnimationParser {
   private imports = ''
   private animations: string = ''
   private animationItems: string = ''
+  private flippedAnimation: string = ''
   private inAnimation: boolean = false
+  private needsFlipping: boolean = false
   private inFrame: boolean = false
   private currentSection: AnimationSection = AnimationSection.None
   private singleCharacterAnimations: Map<string, string> = new Map<string, string>()
@@ -27,7 +29,9 @@ export class AnimationParser {
     this.currentSection = AnimationSection.None
     this.animations = ''
     this.animationItems = ''
+    this.flippedAnimation = ''
     this.inAnimation = false
+    this.needsFlipping = false
     this.imports = ''
     this.singleCharacterAnimations = new Map<string, string>()
     this.imports += getImport('../animation', ['Animation'])
@@ -132,6 +136,13 @@ export class AnimationParser {
     const name = instructions[2]
     const colour = instructions[3]
     this.addAnimationItem(name, colour, 'StandardAnimation', name + 'Animation', instructions[4])
+    
+    if (name.startsWith('LEMMING_')) {
+      this.needsFlipping = true
+      const flippedName = name + '_FLIPPED'
+      this.addAnimationItem(flippedName, colour, 'StandardAnimation', flippedName + 'Animation', instructions[4])
+    }
+
     this.startAnimation(name)
   }
 
@@ -175,37 +186,70 @@ export class AnimationParser {
     if (!stringOnlyContainsSafeCharacters(name, AnimationParser.allowedNames)) {
       return
     }
-    this.animations += 'const ' + name + 'Animation = new Animation([\n'
     this.inAnimation = true
+    
+    this.animations += 'const ' + name + 'Animation = new Animation([\n'
+
+    if (this.needsFlipping) {
+      this.flippedAnimation += 'const ' + name+ '_FLIPPED' + 'Animation = new Animation([\n'
+    }
+
   }
 
   private endAnimation(): void {
     this.animations += '])\n'
+
+    if (this.needsFlipping) {
+      this.flippedAnimation += '])\n'
+      this.animations += this.flippedAnimation
+      this.flippedAnimation = ''
+      this.needsFlipping = false
+    }
+
     this.inAnimation = false
   }
 
   private startFrame(): void {
     this.animations += '[\n'
+    if (this.needsFlipping) {
+      this.flippedAnimation += '[\n'
+    }
+    
     this.inFrame = true
   }
 
   private endFrame(): void {
     this.animations += '],\n'
+    if (this.needsFlipping) {
+      this.flippedAnimation += '],\n'
+    }
+    
     this.inFrame = false
   }
 
-  private addToFrame(line: string): void {
+  private addToFrame(line: string, addToFlipped = false): void {
     if (line.length == 0) { return }
 
-    this.animations += '['
+    let change = ''
+    change += '['
     const lineCharacters = line.split('')
     for (var i = 0; i < lineCharacters.length; i++) {
       let char = lineCharacters[i]
       if (!allowedUserInputCharacters.includes(char)) { continue }
       if (char == '\\') { char += '\\' }
-      this.animations += '"' + char + '"' + ','
+      change += '"' + char + '"' + ','
     }
 
-    this.animations = this.animations.substr(0, this.animations.length - 1) + '],\n'
+    change = change.substr(0, change.length - 1) + '],\n'
+
+    if (!addToFlipped) {
+      this.animations += change
+    } else {
+      this.flippedAnimation += change
+    }
+
+    if (!addToFlipped && this.needsFlipping) {
+      this.addToFrame(line.split('').reverse().join(''), true)
+    }
   }
 }

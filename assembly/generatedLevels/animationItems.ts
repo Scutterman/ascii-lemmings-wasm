@@ -98,7 +98,7 @@ const TRAP_PISTONAnimation = new Animation([
 ["_","_","_","_"],
 ],
 ])
-const WALKAnimation = new Animation([
+const LEMMING_WALKAnimation = new Animation([
 [
 [" "," ","w","w","w","w"," "," "],
 [" "," ","w","w","w"," "," "," "],
@@ -140,6 +140,48 @@ const WALKAnimation = new Animation([
 [" "," ","w"," "," ","W","W"," "],
 ],
 ])
+const LEMMING_WALK_FLIPPEDAnimation = new Animation([
+[
+[" "," ","w","w","w","w"," "," "],
+[" "," "," ","w","w","w"," "," "],
+[" "," ","w","w","w"," "," "," "],
+[" "," "," ","w","w"," "," "," "],
+[" "," "," ","w","w"," "," "," "],
+[" "," "," ","w","w"," "," "," "],
+[" "," "," ","w","w","w","W"," "],
+[" "," "," ","w","w"," "," "," "],
+],
+[
+[" "," "," ","w","w","w"," "," "],
+[" "," "," ","w","w","w"," "," "],
+[" "," ","w","w","w"," "," "," "],
+[" "," "," ","w","w"," "," "," "],
+[" "," "," ","w","w","w"," "," "],
+[" ","w"," ","w","w","w"," "," "],
+[" ","w"," ","w","w"," "," "," "],
+[" "," ","w"," ","w","w"," "," "],
+],
+[
+[" "," "," ","w","w","w"," "," "],
+[" "," "," ","w","w"," "," "," "],
+[" "," ","w","w","w"," "," "," "],
+[" "," "," ","w","w","w"," "," "],
+[" "," "," ","w","w","w"," "," "],
+[" "," ","w","w","w","w","w"," "],
+[" "," ","w","w","w","w"," "," "],
+[" ","w","w"," "," ","w","w"," "],
+],
+[
+[" "," ","w","W"," "," "," "," "],
+[" ","w","w","w","w"," "," "," "],
+[" ","w","w","w","w"," "," "," "],
+[" "," ","w","w"," "," "," "," "],
+[" "," ","W","w","W"," "," "," "],
+[" "," ","W","W"," "," "," "," "],
+[" ","W","W","w","w","W"," "," "],
+[" ","W","W"," "," ","w"," "," "],
+],
+])
 export const animationItems = new Map<string, AnimationListItem>()
 const exit = new StandardAnimation(exitAnimation, "#00FF00", 0)
 animationItems.set("exit", exit)
@@ -153,5 +195,7 @@ const DIGLEFT = new StandardAnimation(DIGLEFTAnimation, "#FF0080", 8)
 animationItems.set("DIGLEFT", DIGLEFT)
 const TRAP_PISTON = new StandardAnimation(TRAP_PISTONAnimation, "#0ccf11", 0)
 animationItems.set("TRAP_PISTON", TRAP_PISTON)
-const WALK = new StandardAnimation(WALKAnimation, "#2866d7", 0)
-animationItems.set("WALK", WALK)
+const LEMMING_WALK = new StandardAnimation(LEMMING_WALKAnimation, "#2866d7", 0)
+animationItems.set("LEMMING_WALK", LEMMING_WALK)
+const LEMMING_WALK_FLIPPED = new StandardAnimation(LEMMING_WALK_FLIPPEDAnimation, "#2866d7", 0)
+animationItems.set("LEMMING_WALK_FLIPPED", LEMMING_WALK_FLIPPED)
