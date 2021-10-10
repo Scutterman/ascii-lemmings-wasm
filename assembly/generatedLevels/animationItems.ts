@@ -129,6 +129,16 @@ const WALKAnimation = new Animation([
 [" "," ","w","w","w","w"," "," "],
 [" ","w","w"," "," ","w","w"," "],
 ],
+[
+[" "," "," "," ","W","w"," "," "],
+[" "," "," ","w","w","w","w"," "],
+[" "," "," ","w","w","w","w"," "],
+[" "," "," "," ","w","w"," "," "],
+[" "," "," ","W","w","W"," "," "],
+[" "," "," "," ","W","W"," "," "],
+[" "," ","W","w","w","W","W"," "],
+[" "," ","w"," "," ","W","W"," "],
+],
 ])
 export const animationItems = new Map<string, AnimationListItem>()
 const exit = new StandardAnimation(exitAnimation, "#00FF00", 0)
