@@ -31,7 +31,7 @@ export class Builder extends LemmingAction {
       this.handleFalling(lemming)
       return
     } else if(this.bricksRemaining == 0) {
-      lemming.action = new Walk()
+      lemming.action = new Walk(lemming.facingDirection)
       return
     }
     
@@ -49,7 +49,7 @@ export class Builder extends LemmingAction {
       this.moveOntoBrick = false
       return
     } else {
-      lemming.action = new Walk()
+      lemming.action = new Walk(lemming.facingDirection)
     }
     
     if (this.canBuildNextTile(lemming)) {
@@ -60,7 +60,7 @@ export class Builder extends LemmingAction {
       this.moveOntoBrick = false
       return
     } else {
-      lemming.action = new Walk()
+      lemming.action = new Walk(lemming.facingDirection)
     }
   }
 

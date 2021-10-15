@@ -1,4 +1,4 @@
-import { Animation } from "../animation";
+import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
 import { LemmingActionPatch } from "./lemmingAction"
 import { Walk } from "./walk";
@@ -11,8 +11,8 @@ export class FallerAnimation extends Animation {
 export class Fall extends LemmingActionPatch {
   private blocksFallen: u8 = 0
 
-  constructor() {
-    super("LEMMING_FALL")
+  constructor(facing: Direction) {
+    super("LEMMING_FALL", facing)
   }
   
   update(lemming: Lemming): void {
@@ -28,7 +28,7 @@ export class Fall extends LemmingActionPatch {
       if (this.blocksFallen >= 16) {
         lemming.removeFromGame()
       } else {
-        lemming.action = new Walk()
+        lemming.action = new Walk(lemming.facingDirection)
       }
     }
   }

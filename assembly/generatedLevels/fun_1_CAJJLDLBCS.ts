@@ -6,7 +6,7 @@ import { LevelMetadata } from "../../shared/src/wasm-safe"
       export class Level_fun_1_CAJJLDLBCS extends Level {
 
         constructor() {
-          super('fun_1_CAJJLDLBCS', 'fun', 10, 1, mapDetail)
+          super('fun_1_CAJJLDLBCS', 'fun', 1, 1, mapDetail)
       
           this.setSkillQuantity(LemmingGift.ClimbingBoots, 10)
 this.setSkillQuantity(LemmingGift.Umbrella, 10)
@@ -19,7 +19,7 @@ this.setSkillQuantity(LemmingGift.Shovel, 255)
         }
       }
     const mapDetail = new LevelMapDetail([])
-mapDetail.meta = new LevelMetadata("Just dig!",1, "CAJJLDLBCS", "fun", "grassland", 10, 1)
+mapDetail.meta = new LevelMetadata("Just dig!",1, "CAJJLDLBCS", "fun", "grassland", 1, 1)
 mapDetail.tiles.push("__________________________________________________________________________")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG           GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG|")
@@ -34,9 +34,9 @@ mapDetail.tiles.push("|GGGGGGGGG                                       GGGGGGGGG
 mapDetail.tiles.push("|GGGGGGGGG                                       GGGGGGGGGGGGGG GGG    GG|")
 mapDetail.tiles.push("|GGGGGGGGG                                       GGGGGGGGGGGGGG        GG|")
 mapDetail.tiles.push("|GGGGGGGGG                                       GGGGGGGGGGGGGG        GG|")
-mapDetail.tiles.push("|GGGGGGGGG                                       GGGGGGGGGGGGGG        GG|")
-mapDetail.tiles.push("|GGGGGGGGG                                      GGGGGGGGGGGGGGGG       GG|")
-mapDetail.tiles.push("|GGGGGGGGG                                     GGGGGGGGGGGGGGGGGG      GG|")
+mapDetail.tiles.push("|GGGGGGGGG          GG             GG            GGGGGGGGGGGGGG        GG|")
+mapDetail.tiles.push("|GGGGGGGGG          GG             GG           GGGGGGGGGGGGGGGG       GG|")
+mapDetail.tiles.push("|GGGGGGGGG          GG             GG          GGGGGGGGGGGGGGGGGG      GG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     GG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     GG|")
 mapDetail.tiles.push("|GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     GGG|")

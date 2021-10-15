@@ -10,8 +10,8 @@ export class ClimberAnimation extends Animation {
 }
 
 export class Climb extends LemmingActionPatch {
-  constructor() {
-    super('LEMMING_CLIMB')
+  constructor(facing: Direction) {
+    super('LEMMING_CLIMB', facing)
   }
 
   private cannotClimbFurther(lemming: Lemming): boolean {
@@ -31,7 +31,7 @@ export class Climb extends LemmingActionPatch {
       const pos = lemming.position
       pos.x += lemming.facingDirection == Direction.Right ? 1 : -1
       lemming.position = pos
-      lemming.action = new Walk()
+      lemming.action = new Walk(lemming.facingDirection)
     } else if (this.cannotClimbFurther(lemming)) {
       lemming.turnAround()
       if (this.isFalling(lemming.position)) {

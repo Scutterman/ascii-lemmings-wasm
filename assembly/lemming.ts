@@ -25,7 +25,7 @@ export class Lemming {
   removed: boolean = false
   exited: boolean = false
   actionTimeLeft: u16 = 0
-  action: LemmingAction = new Fall()
+  action: LemmingAction = new Fall(Direction.Right)
   _position: Vec2 = new Vec2(22, 13)
   size: Vec2 = new Vec2(0,0)
   hasUmbrella: boolean = false
@@ -146,7 +146,7 @@ export class Lemming {
           this.action = new Digger()
       break
       case LemmingGift.Walk:
-          this.action = new Walk()
+          this.action = new Walk(this.facingDirection)
       break
       default:
         return false

@@ -26,7 +26,7 @@ export class Basher extends LemmingAction {
       removeTerrain(new Vec2(pos.x, pos.y - 1), lemming.facingDirection)
       lemming.position = pos
     } else {
-      lemming.action = new Walk()
+      lemming.action = new Walk(lemming.facingDirection)
     }
   }
 

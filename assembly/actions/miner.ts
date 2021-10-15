@@ -29,7 +29,7 @@ export class Miner extends LemmingAction {
       
       lemming.position = new Vec2(lemming.position.x += xDelta, pos.y)
     } else {
-      lemming.action = new Walk()
+      lemming.action = new Walk(lemming.facingDirection)
     }
   }
   

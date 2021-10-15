@@ -4,7 +4,7 @@ NUMBER::1
 CODE::CAJJLDLBCS
 DIFFICULTY::fun
 TEXTURE_GROUP::grassland
-TOSPAWN::10
+TOSPAWN::1
 SUCCESS::1
 SKILL::ClimbingBoots::10
 SKILL::Umbrella::10
@@ -29,9 +29,9 @@ __________________________________________________________________________
 |GGGGGGGGG                                       GGGGGGGGGGGGGG GGG    GG|
 |GGGGGGGGG                                       GGGGGGGGGGGGGG        GG|
 |GGGGGGGGG                                       GGGGGGGGGGGGGG        GG|
-|GGGGGGGGG                                       GGGGGGGGGGGGGG        GG|
-|GGGGGGGGG                                      GGGGGGGGGGGGGGGG       GG|
-|GGGGGGGGG                                     GGGGGGGGGGGGGGGGGG      GG|
+|GGGGGGGGG          GG             GG            GGGGGGGGGGGGGG        GG|
+|GGGGGGGGG          GG             GG           GGGGGGGGGGGGGGGG       GG|
+|GGGGGGGGG          GG             GG          GGGGGGGGGGGGGGGGGG      GG|
 |GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     GG|
 |GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     GG|
 |GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     GGG|

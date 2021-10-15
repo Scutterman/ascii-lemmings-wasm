@@ -24,13 +24,13 @@ export abstract class LemmingAction {
   
   protected handleFalling(lemming: Lemming, changeAction: boolean = true): void {
     if (changeAction) {
-      lemming.action = new Fall()
+      lemming.action = new Fall(lemming.facingDirection)
     }
     lemming.position = new Vec2(lemming.position.x, lemming.position.y + 1)
   }
 
   protected handleClimbing(lemming: Lemming): void {
-    lemming.action = new Climb()
+    lemming.action = new Climb(lemming.facingDirection)
   }
 
   public turnAround(newDirection: Direction): void { }
@@ -46,8 +46,9 @@ export abstract class LemmingAction {
 }
 
 export abstract class LemmingActionPatch extends LemmingAction {
-  constructor(private animationName: string) {
+  constructor(private animationName: string, facing: Direction) {
     super(animationItems.get(animationName).getAnimation().clone())
+    this.turnAround(facing)
   }
 
   

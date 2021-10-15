@@ -9,8 +9,8 @@ export class WalkerAnimation extends Animation {
 }
 
 export class Walk extends LemmingActionPatch {
-  constructor() {
-    super("LEMMING_WALK")
+  constructor(facing: Direction) {
+    super("LEMMING_WALK", facing)
   }
 
   update(lemming: Lemming): void {

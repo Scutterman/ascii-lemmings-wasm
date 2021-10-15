@@ -18,7 +18,7 @@ export class Digger extends LemmingAction {
     if (this.isFalling(lemming.position)) {
       this.handleFalling(lemming)
     } else if (!this.canMineDown(lemming)) {
-      lemming.action = new Walk()
+      lemming.action = new Walk(lemming.facingDirection)
     } else {
       removeTerrainFromDirection(lemming.position, Direction.Down)
       removeTerrainFromDirection(lemming.position, Direction.Down | Direction.Left)

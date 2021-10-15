@@ -14,7 +14,7 @@ export class Block extends LemmingAction {
   
   update(lemming: Lemming): void {
     if (this.isFalling(lemming.position)) {
-      lemming.action = new Walk()
+      lemming.action = new Walk(lemming.facingDirection)
     }
   }
 
