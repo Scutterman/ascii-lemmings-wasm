@@ -18,7 +18,7 @@ export class Fall extends LemmingActionPatch {
   update(lemming: Lemming): void {
     if (this.isFalling(lemming.position)) {
       if (lemming.hasUmbrella && this.blocksFallen >= BLOCKS_FALLEN_BEFORE_UMBRELLA) {
-        lemming.action = new Umbrella()
+        lemming.action = new Umbrella(lemming.facingDirection)
         lemming.action.update(lemming)
       } else {
         this.handleFalling(lemming, false)
