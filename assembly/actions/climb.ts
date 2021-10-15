@@ -1,18 +1,17 @@
-import { log } from "..";
 import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
 import { getTileInDirection, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
-import { LemmingAction } from "./lemmingAction";
+import { LemmingActionPatch } from "./lemmingAction";
 import { Walk } from "./walk";
 
 export class ClimberAnimation extends Animation {
   constructor() { super([[['l']], [['c']]]) }
 }
 
-export class Climb extends LemmingAction {
+export class Climb extends LemmingActionPatch {
   constructor() {
-    super(new ClimberAnimation())
+    super('LEMMING_CLIMB')
   }
 
   private cannotClimbFurther(lemming: Lemming): boolean {

@@ -153,3 +153,67 @@ ____
    ff   
    ff   
  ffFfff 
+//EDITORHINT::ANIMATION::LEMMING_CLIMB::#2866d7::0000
+//EDITORHINT::FRAME
+  CcC  c
+  ccCC C
+  ccccC 
+  CCccC 
+    CcC 
+    ccC 
+     CC 
+      c 
+//EDITORHINT::FRAME
+  cCc  C
+  cccccc
+  ccccC 
+   cCCC 
+    ccc 
+     CC 
+     cc 
+      c 
+//EDITORHINT::FRAME
+  cccccc
+  cccccc
+  cccccc
+   CccCc
+     cCc
+     ccc
+      cc
+       c
+//EDITORHINT::FRAME
+ ccccccC
+ ccccccc
+ ccccccc
+  CCcccc
+     ccc
+     ccc
+      cc
+       c
+//EDITORHINT::FRAME
+ CccccCC
+cccccccC
+cccccccc
+ C  Cccc
+    cccc
+     Ccc
+        
+        
+//EDITORHINT::FRAME
+  ccC  C
+  cccccc
+ ccccccc
+ cc Cccc
+ cc  ccc
+     Ccc
+        
+        
+//EDITORHINT::FRAME
+  ccC  c
+  ccc cc
+ CccccCc
+ CcCcCCc
+    cCCc
+    cccC
+        
+        
