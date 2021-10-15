@@ -1,15 +1,15 @@
-import { Animation } from "../animation";
+import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { LemmingAction } from "./lemmingAction";
+import { LemmingActionPatch } from "./lemmingAction";
 import { Walk } from "./walk";
 
 export class BlockerAnimation extends Animation {
   constructor() { super([[['T']]]) }
 }
 
-export class Block extends LemmingAction {
-  constructor() {
-    super(new BlockerAnimation())
+export class Block extends LemmingActionPatch {
+  constructor(facing: Direction) {
+    super('LEMMING_BLOCK', facing)
   }
   
   update(lemming: Lemming): void {

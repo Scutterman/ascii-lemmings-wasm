@@ -131,7 +131,7 @@ export class Lemming {
         this.isExploding = true
       break
       case LemmingGift.Block:
-          this.action = new Block()
+          this.action = new Block(this.facingDirection)
       break
       case LemmingGift.BrickSack:
           this.action = new Builder()
