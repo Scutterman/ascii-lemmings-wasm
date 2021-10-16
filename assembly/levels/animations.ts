@@ -211,7 +211,7 @@ export class Animations extends MetaScreen {
       ? this.getLemmingFrame()
       : new SingleCharacterAnimation(' ', defaultColour).getAnimation().getNextFrame(false)
     animationItems.get(animationName as string).getAnimation().addFrame(frame)
-    const ui = new UiAnimationFrame(new Vec2(0,0), frame, i16(this.animationEditor.getItems().length), defaultColour)
+    const ui = new UiAnimationFrame(new Vec2(0,0), frame, i16(this.animationEditor.getItems().length), animationItems.get(animationName as string).getColour())
     this.animationEditor.addItem(ui)
   }
 
