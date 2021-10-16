@@ -17,8 +17,10 @@ import { ClimberAnimation } from "../actions/climb"
 import { DiggerAnimation } from "../actions/digger"
 import { MinerAnimation } from "../actions/miner"
 import { FloaterAnimation } from "../actions/umbrella"
-import { LevelMapDetail } from "../maps/types"
+import { LevelMapDetail, SingleCharacterAnimation } from "../maps/types"
 import { removeItem } from "../vdom/elements"
+import { animationItems } from "../generatedLevels/animationItems"
+import { defaultColour } from "../colours"
 
 export class Level extends BaseLevel {
   private canSpawnMore: boolean = true
@@ -36,14 +38,14 @@ export class Level extends BaseLevel {
     this.uiPanels.push(this.skillsLabelPanel)
 
     if (!this.isMetaScreen) {
-      this.addSkillToPanel(new ClimberAnimation(), LemmingGift.ClimbingBoots)
-      this.addSkillToPanel(new FloaterAnimation(), LemmingGift.Umbrella)
-      this.addSkillToPanel(new BomberAnimation(), LemmingGift.Bomb)
-      this.addSkillToPanel(new BlockerAnimation(), LemmingGift.Block)
-      this.addSkillToPanel(new BuilderAnimation(), LemmingGift.BrickSack)
-      this.addSkillToPanel(new BasherAnimation(), LemmingGift.Hammer)
-      this.addSkillToPanel(new MinerAnimation(), LemmingGift.Pickaxe)
-      this.addSkillToPanel(new DiggerAnimation(), LemmingGift.Shovel)
+      this.addSkillToPanel('LEMMING_CLIMB', LemmingGift.ClimbingBoots)
+      this.addSkillToPanel('LEMMING_FLOAT', LemmingGift.Umbrella)
+      this.addSkillToPanel('LEMMING_BOMB', LemmingGift.Bomb)
+      this.addSkillToPanel('LEMMING_BLOCK', LemmingGift.Block)
+      this.addSkillToPanel('LEMMING_BUILD', LemmingGift.BrickSack)
+      this.addSkillToPanel('LEMMING_BASH', LemmingGift.Hammer)
+      this.addSkillToPanel('LEMMING_MINE', LemmingGift.Pickaxe)
+      this.addSkillToPanel('LEMMING_DIG', LemmingGift.Shovel)
 
       this.uiLabels.push(new UILabel(new Vec2(2, this.buttonYCoordinate - 2), '', 'SELECTED_GIFT'))
       this.uiLabels.push(new UILabel(new Vec2(16, this.buttonYCoordinate - 2), '', 'LEMMING_INFO'))
@@ -100,8 +102,9 @@ export class Level extends BaseLevel {
     }
   }
 
-  public addSkillToPanel(skillAnimation: Animation, gift: LemmingGift): void {
-    this.skillsPanel.addItem(new LemmingActionControl(new Vec2(0, 0), gift, skillAnimation))
+  public addSkillToPanel(skillAnimation: string, gift: LemmingGift): void {
+    const animation = animationItems.has(skillAnimation) ? animationItems.get(skillAnimation).getAnimation() : new SingleCharacterAnimation('?', defaultColour).getAnimation()
+    this.skillsPanel.addItem(new LemmingActionControl(new Vec2(0, 0), gift, animation))
   }
 
   public updateSkillQuantity(gift: LemmingGift, newText: string): void {

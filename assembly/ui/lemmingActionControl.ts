@@ -23,9 +23,14 @@ export class LemmingActionControl extends LabelledButton {
     }
 
     const shouldProgressAnimation = isDirty && this.hasMouseFocus
-    this.controlText = this.animation.getNextFrame(shouldProgressAnimation)[0][0]
+    const controlText = this.controlText
+    this.controlText = ''
     
-    return super.getTextForRender(shouldProgressAnimation)
+    const render = super.getTextForRender(shouldProgressAnimation)
+    this.controlText = controlText
+    const text = this.animation.getNextFrameAsText(shouldProgressAnimation)
+    for (let i = 0; i < text.length; i++) { render.push(text[i]) }
+    return render
   }
 
   public render(): void {
