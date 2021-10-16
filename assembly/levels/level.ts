@@ -1,9 +1,9 @@
-import { currentLevel, gameState, lemmings, log } from ".."
+import { gameState, lemmings, log } from ".."
 import { BomberAnimation, Lemming } from "../lemming"
-import { getRenderedTextArray, removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
+import { removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
 import { BaseLevel } from "./baseLevel"
-import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTileDetail, TILE_AIR, VISIBLE_X, VISIBLE_Y } from "../map"
+import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTileDetail, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
 import { BlockerAnimation } from "../actions/block"
@@ -19,7 +19,6 @@ import { MinerAnimation } from "../actions/miner"
 import { FloaterAnimation } from "../actions/umbrella"
 import { LevelMapDetail } from "../maps/types"
 import { removeItem } from "../vdom/elements"
-import { Walk } from "../actions/walk"
 
 export class Level extends BaseLevel {
   private canSpawnMore: boolean = true
