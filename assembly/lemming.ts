@@ -137,7 +137,7 @@ export class Lemming {
           this.action = new Builder(this.facingDirection)
       break
       case LemmingGift.Hammer:
-          this.action = new Basher()
+          this.action = new Basher(this.facingDirection)
       break
       case LemmingGift.Pickaxe:
           this.action = new Miner()

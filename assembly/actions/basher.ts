@@ -2,16 +2,16 @@ import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
 import { getTileDetailInDirection, removeTerrain, terrainIndestructible, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
-import { LemmingAction } from "./lemmingAction";
+import { LemmingActionPatch } from "./lemmingAction";
 import { Walk } from "./walk";
 
 export class BasherAnimation extends Animation {
   constructor() { super([[['B']]]) }
 }
 
-export class Basher extends LemmingAction {
-  constructor() {
-    super(new BasherAnimation())
+export class Basher extends LemmingActionPatch {
+  constructor(facing: Direction) {
+    super('LEMMING_BASH', facing)
   }
   
   update(lemming: Lemming): void {
