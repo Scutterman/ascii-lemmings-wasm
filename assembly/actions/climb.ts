@@ -2,14 +2,14 @@ import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
 import { getTileInDirection, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
-import { LemmingActionPatch } from "./lemmingAction";
+import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
 export class ClimberAnimation extends Animation {
   constructor() { super([[['l']], [['c']]]) }
 }
 
-export class Climb extends LemmingActionPatch {
+export class Climb extends LemmingAction {
   constructor(facing: Direction) {
     super('LEMMING_CLIMB', facing)
   }

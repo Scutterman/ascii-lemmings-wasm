@@ -1,7 +1,6 @@
 import { Animation, Direction } from "../animation";
 import { animationItems } from "../generatedLevels/animationItems";
 import { Lemming } from "../lemming";
-import { getRenderedTextArray } from "../loop";
 import { getTileInDirection, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
 import { Climb } from "./climb";
@@ -9,9 +8,9 @@ import { Fall } from "./fall";
 
 export abstract class LemmingAction {
   protected animation: Animation
-  
-  constructor(animation: Animation) {
-    this.animation = animation
+  constructor(private animationName: string, facing: Direction) {
+    this.animation = animationItems.get(animationName).getAnimation().clone()
+    this.turnAround(facing)
   }
 
   abstract update(lemming: Lemming): void
@@ -33,25 +32,6 @@ export abstract class LemmingAction {
     lemming.action = new Climb(lemming.facingDirection)
   }
 
-  public turnAround(newDirection: Direction): void { }
-
-  public getNextAnimationFrame(progressFrame: boolean): string[] {
-    const frame = this.animation.getNextFrame(progressFrame)
-    return getRenderedTextArray(frame[0][0])
-  }
-
-  public getPositionOffset(): i16 {
-    return 0
-  }
-}
-
-export abstract class LemmingActionPatch extends LemmingAction {
-  constructor(private animationName: string, facing: Direction) {
-    super(animationItems.get(animationName).getAnimation().clone())
-    this.turnAround(facing)
-  }
-
-  
   public turnAround(newDirection: Direction): void {
     const newAnimationName = newDirection == Direction.Right ? this.animationName : this.animationName + '_FLIPPED'
     this.animation = animationItems.get(newAnimationName).getAnimation().clone()

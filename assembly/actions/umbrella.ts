@@ -1,6 +1,6 @@
 import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { LemmingActionPatch } from "./lemmingAction";
+import { LemmingAction } from "./lemmingAction";
 import { Walk } from "./walk";
 
 export const BLOCKS_FALLEN_BEFORE_UMBRELLA: u8 = 4
@@ -10,7 +10,7 @@ export class FloaterAnimation extends Animation {
   constructor() { super([[['U']]]) }
 }
 
-export class Umbrella extends LemmingActionPatch {
+export class Umbrella extends LemmingAction {
   private framesSinceFall: u16 = 0
   constructor(facing: Direction) {
     super('LEMMING_FLOAT', facing)
