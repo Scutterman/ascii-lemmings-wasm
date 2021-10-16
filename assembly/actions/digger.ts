@@ -1,17 +1,17 @@
 import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
-import { getPositionInDirection, getSurroundingTileDetail, getTileDetailInDirection, removeTerrainFromDirection, terrainIndestructible, TILE_AIR } from "../map";
+import { getTileDetailInDirection, removeTerrainFromDirection, terrainIndestructible, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
-import { LemmingAction } from "./lemmingAction";
+import { LemmingActionPatch } from "./lemmingAction";
 import { Walk } from "./walk";
 
 export class DiggerAnimation extends Animation {
   constructor() { super([[['D']]]) }
 }
 
-export class Digger extends LemmingAction {
-  constructor() {
-    super(new DiggerAnimation())
+export class Digger extends LemmingActionPatch {
+  constructor(facing: Direction) {
+    super('LEMMING_DIG', facing)
   }
   
   update(lemming: Lemming): void {

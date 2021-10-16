@@ -143,7 +143,7 @@ export class Lemming {
           this.action = new Miner()
       break
       case LemmingGift.Shovel:
-          this.action = new Digger()
+          this.action = new Digger(this.facingDirection)
       break
       case LemmingGift.Walk:
           this.action = new Walk(this.facingDirection)

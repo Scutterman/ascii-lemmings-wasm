@@ -662,6 +662,50 @@ const LEMMING_BUILD_FLIPPEDAnimation = new Animation([
 [" "," ","b","B"," "," ","B","B"],
 ],
 ])
+const LEMMING_DIGAnimation = new Animation([
+[
+[" "," "," "," ","D","D"," ","D"],
+[" "," "," "," "," ","D","D"," "],
+[" "," "," "," "," "," "," "," "],
+[" "," "," ","D","d","D"," ","D"],
+[" "," ","D","D","D","D","d"," "],
+[" ","D","D","d","D","d"," "," "],
+["d","D"," ","D","D","D"," "," "],
+[" ","D","D","D"," ","D","D","D"],
+],
+[
+["D"," ","D","D"," "," "," "," "],
+[" ","D","D"," "," "," "," "," "],
+[" "," "," "," "," "," "," "," "],
+["D"," "," ","D","D","D"," "," "],
+[" ","D","D","D","D","D"," "," "],
+[" "," ","D","D","D","D","D"," "],
+[" "," ","D","D","d"," ","D","D"],
+["d","d","D"," ","d","d","D"," "],
+],
+])
+const LEMMING_DIG_FLIPPEDAnimation = new Animation([
+[
+["D"," ","D","D"," "," "," "," "],
+[" ","D","D"," "," "," "," "," "],
+[" "," "," "," "," "," "," "," "],
+["D"," ","D","d","D"," "," "," "],
+[" ","d","D","D","D","D"," "," "],
+[" "," ","d","D","d","D","D"," "],
+[" "," ","D","D","D"," ","D","d"],
+["D","D","D"," ","D","D","D"," "],
+],
+[
+[" "," "," "," ","D","D"," ","D"],
+[" "," "," "," "," ","D","D"," "],
+[" "," "," "," "," "," "," "," "],
+[" "," ","D","D","D"," "," ","D"],
+[" "," ","D","D","D","D","D"," "],
+[" ","D","D","D","D","D"," "," "],
+["D","D"," ","d","D","D"," "," "],
+[" ","D","d","d"," ","D","d","d"],
+],
+])
 export const animationItems = new Map<string, AnimationListItem>()
 const exit = new StandardAnimation(exitAnimation, "#00FF00", 0)
 animationItems.set("exit", exit)
@@ -699,3 +743,7 @@ const LEMMING_BUILD = new StandardAnimation(LEMMING_BUILDAnimation, "#2866d7", 0
 animationItems.set("LEMMING_BUILD", LEMMING_BUILD)
 const LEMMING_BUILD_FLIPPED = new StandardAnimation(LEMMING_BUILD_FLIPPEDAnimation, "#2866d7", 0)
 animationItems.set("LEMMING_BUILD_FLIPPED", LEMMING_BUILD_FLIPPED)
+const LEMMING_DIG = new StandardAnimation(LEMMING_DIGAnimation, "#2866d7", 0)
+animationItems.set("LEMMING_DIG", LEMMING_DIG)
+const LEMMING_DIG_FLIPPED = new StandardAnimation(LEMMING_DIG_FLIPPEDAnimation, "#2866d7", 0)
+animationItems.set("LEMMING_DIG_FLIPPED", LEMMING_DIG_FLIPPED)
