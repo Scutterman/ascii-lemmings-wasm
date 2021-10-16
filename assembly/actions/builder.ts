@@ -3,19 +3,19 @@ import { Animation, Direction } from "../animation";
 import { Lemming } from "../lemming";
 import { addBrick, getTileInDirection, TILE_AIR } from "../map";
 import { Vec2 } from "../position";
-import { LemmingAction } from "./lemmingAction";
+import { LemmingActionPatch } from "./lemmingAction";
 import { Walk } from "./walk";
 
 export class BuilderAnimation extends Animation {
   constructor() { super([[['/']]]) }
 }
 
-export class Builder extends LemmingAction {
+export class Builder extends LemmingActionPatch {
   private bricksRemaining: u8 = 12
   private moveOntoBrick: boolean = false
   
-  constructor() {
-    super(new BuilderAnimation())
+  constructor(facing: Direction) {
+    super('LEMMING_BUILD', facing)
   }
   
   update(lemming: Lemming): void {

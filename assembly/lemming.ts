@@ -134,7 +134,7 @@ export class Lemming {
           this.action = new Block(this.facingDirection)
       break
       case LemmingGift.BrickSack:
-          this.action = new Builder()
+          this.action = new Builder(this.facingDirection)
       break
       case LemmingGift.Hammer:
           this.action = new Basher()
