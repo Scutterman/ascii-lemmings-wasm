@@ -1,22 +1,15 @@
 import { gameState, lemmings, log } from ".."
-import { BomberAnimation, Lemming } from "../lemming"
+import { Lemming } from "../lemming"
 import { removeMapTile, renderMapTile, renderTextArrayToScreen } from "../loop"
 import { LemmingGift, lemmingGiftLabel, LevelTileDetail } from "../types"
 import { BaseLevel } from "./baseLevel"
 import { BOUNDARIES_X, BOUNDARIES_Y, getSurroundingTileDetail, VISIBLE_X, VISIBLE_Y } from "../map"
 import { UIControl } from "../ui/uiControl"
 import { Vec2 } from "../position"
-import { BlockerAnimation } from "../actions/block"
 import { UILabel } from "../ui/uiLabel"
 import { Panel } from "../ui/panel"
 import { Animation } from "../animation"
 import { LemmingActionControl } from "../ui/lemmingActionControl"
-import { BasherAnimation } from "../actions/basher"
-import { BuilderAnimation } from "../actions/builder"
-import { ClimberAnimation } from "../actions/climb"
-import { DiggerAnimation } from "../actions/digger"
-import { MinerAnimation } from "../actions/miner"
-import { FloaterAnimation } from "../actions/umbrella"
 import { LevelMapDetail, SingleCharacterAnimation } from "../maps/types"
 import { removeItem } from "../vdom/elements"
 import { animationItems } from "../generatedLevels/animationItems"
@@ -128,6 +121,8 @@ export class Level extends BaseLevel {
     mouseTileX += this.scrollPosition.x
     mouseTileY += this.scrollPosition.y
     for (let i = 0; i < lemmings.length; i++) {
+      if (!lemmings[i].hasPhysicalPresence) { continue }
+
       const position: Vec2 = lemmings[i].position
       if (mouseTileX == position.x && mouseTileY == position.y) {
         this.updateLabel('LEMMING_INFO', lemmings[i].action.label())
@@ -180,14 +175,15 @@ export class Level extends BaseLevel {
       
       lemmings[i].update()
       
-      if (lemmings[i].exited) {
+      if (lemmings[i].hasPhysicalPresence && lemmings[i].exited) {
+        lemmings[i].hasPhysicalPresence = false
         this.numberOfLemmingsSaved++
         const savedPercent = this.getLemmingSavedPercent()
         this.updateLabel('LEMMING_SAVED', 'Saved: ' + savedPercent.toString() + '%')
       }
 
       const tile = getSurroundingTileDetail(lemmings[i].position)
-      if (tile != null && tile.isTrap == true) {
+      if (tile != null && tile.isTrap == true && lemmings[i].hasPhysicalPresence) {
         tile.isTrapActivated = true
         lemmings[i].removeFromGame()
       }
@@ -199,7 +195,7 @@ export class Level extends BaseLevel {
   }
 
   public giveGiftToLemming(lemmingNumber: u8, gift: LemmingGift): void {
-    if (lemmingNumber >= 0 && u8(lemmings.length) >= lemmingNumber) {
+    if (lemmingNumber >= 0 && u8(lemmings.length) > lemmingNumber && lemmings[lemmingNumber].hasPhysicalPresence) {
       lemmings[lemmingNumber].setGift(gift)
     }
   }
@@ -211,7 +207,11 @@ export class Level extends BaseLevel {
 
     for (let i = 0; i < lemmings.length; i++) {
       const lemming = lemmings[i]
-      if (lemming.removed) { continue }
+      if (lemming.removed) {
+        removeItem(lemming.elementId)
+        lemming.elementId = ''
+        continue
+      }
 
       removeItem(lemming.elementId)
       const position = new Vec2(lemming.position.x - this.scrollPosition.x, lemming.position.y - this.scrollPosition.y)

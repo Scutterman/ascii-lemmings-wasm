@@ -8,6 +8,7 @@ import { LemmingAction } from "./actions/lemmingAction";
 import { Miner } from "./actions/miner";
 import { Walk } from "./actions/walk";
 import { Animation, Direction } from "./animation";
+import { animationItems } from "./generatedLevels/animationItems";
 import { getRenderedTextArray } from "./loop";
 import { removeTerrainFromDirection } from "./map";
 import { Vec2 } from "./position";
@@ -33,6 +34,8 @@ export class Lemming {
   private isExploding: boolean = false
   private framesUntilExplosion: u16 = 5
   private explosionAnimation: Animation = new BomberAnimation()
+  public hasPhysicalPresence: boolean = true
+  private finalAnimation: Animation | null = null
 
   get position(): Vec2 {
     // TODO:: When lemmings are 2x2 blocks,
@@ -52,6 +55,10 @@ export class Lemming {
   }
 
   public update(): void {
+    if (!this.hasPhysicalPresence) {
+      return
+    }
+    
     const processUpdate = !this.isExploding || this.updateExplosion()
     if (processUpdate) {
       this.action.update(this)
@@ -66,9 +73,29 @@ export class Lemming {
     return this.isExploding
   }
 
+  public exit(): void {
+    this.exited = true
+    this.finalAnimation = animationItems.get('LEMMING_EXIT').getAnimation()
+  }
+
   public removeFromGame(): void {
     this.removed = true
     removeItem(this.elementId)
+  }
+
+  private updateFinalAnimation(progressFrame: boolean): string[] {
+    const animation = this.finalAnimation
+    if (animation == null) {
+      this.removeFromGame()
+      return []
+    }
+
+    if (animation.isLastFrame()) {
+      this.removeFromGame()
+    }
+    
+    const text = animation.getNextFrameAsText(progressFrame)
+    return text
   }
 
   // returns whether the lemming is still alive (for now)
@@ -91,12 +118,15 @@ export class Lemming {
   }
 
   public renderFrame(isDirty: boolean): string[] {
-    if (this.isExploding) {
+    if (!this.hasPhysicalPresence) {
+      return this.updateFinalAnimation(isDirty)
+    } else if (this.isExploding) {
       return getRenderedTextArray(this.explosionAnimation.getNextFrame(isDirty)[0][0])
     } else {
       return this.action.getNextAnimationFrame(isDirty)
     }
   }
+
   public setGift(gift: LemmingGift): boolean {
     const level = currentLevel
     if (this.action instanceof Block && gift != LemmingGift.Bomb) {
@@ -162,7 +192,9 @@ export class Lemming {
 
 export function isBlockerInLocation(location: Vec2): boolean {
   for (let i = 0; i < lemmings.length; i++) {
-    if (lemmings[i].position.equals(location) && lemmings[i].action instanceof Block) {
+    const lemming = lemmings[i]
+
+    if (lemming.hasPhysicalPresence && lemming.position.equals(location) && lemming.action instanceof Block) {
       return true
     }
   }
