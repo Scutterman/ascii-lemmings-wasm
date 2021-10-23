@@ -143,6 +143,7 @@ export function addBrick(map: LevelTileDetail, location: Vec2): boolean {
   } else {
     map[location.y][location.x].tile = TILE_BRICK
     map[location.y][location.x].animation = characterToAnimation(TILE_BRICK, BlockSide.All)
+    map[location.y][location.x].colour = '#808080'
     map[location.y][location.x].isDirty = true
     return true
   }
