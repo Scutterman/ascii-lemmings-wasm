@@ -210,7 +210,7 @@ export function isBlockerInLocation(location: Vec2): boolean {
   for (let i = 0; i < lemmings.length; i++) {
     const lemming = lemmings[i]
 
-    if (lemming.hasPhysicalPresence && lemming.position.equals(location) && lemming.action instanceof Block) {
+    if (lemming.hasPhysicalPresence && lemming.isInBounds(location) && lemming.action instanceof Block) {
       return true
     }
   }
