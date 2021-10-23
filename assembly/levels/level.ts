@@ -181,7 +181,7 @@ export class Level extends BaseLevel {
         this.updateLabel('LEMMING_SAVED', 'Saved: ' + savedPercent.toString() + '%')
       }
 
-      const tile = getSurroundingTileDetail(lemmings[i].position)
+      const tile = getSurroundingTileDetail(lemmings[i].positionBasedOnFacingDirection)
       if (tile != null && tile.isTrap == true && lemmings[i].hasPhysicalPresence) {
         tile.isTrapActivated = true
         lemmings[i].removeFromGame()

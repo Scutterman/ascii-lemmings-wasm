@@ -40,10 +40,7 @@ export class Builder extends LemmingAction {
     if (this.moveOntoBrick == false) {
       this.moveOntoBrick = true
     } else if (this.canMoveOntoBrickTile(lemming)) {
-      const pos = lemming.position
-      pos.x += xDelta
-      pos.y--
-      lemming.position = pos
+      lemming.addDeltaToPosition(xDelta, -1)
     } else if (this.canBuildTileInOtherDirection(lemming)) {
       lemming.turnAround()
       this.moveOntoBrick = false
@@ -53,7 +50,9 @@ export class Builder extends LemmingAction {
     }
     
     if (this.canBuildNextTile(lemming)) {
-      addBrick(currentLevel.map, new Vec2(lemming.position.x + xDelta, lemming.position.y))
+      const pos = lemming.positionBasedOnFacingDirection
+      pos.x += xDelta
+      addBrick(currentLevel.map, pos)
       this.bricksRemaining--
     } else if (this.canBuildTileInOtherDirection(lemming)) {
       lemming.turnAround()
@@ -65,20 +64,22 @@ export class Builder extends LemmingAction {
   }
 
   private canBuildNextTile(lemming: Lemming): boolean {
-    const tile = getTileInDirection(lemming.position, lemming.facingDirection)
-    const tile2 = getTileInDirection(lemming.position, lemming.facingDirection | Direction.Up)
+    const tile = getTileInDirection(lemming.positionBasedOnFacingDirection, lemming.facingDirection)
+    const tile2 = getTileInDirection(lemming.positionBasedOnFacingDirection, lemming.facingDirection | Direction.Up)
     return tile == TILE_AIR && tile2 == TILE_AIR
   }
 
   private canBuildTileInOtherDirection(lemming: Lemming): boolean {
     const theOtherDirection = lemming.facingDirection == Direction.Right ? Direction.Left : Direction.Right
-    const tile = getTileInDirection(lemming.position, theOtherDirection)
-    const tile2 = getTileInDirection(lemming.position, theOtherDirection | Direction.Up)
+    // TODO:: This will be wrong no matter whether we use .position or .positionBasedOnFacingDirection
+    // Need to get the opposite side of the bounding box to the facing edge
+    const tile = getTileInDirection(lemming.positionBasedOnFacingDirection, theOtherDirection)
+    const tile2 = getTileInDirection(lemming.positionBasedOnFacingDirection, theOtherDirection | Direction.Up)
     return tile == TILE_AIR && tile2 == TILE_AIR
   }
 
   private canMoveOntoBrickTile(lemming: Lemming): boolean {
-    const pos = lemming.position
+    const pos = lemming.positionBasedOnFacingDirection
     const tile = getTileInDirection(pos, lemming.facingDirection | Direction.Up)
     pos.y -= 2
     const tile2 = getTileInDirection(pos, lemming.facingDirection)

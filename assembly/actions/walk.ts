@@ -16,7 +16,7 @@ export class Walk extends LemmingAction {
   update(lemming: Lemming): void {
     if (this.isFalling(lemming.position)) {
       this.handleFalling(lemming)
-    } else if (getTileInDirection(lemming.position, lemming.facingDirection) == TILE_EXIT) {
+    } else if (getTileInDirection(lemming.positionBasedOnFacingDirection, lemming.facingDirection) == TILE_EXIT) {
       lemming.exit()
     } else if (!this.canWalkOnNextTile(lemming)) {
       if (lemming.isClimber) {
@@ -25,12 +25,11 @@ export class Walk extends LemmingAction {
         lemming.turnAround()
       }
     } else {
-      const tile = getTileInDirection(lemming.position, lemming.facingDirection)
+      const tile = getTileInDirection(lemming.positionBasedOnFacingDirection, lemming.facingDirection)
       const isStairs = isWalkingDownStairs(lemming)
-      const pos = lemming.position
-      pos.x += lemming.facingDirection == Direction.Right ? 1 : -1
-      pos.y += tile != TILE_AIR ? -1 : isStairs ? 1 : 0
-      lemming.position = pos
+      const xDelta: i16 = lemming.facingDirection == Direction.Right ? 1 : -1
+      const yDelta: i16 = tile != TILE_AIR ? -1 : isStairs ? 1 : 0
+      lemming.addDeltaToPosition(xDelta, yDelta)
     }
   }
 
@@ -39,9 +38,10 @@ export class Walk extends LemmingAction {
   }
 
   private canWalkOnNextTile(lemming: Lemming): boolean {
-    const tileForward = getTileInDirection(lemming.position, lemming.facingDirection)
-    const tileForwardAbove = getTileInDirection(lemming.position, lemming.facingDirection | Direction.Up)
-    const tileForwardTwoAbove = getTileInDirection(new Vec2(lemming.position.x, lemming.position.y - 2), lemming.facingDirection)
+    const position = lemming.positionBasedOnFacingDirection
+    const tileForward = getTileInDirection(position, lemming.facingDirection)
+    const tileForwardAbove = getTileInDirection(position, lemming.facingDirection | Direction.Up)
+    const tileForwardTwoAbove = getTileInDirection(new Vec2(position.x, position.y - 2), lemming.facingDirection)
 
     return (tileForward == TILE_AIR && (tileForwardAbove == TILE_AIR || tileForwardAbove == TILE_BRICK)) ||
       (tileForward != TILE_AIR && tileForwardAbove == TILE_AIR && tileForwardTwoAbove == TILE_AIR)

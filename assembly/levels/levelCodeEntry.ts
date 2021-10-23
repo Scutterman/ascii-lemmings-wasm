@@ -3,7 +3,6 @@ import { Vec2 } from "../position"
 import { Panel } from "../ui/panel"
 import { UIControl } from "../ui/uiControl"
 import { UILabel } from "../ui/uiLabel"
-import { BaseLevel } from "./baseLevel"
 import { MetaScreen } from "./metascreen"
 import { TitleScreen } from "./titleScreen"
 import { isEditingMap } from '../imports'

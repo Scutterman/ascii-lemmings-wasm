@@ -15,22 +15,23 @@ export class Climb extends LemmingAction {
   }
 
   private cannotClimbFurther(lemming: Lemming): boolean {
-    const aboveTile = getTileInDirection(lemming.position, Direction.Up)
-    const wallTile = getTileInDirection(lemming.position, lemming.facingDirection)
+    const pos = lemming.positionBasedOnFacingDirection
+    const wallTile = getTileInDirection(pos, lemming.facingDirection)
+    // TODO:: this assumes bounding box size of 2x2
+    pos.y--
+    const aboveTile = getTileInDirection(pos, Direction.Up)
     return aboveTile != TILE_AIR || wallTile == TILE_AIR
   }
   
   private hasReachedOpening(lemming: Lemming): boolean {
-    const targetTile = getTileInDirection(lemming.position, lemming.facingDirection)
-    const aboveTargetTile = getTileInDirection(lemming.position, lemming.facingDirection | Direction.Up)
+    const targetTile = getTileInDirection(lemming.positionBasedOnFacingDirection, lemming.facingDirection)
+    const aboveTargetTile = getTileInDirection(lemming.positionBasedOnFacingDirection, lemming.facingDirection | Direction.Up)
     return targetTile == TILE_AIR && aboveTargetTile == TILE_AIR
   }
 
   update(lemming: Lemming): void {
     if (this.hasReachedOpening(lemming)) {
-      const pos = lemming.position
-      pos.x += lemming.facingDirection == Direction.Right ? 1 : -1
-      lemming.position = pos
+      lemming.addDeltaToPosition(lemming.facingDirection == Direction.Right ? 1 : -1, 0)
       lemming.action = new Walk(lemming.facingDirection)
     } else if (this.cannotClimbFurther(lemming)) {
       lemming.turnAround()
@@ -38,7 +39,7 @@ export class Climb extends LemmingAction {
         this.handleFalling(lemming)
       }
     } else {
-      lemming.position = new Vec2(lemming.position.x, lemming.position.y - 1)
+      lemming.addDeltaToPosition(0, - 1)
     }
   }
   

@@ -20,9 +20,10 @@ export class Digger extends LemmingAction {
     } else if (!this.canMineDown(lemming)) {
       lemming.action = new Walk(lemming.facingDirection)
     } else {
+      // TODO:: this assumes the size of the texture to be 2x2
       removeTerrainFromDirection(lemming.position, Direction.Down)
       removeTerrainFromDirection(lemming.position, Direction.Down | Direction.Left)
-      lemming.position = new Vec2(lemming.position.x, lemming.position.y + 1)
+      lemming.addDeltaToPosition(0, 1)
     }
   }
 

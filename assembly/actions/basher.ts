@@ -20,11 +20,11 @@ export class Basher extends LemmingAction {
     } else if (this.canMineTile(lemming)) {
 
       const xDelta: i16 = lemming.facingDirection == Direction.Right ? 1 : -1
-      const pos = lemming.position
+      const pos = lemming.positionBasedOnFacingDirection
       pos.x += xDelta
       removeTerrain(new Vec2(pos.x, pos.y), lemming.facingDirection)
       removeTerrain(new Vec2(pos.x, pos.y - 1), lemming.facingDirection)
-      lemming.position = pos
+      lemming.addDeltaToPosition(xDelta, 0)
     } else {
       lemming.action = new Walk(lemming.facingDirection)
     }
@@ -35,8 +35,8 @@ export class Basher extends LemmingAction {
   }
 
   private canMineTile(lemming: Lemming): boolean {
-    const side = getTileDetailInDirection(lemming.position, lemming.facingDirection)
-    const above = getTileDetailInDirection(lemming.position, lemming.facingDirection | Direction.Up)
+    const side = getTileDetailInDirection(lemming.positionBasedOnFacingDirection, lemming.facingDirection)
+    const above = getTileDetailInDirection(lemming.positionBasedOnFacingDirection, lemming.facingDirection | Direction.Up)
     if (side == null || above == null || (side.tile == TILE_AIR && above.tile == TILE_AIR)) {
       return false
     }

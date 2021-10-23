@@ -11,7 +11,7 @@ import { Animation, Direction } from "./animation";
 import { animationItems } from "./generatedLevels/animationItems";
 import { getRenderedTextArray } from "./loop";
 import { removeTerrainFromDirection } from "./map";
-import { Vec2 } from "./position";
+import { Rect, Vec2 } from "./position";
 import { LemmingGift } from "./types";
 import { removeItem } from "./vdom/elements";
 
@@ -52,6 +52,40 @@ export class Lemming {
     // to account for the fact that it may be one off
     // based on what direction it's facing
     this._position = newPosition
+  }
+
+
+  get textureBoundingBox(): Rect {
+    const offsets = this.action.getPositionOffset()
+    const position = this.position
+    
+    if (offsets.x < 0) {
+      offsets.x *= -1
+      position.x -= offsets.x
+    }
+    
+    if (offsets.y < 0) {
+      offsets.y *= -1
+      position.y -= offsets.y
+    }
+
+    return new Rect(position, offsets)
+  }
+  
+  get positionBasedOnFacingDirection(): Vec2 {
+    if (this.facingDirection == Direction.Right) {
+      return this.position
+    }
+    
+    const bounding = this.textureBoundingBox
+    return new Vec2(bounding.position.x, bounding.position.y + bounding.size.y)
+  }
+
+  public addDeltaToPosition(x: i16, y: i16): void {
+    const pos = this.position
+    pos.x += x
+    pos.y += y
+    this.position = new Vec2(pos.x, pos.y)
   }
 
   public update(): void {
@@ -188,21 +222,10 @@ export class Lemming {
     this.facingDirection = this.facingDirection == Direction.Right ? Direction.Left : Direction.Right
     this.action.turnAround(this.facingDirection)
   }
-  
-  public isInBounds(point: Vec2): boolean {
-    const offsets = this.action.getPositionOffset()
-    const position = this.position
-    if (offsets.x < 0) {
-      offsets.x *= -1
-      position.x -= offsets.x
-    }
-    
-    if (offsets.y < 0) {
-      offsets.y *= -1
-      position.y -= offsets.y
-    }
 
-    return point.x >= position.x && point.x <= (position.x + offsets.x) && point.y >= position.y && point.y <= (position.y + offsets.y)
+  public isInBounds(point: Vec2): boolean {
+    const bounding = this.textureBoundingBox
+    return point.x >= bounding.position.x && point.x <= (bounding.position.x + bounding.size.x) && point.y >= bounding.position.y && point.y <= (bounding.position.y + bounding.size.y)
   }
 }
 

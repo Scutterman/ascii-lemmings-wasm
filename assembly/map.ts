@@ -98,8 +98,9 @@ export function getSurroundingTile(position: Vec2): Tile {
 
 export function isWalkingDownStairs(lemming: Lemming): boolean {
   const deltaX: i16 = lemming.facingDirection == Direction.Right ? 1 : -1
-  const tileBelowPosition: Vec2 = new Vec2(lemming.position.x + deltaX, lemming.position.y + 1)
-  const tileTwoBelowPosition: Vec2 = new Vec2(lemming.position.x + deltaX, lemming.position.y + 2)
+  const position = lemming.positionBasedOnFacingDirection
+  const tileBelowPosition: Vec2 = new Vec2(position.x + deltaX, position.y + 1)
+  const tileTwoBelowPosition: Vec2 = new Vec2(position.x + deltaX, position.y + 2)
   const tileBelow: string = getSurroundingTile(tileBelowPosition)
   const tileTwoBelow: string = getSurroundingTile(tileTwoBelowPosition)
   return tileBelow == TILE_AIR && tileTwoBelow != TILE_AIR
