@@ -188,6 +188,22 @@ export class Lemming {
     this.facingDirection = this.facingDirection == Direction.Right ? Direction.Left : Direction.Right
     this.action.turnAround(this.facingDirection)
   }
+  
+  public isInBounds(point: Vec2): boolean {
+    const offsets = this.action.getPositionOffset()
+    const position = this.position
+    if (offsets.x < 0) {
+      offsets.x *= -1
+      position.x -= offsets.x
+    }
+    
+    if (offsets.y < 0) {
+      offsets.y *= -1
+      position.y -= offsets.y
+    }
+
+    return point.x >= position.x && point.x <= (position.x + offsets.x) && point.y >= position.y && point.y <= (position.y + offsets.y)
+  }
 }
 
 export function isBlockerInLocation(location: Vec2): boolean {

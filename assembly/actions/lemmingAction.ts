@@ -41,7 +41,7 @@ export abstract class LemmingAction {
     return this.animation.getNextFrameAsText(progressFrame)
   }
 
-  public getPositionOffset(): i16 {
-    return 1
+  public getPositionOffset(): Vec2 {
+    return new Vec2(-1, -1)
   }
 }

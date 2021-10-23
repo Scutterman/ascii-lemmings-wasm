@@ -123,8 +123,7 @@ export class Level extends BaseLevel {
     for (let i = 0; i < lemmings.length; i++) {
       if (!lemmings[i].hasPhysicalPresence) { continue }
 
-      const position: Vec2 = lemmings[i].position
-      if (mouseTileX == position.x && mouseTileY == position.y) {
+      if (lemmings[i].isInBounds(new Vec2(i16(mouseTileX), i16(mouseTileY)))) {
         this.updateLabel('LEMMING_INFO', lemmings[i].action.label())
         
         if (processLemmingClick) {
@@ -225,12 +224,13 @@ export class Level extends BaseLevel {
       const colour = lemming.areYouExploding() ? '#ff0000' : '#2866d7'
       const text = lemming.renderFrame(this.isDirty)
       const positionOffset = lemming.action.getPositionOffset()
-
-      position.y -= positionOffset
+      
+      position.x += positionOffset.x
+      position.y += positionOffset.y
       const info = renderTextArrayToScreen(text, position, false, colour)
       lemming.elementId = info.id
-      info.dimensions.position.x += this.scrollPosition.x
-      info.dimensions.position.y += this.scrollPosition.y + positionOffset
+      info.dimensions.position.x += this.scrollPosition.x - positionOffset.y
+      info.dimensions.position.y += this.scrollPosition.y - positionOffset.y
       lemming.position = info.dimensions.position
       lemming.size = info.dimensions.size
     }
