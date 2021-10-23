@@ -47,21 +47,6 @@ export function mapToTiles(map: LevelMap): LevelTileDetail {
   return arr
 }
 
-export function getSurroundingTiles(position: Vec2): SurroundingTiles {
-  const surrounding: SurroundingTiles = {
-    topLeft: getSurroundingTile(new Vec2(position.x - 1, position.y - 1)),
-    topCentre: getSurroundingTile(new Vec2(position.x, position.y - 1)),
-    topRight: getSurroundingTile(new Vec2(position.x + 1, position.y - 1)),
-    left: getSurroundingTile(new Vec2(position.x - 1, position.y)),
-    centre: getSurroundingTile(new Vec2(position.x, position.y)),
-    right: getSurroundingTile(new Vec2(position.x + 1, position.y)),
-    bottomLeft: getSurroundingTile(new Vec2(position.x - 1, position.y + 1)),
-    bottomCentre: getSurroundingTile(new Vec2(position.x, position.y + 1) ),
-    bottomRight: getSurroundingTile(new Vec2(position.x + 1, position.y + 1))
-  }
-  return surrounding
-}
-
 function isOutOfMapBounds(map: LevelTileDetail, location: Vec2): boolean {
   return location.x < 0 || location.y < 0 || location.y >= map.length || location.x >= map[location.y].length
 }
