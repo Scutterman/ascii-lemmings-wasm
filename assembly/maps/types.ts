@@ -128,25 +128,6 @@ export class LevelMapDetail {
       case tile == TILE_SIDE:
         detail.animation = characterToAnimation('|')
       break;
-      case tile == TILE_EXIT: 
-        detail.colour = '#3b2a15'
-        detail.animation = new Animation([
-          [
-            '^  ^'.split(''),
-            '#/\\#'.split(''),
-            '/  \\'.split(''),
-            '|  |'.split('')
-          ],
-          [
-            'w  w'.split(''),
-            '#/\\#'.split(''),
-            '/  \\'.split(''),
-            '|  |'.split('')
-          ]
-        ])
-      case tile == TILE_AIR:
-        detail.animation.setCanDestroySides(BlockSide.All)
-      break
       default:
         if (this.customAnimations.has(positionString)) {
           const _detail = this.getDetailFromAnimationLabel(tile, this.customAnimations.get(positionString))
