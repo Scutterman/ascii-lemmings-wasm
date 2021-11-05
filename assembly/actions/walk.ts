@@ -17,6 +17,8 @@ export class Walk extends LemmingAction {
     if (this.isFalling(lemming.position)) {
       this.handleFalling(lemming)
     } else if (getTileInDirection(lemming.positionBasedOnFacingDirection, lemming.facingDirection) == TILE_EXIT) {
+      const xDelta: i16 = lemming.facingDirection == Direction.Right ? 1 : -1
+      lemming.addDeltaToPosition(xDelta, 0)
       lemming.exit()
     } else if (!this.canWalkOnNextTile(lemming)) {
       if (lemming.isClimber) {
