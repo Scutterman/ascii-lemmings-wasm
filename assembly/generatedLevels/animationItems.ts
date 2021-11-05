@@ -2,16 +2,44 @@ import { Animation } from "../animation"
 import { AnimationListItem, SingleCharacterAnimation, StandardAnimation } from "../maps/types"
 const exitAnimation = new Animation([
 [
-["^"," "," ","^"],
-["#","/","\\","#"],
-["/"," "," ","\\"],
-["|"," "," ","|"],
+[" "," ","G"," "],
+[" ","G","G"," "],
+["G","G","G","G"],
+["G","G","G","G"],
+],
+])
+const EXIT_TOPAnimation = new Animation([
+[
+["T"," "," ","T"],
+[" ","T","T"," "],
+["T","T","T","T"],
+["T","T","T","T"],
+],
+])
+const EXIT_FLAMEAnimation = new Animation([
+[
+["F","F"," "," "],
+["F","F","F"," "],
+[" ","F","F","F"],
+[" "," "," ","F"],
 ],
 [
-["w"," "," ","w"],
-["#","/","\\","#"],
-["/"," "," ","\\"],
-["|"," "," ","|"],
+[" "," ","F"," "],
+["F","F","F","F"],
+[" ","F","F"," "],
+[" ","F","F","F"],
+],
+[
+[" "," ","F","F"],
+[" ","F","F","F"],
+[" ","F"," "," "],
+[" ","F","F","F"],
+],
+[
+[" "," ","F"," "],
+["F","F","F","F"],
+[" ","F","F"," "],
+[" ","F","F","F"],
 ],
 ])
 const digRightAnimation = new Animation([
@@ -1081,6 +1109,14 @@ const LEMMING_EXIT_FLIPPEDAnimation = new Animation([
 export const animationItems = new Map<string, AnimationListItem>()
 const exit = new StandardAnimation(exitAnimation, "#00FF00", 0)
 animationItems.set("exit", exit)
+const EXIT_SIDE = new SingleCharacterAnimation("S", "#414756", 0)
+animationItems.set("EXIT_SIDE", EXIT_SIDE)
+const EXIT_TOP = new StandardAnimation(EXIT_TOPAnimation, "#414756", 0)
+animationItems.set("EXIT_TOP", EXIT_TOP)
+const EXIT_FLAME = new StandardAnimation(EXIT_FLAMEAnimation, "#ED7D07", 0)
+animationItems.set("EXIT_FLAME", EXIT_FLAME)
+const EXIT_MIDDLE = new SingleCharacterAnimation("S", "#4e5fc0", 0)
+animationItems.set("EXIT_MIDDLE", EXIT_MIDDLE)
 const digRight = new StandardAnimation(digRightAnimation, "#0ccf11", 2)
 animationItems.set("digRight", digRight)
 const grassland_grass = new SingleCharacterAnimation("'", "#00FF00", 15)
