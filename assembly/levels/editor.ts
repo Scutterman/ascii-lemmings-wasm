@@ -265,6 +265,9 @@ export class Editor extends MetaScreen {
     animationListItemKeys.push('Cancel')
     
     for (let i = 0; i < animationListItemKeys.length; i++) {
+      if (animationListItemKeys[i].startsWith('LEMMING_')) {
+        continue
+      }
       this.tileOptions.addItem(new UIControl(new Vec2(0,0), animationListItemKeys[i], tag => {
         if (typeof tag != 'undefined') {
           (currentLevel as Editor).setBlockAnimation(tag)
