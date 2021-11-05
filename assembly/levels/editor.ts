@@ -13,6 +13,7 @@ import { animationItems } from "../generatedLevels/animationItems"
 import { LevelMetadata } from "../../shared/src/wasm-safe"
 import { LabelledButton, EasyLabelledButton } from "../ui/labelledButton"
 import { LabelledCheckbox } from "../ui/labelledCheckbox"
+import { AirAnimation } from "../animation"
 
 declare function addBlocks(startRow: u8, endRow: u8, startCol: u8, endCol: u8): void
 
@@ -210,7 +211,7 @@ export class Editor extends MetaScreen {
     const tileDetail = this.metaMap.detailFromTile(tile, this.selectedBlockY, this.selectedBlockX)
     tileDetail.elementId = detail.elementId
     tileDetail.isDirty = true
-    if (tile == TILE_AIR) {
+    if (tile == TILE_AIR && detail.animation instanceof AirAnimation) {
       tileDetail.needsRemoval = true
     }
     this.map[this.selectedBlockY][this.selectedBlockX] = tileDetail

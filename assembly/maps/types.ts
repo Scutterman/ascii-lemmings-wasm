@@ -1,5 +1,5 @@
-import { Animation, BlockSide } from "../animation";
-import { testBlockSide, TILE_AIR, TILE_BOUNDARY, TILE_EXIT, TILE_SIDE } from "../map";
+import { AirAnimation, Animation, BlockSide } from "../animation";
+import { testBlockSide, TILE_AIR, TILE_BOUNDARY, TILE_SIDE } from "../map";
 import { LevelMap, LevelTileDetail, TileDetail } from "../types";
 import { animationItems } from "../generatedLevels/animationItems";
 import { LevelMetadata } from "../../shared/src/wasm-safe"
@@ -118,7 +118,7 @@ export class LevelMapDetail {
   }
 
   public detailFromTile(tile: string, row: i32, col: i32): TileDetail {
-    let detail = new TileDetail(tile, defaultColour, new Animation([]))
+    let detail = new TileDetail(tile, defaultColour, new AirAnimation())
     const positionString = col.toString() + ',' + row.toString()
 
     switch(true) {
@@ -153,6 +153,8 @@ export class LevelMapDetail {
           if (_detail != null) {
             detail = _detail
           }
+        } else if (tile == TILE_AIR) {
+          detail.animation.setCanDestroySides(BlockSide.All)
         } else {
           if (!this.defaultAnimations.has(tile)) {
             if (!animationItems.has(tile)) {

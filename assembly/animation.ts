@@ -97,6 +97,11 @@ export class Animation {
   }
 }
 
+export class AirAnimation extends Animation {
+  constructor() {
+    super([])
+  }
+}
 
 export const debugDirection = (direction: Direction): string => {
   let output = ''
