@@ -79,29 +79,10 @@ function processInputs(): void {
 }
 
 function processControlClicks(clickProcessed: boolean): boolean {
-  for (let i = 0; i < currentLevel.uiLabels.length; i++) {
-    clickProcessed = processLabelEvents(currentLevel.uiLabels[i], clickProcessed)
-  }
-
-  for (let i = 0; i < currentLevel.uiControls.length; i++) {
-    clickProcessed = processLabelEvents(currentLevel.uiControls[i], clickProcessed)
-  }
-
-  for (let i = 0; i < currentLevel.uiPanels.length; i++) {
-    const panel = currentLevel.uiPanels[i]
-    if (!panel.isShowing() || panel.isOffscreen()) {
-      continue
-    }
-    const items = panel.getItems()
-    for (let j = 0; j < items.length; j++) {
-      clickProcessed = processLabelEvents(items[j], clickProcessed)
-    }
-  }
-
-  for (let containerIndex = 0; containerIndex < currentLevel.uiPanelContainers.length; containerIndex++) {
+  for (let containerIndex = currentLevel.uiPanelContainers.length -1; containerIndex >= 0; containerIndex--) {
     const container = currentLevel.uiPanelContainers[containerIndex]
     const panels = container.getItems()
-    for (let panelIndex = 0; panelIndex < panels.length; panelIndex++) {
+    for (let panelIndex = panels.length - 1; panelIndex >= 0; panelIndex--) {
       const panel = panels[panelIndex]
 
       if (!panel.isShowing() || panel.isOffscreen()) {
@@ -109,12 +90,31 @@ function processControlClicks(clickProcessed: boolean): boolean {
       }
 
       const items = panel.getItems()
-      for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
+      for (let itemIndex = items.length - 1; itemIndex >= 0; itemIndex--) {
         clickProcessed = processLabelEvents(items[itemIndex], clickProcessed)
       }
     }
   }
 
+  for (let i = currentLevel.uiPanels.length - 1; i >= 0; i--) {
+    const panel = currentLevel.uiPanels[i]
+    if (!panel.isShowing() || panel.isOffscreen()) {
+      continue
+    }
+    const items = panel.getItems()
+    for (let j = items.length - 1; j >= 0; j--) {
+      clickProcessed = processLabelEvents(items[j], clickProcessed)
+    }
+  }
+
+  for (let i = currentLevel.uiLabels.length - 1; i >= 0; i--) {
+    clickProcessed = processLabelEvents(currentLevel.uiLabels[i], clickProcessed)
+  }
+
+  for (let i = currentLevel.uiControls.length - 1; i >= 0; i--) {
+    clickProcessed = processLabelEvents(currentLevel.uiControls[i], clickProcessed)
+  }
+  
   return clickProcessed
 }
 
