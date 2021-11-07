@@ -8,6 +8,7 @@ export class UIITem {
   private colour: string = defaultColour
   protected showing: boolean = true
   protected hasChangedState: boolean = true
+  protected canReceiveFocus: boolean = false
   private size: Vec2 = new Vec2(0,0)
 
   constructor(public position: Vec2, protected tag: string = '') {}
@@ -18,8 +19,8 @@ export class UIITem {
   public setSize(size: Vec2): void { this.size = size.clone() }
 
   public setBackgroundColour(newColour: string): void {
+    this.hasChangedState = this.hasChangedState || this.backgroundColour != newColour
     this.backgroundColour = newColour
-    this.hasChangedState = true
   }
 
   public getBackgroundColour(): string {
@@ -36,6 +37,7 @@ export class UIITem {
   }
 
   public isShowing(): boolean { return this.showing }
+  public getCanReceiveFocus(): boolean { return this.canReceiveFocus }
   public requiresRender(): boolean { return this.hasChangedState }
   
   public show(): void {

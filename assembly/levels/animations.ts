@@ -8,7 +8,7 @@ import { animationItems } from "../generatedLevels/animationItems"
 import { PanelContainer } from "../ui/panelContainer"
 import { SingleCharacterAnimation, StandardAnimation } from "../maps/types"
 import { isEditingMap } from "../imports"
-import { LabelledButton, EasyLabelledButton } from "../ui/labelledButton"
+import { LabelledTextbox, EasyLabelledButton } from "../ui/labelledButton"
 import { UILabel } from "../ui/uiLabel"
 import { LabelledCheckbox } from "../ui/labelledCheckbox"
 import { Animation, BlockSide } from "../animation"
@@ -21,8 +21,8 @@ export class Animations extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 40))
   private animationEditor: PanelContainer = new PanelContainer(new Vec2(2, 5))
   private displayedAnimation: string | null = null
-  private newNameLabel: LabelledButton = new EasyLabelledButton('Animation Name', 'NEW_NAME')
-  private newColourLabel: LabelledButton = new EasyLabelledButton('Colour', 'NEW_COLOUR')
+  private newNameLabel: LabelledTextbox = new EasyLabelledButton('Animation Name', 'NEW_NAME')
+  private newColourLabel: LabelledTextbox = new EasyLabelledButton('Colour', 'NEW_COLOUR')
   private newNameCreateButton: UIControl
   private newNamePanel: Panel = new Panel(new Vec2(-1,-1))
   private newButton: UIControl
@@ -130,8 +130,8 @@ export class Animations extends MetaScreen {
   private addAnimation(): void {
     resetText()
     this.newNameCreateButton.setBackgroundColour('#ffffff00')
-    this.newNameLabel.setControlText('')
-    this.newColourLabel.setControlText('')
+    this.newNameLabel.updateText('')
+    this.newColourLabel.updateText('')
     this.newNamePanel.show()
   }
 
@@ -143,16 +143,23 @@ export class Animations extends MetaScreen {
   private getAdditionalDestructionDirectionIfChecked(tag: string, direction: BlockSide): BlockSide {
     return this.isChecked(tag) ? direction : BlockSide.None
   }
+
+  private validateAnimationName(): boolean {
+    const animationName = this.newNameLabel.getText()
+    const isValid = animationName.length > 0 && !animationItems.has(animationName)
+    const colour = isValid ? '#ffffff00' : '#cf4a4a'
+    this.newNameCreateButton.setBackgroundColour(colour)
+    return isValid
+  }
   
   private addAnimationByName(): void {
-    const animationName = this.newNameLabel.getControlText()
-    let animationColour = this.newColourLabel.getControlText()
+    const animationName = this.newNameLabel.getText()
+    let animationColour = this.newColourLabel.getText()
     if (!this.validateColour(animationColour)) {
       animationColour = defaultColour
     }
     
-    if (animationName.length == 0 || animationItems.has(animationName)) {
-      this.newNameCreateButton.setBackgroundColour('#cf4a4a')
+    if (!this.validateAnimationName()) {
       return
     }
 
@@ -233,15 +240,10 @@ export class Animations extends MetaScreen {
 
   private handleTextEntry(): void {
     const text = gameState.userEnteredText
-    if (text.length > 0) {
-      const newNameshowing = this.newNamePanel.isShowing()
-      const editorShowing = this.animationEditor.isShowing()
+    if (text.length > 0 && this.animationEditor.isShowing()) {
       const lastClickedFrame = getLastFrame()
       const items = this.animationEditor.getItems()
-      if (newNameshowing) {
-        this.handleNewNamescreenTextEntry(text)
-      }
-      else if (editorShowing && lastClickedFrame > -1 && lastClickedFrame < items.length) {
+      if (lastClickedFrame > -1 && lastClickedFrame < items.length) {
         resetText()
         const item = (items[lastClickedFrame] as UiAnimationFrame)
         if (item.canSetNewCharacter()) {
@@ -249,32 +251,6 @@ export class Animations extends MetaScreen {
           item.setNewCharacter(lastEnteredCharacter)
         }
       }
-    }
-  }
-
-  private handleNewNamescreenTextEntry(text: string): void {
-    const _focused = gameState.focusedUiControl
-    if (_focused == null || !(_focused instanceof LabelledButton)) {
-       return
-    }
-
-    const focused = _focused as LabelledButton
-    const tag = focused.getTag()
-    if (tag.length == 0) {
-      return
-    }
-
-    const existingText = focused.getControlText()
-
-    if (text == existingText) {
-      return
-    }
-      
-    focused.setControlText(existingText + text)
-    resetText()
-
-    if (tag == this.newNameLabel.getTag()) {
-      this.newNameCreateButton.setBackgroundColour('#ffffff00')
     }
   }
 
@@ -295,6 +271,9 @@ export class Animations extends MetaScreen {
   }
 
   public renderLevel(): void {
+    if (gameState.focusedUiControl === this.newNameLabel) {
+      this.validateAnimationName()
+    }
     this.handleTextEntry()
     super.renderLevel()
   }

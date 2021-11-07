@@ -1,62 +1,54 @@
 import { getRenderedTextArray } from "../loop";
 import { Vec2 } from "../position";
 import { UIAction } from "../types";
+import { Textbox } from "./Textbox";
 import { UIControl } from "./uiControl";
 
-export class LabelledButton extends UIControl {
-  protected controlText: string = ''
+export const getMultiLineTextForRender = (rows: string[]): string[] => {
+  const output: string[] = []
+  const textArrays: string[][] = []
+  let maxWidth = 0
 
+  for (let i = 0; i < rows.length; i++) {
+    const arr = getRenderedTextArray(rows[i])
+    textArrays.push(arr)
+    if (arr.length > 0 && arr[0].length > maxWidth) {
+      maxWidth = arr[0].length;
+    }
+  }
+
+  for (let i = 0; i < textArrays.length; i++) {
+    const width = textArrays[i].length > 0 ? textArrays[i][0].length : 0
+    let leftPadding = ''
+    let rightPadding = ''
+
+    if (width < maxWidth) {
+    const paddingAmount = maxWidth - width
+    const leftPaddingAmount = i32(Math.floor(paddingAmount / 2))
+    const rightPaddingAmount = paddingAmount - leftPaddingAmount
+    leftPadding = ' '.repeat(leftPaddingAmount)
+    rightPadding = ' '.repeat(rightPaddingAmount)
+    }
+    
+    for (let row = 0; row < textArrays[i].length; row++) {
+      output.push(leftPadding + textArrays[i][row] + rightPadding)
+    }
+  }
+
+  return output
+}
+
+export class LabelledTextbox extends Textbox {
   constructor(
     position: Vec2,
-    labelText: string,
-    action: UIAction,
+    private labelText: string,
     tag?: string
   ) {
-    super(position, labelText, action, tag)
+    super(position, '', tag)
   }
 
-  public setControlText(value: string): void {
-    this.controlText = value
-  }
-
-  public getControlText(): string {
-    return this.controlText
-  }
-
-  public getTextForRender(isDirty: boolean): string[] {
-    const labelText = getRenderedTextArray(this.getText())
-    const controlText = getRenderedTextArray(this.controlText)
-    const maxLabelWidth: i32 = labelText.length > 0 ? labelText[0].length : 0
-    const maxControlTextWidth: i32 = controlText.length > 0 ? controlText[0].length : 0
-    
-    // Ensure both elements are centred in the control
-    if (maxControlTextWidth < maxLabelWidth) {
-      const paddingAmount = maxLabelWidth - maxControlTextWidth
-      const leftPaddingAmount = i32(Math.floor(paddingAmount / 2))
-      const rightPaddingAmount = paddingAmount - leftPaddingAmount
-
-      const leftPadding = ' '.repeat(leftPaddingAmount)
-      const rightPadding = ' '.repeat(rightPaddingAmount)
-      for (let row = 0; row < controlText.length; row++) {
-        controlText[row] = leftPadding + controlText[row] + rightPadding
-      }
-    } else if (maxLabelWidth < maxControlTextWidth) {
-      const paddingAmount = maxControlTextWidth - maxLabelWidth
-      const leftPaddingAmount = i32(Math.floor(paddingAmount / 2))
-      const rightPaddingAmount = paddingAmount - leftPaddingAmount
-
-      const leftPadding = ' '.repeat(leftPaddingAmount)
-      const rightPadding = ' '.repeat(rightPaddingAmount)
-
-      for (let row = 0; row < labelText.length; row++) {
-        labelText[row] = leftPadding + labelText[row] + rightPadding
-      }
-    }
-
-    for (let row = 0; row < controlText.length; row++) {
-      labelText.push(controlText[row])
-    }
-    return labelText
+  public getTextForRender(_isDirty: boolean): string[] {
+    return getMultiLineTextForRender([this.labelText, this.getText()])
   }
 
   public render(): void {
@@ -65,8 +57,8 @@ export class LabelledButton extends UIControl {
   }
 }
 
-export class EasyLabelledButton extends LabelledButton {
+export class EasyLabelledButton extends LabelledTextbox {
   constructor(labelText: string, tag?: string) {
-    super(new Vec2(0,0), labelText, () => {}, tag)
+    super(new Vec2(0,0), labelText, tag)
   }
 }

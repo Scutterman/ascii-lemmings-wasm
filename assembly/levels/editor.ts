@@ -11,11 +11,24 @@ import { UILabel } from "../ui/uiLabel"
 import { LevelMap, TileDetail } from "../types"
 import { animationItems } from "../generatedLevels/animationItems"
 import { LevelMetadata } from "../../shared/src/wasm-safe"
-import { LabelledButton, EasyLabelledButton } from "../ui/labelledButton"
+import { LabelledTextbox, EasyLabelledButton } from "../ui/labelledButton"
 import { LabelledCheckbox } from "../ui/labelledCheckbox"
 import { AirAnimation } from "../animation"
 
 declare function addBlocks(startRow: u8, endRow: u8, startCol: u8, endCol: u8): void
+
+class LabelledNumberBox extends LabelledTextbox {
+  constructor(labelText: string, tag: string) {
+    super(new Vec2(0,0), labelText, tag)
+  }
+
+  updateText(text: string): void {
+    if (text.startsWith('-')) {
+      text = '∞'
+    }
+    super.updateText(text)
+  }
+}
 
 export class Editor extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, 38))
@@ -27,13 +40,7 @@ export class Editor extends MetaScreen {
   private metaMap: LevelMapDetail = new LevelMapDetail([])
   private newLevelPanel: Panel = new Panel(new Vec2(-1,-1))
   private newLevelTextureGroup: UILabel = new UILabel(new Vec2(-1, -1), '', 'NEW_LEVEL_TEXTURE_GROUP')
-  private canAcceptTextTags: string[] = ['META_DIFFICULTY', 'META_NAME', 'META_CODE']
-  private canAcceptNumberTags: string[] = [
-    'META_NUMBER', 'META_SPAWN', 'META_SUCCESS',
-    'SKILL_CLIMB', 'SKILL_FLOAT', 'SKILL_BOMB', 'SKILL_BLOCK',
-    'SKILL_BUILD', 'SKILL_BASH', 'SKILL_MINE', 'SKILL_DIG'
-  ]
-
+  
   constructor() {
     super('EDITOR')
 
@@ -54,20 +61,20 @@ export class Editor extends MetaScreen {
     this.uiPanels.push(this.newLevelPanel)
     this.newLevelPanel.hide()
     this.newLevelPanel.addItem(new EasyLabelledButton('Difficulty', 'META_DIFFICULTY'))
-    this.newLevelPanel.addItem(new EasyLabelledButton('Number', 'META_NUMBER'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Number', 'META_NUMBER'))
     this.newLevelPanel.addItem(new EasyLabelledButton('Name', 'META_NAME'))
     this.newLevelPanel.addItem(new EasyLabelledButton('Code', 'META_CODE'))
-    this.newLevelPanel.addItem(new EasyLabelledButton('Spawn', 'META_SPAWN'))
-    this.newLevelPanel.addItem(new EasyLabelledButton('Success', 'META_SUCCESS'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Spawn', 'META_SPAWN'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Success', 'META_SUCCESS'))
     this.newLevelPanel.addLinebreak()
-    this.newLevelPanel.addItem(new EasyLabelledButton('Climbers', 'SKILL_CLIMB'))
-    this.newLevelPanel.addItem(new EasyLabelledButton('Floaters', 'SKILL_FLOAT'))
-    this.newLevelPanel.addItem(new EasyLabelledButton('Bombers', 'SKILL_BOMB'))
-    this.newLevelPanel.addItem(new EasyLabelledButton('Blockers', 'SKILL_BLOCK'))
-    this.newLevelPanel.addItem(new EasyLabelledButton('Builders', 'SKILL_BUILD'))
-    this.newLevelPanel.addItem(new EasyLabelledButton('Bashers', 'SKILL_BASH'))
-    this.newLevelPanel.addItem(new EasyLabelledButton('Miners', 'SKILL_MINE'))
-    this.newLevelPanel.addItem(new EasyLabelledButton('Diggers', 'SKILL_DIG'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Climbers', 'SKILL_CLIMB'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Floaters', 'SKILL_FLOAT'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Bombers', 'SKILL_BOMB'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Blockers', 'SKILL_BLOCK'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Builders', 'SKILL_BUILD'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Bashers', 'SKILL_BASH'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Miners', 'SKILL_MINE'))
+    this.newLevelPanel.addItem(new LabelledNumberBox('Diggers', 'SKILL_DIG'))
     this.newLevelPanel.addLinebreak()
     
     this.newLevelPanel.addItem(new UILabel(new Vec2(-1, -1), 'Default Textures:'))
@@ -318,7 +325,6 @@ export class Editor extends MetaScreen {
 
   private selectedBlockId: string = ''
   public renderLevel(): void {
-    this.handleTextEntry()
     if (this.firstRender && this.levelLoaded) {
       this.scrollPosition = new Vec2(0,0)
       this.canScroll = true
@@ -381,45 +387,8 @@ export class Editor extends MetaScreen {
 
   private getSkillValue(tag: string): u8 {
     const value = this.getLabelValueByTag(tag)
-    if (value == '-') { return u8.MAX_VALUE}
+    if (value == '∞') { return u8.MAX_VALUE}
     else { return U8.parseInt(value) }
-  }
-
-  private handleTextEntry(): void {
-    const text = gameState.userEnteredText
-    if (text.length == 0) {
-      return
-    }
-
-    const _focused = gameState.focusedUiControl
-    if (_focused == null || !(_focused instanceof LabelledButton)) {
-       return
-    }
-
-    const focused = _focused as LabelledButton
-    const tag = focused.getTag()
-    if (tag.length == 0) {
-      return
-    }
-
-    let existingText = focused.getControlText()
-    
-    if (this.canAcceptTextTags.includes(tag)) {
-      focused.setControlText(existingText + text)
-      resetText()
-    } else if (this.canAcceptNumberTags.includes(tag)) {
-      if (existingText == '∞') { existingText = '' }
-      
-      if (text == '-') {
-        focused.setControlText('∞')
-      } else {
-        existingText = U8.parseInt(existingText + text, 10).toString(10)
-        // existingText = existingText.substr(0, existingText.indexOf('.'))
-        focused.setControlText(existingText)
-      }
-
-      resetText()
-    }
   }
 
   public clone(): Editor {

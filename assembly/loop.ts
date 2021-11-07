@@ -9,6 +9,7 @@ import { UIControl } from "./ui/uiControl"
 import { Editor } from "./levels/editor"
 import { compileItems, compileMapChanges, ITEM_SET_BACKGROUND, ITEM_SET_MAP, removeItem, resetItems, setItem } from "./vdom/elements"
 import { defaultColour } from "./colours"
+import { Textbox } from "./ui/Textbox"
 
 const millisecondsPerFrameRender: i64 = Math.round(1000 / 60) as i64
 
@@ -47,6 +48,7 @@ function getClippedCursorPosition(): Vec2 {
 }
 
 function processInputs(): void {
+  const currentFocused = gameState.focusedUiControl
   let processLemmingClick = (
     gameState.mouseClicked &&
     gameState.selectedGift != LemmingGift.None &&
@@ -67,6 +69,12 @@ function processInputs(): void {
 
   if (!clickProcessed) {
     gameState.focusedUiControl = null
+  }
+  
+  if (gameState.focusedUiControl !== currentFocused) {
+    gameState.userEnteredText = ''
+  } else if (gameState.focusedUiControl instanceof Textbox) {
+    ;(gameState.focusedUiControl as Textbox).updateText(gameState.userEnteredText)
   }
   
   if (currentLevel instanceof Editor) {
@@ -119,14 +127,17 @@ function processControlClicks(clickProcessed: boolean): boolean {
 }
 
 function processLabelEvents(label: UILabel, clickProcessed: boolean): boolean {
-  const hasFocus = label.isShowing() && label.isInBounds(gameState.mouseTileX, gameState.mouseTileY)
+  const hasFocus = label.isShowing() && label.isInBounds(gameState.mouseTileX, gameState.mouseTileY) && label.getCanReceiveFocus()
   label.setFocus(hasFocus)
 
-  if (!clickProcessed && hasFocus && label instanceof UIControl) {
-    const ctrl = label as UIControl
-    gameState.focusedUiControl = ctrl
-    ctrl.clicked()
+  
+  if (!clickProcessed && hasFocus) {
+    gameState.focusedUiControl = label
     clickProcessed = true
+    if (label instanceof UIControl) {
+      const ctrl = label as UIControl
+      ctrl.clicked()
+    }
   }
   
   return clickProcessed

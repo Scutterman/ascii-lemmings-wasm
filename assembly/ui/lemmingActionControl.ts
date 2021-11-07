@@ -2,9 +2,9 @@ import { gameState } from "..";
 import { Animation } from "../animation";
 import { Vec2 } from "../position";
 import { LemmingGift } from "../types";
-import { LabelledButton } from "./labelledButton";
+import { UIControl } from "./uiControl";
 
-export class LemmingActionControl extends LabelledButton {
+export class LemmingActionControl extends UIControl {
   constructor(
     position: Vec2,
     private gift: LemmingGift,
@@ -23,11 +23,7 @@ export class LemmingActionControl extends LabelledButton {
     }
 
     const shouldProgressAnimation = isDirty && this.hasMouseFocus
-    const controlText = this.controlText
-    this.controlText = ''
-    
     const render = super.getTextForRender(shouldProgressAnimation)
-    this.controlText = controlText
     const text = this.animation.getNextFrameAsText(shouldProgressAnimation)
     for (let i = 0; i < text.length; i++) { render.push(text[i]) }
     return render

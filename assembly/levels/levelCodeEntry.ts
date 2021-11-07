@@ -9,6 +9,7 @@ import { isEditingMap } from '../imports'
 import { Editor } from "./editor"
 import { Animations } from "./animations"
 import { getLevelByCode } from '../generatedLevels/select'
+import { LabelledTextbox } from "../ui/labelledButton"
 
 export class LevelCodeEntry extends MetaScreen {
   private actionPanel: Panel = new Panel(new Vec2(-1, -1))
@@ -19,7 +20,9 @@ export class LevelCodeEntry extends MetaScreen {
     resetText()
 
     this.uiLabels.push(new UILabel(new Vec2(-1, 15), '', 'LEVEL_CODE_MESSAGE'))
-    this.uiLabels.push(new UILabel(new Vec2(-1, 20), '', 'LEVEL_CODE'))
+    const entry = new LabelledTextbox(new Vec2(-1, 19), 'Enter Code', 'LEVEL_CODE')
+    this.uiLabels.push(entry)
+    gameState.focusedUiControl = entry
     this.uiPanels.push(this.actionPanel)
     
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Back", () => {
@@ -34,7 +37,9 @@ export class LevelCodeEntry extends MetaScreen {
     }))
 
     this.actionPanel.addItem(new UIControl(new Vec2(0, 0), "Go", () => {
-      let levelCode = gameState.userEnteredText.toUpperCase()
+      const label = (currentLevel as LevelCodeEntry).getUIByTag('LEVEL_CODE')
+      if (label == null) { return }
+      let levelCode = label.getText().toUpperCase()
       
       if (levelCode == 'EDIT:') {
         // TODO:: when exiting the edit screen this needs to be reset
@@ -64,14 +69,6 @@ export class LevelCodeEntry extends MetaScreen {
     return new LevelCodeEntry()
   }
 
-  public renderLevel(): void {
-    const label = this.getUIByTag('LEVEL_CODE')
-    if (label != null) {
-      label.updateText(gameState.userEnteredText)
-      label.setPosition(new Vec2(-1, label.getPosition().y), true) // force centre of label to be recalculated
-    }
-    super.renderLevel()
-  }
 }
 
 const doBeforeLeaving = (): void => {
