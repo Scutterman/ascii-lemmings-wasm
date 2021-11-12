@@ -90,6 +90,10 @@ function processInputs(): void {
 function processControlClicks(clickProcessed: boolean): boolean {
   for (let containerIndex = currentLevel.uiPanelContainers.length -1; containerIndex >= 0; containerIndex--) {
     const container = currentLevel.uiPanelContainers[containerIndex]
+    if (!container.isShowing()) {
+      continue
+    }
+    
     const panels = container.getItems()
     for (let panelIndex = panels.length - 1; panelIndex >= 0; panelIndex--) {
       const panel = panels[panelIndex]
