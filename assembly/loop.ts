@@ -6,6 +6,7 @@ import { UILabel } from './ui/uiLabel'
 import { getCharacterRender } from "./text"
 import { Rect, Vec2 } from "./position"
 import { UIControl } from "./ui/uiControl"
+import { LabelledCheckbox } from "./ui/labelledCheckbox"
 import { Editor } from "./levels/editor"
 import { compileItems, compileMapChanges, ITEM_SET_BACKGROUND, ITEM_SET_MAP, removeItem, resetItems, setItem } from "./vdom/elements"
 import { defaultColour } from "./colours"
@@ -136,6 +137,9 @@ function processLabelEvents(label: UILabel, clickProcessed: boolean): boolean {
     clickProcessed = true
     if (label instanceof UIControl) {
       const ctrl = label as UIControl
+      ctrl.clicked()
+    } else if (label instanceof LabelledCheckbox) {
+      const ctrl = label as LabelledCheckbox
       ctrl.clicked()
     }
   }
