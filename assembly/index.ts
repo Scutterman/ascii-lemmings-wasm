@@ -1,5 +1,5 @@
-import { Test } from './autoplayer/test'
-import { TestLevel } from './autoplayer/testLevel'
+import { StreamStarting } from './autoplayer/streamStarting'
+import { Level_AUTO_1_SOON } from './generatedLevels/auto_1_SOON'
 import { GameState } from './gameState'
 import { Lemming } from './lemming'
 import { BaseLevel } from './levels/baseLevel'
@@ -124,8 +124,8 @@ export function start(): boolean {
   }
 
   if (useAutoPlayer) {
-    const level = new TestLevel()
-    const player = new Test(level)
+    const level = new Level_AUTO_1_SOON()
+    const player = new StreamStarting(level)
     gameState.autoplayer = player
   } else {
     const titleScreen = new TitleScreen()

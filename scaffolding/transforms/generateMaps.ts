@@ -6,7 +6,7 @@ import '../../../assemblyscript/std/portable'
 class GenerateMapTransform extends Transform {
   private mapParser: MapParser = new MapParser()
   private animationParser: AnimationParser = new AnimationParser()
-  private difficultyLevels: string[] = ['fun', 'tricky', 'taxing', 'mayhem']
+  private difficultyLevels: string[] = ['fun', 'tricky', 'taxing', 'mayhem', 'auto']
 
   constructor() {
     super()
